@@ -4,23 +4,6 @@ import { LoginComponent } from './auth/login/login.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 
 export const AppRoutes: Routes = [
-
-
-  // {
-  //   path: "auth",
-  //   loadChildren: () =>
-  //       import("./auth/auth.module").then((m) => m.AuthModule),
-  // },
-  // {
-  //   path: "",
-  //   //canActivate: [AuthGuard],
-  //   loadChildren: () =>
-  //   import('./layouts/admin-layout/admin-layout.module').then(x => x.AdminLayoutModule),
-  //   },
-
-
-
-
   {
     path: '',
     redirectTo: 'login',
@@ -28,7 +11,7 @@ export const AppRoutes: Routes = [
   }, 
   { path: 'login', component: LoginComponent },
   {
-    path: '',
+    path: 'home',
     component: AdminLayoutComponent,
     children: [
         {
@@ -37,6 +20,6 @@ export const AppRoutes: Routes = [
   }]},
   {
     path: '**',
-    redirectTo: 'login'
+    redirectTo: 'dashboard'
   }
 ]

@@ -9,8 +9,8 @@
                     <div class="auth-logo">
                         <img src="../.././../assets/img/logo.png" alt=""/>
                     </div>
-                    <form [formGroup]="loginForm"
-                    (ngSubmit)= "login($event)">
+                    <form [formGroup]="loginForm" 
+                    (ngSubmit)= "onSubmitMail()" *ngIf="!formSubmitted || !loginForm.valid">
                         <div class="auth-form">
                             <div class="af-row">
                                 <input type="email" class="form-control" 
@@ -25,19 +25,19 @@
                             
                         </div>
                 </form>
-                <form [formGroup]="loginForm"
-                    (ngSubmit)= "login($event)">
+                <form [formGroup]="loginOtpForm" *ngIf="formSubmitted && loginForm.valid"
+                    (ngSubmit)= "login()">
                         <div class="auth-form auth-otp">
                             <div class="af-row">
                                 <input type="number" class="form-control" 
-                                formControlName="email"
+                                formControlName="otp"
                                 placeholder="Enter your OTP"/>
                                 <div class="error d-none">Invalid OTP</div>
                                 <div class="re-otp"><a href="#">Resend OTP</a></div>
                             </div>
                             
                             <div class="af-row af-btnrow">
-                                <button class="auth-btn thm-btn" type="submit" [disabled]="loginForm.invalid">ENTER</button>
+                                <button class="auth-btn thm-btn" type="submit" [disabled]="loginOtpForm.invalid">ENTER</button>
                             </div>
                             
                         </div>

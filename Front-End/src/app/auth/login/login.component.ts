@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -11,26 +12,32 @@ export class LoginComponent implements OnInit {
   formSubmitted = false;
   loginForm!: FormGroup;
   errMessage:string;
+  loginOtpForm:FormGroup
   get f() {
     return this.loginForm.controls;
   }
-
-  constructor(private _fb: FormBuilder,private _router: Router) { }
+  get f1(){
+    return this.loginOtpForm.controls;
+  }
+  constructor(private _fb: FormBuilder,private _router: Router,private toast: ToastrService) { }
 
   ngOnInit(): void {
     this.loginForm = this._fb.group({
-      email: ['', Validators.required],
+      email: ['', [Validators.required,Validators.email]],
+    });
+    this.loginOtpForm = this._fb.group({
+      otp: ['', Validators.required],
     });
   }
-  login(event:any){
-    this.formSubmitted = true;
+  onSubmitMail(){
+    this.toast.success("User Successfully logged in")
     // if(this.loginForm.valid){
     //   const params = {
-    //     email: this.loginForm.controls['email'].value,
+    //     emailAddress: this.loginForm.controls['email'].value,
     //   }
     //   this.authServce.get(url,params).subscribe((res)=>{
     //     if(res.responseCode == 200){
-              //this._router.navigate(['']);
+            //this.formSubmitted = true;
     //     }
     //   },
     //   (err: any) => {
@@ -38,6 +45,32 @@ export class LoginComponent implements OnInit {
     //   }
     //   )
     // }
+    //else{
+      //this.toast.error("Please Enter Valid Email Address");
+    //}
+  }
+  login(){
+    // if(this.loginForm.valid){
+    //   const params = {
+    //     otp: this.loginOtpForm.controls['otp'].value,
+    //   }
+    //   this.authServce.get(url,params).subscribe((res)=>{
+    //     if(res.responseCode == 200){
+              //var data = response.data;
+              //localStorage.setItem('user',JSON.stringify(data));
+              //this.toast.success("User Successfully logged in")
+              //this._router.navigate(['/home']);
+    //     }
+    //   },
+    //   (err: any) => {
+    //     this.errMessage = err;
+    //   }
+    //   )
+    // }
+    //else{
+      //this.toast.error("Please Enter Valid OTP");
+    //}
+
   }
 
 }
