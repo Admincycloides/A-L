@@ -1,43 +1,45 @@
 <div class="auth-container">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-8"></div>
-            <div class="col-md-4">
-                    <div class="auth-title">
+            <div class="col-md-8 px-0 vh-100 d-sm-none d-none d-md-block d-lg-block d-xl-block">
+                <img src="../../../assets/img/auth-bg.png" alt="" class="auth-bg w-100 h-100"/>
+            </div>
+            <div class="col-md-4 d-flex justify-content-center flex-column auth-column align-items-center vh-100">
+                    <div class="auth-title text-center">
                         Login
                     </div>
                     <div class="auth-logo">
                         <img src="../.././../assets/img/logo.png" alt=""/>
                     </div>
-                    <form [formGroup]="loginForm" 
+                    <form class="w-100 d-flex justify-content-center"[formGroup]="loginForm" 
                     (ngSubmit)= "onSubmitMail()" *ngIf="!formSubmitted || !loginForm.valid">
-                        <div class="auth-form">
-                            <div class="af-row">
+                        <div class="auth-form d-flex flex-column align-items-center">
+                            <div class="af-row w-100">
                                 <input type="email" class="form-control" 
                                 formControlName="email"
                                 placeholder="Enter your email"/>
-                                <div class="error d-none" *ngIf="errMessage.length">Invalid Email Address {{errMessage}}</div>
+                                <div class="error" *ngIf="errMessage.length">Invalid Email Address {{errMessage}}</div>
                             </div>
                             
-                            <div class="af-row af-btnrow">
-                                <button class="auth-btn thm-btn" type="submit" [disabled]="loginForm.invalid">GENERATE OTP</button>
+                            <div class="af-row af-btnrow w-100">
+                                <button class="auth-btn thm-btn w-100" type="submit" [disabled]="loginForm.invalid">GENERATE OTP</button>
                             </div>
                             
                         </div>
                 </form>
                 <form [formGroup]="loginOtpForm" *ngIf="formSubmitted && loginForm.valid"
                     (ngSubmit)= "login()">
-                        <div class="auth-form auth-otp">
-                            <div class="af-row">
+                        <div class="auth-form d-flex flex-column align-items-center">
+                            <div class="af-row w-100">
                                 <input type="number" class="form-control" 
                                 formControlName="otp"
                                 placeholder="Enter your OTP"/>
-                                <div class="error d-none" *ngIf="loginOtpForm.length">Invalid OTP {{loginOtpForm}}</div>
-                                <div class="re-otp"><a href="#">Resend OTP</a></div>
+                                <div class="error" *ngIf="loginOtpForm.length">Invalid OTP {{loginOtpForm}}</div>
+                                <div class="re-otp"><button>Redsend OTP</button></div>
                             </div>
                             
-                            <div class="af-row af-btnrow">
-                                <button class="auth-btn thm-btn" type="submit" [disabled]="loginOtpForm.invalid">ENTER</button>
+                            <div class="af-row af-btnrow w-100">
+                                <button class="auth-btn thm-btn w-100" type="submit" [disabled]="loginOtpForm.invalid">ENTER</button>
                             </div>
                             
                         </div>
