@@ -11,7 +11,8 @@ import { ToastrService } from 'ngx-toastr';
 export class LoginComponent implements OnInit {
   formSubmitted = false;
   loginForm!: FormGroup;
-  errMessage:string;
+  errMessage: string ;
+  invalidOtp: string;
   loginOtpForm:FormGroup
   get f() {
     return this.loginForm.controls;
@@ -30,7 +31,6 @@ export class LoginComponent implements OnInit {
     });
   }
   onSubmitMail(){
-    this.toast.success("User Successfully logged in")
     // if(this.loginForm.valid){
     //   const params = {
     //     emailAddress: this.loginForm.controls['email'].value,
@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit {
     //     }
     //   },
     //   (err: any) => {
-    //     this.errMessage = err;
+    //     this.loginOtpForm = err;
     //   }
     //   )
     // }
