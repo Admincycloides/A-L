@@ -9,15 +9,18 @@
                     <div class="auth-logo">
                         <img src="../.././../assets/img/logo.png" alt=""/>
                     </div>
-                    <form>
+                    <form [formGroup]="loginForm"
+                    (ngSubmit)= "login($event)">
                         <div class="auth-form">
                             <div class="af-row">
-                                <input type="email" class="form-control" placeholder="Enter your email"/>
+                                <input type="email" class="form-control" 
+                                formControlName="email"
+                                placeholder="Enter your email"/>
                                 <div class="error d-none">Invalid Email Address</div>
                                 <div class="re-otp"><a href="#">Resend OTP</a></div>
                             </div>
                             <div class="af-row af-btnrow">
-                                <button class="auth-btn thm-btn">GENERATE OTP</button>
+                                <button class="auth-btn thm-btn" type="submit" [disabled]="loginForm.invalid">GENERATE OTP</button>
                             </div>
                             
                         </div>
