@@ -17,10 +17,27 @@
                                 formControlName="email"
                                 placeholder="Enter your email"/>
                                 <div class="error d-none">Invalid Email Address</div>
-                                <div class="re-otp"><a href="#">Resend OTP</a></div>
                             </div>
+                            
                             <div class="af-row af-btnrow">
                                 <button class="auth-btn thm-btn" type="submit" [disabled]="loginForm.invalid">GENERATE OTP</button>
+                            </div>
+                            
+                        </div>
+                </form>
+                <form [formGroup]="loginForm"
+                    (ngSubmit)= "login($event)">
+                        <div class="auth-form auth-otp">
+                            <div class="af-row">
+                                <input type="number" class="form-control" 
+                                formControlName="email"
+                                placeholder="Enter your OTP"/>
+                                <div class="error d-none">Invalid OTP</div>
+                                <div class="re-otp"><a href="#">Resend OTP</a></div>
+                            </div>
+                            
+                            <div class="af-row af-btnrow">
+                                <button class="auth-btn thm-btn" type="submit" [disabled]="loginForm.invalid">ENTER</button>
                             </div>
                             
                         </div>
