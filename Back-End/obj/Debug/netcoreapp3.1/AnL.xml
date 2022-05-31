@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AnL</name>
+    </assembly>
+    <members>
+        <member name="M:TestApplication.Controllers.UserController.GenerateOTP">
+            <summary>
+            Generates OTP using email address.
+            </summary>
+            <returns>OTP</returns>
+        </member>
+    </members>
+</doc>
