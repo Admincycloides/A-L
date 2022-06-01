@@ -15,4 +15,18 @@ export class UrlService {
     const URL = environment.apiConfig.api;
     return URL;
   }
+  // api       = environment.apiConfig.api;
+  // serverApi = environment.apiConfig.server;
+
+
+
+  // // Login
+  // generateOTP = this.api + '/GenerateOTP';
+  // submitOTP   = this.api + '/SubmitOTP';
+
+  // Login
+  public login = {
+    getOTP        :'/GenerateOTP',
+    submitOTP     :'/SubmitOTP'
+  }
 }

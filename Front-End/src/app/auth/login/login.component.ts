@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HttpService } from 'app/_services/http.service';
+import { UrlService } from 'app/_services/url.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -20,7 +22,10 @@ export class LoginComponent implements OnInit {
   get f1(){
     return this.loginOtpForm.controls;
   }
-  constructor(private _fb: FormBuilder,private _router: Router,private toast: ToastrService) { }
+  constructor(private _fb: FormBuilder,private _router: Router,private toast: ToastrService,
+    private _url: UrlService,
+    private _http: HttpService
+    ) { }
 
   ngOnInit(): void {
     this.loginForm = this._fb.group({
@@ -31,59 +36,57 @@ export class LoginComponent implements OnInit {
     });
   }
   onSubmitMail(){
-    // if(this.loginForm.valid){
-    //   const params = {
-    //     emailAddress: this.loginForm.controls['email'].value,
-    //   }
-    //   this.authServce.get(url,params).subscribe((res)=>{
-    //     if(res.responseCode == 200){
-            //this.formSubmitted = true;
-    //     }
-    //   },
-    //   (err: any) => {
-    //     this.errMessage = err;
-    //   }
-    //   )
-    // }
-    //else{
-      //this.toast.error("Please Enter Valid Email Address");
-    //}
+   if(this.loginForm.valid){
+      let emailAddress = this.loginForm.controls['email'].value;
+      this._http.get(`${this._url.login.getOTP}/${emailAddress}`).subscribe(
+        {
+          next(res) {
+            this.formSubmitted = true;
+          },
+          error(msg) {
+            this.errMessage = msg;
+          }
+        })
+    }
+    else{
+      this.toast.error("Please Enter Valid Email Address");
+    }
   }
   login(){
-    // if(this.loginForm.valid){
-    //   const params = {
-    //     otp: this.loginOtpForm.controls['otp'].value,
-    //   }
-    //   this.authServce.get(url,params).subscribe((res)=>{
-    //     if(res.responseCode == 200){
-              //var data = response.data;
+    if(this.loginForm.valid){
+       let  otpValue = this.loginOtpForm.controls['otp'].value;
+       let username = this.loginForm.controls['email'].value;
+      this._http.get(`${this._url.login.submitOTP}/${otpValue}${username}`).subscribe(
+        {
+          next(res) {
+              //var data = res.body.data;
               //localStorage.setItem('user',JSON.stringify(data));
-              //this.toast.success("User Successfully logged in")
-              //this._router.navigate(['/home']);
-    //     }
-    //   },
-    //   (err: any) => {
-    //     this.loginOtpForm = err;
-    //   }
-    //   )
-    // }
-    //else{
-      //this.toast.error("Please Enter Valid OTP");
-    //}
+              this.toast.success("User Successfully logged in")
+              this._router.navigate(['/home']);
+          },
+          error(msg) {
+            this.errMessage = msg;
+          }
+        }
+      )
+    }
+    else{
+      this.toast.error("Please Enter Valid OTP");
+    }
 
   }
   onResentOtp(){
-    //   const params = {
-    //     emailAddress: this.loginForm.controls['email'].value,
-    //   }
-    //   this.authServce.get(url,params).subscribe((res)=>{
-    //     if(res.responseCode == 200){
-    //     }
-    //   },
-    //   (err: any) => {
-    //     this.errMessage = err;
-    //   }
-    //   )
+      let  emailAddress = this.loginForm.controls['email'].value
+      this._http.get(`${this._url.login.getOTP}/${emailAddress}`).subscribe(
+        {
+          next(res) {
+            this.formSubmitted = true;
+          },
+          error(msg) {
+            this.errMessage = msg;
+          }
+        }
+      )
   }
 
 }

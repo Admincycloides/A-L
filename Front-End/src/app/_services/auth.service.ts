@@ -11,7 +11,10 @@ export class AuthService {
     const tokenExpiryTime = JSON.parse(localStorage.getItem('user')).tokenExpiryTime;
     const time = Math.floor(Date.now() / 1000);
     if(tokenExpiryTime < time) return true;
-    else return false;
+    else{
+      localStorage.removeItem("user");
+      return false;
+    }
   }
   logout() {
     localStorage.removeItem("user");

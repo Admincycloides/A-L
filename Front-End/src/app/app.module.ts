@@ -15,6 +15,7 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 import { LogComponent } from './pages/log/log.component';
 import { LoginComponent } from './auth/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from "@angular/common/http";
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     ToastrModule.forRoot(),
     FooterModule,
     FixedPluginModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
