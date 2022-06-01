@@ -72,5 +72,18 @@ export class LoginComponent implements OnInit {
     //}
 
   }
+  onResentOtp(){
+    //   const params = {
+    //     emailAddress: this.loginForm.controls['email'].value,
+    //   }
+    //   this.authServce.get(url,params).subscribe((res)=>{
+    //     if(res.responseCode == 200){
+    //     }
+    //   },
+    //   (err: any) => {
+    //     this.errMessage = err;
+    //   }
+    //   )
+  }
 
 }
