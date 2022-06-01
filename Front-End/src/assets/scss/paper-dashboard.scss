@@ -55,5 +55,15 @@ body{
     font-size: 12px;
     padding: 5px 0 0;
 }
+table{
+    th,td{
+        .tbl-check{
+            margin-left: -27px;
+        }
+        &:first-child{
+            padding-left: 28px!important;
+        }
+    }
+}
 
 

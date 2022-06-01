@@ -22,7 +22,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     AppComponent,
     AdminLayoutComponent,
     LogComponent,
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -34,7 +34,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     ToastrModule.forRoot(),
     FooterModule,
     FixedPluginModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
