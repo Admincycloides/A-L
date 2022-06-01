@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace AnL.Models
+namespace AnL.ViewModel
 {
-    public partial class TimesheetDetails
+    public class TimesheetViewModel
     {
         public DateTime Date { get; set; }
         public string EmployeeId { get; set; }
+        public string EmployeeName { get; set; }
         public int ProjectId { get; set; }
         public int ActivityId { get; set; }
+        public int ActivityName { get; set; }
         public double NumberOfHours { get; set; }
         public string Remarks { get; set; }
         public int UniqueId { get; set; }
-
-        public virtual ActivityDetails Activity { get; set; }
-        public virtual ProjectDetails Project { get; set; }
     }
 }
