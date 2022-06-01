@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace TestApplication.Models
+namespace AnL.Models
 {
     public partial class Tan_DBContext : DbContext
     {
@@ -13,7 +13,7 @@ namespace TestApplication.Models
         public Tan_DBContext(DbContextOptions<Tan_DBContext> options)
             : base(options)
         {
-        }
+        }   
 
         public virtual DbSet<ActivityDetails> ActivityDetails { get; set; }
         public virtual DbSet<ActivityMapping> ActivityMapping { get; set; }

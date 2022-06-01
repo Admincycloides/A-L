@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TestApplication.Models
+namespace AnL.Models
 {
     public partial class ProjectDetails
     {

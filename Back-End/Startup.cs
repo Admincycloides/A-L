@@ -1,7 +1,11 @@
+using AnL.Models;
+using AnL.Repository.Abstraction;
+using AnL.Repository.Implementation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -29,6 +33,10 @@ namespace TestApplication
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddDbContext<Tan_DBContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+            );
             services.AddSwaggerGen(swagger =>
             {
                 swagger.SwaggerDoc("v1", new OpenApiInfo
