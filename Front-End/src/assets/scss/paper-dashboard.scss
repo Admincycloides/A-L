@@ -65,5 +65,48 @@ table{
         }
     }
 }
+// date picker native
+.date-week{
+    border: none;
+    background: transparent;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    margin: 0 5px;
+    display: flex;
+    &:focus{
+        outline: none;
+    }
+}
+.act-filter{
+    input[type="date"]{
+        margin: 0 15px;
+    }
+}
+.d-label{
+    
+}
+// inner page
+.page-title{
+    padding: 5px;
+    font-size: 20px;
+    text-transform: uppercase;
+    color: $secondary-color;
+    font-weight: 700;
+}
+.main-panel{
+    background-color: $bg-color;
+}
+.thm-btn{
+    padding: 5px;
+    @include radius(5px);
+    height:40px;
+    outline: none;
+    border: none;
+    font-size: 16px;
+    &:focus{
+        outline: none;
+    }
+}
 
 
