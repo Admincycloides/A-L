@@ -49,7 +49,7 @@
 
 body{
     font-family: 'Roboto', sans-serif;
-}
+
 .error{
     color: #9f1b19;
     font-size: 12px;
@@ -64,6 +64,27 @@ table{
             padding-left: 28px!important;
         }
     }
+}
+// layout
+.sidebar .logo, .off-canvas-sidebar .logo{
+    height: 63px;
+    background-color: $secondary-color;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+}
+.main-panel{
+    .navbar{
+        background-color: $secondary-color!important;
+        padding-top: 3px;
+        padding-bottom: 3px;
+    }
+}
+.user-dp{
+    width: 42px;
+    height: 42px;
+    @include radius(50%);
+    object-fit: cover;
 }
 // date picker native
 .date-week{
@@ -109,4 +130,4 @@ table{
     }
 }
 
-
+}//body END
