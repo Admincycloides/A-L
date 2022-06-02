@@ -55,6 +55,9 @@ body{
     font-size: 12px;
     padding: 5px 0 0;
 }
+.modal{
+    z-index: 99999;
+}
 table{
     th,td{
         .tbl-check{

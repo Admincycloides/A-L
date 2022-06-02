@@ -27,7 +27,7 @@
 
     </div>
     <div class="action">
-        <button class="act-btn thm-btn thm-btn-primary"><i class="nc-icon nc-simple-add"></i> Add Time</button>
+        <button class="act-btn thm-btn thm-btn-primary" (click)="open(content)"><i class="nc-icon nc-simple-add"></i> Add Time</button>
     </div>
 </div>
 <div class="row">
@@ -164,7 +164,58 @@
            <label>Remarks</label>
            <textarea></textarea>
        </div>
+       <div class="r-row">
+           <button>Submit</button>
+       </div>
     </div>
 
   </div>
+  <ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Add Time</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"><i class="nc-icon nc-simple-remove"></i></button>
+    </div>
+    <div class="modal-body addproject-modal">
+      <form>
+        <div class="row fm-row">
+            <div class="col-md-12">
+                <div class="form-group mb-3">
+                    <label>Select Project</label>
+                    <select class="form-control">
+                        <option selected>Select Project</option>
+                        <option>2</option>
+                    </select>
+                    <div class="error"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row fm-row">
+            <div class="col-md-12">
+                <div class="form-group mb-3">
+                    <label>Activity</label>
+                    <select class="form-control">
+                        <option selected>Select Activity</option>
+                        <option>2</option>
+                    </select>
+                    <div class="error"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row fm-row">
+            <div class="col-md-12">
+                <div class="form-group mb-3">
+                    <label>Remarks</label>
+                    <textarea class="form-control"></textarea>
+                    <div class="error"></div>
+                </div>
+            </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    </div>
+  </ng-template>
+
+
   

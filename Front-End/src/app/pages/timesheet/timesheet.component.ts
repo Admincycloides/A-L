@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { HttpService } from 'app/_services/http.service';
 import { UrlService } from 'app/_services/url.service';
 import * as moment from 'moment';
@@ -12,6 +13,7 @@ import * as moment from 'moment';
   styleUrls: ['./timesheet.component.scss']
 })
 export class TimesheetComponent implements OnInit {
+  closeResult = '';
   userDetails: any;
   startOfWeek: any;
   endOfWeek: any;
@@ -31,7 +33,24 @@ export class TimesheetComponent implements OnInit {
 
 
   constructor(private _url: UrlService,
-    private _http: HttpService) { }
+    private _http: HttpService,private modalService: NgbModal) { }
+    open(content) {
+      this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+        this.closeResult = `Closed with: ${result}`;
+      }, (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      });
+    }
+  
+    private getDismissReason(reason: any): string {
+      if (reason === ModalDismissReasons.ESC) {
+        return 'by pressing ESC';
+      } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+        return 'by clicking on a backdrop';
+      } else {
+        return `with: ${reason}`;
+      }
+    }
 
   ngOnInit(): void {
     // this.userDetails = JSON.parse(localStorage.getItem('token'));
@@ -150,3 +169,4 @@ export class TimesheetComponent implements OnInit {
   }
 
 }
+
