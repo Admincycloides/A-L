@@ -16,6 +16,7 @@ import { LogComponent } from './pages/log/log.component';
 import { LoginComponent } from './auth/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from "@angular/common/http";
+import { AddtimesheetComponent } from './pages/timesheet/addtimesheet/addtimesheet.component';
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import { HttpClientModule } from "@angular/common/http";
     AdminLayoutComponent,
     LogComponent,
     LoginComponent,
+    AddtimesheetComponent,
   ],
   imports: [
     BrowserAnimationsModule,
