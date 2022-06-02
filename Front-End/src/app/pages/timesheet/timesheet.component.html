@@ -2,7 +2,29 @@
 <div class="action-head justify-content-between d-flex">
     <div class="time"><i class="nc-icon nc-watch-time"></i> In hours</div>
     <div class="act-filter d-flex align-items-center justify-content-center">
-       <button class="left-date date-week"><i class="nc-icon nc-minimal-left"></i></button> <span class="d-label">From</span><input type="date" class="nm-date"/><span class="d-label">To</span><input type="date" class="nm-date"/><button class="right-date date-week"><i class="nc-icon nc-minimal-right"></i></button>
+       <!-- <button class="left-date date-week"><i class="nc-icon nc-minimal-left"></i></button> <span class="d-label">From</span><input type="date" class="nm-date"/><span class="d-label">To</span><input type="date" class="nm-date"/><button class="right-date date-week"><i class="nc-icon nc-minimal-right"></i></button> -->
+       
+
+       <div class="input-group">  
+        <button class="left-date date-week" (click)="onPreviousClick()">
+          <i class="nc-icon nc-minimal-left"></i>
+        </button>
+        <input class="form-control" placeholder="mm-dd-yyyy"  readonly
+               name="dp" [(ngModel)]="model" ngbDatepicker 
+               (dateSelect)="dateChange($event)"
+               #d="ngbDatepicker">  
+
+               {{weekShow}}
+        <div class="input-group-append">  
+          <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button">
+            <i class="fas fa-calendar"></i>
+          </button>  
+        </div>  
+        <button class="right-date date-week" (click)="onNextClick()">
+          <i class="nc-icon nc-minimal-right"></i>
+        </button>
+      </div>
+
     </div>
     <div class="action">
         <button class="act-btn thm-btn thm-btn-primary"><i class="nc-icon nc-simple-add"></i> Add Time</button>
@@ -15,32 +37,35 @@
           <div class="table-responsive">
             <table class="table">
               <thead class=" text-primary">
+                <th>
+                  <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault">Status
+                 </th>
                   <th>
-                   <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault"> Project
+                    Project
                   </th>
                   <th>
                       Activities
                     </th>
                     <th>
-                      Monday<br>May 23
+                      Monday<br>{{currentWeek[0]}}
                     </th>
                     <th>
-                      Tuesday<br>May 24
+                      Tuesday<br>{{currentWeek[1]}}
                     </th>
                   <th>
-                    Wednesday<br>May 25 
+                    Wednesday<br>{{currentWeek[2] }}
                   </th>
                   <th>
-                    Thusday<br>May 26 
+                    Thusday<br>{{currentWeek[3]}} 
                   </th>
                   <th>
-                    Friday<br>May 27 
+                    Friday<br>{{currentWeek[4]}}
                   </th>
                   <th>
-                    Saturday<br>May 28 
+                    Saturday<br>{{currentWeek[5]}}
                   </th>
                   <th>
-                    Sunday<br>May 29 
+                    Sunday<br>{{currentWeek[6]}}
                   </th>
                   <th>
                    Total
@@ -49,53 +74,50 @@
                    Remarks
                   </th>
                   <th>
-                    Status
-                   </th>
-                  <th>
                    Edit
                   </th>
                   <th>
                    Delete
                   </th>
               </thead>
-              <tbody *ngFor="let row of timeSheetDetails | paginate: config; let i = index">
+              <tbody *ngFor="let row of timeSheetDetailsArray | paginate: config; let i = index">
                 <tr>
                     <td>
                         <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault">
-                         {{row.ProjectName}}
+                         {{row[0]}}
                     </td>
                     <td>
-                      {{row.ActivityName}}
+                      {{row[1]}}
                     </td>
                     <td >
-                      {{row.monday.value}}
+                      {{row[2]}}
                     </td>
                     <td>
-                      {{row.tuesday.value}}
+                      {{row[3]}}
                     </td>
                     <td>
-                      {{row.wednesday.value}}
+                      {{row[4]}}
                     </td>
                     <td>
-                      {{row.thurday.value}}
+                      {{row[5]}}
                     </td>
                     <td>
-                      {{row.friday.value}}
+                      {{row[6]}}
                     </td>
                     <td>
-                      {{row.saturday.value}}
+                      {{row[7]}}
                     </td>
                     <td>
-                      {{row.sunday.value}}
+                      {{row[8]}}
                     </td>
                     <td>
-                      5
+                      {{row[9]}}
                     </td>
                     <td>
-                      {{row?.Remarks }}
+                      {{row[10]}}
                     </td>
                     <td>
-                        {{row.Status}}
+                      {{row[11]}}
                     </td>
                     <td>
                         <button class="edit"><img src="../../../assets/img/edit.png" alt=""/></button>
