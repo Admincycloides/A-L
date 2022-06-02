@@ -23,7 +23,7 @@ export class AppComponent implements OnInit{
     //   this._router.navigate(["/login"]);
     // }
     if(this._authService.isLoggedIn()) {
-      this._router.navigate(["/home"]);
+      this._router.navigate(["/timesheet"]);
     }else{
       this._router.navigate(["/login"]);
     }

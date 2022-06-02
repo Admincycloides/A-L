@@ -16,13 +16,15 @@ import { UpgradeComponent }         from '../../pages/upgrade/upgrade.component'
 import { TimesheetComponent }       from '../../pages/timesheet/timesheet.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule.forChild(AdminLayoutRoutes),
     FormsModule,
-    NgbModule
+    NgbModule,
+    HttpClientModule
   ],
   declarations: [
     DashboardComponent,
@@ -34,6 +36,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     MapsComponent,
     NotificationsComponent,
     TimesheetComponent,
+    
   ]
 })
 

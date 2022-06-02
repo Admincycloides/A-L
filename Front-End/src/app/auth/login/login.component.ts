@@ -60,9 +60,9 @@ export class LoginComponent implements OnInit {
         {
           next(res) {
               //var data = res.body.data;
-              //localStorage.setItem('user',JSON.stringify(data));
-              this.toast.success("User Successfully logged in")
-              this._router.navigate(['/home']);
+              //localStorage.setItem('token',JSON.stringify(data));
+              this.toast.success("User Successfully logged in");
+              this._router.navigate(['/timesheet']);
           },
           error(msg) {
             this.errMessage = msg;

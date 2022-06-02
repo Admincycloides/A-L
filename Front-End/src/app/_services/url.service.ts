@@ -26,7 +26,8 @@ export class UrlService {
 
   // Login
   public login = {
-    getOTP        :'/GenerateOTP',
-    submitOTP     :'/SubmitOTP'
+    getOTP              :'/GenerateOTP',
+    submitOTP           :'/SubmitOTP',
+    getEmployeeDetails  :'EmployeeDetails/getEmployeeDetails'
   }
 }
