@@ -9,7 +9,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-">
+    <div class="col-md-10">
       <div class="card">
         <div class="card-body">
           <div class="table-responsive">
@@ -58,43 +58,44 @@
                    Delete
                   </th>
               </thead>
-              <tbody>
+              <tbody *ngFor="let row of timeSheetDetails | paginate: config; let i = index">
                 <tr>
                     <td>
-                        <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault"> Project 1
+                        <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault">
+                         {{row.ProjectName}}
                     </td>
                     <td>
-                      Activity3
-                    </td>
-                    <td>
-                      5
+                      {{row.ActivityName}}
                     </td>
                     <td >
-                      6
+                      {{row.monday.value}}
                     </td>
                     <td>
-                      2
+                      {{row.tuesday.value}}
                     </td>
                     <td>
-                      4
+                      {{row.wednesday.value}}
                     </td>
                     <td>
-                      1
+                      {{row.thurday.value}}
                     </td>
                     <td>
-                     2
+                      {{row.friday.value}}
                     </td>
                     <td>
-                      3
+                      {{row.saturday.value}}
                     </td>
                     <td>
-                      2
+                      {{row.sunday.value}}
                     </td>
                     <td>
                       5
                     </td>
                     <td>
-                        Status
+                      {{row?.Remarks }}
+                    </td>
+                    <td>
+                        {{row.Status}}
                     </td>
                     <td>
                         <button class="edit"><img src="../../../assets/img/edit.png" alt=""/></button>
@@ -102,283 +103,33 @@
                     <td>
                         <button class="delete"><img src="../../../assets/img/delete.png" alt=""/></button>
                     </td>
-                  </tr>
-                  <tr>
-                      <td>
-                        <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault"> Project 1
-                      </td>
-                      <td>
-                        Activity3
-                      </td>
-                      <td>
-                        5
-                      </td>
-                      <td >
-                        6
-                      </td>
-                      <td>
-                        2
-                      </td>
-                      <td>
-                        4
-                      </td>
-                      <td>
-                        1
-                      </td>
-                      <td>
-                       2
-                      </td>
-                      <td>
-                        3
-                      </td>
-                      <td>
-                        2
-                      </td>
-                      <td>
-                        5
-                      </td>
-                      <td>
-                        Status
-                    </td>
-                      <td>
-                        <button class="edit"><img src="../../../assets/img/edit.png" alt=""/></button>
-                      </td>
-                      <td>
-                        <button class="delete"><img src="../../../assets/img/delete.png" alt=""/></button>
-                      </td>
-    
-                    </tr>
-                    <tr>
-                      <td>
-                        <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault"> Project 1
-                      </td>
-                      <td>
-                        Activity3
-                      </td>
-                      <td>
-                        5
-                      </td>
-                      <td >
-                        6
-                      </td>
-                      <td>
-                        2
-                      </td>
-                      <td>
-                        4
-                      </td>
-                      <td>
-                        1
-                      </td>
-                      <td>
-                       2
-                      </td>
-                      <td>
-                        3
-                      </td>
-                      <td>
-                        2
-                      </td>
-                      <td>
-                        5
-                      </td>
-                      <td>
-                        Status
-                    </td>
-                      <td>
-                        <button class="edit"><img src="../../../assets/img/edit.png" alt=""/></button>
-                      </td>
-                      <td>
-                        <button class="delete"><img src="../../../assets/img/delete.png" alt=""/></button>
-                      </td>
-    
-                    </tr>
-                    <tr>
-                      <td>
-                        <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault"> Project 1
-                      </td>
-                      <td>
-                        Activity3
-                      </td>
-                      <td>
-                        5
-                      </td>
-                      <td >
-                        6
-                      </td>
-                      <td>
-                        2
-                      </td>
-                      <td>
-                        4
-                      </td>
-                      <td>
-                        1
-                      </td>
-                      <td>
-                       2
-                      </td>
-                      <td>
-                        3
-                      </td>
-                      <td>
-                        2
-                      </td>
-                      <td>
-                        5
-                      </td>
-                      <td>
-                        Status
-                    </td>
-                      <td>
-                        <button class="edit"><img src="../../../assets/img/edit.png" alt=""/></button>
-                      </td>
-                      <td>
-                        <button class="delete"><img src="../../../assets/img/delete.png" alt=""/></button>
-                      </td>
-    
-                    </tr>
-                    <tr>
-                      <td>
-                        <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault"> Project 1
-                      </td>
-                      <td>
-                        Activity3
-                      </td>
-                      <td>
-                        5
-                      </td>
-                      <td >
-                        6
-                      </td>
-                      <td>
-                        2
-                      </td>
-                      <td>
-                        4
-                      </td>
-                      <td>
-                        1
-                      </td>
-                      <td>
-                       2
-                      </td>
-                      <td>
-                        3
-                      </td>
-                      <td>
-                        2
-                      </td>
-                      <td>
-                        5
-                      </td>
-                      <td>
-                        Status
-                    </td>
-                      <td>
-                        <button class="edit"><img src="../../../assets/img/edit.png" alt=""/></button>
-                      </td>
-                      <td>
-                        <button class="delete"><img src="../../../assets/img/delete.png" alt=""/></button>
-                      </td>
-    
-                    </tr>
-                    <tr>
-                      <td>
-                        <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault"> Project 1
-                      </td>
-                      <td>
-                        Activity3
-                      </td>
-                      <td>
-                        5
-                      </td>
-                      <td >
-                        6
-                      </td>
-                      <td>
-                        2
-                      </td>
-                      <td>
-                        4
-                      </td>
-                      <td>
-                        1
-                      </td>
-                      <td>
-                       2
-                      </td>
-                      <td>
-                        3
-                      </td>
-                      <td>
-                        2
-                      </td>
-                      <td>
-                        5
-                      </td>
-                      <td>
-                        Status
-                    </td>
-                      <td>
-                        <button class="edit"><img src="../../../assets/img/edit.png" alt=""/></button>
-                      </td>
-                      <td>
-                        <button class="delete"><img src="../../../assets/img/delete.png" alt=""/></button>
-                      </td>
-
-                    </tr>
-                    <tr>
-                      <td>
-                        <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault"> Project 1
-                      </td>
-                      <td>
-                        Activity3
-                      </td>
-                      <td>
-                        5
-                      </td>
-                      <td >
-                        6
-                      </td>
-                      <td>
-                        2
-                      </td>
-                      <td>
-                        4
-                      </td>
-                      <td>
-                        1
-                      </td>
-                      <td>
-                       2
-                      </td>
-                      <td>
-                        3
-                      </td>
-                      <td>
-                        2
-                      </td>
-                      <td>
-                        5
-                      </td>
-                      <td>
-                        Status
-                    </td>
-                      <td>
-                        <button class="edit"><img src="../../../assets/img/edit.png" alt=""/></button>
-                      </td>
-                      <td>
-                        <button class="delete"><img src="../../../assets/img/delete.png" alt=""/></button>
-                      </td>
-    
-                    </tr>
+                </tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
+      <!-- Pagination -->
+      <div class="pagination-line d-flex justify-content-end" *ngIf="true">
+        <ul>
+            <pagination-controls
+            id='timesheet'
+            (pageChange)="pageChanged($event)"
+            [directionLinks]="true"
+            [autoHide]="false"
+            [maxSize]="10"
+            [responsive]="true"
+            previousLabel="Previous"
+            nextLabel="Next"
+            screenReaderPaginationLabel="Pagination"
+            screenReaderPageLabel="page"
+            screenReaderCurrentLabel="You're on page"
+            >
+            </pagination-controls>
+        </ul>
+</div>
     </div>
+
     <div class="col-md-2 remarks-col">
        <div class="r-row">
            <label>Send to</label>
