@@ -17,7 +17,10 @@ import { TimesheetComponent }       from '../../pages/timesheet/timesheet.compon
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
-import { NgxPaginationModule } from 'ngx-pagination'
+import { NgxPaginationModule } from 'ngx-pagination';
+import { AddtimesheetComponent } from '../../pages/timesheet/addtimesheet/addtimesheet.component';
+
+
 
 @NgModule({
   imports: [
@@ -38,6 +41,7 @@ import { NgxPaginationModule } from 'ngx-pagination'
     MapsComponent,
     NotificationsComponent,
     TimesheetComponent,
+    AddtimesheetComponent,
     
   ]
 })
