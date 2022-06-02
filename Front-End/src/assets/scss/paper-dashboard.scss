@@ -70,17 +70,17 @@ table{
 }
 // layout
 .sidebar .logo, .off-canvas-sidebar .logo{
-    height: 63px;
+    height: 62px;
     background-color: $secondary-color;
-    padding: 6px;
+    padding: 0 0 0 5pxpx;
     display: flex;
     align-items: center;
 }
 .main-panel{
     .navbar{
         background-color: $secondary-color!important;
-        padding-top: 3px;
-        padding-bottom: 3px;
+        padding-top: 2px;
+        padding-bottom: 2px;
     }
 }
 .user-dp{
@@ -88,6 +88,26 @@ table{
     height: 42px;
     @include radius(50%);
     object-fit: cover;
+}
+.sidebar, .off-canvas-sidebar,.sidebar .sidebar-wrapper, .off-canvas-sidebar .sidebar-wrapper{
+    width: 210px;
+}
+.main-panel{
+    width: calc(100% - 210px);
+}
+.main-panel .content{
+    padding: 0 15px 30px;
+}
+.sidebar .nav i, .off-canvas-sidebar .nav i{
+    font-size: 18px;
+    margin-right: 0px;
+    bottom: 3px;
+}
+.sidebar .nav li>a, .off-canvas-sidebar .nav li>a{
+    margin: 10px 0px 0;
+    font-size: 13px;
+    padding: 5px 8px 5px 0px;
+    line-height: 26px;
 }
 // date picker native
 .date-week{
