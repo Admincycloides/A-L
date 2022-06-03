@@ -27,7 +27,7 @@ namespace AnL.Repository.Implementation
             });
 
         }
-        public async Task<bool> UpdateOTP(int Otp,int Userid)
+        public async Task<UserLogin> UpdateOTP(int Otp,int Userid)
         {
             return await Task.Run(() =>
             {
@@ -35,7 +35,7 @@ namespace AnL.Repository.Implementation
                 details.Otp = Otp;
                 details.OtpexpiryDate = DateTime.UtcNow;
                 _context.SaveChanges();
-                return true;
+                return details;
             });
             
         }
