@@ -34,6 +34,10 @@ export class TimesheetComponent implements OnInit {
   weekShow:any;
   selectAllTimesheet: boolean = false;
   addTimesheetForm :FormGroup;
+  projectList:any[];
+  activityList:any[];
+  selectedProjectName:any;
+  selectedActivityName: any;
   get f() {
     return this.addTimesheetForm.controls;
   }
@@ -46,6 +50,8 @@ export class TimesheetComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.content);
+    this.projectList = ['Project 1','Project 2','Project 3','Project 4'];
+    this.activityList = ['Activity 1','Activity 2','Activity 3','Activity 4'];
     // this.userDetails = JSON.parse(localStorage.getItem('token'));
     // this.getEmployeeDetails();
     this.startOfWeek = moment().startOf('isoWeek').toDate();
@@ -58,9 +64,9 @@ export class TimesheetComponent implements OnInit {
         "EmployeeId": "92S5000000423",
         "EmployeeName": "Emp1",
         "ProjectId": 10,
-        "ProjectName": "Other",
+        "ProjectName": "Project 1",
         "ActivityId": 12,
-        "ActivityName": "Break",
+        "ActivityName": "Activity 1",
         "NumberOfHours": 0.5,
         "Remarks": null,
         "Status": "In Progress",
@@ -73,9 +79,9 @@ export class TimesheetComponent implements OnInit {
         "EmployeeId": "92S5000000423",
         "EmployeeName": "Emp1",
         "ProjectId": 10,
-        "ProjectName": "Other",
+        "ProjectName": "Project 2",
         "ActivityId": 13,
-        "ActivityName": "Lunch",
+        "ActivityName": "Activity 2",
         "NumberOfHours": 0.5,
         "Remarks": "Flagging potato and tomato plots",
         "Status": "In Progress",
@@ -140,7 +146,9 @@ export class TimesheetComponent implements OnInit {
     this.startOfWeek = moment(date).startOf('isoWeek').toDate();
     this.endOfWeek = moment(date).endOf('isoWeek').toDate();
     this.model = "2022-12-5";
-    this.weekShow = moment(this.startOfWeek).format("MMMM-DD")+"-"+moment(this.endOfWeek).format("MMMM-DD")
+    this.currentWeek = this.dateFormatter(moment(this.startOfWeek).format("YYYY-MM-DD"),moment(this.endOfWeek).format("YYYY-MM-DD"));
+    this.weekShow = moment(this.startOfWeek).format("MMMM-DD")+"-"+moment(this.endOfWeek).format("MMMM-DD");
+    //console.log("this.currentWeek ",this.currentWeek )
   }
   private dateFormatter(start:any,end:any){
     var dateArray = [];
@@ -157,12 +165,14 @@ export class TimesheetComponent implements OnInit {
     this.endOfWeek = moment(this.endOfWeek).subtract(1,'weeks');
     this.currentWeek = this.dateFormatter(moment(this.startOfWeek).format("YYYY-MM-DD"),moment(this.endOfWeek).format("YYYY-MM-DD"));
     this.weekShow = moment(this.startOfWeek).format("MMMM-DD")+"-"+moment(this.endOfWeek).format("MMMM-DD")
+    //console.log("this.currentWeek ",this.currentWeek )
   }
   onNextClick(){
     this.startOfWeek = moment(this.startOfWeek).add(1,'weeks');
     this.endOfWeek = moment(this.endOfWeek).add(1,'weeks');
     this.currentWeek = this.dateFormatter(moment(this.startOfWeek).format("YYYY-MM-DD"),moment(this.endOfWeek).format("YYYY-MM-DD"));
-    this.weekShow = moment(this.startOfWeek).format("MMMM-DD")+"-"+moment(this.endOfWeek).format("MMMM-DD")
+    this.weekShow = moment(this.startOfWeek).format("MMMM-DD")+"-"+moment(this.endOfWeek).format("MMMM-DD");
+    //console.log("this.currentWeek ",this.currentWeek )
 
   }
   
@@ -192,9 +202,14 @@ export class TimesheetComponent implements OnInit {
   onTimesheetAddEdit(id:any){
     if(id == -1){
       this.open(this.content);
+      this.selectedProjectName ='';
+      this.selectedActivityName = '';
     }
     else{
       this.open(this.content);
+      this.selectedProjectName = this.timeSheetDetailsArray[id][1];
+      this.selectedActivityName = this.timeSheetDetailsArray[id][2];
+      console.log(this.selectedActivityName,this.selectedProjectName);
     }
 
 
@@ -221,6 +236,9 @@ export class TimesheetComponent implements OnInit {
   }
   onSaveTimesheetDetails(){
     console.log(this.addTimesheetForm.controls['project'].value);
+  }
+  selectChanges(value:any){
+
   }
 
   
