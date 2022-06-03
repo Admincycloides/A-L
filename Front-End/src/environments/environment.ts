@@ -7,7 +7,7 @@ export const environment = {
   production: false,
   env:'A & L Dev',
   apiConfig: {
-    api: '',
+    api: 'https://103.79.223.61:440',
     server : ''
   }
 }

@@ -86,9 +86,9 @@
                 <tr>
                     <td>
                         <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault" 
-                        (click)="onRowCheck(i)" *ngIf="!selectAllTimesheet">
-                        <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault" 
-                        (click)="onRowCheck(i)" *ngIf="selectAllTimesheet">
+                        (click)="onRowCheck(i)" [checked] = "selectAllTimesheet? true:false">
+                        <!-- <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault" 
+                        (click)="onRowCheck(i)" [checked] = "selectAllTimesheet"> -->
                          {{row[0]}}
                     </td>
                     <td>

@@ -26,12 +26,12 @@ export class UrlService {
 
   // Login
   public login = {
-    getOTP              :'/GenerateOTP',
-    submitOTP           :'/SubmitOTP',
+    getOTP              :'GenerateOTP',
+    submitOTP           :'SubmitOTP',
     getEmployeeDetails  :'EmployeeDetails/getEmployeeDetails'
   }
   public timesheet = {
-    getTimesheet      : '/Timesheet/GetDetails',
+    getTimesheet      : 'Timesheet/GetDetails',
     deleteTimesheet   : 'Timesheet/DeleteTimesheet',
     addTimesheet      : 'Timesheet/AddTimesheetDetails',
     editTimesheet     : 'Timesheet/ModifyTimesheet'

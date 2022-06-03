@@ -44,7 +44,8 @@ import { AddtimesheetComponent } from '../../pages/timesheet/addtimesheet/addtim
     AddtimesheetComponent,
     
   ],
-  providers: []
+  providers: [],
+  entryComponents:[TimesheetComponent]
 })
 
 export class AdminLayoutModule {}

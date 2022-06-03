@@ -16,7 +16,6 @@ import { LogComponent } from './pages/log/log.component';
 import { LoginComponent } from './auth/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from "@angular/common/http";
-import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 
 
 @NgModule({
@@ -38,7 +37,6 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
     FixedPluginModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]
