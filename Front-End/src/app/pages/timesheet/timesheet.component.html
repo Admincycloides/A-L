@@ -2,225 +2,295 @@
 <div class="action-head justify-content-between d-flex">
     <div class="time"><i class="nc-icon nc-watch-time"></i> In hours</div>
     <div class="act-filter d-flex align-items-center justify-content-center">
-       <!-- <button class="left-date date-week"><i class="nc-icon nc-minimal-left"></i></button> <span class="d-label">From</span><input type="date" class="nm-date"/><span class="d-label">To</span><input type="date" class="nm-date"/><button class="right-date date-week"><i class="nc-icon nc-minimal-right"></i></button> -->
-       
+        <!-- <button class="left-date date-week"><i class="nc-icon nc-minimal-left"></i></button> <span class="d-label">From</span><input type="date" class="nm-date"/><span class="d-label">To</span><input type="date" class="nm-date"/><button class="right-date date-week"><i class="nc-icon nc-minimal-right"></i></button> -->
+        <div class="input-group">
+            <button class="left-date date-week" (click)="onPreviousClick()">
+                <i class="nc-icon nc-minimal-left"></i>
+            </button>
+            <input class="form-control" placeholder="Select Week" readonly
+                name="dp" [(ngModel)]="model" ngbDatepicker
+                (dateSelect)="dateChange($event)"
+                #d="ngbDatepicker">
 
-       <div class="input-group">  
-        <button class="left-date date-week" (click)="onPreviousClick()">
-          <i class="nc-icon nc-minimal-left"></i>
-        </button>
-        <input class="form-control" placeholder="Select Week"  readonly
-               name="dp" [(ngModel)]="model" ngbDatepicker 
-               (dateSelect)="dateChange($event)"
-               #d="ngbDatepicker" >  
-              
-        <div class="input-group-append">  
-          <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button">
-            <i class="fas fa-calendar"></i>
-          </button>  
-        </div>  
-        <button class="right-date date-week" (click)="onNextClick()">
-          <i class="nc-icon nc-minimal-right"></i>
-        </button>
-      </div>
-      <div class="week-range">{{weekShow}}</div>
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary calendar"
+                    (click)="d.toggle()" type="button">
+                    <i class="fas fa-calendar"></i>
+                </button>
+            </div>
+            <button class="right-date date-week" (click)="onNextClick()">
+                <i class="nc-icon nc-minimal-right"></i>
+            </button>
+        </div>
+        <div class="week-range">{{weekShow}}</div>
 
     </div>
     <div class="action">
-        <button class="act-btn thm-btn thm-btn-primary" (click)="onTimesheetAddEdit(-1)"><i class="nc-icon nc-simple-add"></i> Add Time</button>
+        <button class="act-btn thm-btn thm-btn-primary"
+            (click)="onTimesheetAddEdit(-1)"><i class="nc-icon nc-simple-add"></i>
+            Add Time</button>
     </div>
 </div>
 <div class="row">
     <div class="col-md-10">
-      <div class="card">
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table">
-              <thead class=" text-primary">
-                <th>
-                  <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault" 
-                  (click)="onRowCheck(-1)">
-                  Status
-                 </th>
-                  <th>
-                    Project
-                  </th>
-                  <th>
-                      Activities
-                    </th>
-                    <th>
-                      Monday<br>{{currentWeek[0]}}
-                    </th>
-                    <th>
-                      Tuesday<br>{{currentWeek[1]}}
-                    </th>
-                  <th>
-                    Wednesday<br>{{currentWeek[2] }}
-                  </th>
-                  <th>
-                    Thusday<br>{{currentWeek[3]}} 
-                  </th>
-                  <th>
-                    Friday<br>{{currentWeek[4]}}
-                  </th>
-                  <th>
-                    Saturday<br>{{currentWeek[5]}}
-                  </th>
-                  <th>
-                    Sunday<br>{{currentWeek[6]}}
-                  </th>
-                  <th>
-                   Total
-                  </th>
-                  <th>
-                   Remarks
-                  </th>
-                  <th>
-                   Edit
-                  </th>
-                  <th>
-                   Delete
-                  </th>
-              </thead>
-              <tbody *ngFor="let row of timeSheetDetailsArray | paginate: config; let i = index">
-                <tr>
-                    <td>
-                        <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault" 
-                        (click)="onRowCheck(i)" [checked] = "selectAllTimesheet? true:false">
-                        <!-- <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault" 
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="text-primary">
+                            <th>
+                                <input class="form-check-input tbl-check"
+                                    type="checkbox" value=""
+                                    id="flexCheckDefault"
+                                    (click)="onRowCheck(-1)">
+                                Status
+                            </th>
+                            <th>
+                                Project
+                            </th>
+                            <th>
+                                Activities
+                            </th>
+                            <th>
+                                Monday<br>{{currentWeek[0]}}
+                            </th>
+                            <th>
+                                Tuesday<br>{{currentWeek[1]}}
+                            </th>
+                            <th>
+                                Wednesday<br>{{currentWeek[2] }}
+                            </th>
+                            <th>
+                                Thusday<br>{{currentWeek[3]}}
+                            </th>
+                            <th>
+                                Friday<br>{{currentWeek[4]}}
+                            </th>
+                            <th>
+                                Saturday<br>{{currentWeek[5]}}
+                            </th>
+                            <th>
+                                Sunday<br>{{currentWeek[6]}}
+                            </th>
+                            <th>
+                                Total
+                            </th>
+                            <th>
+                                Remarks
+                            </th>
+                            <th>
+                                Edit
+                            </th>
+                            <th>
+                                Delete
+                            </th>
+                        </thead>
+                        <tbody *ngFor="let row of timeSheetDetailsArray |
+                            paginate: config; let i= index">
+                            <tr>
+                                <td>
+                                    <input class="form-check-input tbl-check"
+                                        type="checkbox" value=""
+                                        id="flexCheckDefault"
+                                        (click)="onRowCheck(i)" [checked]="selectAllTimesheet?
+                                        true:false">
+                                    <!-- <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault" 
                         (click)="onRowCheck(i)" [checked] = "selectAllTimesheet"> -->
-                         {{row[0]}}
-                    </td>
-                    <td>
-                      {{row[1]}}
-                    </td>
-                    <td >
-                      {{row[2]}}
-                    </td>
-                    <td>
-                      {{row[3]}}
-                    </td>
-                    <td>
-                      {{row[4]}}
-                    </td>
-                    <td>
-                      {{row[5]}}
-                    </td>
-                    <td>
-                      {{row[6]}}
-                    </td>
-                    <td>
-                      {{row[7]}}
-                    </td>
-                    <td>
-                      {{row[8]}}
-                    </td>
-                    <td>
-                      {{row[9]}}
-                    </td>
-                    <td>
-                      {{row[10]}}
-                    </td>
-                    <td>
-                      {{row[11]}}
-                    </td>
-                    <td>
-                        <button class="edit" (click)="onTimesheetAddEdit(i)"><img src="../../../assets/img/edit.png" alt=""/></button>
-                    </td>
-                    <td>
-                        <button class="delete" (click)="onTimesheetDelete(i)"><img src="../../../assets/img/delete.png" alt=""/></button>
-                    </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+                                    {{row[0]}}
+                                </td>
+                                <td>
+                                    {{row[1]}}
+                                </td>
+                                <td>
+                                    {{row[2]}}
+                                </td>
+                                <td>
+                                    {{row[3]}}
+                                </td>
+                                <td>
+                                    {{row[4]}}
+                                </td>
+                                <td>
+                                    {{row[5]}}
+                                </td>
+                                <td>
+                                    {{row[6]}}
+                                </td>
+                                <td>
+                                    {{row[7]}}
+                                </td>
+                                <td>
+                                    {{row[8]}}
+                                </td>
+                                <td>
+                                    {{row[9]}}
+                                </td>
+                                <td>
+                                    {{row[10]}}
+                                </td>
+                                <td>
+                                    {{row[11]}}
+                                </td>
+                                <td>
+                                    <button class="edit"
+                                        (click)="onTimesheetAddEdit(i)"><img
+                                            src="../../../assets/img/edit.png"
+                                            alt="" /></button>
+                                </td>
+                                <td>
+                                    <button class="delete"
+                                        (click)="onTimesheetDelete(i)"><img
+                                            src="../../../assets/img/delete.png"
+                                            alt="" /></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-      </div>
-      <!-- Pagination -->
-      <div class="pagination-line d-flex justify-content-end" *ngIf="true">
-        <ul>
-            <pagination-controls
-            id='timesheet'
-            (pageChange)="pageChanged($event)"
-            [directionLinks]="true"
-            [autoHide]="false"
-            [maxSize]="10"
-            [responsive]="true"
-            previousLabel="Previous"
-            nextLabel="Next"
-            screenReaderPaginationLabel="Pagination"
-            screenReaderPageLabel="page"
-            screenReaderCurrentLabel="You're on page"
-            >
-            </pagination-controls>
-        </ul>
-</div>
+        <!-- Pagination -->
+        <div class="pagination-line d-flex justify-content-end" *ngIf="true">
+            <ul>
+                <pagination-controls
+                    id='timesheet'
+                    (pageChange)="pageChanged($event)"
+                    [directionLinks]="true"
+                    [autoHide]="false"
+                    [maxSize]="10"
+                    [responsive]="true"
+                    previousLabel="Previous"
+                    nextLabel="Next"
+                    screenReaderPaginationLabel="Pagination"
+                    screenReaderPageLabel="page"
+                    screenReaderCurrentLabel="You're on page">
+                </pagination-controls>
+            </ul>
+        </div>
     </div>
 
     <div class="col-md-2 remarks-col">
-       <div class="r-row">
-           <label>Send to</label>
-           <select>
-               <option>1</option>
-               <option>2</option>
-           </select>
-       </div>
-       <div class="r-row">
-           <label>Remarks</label>
-           <textarea></textarea>
-       </div>
-       <div class="r-row">
-           <button>Submit</button>
-       </div>
+        <div class="r-row">
+            <label>Send to</label>
+            <select>
+                <option>1</option>
+                <option>2</option>
+            </select>
+        </div>
+        <div class="r-row">
+            <label>Remarks</label>
+            <textarea></textarea>
+        </div>
+        <div class="r-row">
+            <button>Submit</button>
+        </div>
     </div>
 
-  </div>
-  <ng-template #content let-modal>
+</div>
+<ng-template #content let-modal>
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Add Time</h4>
-      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"><i class="nc-icon nc-simple-remove"></i></button>
+        <h4 class="modal-title" id="modal-basic-title">Add Time</h4>
+        <button type="button" class="btn-close" aria-label="Close"
+            (click)="modal.dismiss('Cross click')"><i class="nc-icon
+                nc-simple-remove"></i></button>
     </div>
     <div class="modal-body addproject-modal">
-      <form>
-        <div class="row fm-row">
-            <div class="col-md-12">
-                <div class="form-group mb-3">
-                    <label>Select Project</label>
-                    <select class="form-control">
-                        <option selected>Select Project</option>
-                        <option>2</option>
-                    </select>
-                    <div class="error"></div>
+        <form>
+            <div class="row fm-row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label>Select Project</label>
+                        <select class="form-control">
+                            <option selected>Select Project</option>
+                            <option>2</option>
+                        </select>
+                        <div class="error"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label>Activity</label>
+                        <select class="form-control">
+                            <option selected>Select Activity</option>
+                            <option>2</option>
+                        </select>
+                        <div class="error"></div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row fm-row">
-            <div class="col-md-12">
-                <div class="form-group mb-3">
-                    <label>Activity</label>
-                    <select class="form-control">
-                        <option selected>Select Activity</option>
-                        <option>2</option>
-                    </select>
-                    <div class="error"></div>
+            <div class="row fm-row">
+                <div class="col-md-12">
+                    <div class="form-group mb-3">
+                        <label>Remarks</label>
+                        <textarea class="form-control"></textarea>
+                        <div class="error"></div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row fm-row">
-            <div class="col-md-12">
-                <div class="form-group mb-3">
-                    <label>Remarks</label>
-                    <textarea class="form-control"></textarea>
-                    <div class="error"></div>
+            <div class="row fm-row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="text-primary">
+                                <th>
+                                    Monday
+                                </th>
+                                <th>
+                                    Tuesday
+                                </th>
+                                <th>
+                                    Wednesday
+                                </th>
+                                <th>
+                                    Thusday
+                                </th>
+                                <th>
+                                    Friday
+                                </th>
+                                <th>
+                                    Saturday
+                                </th>
+                                <th>
+                                    Sunday
+                                </th>
+                  
+
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="number" class="h-input" value="5" />
+                                    </td>
+                                    <td>
+                                        <input type="number" class="h-input" value="5" />
+                                    </td>
+                                    <td>
+                                        <input type="number" class="h-input" value="5" />
+                                    </td>
+                                    <td>
+                                        <input type="number" class="h-input" value="5" />
+                                    </td>
+                                    <td>
+                                        <input type="number" class="h-input" value="5" />
+                                    </td>
+                                    <td>
+                                        <input type="number" class="h-input" value="5" />
+                                    </td>
+                                    <td>
+                                        <input type="number" class="h-input" value="5" />
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-      </form>
+        </form>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+        <button type="button" class="btn btn-outline-dark"
+            (click)="modal.close('Save click')">Save</button>
     </div>
-  </ng-template>
-
-
-  
+</ng-template>
