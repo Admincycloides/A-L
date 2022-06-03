@@ -10,6 +10,7 @@ import { NotificationsComponent } from '../../pages/notifications/notifications.
 import { UpgradeComponent } from '../../pages/upgrade/upgrade.component';
 import { TimesheetComponent } from '../../pages/timesheet/timesheet.component';
 import { AddtimesheetComponent } from '../../pages/timesheet/addtimesheet/addtimesheet.component';
+import { ProjectsComponent } from '../../pages/projects/projects.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
@@ -21,5 +22,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'notifications',  component: NotificationsComponent },
     { path: 'upgrade',        component: UpgradeComponent },
     { path: 'timesheet',      component: TimesheetComponent },
-    { path: 'addtimesheet',      component: AddtimesheetComponent }
+    { path: 'addtimesheet',      component: AddtimesheetComponent },
+    { path: 'projects',      component: ProjectsComponent }
+    
 ];
