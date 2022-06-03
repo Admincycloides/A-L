@@ -130,6 +130,16 @@ table{
 .d-label{
     
 }
+.act-filter{
+    input{
+        background-color: #dfdfdf!important;
+        height: 35px;
+        &::placeholder{
+            color: transparentize($dark-color,.3)
+        }
+        @include radoius
+    }
+}
 // inner page
 .page-title{
     padding: 5px;
