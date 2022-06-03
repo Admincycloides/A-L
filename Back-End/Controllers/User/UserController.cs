@@ -8,6 +8,8 @@ using System;
 using AnL.Models;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
+using AnL.Constants;
+using AnL.ViewModel;
 
 namespace TestApplication.Controllers
 {
@@ -27,42 +29,33 @@ namespace TestApplication.Controllers
         /// <summary>
         /// Generates OTP using email address.
         /// </summary>
+        /// <param name="mailto"></param>
         /// <returns>OTP</returns>
         // GET: api/Employee
         [HttpPost]
         public async Task<ActionResult> GenerateOTP(string mailto)
         {
-
-                Random rnd = new Random();
-                int otp = rnd.Next(10000, 99999);
-                string msg = "Your otp from test.com is " + otp;
-                bool result = SendOTP(mailto, "Subjected to OTP", msg);
-                var details = await _UOW.UserRepository.GetLogin(mailto);
-                if(details==null)
-                {
-                    return BadRequest("Invalid Email address");
-                }
-                else
-                {
-                    var response = await _UOW.UserRepository.UpdateOTP(otp, details.UserId);
-
-                    return Ok(response);
-
-
-                }
-                if (result)
-                {
-                    return Ok("otp sent successfully");
-                }
-                else
-                {
-                    return Ok("otp not sent");
-                }
-            
-            
-            //if()
-            
-            //return Ok();
+            Random rnd = new Random();
+            BaseResponse baseResponse = new BaseResponse();
+            int otp = rnd.Next(10000, 99999);
+            string msg = "Your otp from test.com is " + otp;
+            bool result = SendOTP(mailto, "Subjected to OTP", msg);
+            var details = await _UOW.UserRepository.GetLogin(mailto);
+            if(details==null)
+            {
+                baseResponse.Data = details;
+                baseResponse.ResponseCode = HTTPConstants.BAD_REQUEST;
+                baseResponse.ResponseMessage = MessageConstants.GenerateOTPFailed;
+                return BadRequest(baseResponse);
+            }
+            else
+            {
+                var response = await _UOW.UserRepository.UpdateOTP(otp, details.UserId);
+                baseResponse.Data = response;
+                baseResponse.ResponseCode = HTTPConstants.OK;
+                baseResponse.ResponseMessage = MessageConstants.GenerateOTPSuccess;
+                return Ok(baseResponse);
+            }
         }
         [HttpGet]
         public bool SendOTP(string mailto, string subject, string body)
@@ -72,7 +65,7 @@ namespace TestApplication.Controllers
             {
                 MailMessage mailMessage = new MailMessage();
                 mailMessage.To.Add(mailto);
-                //mailMessage.From = new MailAddress(mailfrom);
+                mailMessage.From = new MailAddress(_configuration["Smtp:Sender"]);
                 mailMessage.Subject = subject;
                 mailMessage.Body = body;
                 System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient()

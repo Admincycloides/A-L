@@ -10,5 +10,8 @@
         public static readonly string TimsheetModificationFailed = "TimeSheet records modification Failed";
         public static readonly string TimsheetListingSuccess = "TimeSheet records fetched successfully";
         public static readonly string TimsheetListingFailed = "TimeSheet records fetch failed";
+        public static readonly string GenerateOTPFailed = "OTP Generation failed";
+        public static readonly string GenerateOTPSuccess = "OTP Generated successfully";
     }
+}
 }
