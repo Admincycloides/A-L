@@ -9,12 +9,11 @@
         <button class="left-date date-week" (click)="onPreviousClick()">
           <i class="nc-icon nc-minimal-left"></i>
         </button>
-        <input class="form-control" placeholder="mm-dd-yyyy"  readonly
+        <input class="form-control" placeholder="Select Week"  readonly
                name="dp" [(ngModel)]="model" ngbDatepicker 
                (dateSelect)="dateChange($event)"
-               #d="ngbDatepicker">  
-
-               {{weekShow}}
+               #d="ngbDatepicker" >  
+              
         <div class="input-group-append">  
           <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button">
             <i class="fas fa-calendar"></i>
@@ -24,6 +23,7 @@
           <i class="nc-icon nc-minimal-right"></i>
         </button>
       </div>
+      <div class="week-range">{{weekShow}}</div>
 
     </div>
     <div class="action">
