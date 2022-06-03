@@ -137,7 +137,7 @@ table{
         &::placeholder{
             color: transparentize($dark-color,.3)
         }
-        @include radoius
+        // @include radoius
     }
 }
 // inner page
