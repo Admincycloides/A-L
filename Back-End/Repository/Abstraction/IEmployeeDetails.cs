@@ -5,6 +5,7 @@ namespace AnL.Repository.Abstraction
 {
     public interface IEmployeeDetails : IRepository<EmployeeDetails>
     {
-        public List<EmployeeDetails> getEmployeeDetails(List<string> EmployeeID);
+        public List<EmployeeDetails> GetEmployeeDetails(List<string> EmployeeID);
+        EmployeeDetails GetById(object Id);
     }
 }

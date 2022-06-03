@@ -29,7 +29,7 @@ namespace AnL.Repository.Implementation
         {
             List<string> employeeIDs = new List<string>();
             employeeIDs.Add(timesheetDetails.EmployeeId);
-            var empDetails = _UOW.EmployeeDetailsRepository.getEmployeeDetails(employeeIDs);
+            var empDetails = _UOW.EmployeeDetailsRepository.GetEmployeeDetails(employeeIDs);
             List<string> subEmpDetails = new List<string>();
             List<TimesheetDetails> sheetDetails = new List<TimesheetDetails>();
             if (empDetails[0].SupervisorFlag=="Y" && empDetails.Count==1 )

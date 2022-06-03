@@ -4,6 +4,26 @@
         <name>AnL</name>
     </assembly>
     <members>
+        <member name="M:AnL.Controllers.TimesheetController.GetDetails(AnL.ViewModel.TimesheetViewModel)">
+            <summary>
+            Fetch Timesheet Details based on the user Logged in
+            </summary>
+        </member>
+        <member name="M:AnL.Controllers.TimesheetController.AddTimesheetDetails(System.Collections.Generic.List{AnL.ViewModel.TimesheetViewModel})">
+            <summary>
+            Adding Timesheet records based on Project and its Activities
+            </summary>
+        </member>
+        <member name="M:AnL.Controllers.TimesheetController.ModifyTimesheet(System.Collections.Generic.List{AnL.ViewModel.TimesheetViewModel})">
+            <summary>
+            Modifying Timesheet records based on Project and its Activities
+            </summary>
+        </member>
+        <member name="M:AnL.Controllers.TimesheetController.DeleteTimesheet(System.Collections.Generic.List{AnL.ViewModel.TimesheetViewModel})">
+            <summary>
+            Deletion of Timesheet records based on Project and its Activities
+            </summary>
+        </member>
         <member name="M:TestApplication.Controllers.UserController.GenerateOTP(System.String)">
             <summary>
             Generates OTP using email address.

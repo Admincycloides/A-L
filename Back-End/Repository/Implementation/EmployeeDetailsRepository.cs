@@ -18,7 +18,7 @@ namespace AnL.Repository.Implementation
             dbSet = context.Set<EmployeeDetails>();
         }
 
-        public List<EmployeeDetails> getEmployeeDetails(List<string> EmployeeID)
+        public List<EmployeeDetails> GetEmployeeDetails(List<string> EmployeeID)
         {
             List<EmployeeDetails> empDetails=new List<EmployeeDetails>();
             foreach(string empID in EmployeeID)
@@ -33,6 +33,12 @@ namespace AnL.Repository.Implementation
             {
                 return null;
             }
+        }
+        public override EmployeeDetails GetById(object Id)
+        {
+            //Guid ASNId = (Guid)Id;
+            EmployeeDetails temp = dbSet.Find(Id);
+            return temp;
         }
     }
 }

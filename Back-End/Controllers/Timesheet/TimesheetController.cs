@@ -34,7 +34,7 @@ namespace AnL.Controllers
 
                 List<string> employeeIDs = new List<string>();
                 employeeIDs.Add(timesheetDetails.EmployeeId);
-                var empDetails = _UOW.EmployeeDetailsRepository.getEmployeeDetails(employeeIDs);
+                var empDetails = _UOW.EmployeeDetailsRepository.GetEmployeeDetails(employeeIDs);
                 List<string> subEmpDetails = new List<string>();
                 List<TimesheetDetails> sheetDetails = new List<TimesheetDetails>();
                 //Get Manager and all employee Timesheet Details based on dates

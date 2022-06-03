@@ -19,7 +19,7 @@ namespace AnL.Controllers
         [HttpGet]
         public ActionResult getEmployeeDetail(List<string> EmployeeID)
         {
-            var results = _UOW.EmployeeDetailsRepository.getEmployeeDetails(EmployeeID);
+            var results = _UOW.EmployeeDetailsRepository.GetEmployeeDetails(EmployeeID);
             if (results != null)
             {
                 return Ok(results);
