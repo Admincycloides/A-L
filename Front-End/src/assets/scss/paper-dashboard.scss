@@ -162,5 +162,18 @@ table{
         outline: none;
     }
 }
+.row-created{
+    border: dashed 2px transparentize($secondary-color, .45);
+    background: transparent;
+}
+.row-added{
+    border-left: solid 3px $secondary-color!important;
+    border-top: none!important;
+    border-bottom: none!important;
+    border-right: none!important;
+    background: #e3f6e6!important;
+}
+
+
 
 }//body END
