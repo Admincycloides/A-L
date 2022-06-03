@@ -12,6 +12,7 @@ namespace AnL.Models
         public double NumberOfHours { get; set; }
         public string Remarks { get; set; }
         public int UniqueId { get; set; }
+        public string Status { get; set; }
 
         public virtual ActivityDetails Activity { get; set; }
         public virtual ProjectDetails Project { get; set; }

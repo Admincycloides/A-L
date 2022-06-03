@@ -20,7 +20,7 @@ namespace AnL.Controllers
         [HttpGet]
         public EmployeeDetails getEmployeeDetails(string UserID)
         {
-            var Result= _UOW.EmployeeDetailRepository.GetById(UserID);
+            var Result= _UOW.EmployeeDetailsRepository.GetById(UserID);
             return Result;
         }
     }

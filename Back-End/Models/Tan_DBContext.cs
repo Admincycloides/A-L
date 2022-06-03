@@ -262,6 +262,10 @@ namespace AnL.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Status)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.HasOne(d => d.Activity)
                     .WithMany(p => p.TimesheetDetails)
                     .HasForeignKey(d => d.ActivityId)
