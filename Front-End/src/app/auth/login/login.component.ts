@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
   onSubmitMail(){
    if(this.loginForm.valid){
       let emailAddress = this.loginForm.controls['email'].value;
-      const url = `${this._url.login.getOTP}?mailto=${emailAddress}`
+      const url = `${this._url.user.getOTP}?mailto=${emailAddress}`
       this._http.get(url).subscribe(
         {
           next(res) {
@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
     if(this.loginForm.valid){
        let  otpValue = this.loginOtpForm.controls['otp'].value;
        let username = this.loginForm.controls['email'].value;
-      this._http.get(`${this._url.login.submitOTP}?finalDigit=${otpValue}&username=${username}`).subscribe(
+      this._http.get(`${this._url.user.submitOTP}?finalDigit=${otpValue}&username=${username}`).subscribe(
         {
           next(res) {
               //var data = res.body.data;
@@ -78,7 +78,7 @@ export class LoginComponent implements OnInit {
   }
   onResentOtp(){
       let  emailAddress = this.loginForm.controls['email'].value
-      this._http.get(`${this._url.login.getOTP}?mailto=${emailAddress}`).subscribe(
+      this._http.get(`${this._url.user.getOTP}?mailto=${emailAddress}`).subscribe(
         {
           next(res) {
             this.formSubmitted = true;

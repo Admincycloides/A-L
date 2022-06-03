@@ -181,13 +181,12 @@
       <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"><i class="nc-icon nc-simple-remove"></i></button>
     </div>
     <div class="modal-body addproject-modal">
-      <form [formGroup]="addTimesheetForm">
+      <form>
         <div class="row fm-row">
             <div class="col-md-12">
                 <div class="form-group mb-3">
                     <label>Select Project</label>
-                    <select class="form-control"
-                      formControlName="project">
+                    <select class="form-control">
                         <option selected>Select Project</option>
                         <option>2</option>
                     </select>
@@ -199,8 +198,7 @@
             <div class="col-md-12">
                 <div class="form-group mb-3">
                     <label>Activity</label>
-                    <select class="form-control"
-                      formControlName="activity">
+                    <select class="form-control">
                         <option selected>Select Activity</option>
                         <option>2</option>
                     </select>
@@ -212,7 +210,7 @@
             <div class="col-md-12">
                 <div class="form-group mb-3">
                     <label>Remarks</label>
-                    <textarea class="form-control" formControlName="remarks"></textarea>
+                    <textarea class="form-control"></textarea>
                     <div class="error"></div>
                 </div>
             </div>
@@ -220,7 +218,7 @@
       </form>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click');onSaveTimesheetDetails()">Save</button>
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
     </div>
   </ng-template>
 

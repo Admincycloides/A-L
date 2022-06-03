@@ -25,15 +25,17 @@ export class UrlService {
   // submitOTP   = this.api + '/SubmitOTP';
 
   // Login
-  public login = {
-    getOTP              :'GenerateOTP',
-    submitOTP           :'SubmitOTP',
-    getEmployeeDetails  :'EmployeeDetails/getEmployeeDetails'
+  public user = {
+    getOTP              :'api/User/GenerateOTP',
+    submitOTP           :'api/User/SubmitOTP',
   }
   public timesheet = {
     getTimesheet      : 'Timesheet/GetDetails',
     deleteTimesheet   : 'Timesheet/DeleteTimesheet',
     addTimesheet      : 'Timesheet/AddTimesheetDetails',
     editTimesheet     : 'Timesheet/ModifyTimesheet'
+  }
+  public Employee = {
+    getEmployeeDetails  :'api/Employee/getEmployeeDetails'
   }
 }

@@ -15,6 +15,7 @@ import { NotificationsComponent }   from '../../pages/notifications/notification
 import { UpgradeComponent }         from '../../pages/upgrade/upgrade.component';
 import { TimesheetComponent }       from '../../pages/timesheet/timesheet.component';
 
+
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -45,7 +46,6 @@ import { AddtimesheetComponent } from '../../pages/timesheet/addtimesheet/addtim
     
   ],
   providers: [],
-  entryComponents:[TimesheetComponent]
 })
 
 export class AdminLayoutModule {}

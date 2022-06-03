@@ -14,7 +14,7 @@ import * as moment from 'moment';
   styleUrls: ['./timesheet.component.scss']
 })
 export class TimesheetComponent implements OnInit {
-  @ViewChild('content') content;
+  @ViewChild('content') content: any;
   closeResult = '';
   userDetails: any;
   startOfWeek: any;
@@ -43,11 +43,9 @@ export class TimesheetComponent implements OnInit {
     private _fb: FormBuilder,
     ) { }
     
-    
-  
-    
 
   ngOnInit(): void {
+    console.log(this.content);
     // this.userDetails = JSON.parse(localStorage.getItem('token'));
     // this.getEmployeeDetails();
     this.startOfWeek = moment().startOf('isoWeek').toDate();
@@ -95,7 +93,7 @@ export class TimesheetComponent implements OnInit {
   }
   private getEmployeeDetails(){
 
-    this._http.get(`${this._url.login.getEmployeeDetails}/${this.userDetails.userId}`).subscribe(
+    this._http.get(`${this._url.Employee.getEmployeeDetails}?UserID=${this.userDetails.userId}`).subscribe(
       {
         next(res) {
           //localStorage.setItem('user',JSON.stringify(res.data));
@@ -169,6 +167,7 @@ export class TimesheetComponent implements OnInit {
   }
 
   public open(content: any) {
+    console.log("open",content);
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'xl' }).result.then(
       (result) => {
         this.closeResult = `Closed with: ${result}`;
