@@ -8,13 +8,20 @@ export class AuthService {
 
   constructor(private _router: Router) { }
   isLoggedIn() {
-    const tokenExpiryTime = JSON.parse(localStorage.getItem('user')).tokenExpiryTime;
+    //const tokenExpiryTime = JSON.parse(localStorage.getItem('user')).tokenExpiryTime;
+    const tokenExpiryTime = JSON.parse(localStorage.getItem('token')).tokenExpiryTime;
     const time = Math.floor(Date.now() / 1000);
     if(tokenExpiryTime < time) return true;
-    else return false;
+    else{
+      //localStorage.removeItem("user");
+      localStorage.removeItem("token");
+      return false;
+    }
   }
   logout() {
+    //localStorage.removeItem("user");
+    localStorage.removeItem("token");
     localStorage.removeItem("user");
-    this._router.navigate(["/auth"]);
+    this._router.navigate(["/login"]);
   }
 }

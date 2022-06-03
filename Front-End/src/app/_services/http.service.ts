@@ -8,22 +8,13 @@ import {
 import { Observable } from "rxjs";
 import { UrlService } from "../_services/url.service";
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class HttpService {
   constructor(private _http: HttpClient, private _urlService: UrlService) {}
-  // get(
-  //   url: string,
-  //   options: {
-  //     headers?: HttpHeaders | { [header: string]: string | string[] };
-  //     observe: "response";
-  //     params?: HttpParams | { [param: string]: string | string[] };
-  //     reportProgress?: boolean;
-  //     responseType?: "json";
-  //     withCredentials?: boolean;
-  //   }
-  // ): Observable<HttpResponse<Object>>;
-
-  // GET
+  
+  //GET
   get(
     url: String,
     query?: String,

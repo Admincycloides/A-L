@@ -4,7 +4,7 @@
         <name>AnL</name>
     </assembly>
     <members>
-        <member name="M:TestApplication.Controllers.UserController.GenerateOTP">
+        <member name="M:TestApplication.Controllers.UserController.GenerateOTP(System.String)">
             <summary>
             Generates OTP using email address.
             </summary>

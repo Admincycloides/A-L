@@ -15,4 +15,27 @@ export class UrlService {
     const URL = environment.apiConfig.api;
     return URL;
   }
+  // api       = environment.apiConfig.api;
+  // serverApi = environment.apiConfig.server;
+
+
+
+  // // Login
+  // generateOTP = this.api + '/GenerateOTP';
+  // submitOTP   = this.api + '/SubmitOTP';
+
+  // Login
+  public user = {
+    getOTP              :'api/User/GenerateOTP',
+    submitOTP           :'api/User/SubmitOTP',
+  }
+  public timesheet = {
+    getTimesheet      : 'Timesheet/GetDetails',
+    deleteTimesheet   : 'Timesheet/DeleteTimesheet',
+    addTimesheet      : 'Timesheet/AddTimesheetDetails',
+    editTimesheet     : 'Timesheet/ModifyTimesheet'
+  }
+  public Employee = {
+    getEmployeeDetails  :'api/Employee/getEmployeeDetails'
+  }
 }

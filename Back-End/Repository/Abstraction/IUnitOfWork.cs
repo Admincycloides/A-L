@@ -3,7 +3,9 @@
     public interface IUnitOfWork
     {
         ITimesheetDetail TimesheetDetailRepository { get; }
-        IEmployeeDetails EmployeeDetailsRepository { get; }
+        IUser UserRepository { get; }
+
+        IEmployeeDetail EmployeeDetailRepository { get; }
         void SaveChanges();
     }
 }

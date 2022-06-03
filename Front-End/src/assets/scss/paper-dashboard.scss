@@ -49,11 +49,118 @@
 
 body{
     font-family: 'Roboto', sans-serif;
-}
+
 .error{
     color: #9f1b19;
     font-size: 12px;
     padding: 5px 0 0;
 }
+.modal{
+    z-index: 99999;
+}
+table{
+    th,td{
+        .tbl-check{
+            margin-left: -27px;
+        }
+        &:first-child{
+            padding-left: 28px!important;
+        }
+    }
+}
+// layout
+.sidebar .logo, .off-canvas-sidebar .logo{
+    height: 62px;
+    background-color: $secondary-color;
+    padding: 0 0 0 5pxpx;
+    display: flex;
+    align-items: center;
+}
+.main-panel{
+    .navbar{
+        background-color: $secondary-color!important;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+}
+.user-dp{
+    width: 42px;
+    height: 42px;
+    @include radius(50%);
+    object-fit: cover;
+}
+.sidebar, .off-canvas-sidebar,.sidebar .sidebar-wrapper, .off-canvas-sidebar .sidebar-wrapper{
+    width: 210px;
+}
+.main-panel{
+    width: calc(100% - 210px);
+}
+.main-panel .content{
+    padding: 0 15px 30px;
+}
+.sidebar .nav i, .off-canvas-sidebar .nav i{
+    font-size: 18px;
+    margin-right: 0px;
+    bottom: 3px;
+}
+.sidebar .nav li>a, .off-canvas-sidebar .nav li>a{
+    margin: 10px 0px 0;
+    font-size: 13px;
+    padding: 5px 8px 5px 0px;
+    line-height: 26px;
+}
+// date picker native
+.date-week{
+    border: none;
+    background: transparent;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    margin: 0 5px;
+    display: flex;
+    &:focus{
+        outline: none;
+    }
+}
+.act-filter{
+    input[type="date"]{
+        margin: 0 15px;
+    }
+}
+.d-label{
+    
+}
+.act-filter{
+    input{
+        background-color: #dfdfdf!important;
+        height: 35px;
+        &::placeholder{
+            color: transparentize($dark-color,.3)
+        }
+        // @include radoius
+    }
+}
+// inner page
+.page-title{
+    padding: 5px;
+    font-size: 20px;
+    text-transform: uppercase;
+    color: $secondary-color;
+    font-weight: 700;
+}
+.main-panel{
+    background-color: $bg-color;
+}
+.thm-btn{
+    padding: 5px;
+    @include radius(5px);
+    height:40px;
+    outline: none;
+    border: none;
+    font-size: 16px;
+    &:focus{
+        outline: none;
+    }
+}
 
-
+}//body END

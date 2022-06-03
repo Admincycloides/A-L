@@ -13,15 +13,24 @@ import { IconsComponent }           from '../../pages/icons/icons.component';
 import { MapsComponent }            from '../../pages/maps/maps.component';
 import { NotificationsComponent }   from '../../pages/notifications/notifications.component';
 import { UpgradeComponent }         from '../../pages/upgrade/upgrade.component';
+import { TimesheetComponent }       from '../../pages/timesheet/timesheet.component';
+
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HttpClientModule } from '@angular/common/http';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { AddtimesheetComponent } from '../../pages/timesheet/addtimesheet/addtimesheet.component';
+
+
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule.forChild(AdminLayoutRoutes),
     FormsModule,
-    NgbModule
+    NgbModule,
+    HttpClientModule,
+    NgxPaginationModule
   ],
   declarations: [
     DashboardComponent,
@@ -32,7 +41,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     IconsComponent,
     MapsComponent,
     NotificationsComponent,
-  ]
+    TimesheetComponent,
+    AddtimesheetComponent,
+    
+  ],
+  providers: [],
 })
 
 export class AdminLayoutModule {}

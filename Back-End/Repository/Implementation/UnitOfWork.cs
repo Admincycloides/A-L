@@ -13,6 +13,20 @@ namespace AnL.Repository.Implementation
             _dbcontext = dbcontext;
         }
         private ITimesheetDetail _TimesheetDetailRepository;
+        private IUser _UserRepository;
+        private IEmployeeDetails _EmployeeDetailRepository;
+        public IEmployeeDetails EmployeeDetailsRepository
+        {
+            get
+            {
+                if (_EmployeeDetailRepository == null)
+                {
+                    _EmployeeDetailRepository = new EmployeeDetailsRepository(_dbcontext, _UOW);
+                }
+
+                return _EmployeeDetailRepository;
+            }
+        }
         public ITimesheetDetail TimesheetDetailRepository
         {
             get
@@ -25,17 +39,16 @@ namespace AnL.Repository.Implementation
                 return _TimesheetDetailRepository;
             }
         }
-        private IEmployeeDetails _EmployeeDetailsRepository;
-        public IEmployeeDetails EmployeeDetailsRepository
+        public IUser UserRepository
         {
             get
             {
-                if (_EmployeeDetailsRepository == null)
+                if (_UserRepository == null)
                 {
-                    _EmployeeDetailsRepository = new EmployeeDetailsRepository(_dbcontext, _UOW);
+                    _UserRepository = new UserRepository(_dbcontext);
                 }
 
-                return _EmployeeDetailsRepository;
+                return _UserRepository;
             }
         }
         public void SaveChanges()
