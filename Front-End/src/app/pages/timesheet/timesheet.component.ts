@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpService } from 'app/_services/http.service';
 import { UrlService } from 'app/_services/url.service';
 import * as moment from 'moment';
@@ -13,6 +14,7 @@ import * as moment from 'moment';
   styleUrls: ['./timesheet.component.scss']
 })
 export class TimesheetComponent implements OnInit {
+  @ViewChild('content') content;
   closeResult = '';
   userDetails: any;
   startOfWeek: any;
@@ -30,27 +32,20 @@ export class TimesheetComponent implements OnInit {
   timeSheetDetailsArray =[];
   model;
   weekShow:any;
-
+  selectAllTimesheet: boolean = false;
+  addTimesheetForm :FormGroup;
+  get f() {
+    return this.addTimesheetForm.controls;
+  }
 
   constructor(private _url: UrlService,
-    private _http: HttpService,private modalService: NgbModal) { }
-    open(content) {
-      this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-        this.closeResult = `Closed with: ${result}`;
-      }, (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      });
-    }
+    private _http: HttpService,private modalService: NgbModal,
+    private _fb: FormBuilder,
+    ) { }
+    
+    
   
-    private getDismissReason(reason: any): string {
-      if (reason === ModalDismissReasons.ESC) {
-        return 'by pressing ESC';
-      } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-        return 'by clicking on a backdrop';
-      } else {
-        return `with: ${reason}`;
-      }
-    }
+    
 
   ngOnInit(): void {
     // this.userDetails = JSON.parse(localStorage.getItem('token'));
@@ -91,7 +86,12 @@ export class TimesheetComponent implements OnInit {
         "UniqueId": 5
       }
     ]
-    this.getTimesheetDetails()
+    this.getTimesheetDetails();
+    this.addTimesheetForm = this._fb.group({
+      project: ['', Validators.required],
+      activity:['',Validators.required],
+      remarks:['']
+    });
   }
   private getEmployeeDetails(){
 
@@ -131,7 +131,7 @@ export class TimesheetComponent implements OnInit {
         }
         // rowArray.splice(itemIndex+2,0,item.NumberOfHours);
         // rowArray.splice(9,0,5);
-        rowArray.push(item.NumberOfHours,item.Remarks);
+        rowArray.push(item.NumberOfHours,item.Remarks,item.UniqueId);
          this.timeSheetDetailsArray.push(rowArray);
       }
       
@@ -168,5 +168,61 @@ export class TimesheetComponent implements OnInit {
 
   }
 
+  public open(content: any) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'xl' }).result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  onTimesheetAddEdit(id:any){
+    if(id == -1){
+      this.open(this.content);
+    }
+    else{
+      this.open(this.content);
+    }
+
+
+  }
+  onTimesheetDelete(id:any){
+    const uniqueId = this.timeSheetDetailsArray[id].UniqueId;
+    this._http.delete(`${this._url.timesheet.deleteTimesheet}/${uniqueId}`).subscribe(
+    {
+      next(res) {
+        //this.toastr.success(res.responseMessage)
+    }
+    });
+  }
+
+  onRowCheck(id: any){
+    console.log(id)
+    if(id == -1){
+      this.selectAllTimesheet = !this.selectAllTimesheet;
+    }else{
+      console.log(this.timeSheetDetailsArray[id])
+    }
+    //console.log(this.selectAllTimesheet)
+
+  }
+  onSaveTimesheetDetails(){
+    console.log(this.addTimesheetForm.controls['project'].value);
+  }
+
+  
 }
 

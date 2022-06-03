@@ -30,4 +30,10 @@ export class UrlService {
     submitOTP           :'/SubmitOTP',
     getEmployeeDetails  :'EmployeeDetails/getEmployeeDetails'
   }
+  public timesheet = {
+    getTimesheet      : '/Timesheet/GetDetails',
+    deleteTimesheet   : 'Timesheet/DeleteTimesheet',
+    addTimesheet      : 'Timesheet/AddTimesheetDetails',
+    editTimesheet     : 'Timesheet/ModifyTimesheet'
+  }
 }

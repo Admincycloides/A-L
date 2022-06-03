@@ -27,7 +27,7 @@
 
     </div>
     <div class="action">
-        <button class="act-btn thm-btn thm-btn-primary" (click)="open(content)"><i class="nc-icon nc-simple-add"></i> Add Time</button>
+        <button class="act-btn thm-btn thm-btn-primary" (click)="onTimesheetAddEdit(-1)"><i class="nc-icon nc-simple-add"></i> Add Time</button>
     </div>
 </div>
 <div class="row">
@@ -38,7 +38,9 @@
             <table class="table">
               <thead class=" text-primary">
                 <th>
-                  <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault">Status
+                  <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault" 
+                  (click)="onRowCheck(-1)">
+                  Status
                  </th>
                   <th>
                     Project
@@ -83,7 +85,10 @@
               <tbody *ngFor="let row of timeSheetDetailsArray | paginate: config; let i = index">
                 <tr>
                     <td>
-                        <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault">
+                        <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault" 
+                        (click)="onRowCheck(i)" *ngIf="!selectAllTimesheet">
+                        <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault" 
+                        (click)="onRowCheck(i)" *ngIf="selectAllTimesheet">
                          {{row[0]}}
                     </td>
                     <td>
@@ -120,10 +125,10 @@
                       {{row[11]}}
                     </td>
                     <td>
-                        <button class="edit"><img src="../../../assets/img/edit.png" alt=""/></button>
+                        <button class="edit" (click)="onTimesheetAddEdit(i)"><img src="../../../assets/img/edit.png" alt=""/></button>
                     </td>
                     <td>
-                        <button class="delete"><img src="../../../assets/img/delete.png" alt=""/></button>
+                        <button class="delete" (click)="onTimesheetDelete(i)"><img src="../../../assets/img/delete.png" alt=""/></button>
                     </td>
                 </tr>
               </tbody>
@@ -176,12 +181,13 @@
       <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"><i class="nc-icon nc-simple-remove"></i></button>
     </div>
     <div class="modal-body addproject-modal">
-      <form>
+      <form [formGroup]="addTimesheetForm">
         <div class="row fm-row">
             <div class="col-md-12">
                 <div class="form-group mb-3">
                     <label>Select Project</label>
-                    <select class="form-control">
+                    <select class="form-control"
+                      formControlName="project">
                         <option selected>Select Project</option>
                         <option>2</option>
                     </select>
@@ -193,7 +199,8 @@
             <div class="col-md-12">
                 <div class="form-group mb-3">
                     <label>Activity</label>
-                    <select class="form-control">
+                    <select class="form-control"
+                      formControlName="activity">
                         <option selected>Select Activity</option>
                         <option>2</option>
                     </select>
@@ -205,7 +212,7 @@
             <div class="col-md-12">
                 <div class="form-group mb-3">
                     <label>Remarks</label>
-                    <textarea class="form-control"></textarea>
+                    <textarea class="form-control" formControlName="remarks"></textarea>
                     <div class="error"></div>
                 </div>
             </div>
@@ -213,7 +220,7 @@
       </form>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click');onSaveTimesheetDetails()">Save</button>
     </div>
   </ng-template>
 
