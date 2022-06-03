@@ -13,7 +13,7 @@ namespace AnL.Models
         public Tan_DBContext(DbContextOptions<Tan_DBContext> options)
             : base(options)
         {
-        }   
+        }
 
         public virtual DbSet<ActivityDetails> ActivityDetails { get; set; }
         public virtual DbSet<ActivityMapping> ActivityMapping { get; set; }
@@ -258,6 +258,10 @@ namespace AnL.Models
                 entity.Property(e => e.ProjectId).HasColumnName("Project_ID");
 
                 entity.Property(e => e.Remarks)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Status)
                     .HasMaxLength(50)
                     .IsUnicode(false);
 

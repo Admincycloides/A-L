@@ -3,6 +3,7 @@
     public interface IUnitOfWork
     {
         ITimesheetDetail TimesheetDetailRepository { get; }
+        IEmployeeDetails EmployeeDetailsRepository { get; }
         void SaveChanges();
     }
 }
