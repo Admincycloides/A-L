@@ -47,7 +47,6 @@ export class LoginComponent implements OnInit {
         this.formSubmitted = true;
       },(err)=>{
         this.showMessage = true;
-        console.log(err);
         this.errMessage = err.error.responseMessage
       }
       )
@@ -77,7 +76,7 @@ export class LoginComponent implements OnInit {
         this._router.navigate(['/timesheet']);
       },(error)=>{
         this.showOTPMessage = true;
-        this.invalidOtp = error.error.responseMessage;
+        this.invalidOtp = error.error;
       }
         // {
         //   next(res) {
