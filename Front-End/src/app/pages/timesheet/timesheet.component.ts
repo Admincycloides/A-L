@@ -52,8 +52,8 @@ export class TimesheetComponent implements OnInit {
     console.log(this.content);
     this.projectList = ['Project 1','Project 2','Project 3','Project 4'];
     this.activityList = ['Activity 1','Activity 2','Activity 3','Activity 4'];
-    // this.userDetails = JSON.parse(localStorage.getItem('token'));
-    // this.getEmployeeDetails();
+    this.userDetails = JSON.parse(localStorage.getItem('token'));
+    this.getEmployeeDetails();
     this.startOfWeek = moment().startOf('isoWeek').toDate();
     this.endOfWeek = moment().endOf('isoWeek').toDate();
     this.weekShow = moment(this.startOfWeek).format("MMMM-DD")+"-"+moment(this.endOfWeek).format("MMMM-DD");
@@ -289,13 +289,17 @@ export class TimesheetComponent implements OnInit {
     });
   }
   private getEmployeeDetails(){
-
-    this._http.get(`${this._url.Employee.getEmployeeDetails}?UserID=${this.userDetails.userId}`).subscribe(
-      {
-        next(res) {
-          //localStorage.setItem('user',JSON.stringify(res.data));
-        }
+    const url = `${this._url.Employee.getEmployeeDetails}?UserID=${this.userDetails.userId}`
+    this._http.get(url).subscribe(
+      (res)=>{
+        console.log(res);
+        //localStorage.setItem('user',JSON.stringify(res.data))
       }
+      // {
+      //   next(res) {
+      //     localStorage.setItem('user',JSON.stringify(res.data));
+      //   }
+      // }
     )
   }
 
