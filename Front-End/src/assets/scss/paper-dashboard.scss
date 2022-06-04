@@ -132,12 +132,16 @@ table{
 }
 .act-filter{
     input{
-        background-color: #dfdfdf!important;
-        height: 35px;
-        &::placeholder{
-            color: transparentize($dark-color,.3)
+        &.date-input{
+            background-color: #dfdfdf!important;
+            height: 40px;
+            @include radius(5px 0 0 5px);
         }
+        
         // @include radoius
+    }
+    .week-range{
+        color: transparentize($dark-color,.3)
     }
 }
 // inner page
