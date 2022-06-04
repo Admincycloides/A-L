@@ -96,6 +96,7 @@ export class TimesheetComponent implements OnInit {
       activity:['',Validators.required],
       remarks:['']
     });
+    this.getEmployeeDetails();
   }
   private getEmployeeDetails(){
 

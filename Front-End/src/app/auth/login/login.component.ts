@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
    if(this.loginForm.valid){
       let emailAddress = this.loginForm.controls['email'].value;
       const url = `${this._url.user.getOTP}?mailto=${emailAddress}`
-      this._http.get(url).subscribe(
+      this._http.post(url,{}).subscribe(
         {
           next(res) {
             this.formSubmitted = true;
@@ -57,7 +57,9 @@ export class LoginComponent implements OnInit {
     if(this.loginForm.valid){
        let  otpValue = this.loginOtpForm.controls['otp'].value;
        let username = this.loginForm.controls['email'].value;
-      this._http.get(`${this._url.user.submitOTP}?finalDigit=${otpValue}&username=${username}`).subscribe(
+      //let otpValue ='123456789';
+      //let username ='jishnup@tangentia.com'
+      this._http.get(`${this._url.user.submitOTP}/${otpValue}/${username}`).subscribe(
         {
           next(res) {
               //var data = res.body.data;
