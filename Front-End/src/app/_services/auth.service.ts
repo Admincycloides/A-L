@@ -9,10 +9,10 @@ export class AuthService {
   constructor(private _router: Router) { }
   isLoggedIn() {
     //const tokenExpiryTime = JSON.parse(localStorage.getItem('user')).tokenExpiryTime;
-    const tokenExpiryTime = JSON.parse(localStorage.getItem('token')).tokenExpiryDate;
+    const tokenExpiryTime = JSON.parse(localStorage.getItem('token')).tokenExpiryDate ? JSON.parse(localStorage.getItem('token')).tokenExpiryDate:'NA';
     //const time = Math.floor(Date.now() / 1000);
     const time = new Date().toLocaleString();
-    if(tokenExpiryTime < time) return true;
+    if(tokenExpiryTime !='NA' && tokenExpiryTime > time) return true;
     else{
       //localStorage.removeItem("user");
       localStorage.removeItem("token");

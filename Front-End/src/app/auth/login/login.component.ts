@@ -15,7 +15,9 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   errMessage: string ;
   invalidOtp: string;
-  loginOtpForm:FormGroup
+  loginOtpForm:FormGroup;
+  showMessage = false;
+  showOTPMessage = false;
   get f() {
     return this.loginForm.controls;
   }
@@ -36,13 +38,19 @@ export class LoginComponent implements OnInit {
     });
   }
   onSubmitMail(){
-   if(this.loginForm.valid){
+   if(this.loginForm.controls.email.valid){
     
       let emailAddress = this.loginForm.controls['email'].value;
       const url = `${this._url.user.getOTP}?mailto=${emailAddress}`
       this._http.post(url,{}).subscribe((res)=>{
+        this.showMessage = false;
         this.formSubmitted = true;
-      })
+      },(err)=>{
+        this.showMessage = true;
+        console.log(err);
+        this.errMessage = err.error.responseMessage
+      }
+      )
         // {
         //   next(res) {
         //     console.log("res",this.formSubmitted);
@@ -62,12 +70,14 @@ export class LoginComponent implements OnInit {
        let username = this.loginForm.controls['email'].value;
        const url = `${this._url.user.submitOTP}/${otpValue}/${username}`;
       this._http.get(url).subscribe((res)=>{
+        this.showOTPMessage = false;
         var data = res;
         localStorage.setItem('token',JSON.stringify(data));
         this.toast.success("User Successfully logged in");
         this._router.navigate(['/timesheet']);
       },(error)=>{
-        this.errMessage = error;
+        this.showOTPMessage = true;
+        this.invalidOtp = error.error.responseMessage;
       }
         // {
         //   next(res) {
