@@ -11,8 +11,7 @@
                     <div class="auth-logo">
                         <img src="../.././../assets/img/logo.png" alt=""/>
                     </div>
-                    <form class="w-100 d-flex justify-content-center"[formGroup]="loginForm" 
-                    (ngSubmit)= "onSubmitMail()" *ngIf="!formSubmitted || !loginForm.valid">
+                    <form class="w-100 d-flex justify-content-center"[formGroup]="loginForm" *ngIf="!formSubmitted">
                         <div class="auth-form d-flex flex-column align-items-center">
                             <div class="af-row w-100">
                                 <input type="email" class="form-control" 
@@ -22,24 +21,25 @@
                             </div>
                             
                             <div class="af-row af-btnrow w-100">
-                                <button class="auth-btn thm-btn w-100" type="submit" [disabled]="loginForm.invalid">GENERATE OTP</button>
+                                <button class="auth-btn thm-btn w-100" type="submit" [disabled]="loginForm.invalid"
+                                (click)="onSubmitMail()">GENERATE OTP</button>
                             </div>
                             
                         </div>
                 </form>
-                <form [formGroup]="loginOtpForm" *ngIf="formSubmitted && loginForm.valid"
-                    (ngSubmit)= "login()">
+                <form [formGroup]="loginOtpForm" *ngIf="formSubmitted">
                         <div class="auth-form d-flex flex-column align-items-center">
                             <div class="af-row w-100">
                                 <input type="number" class="form-control" 
                                 formControlName="otp"
                                 placeholder="Enter your OTP"/>
                                 <div class="error" *ngIf="loginOtpForm.length">Invalid OTP {{loginOtpForm}}</div>
-                                <div class="re-otp"><button>Redsend OTP</button></div>
+                                <div class="re-otp"><button (click)="onResentOtp()">Resend OTP</button></div>
                             </div>
                             
                             <div class="af-row af-btnrow w-100">
-                                <button class="auth-btn thm-btn w-100" type="submit" [disabled]="loginOtpForm.invalid">ENTER</button>
+                                <button class="auth-btn thm-btn w-100" type="submit" [disabled]="loginOtpForm.invalid"
+                                (click)="login()">ENTER</button>
                             </div>
                             
                         </div>

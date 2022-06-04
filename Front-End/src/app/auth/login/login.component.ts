@@ -37,40 +37,49 @@ export class LoginComponent implements OnInit {
   }
   onSubmitMail(){
    if(this.loginForm.valid){
+    
       let emailAddress = this.loginForm.controls['email'].value;
       const url = `${this._url.user.getOTP}?mailto=${emailAddress}`
-      this._http.post(url,{}).subscribe(
-        {
-          next(res) {
-            this.formSubmitted = true;
-          },
-          error(msg) {
-            this.errMessage = msg;
-          }
-        })
+      this._http.post(url,{}).subscribe((res)=>{
+        this.formSubmitted = true;
+      })
+        // {
+        //   next(res) {
+        //     console.log("res",this.formSubmitted);
+        //   },
+        //   error(msg) {
+        //     this.errMessage = msg;
+        //   }
+        // })
     }
     else{
       this.toast.error("Please Enter Valid Email Address");
     }
   }
   login(){
-    if(this.loginForm.valid){
+    if(this.loginOtpForm.valid){
        let  otpValue = this.loginOtpForm.controls['otp'].value;
        let username = this.loginForm.controls['email'].value;
-      //let otpValue ='123456789';
-      //let username ='jishnup@tangentia.com'
-      this._http.get(`${this._url.user.submitOTP}/${otpValue}/${username}`).subscribe(
-        {
-          next(res) {
-              //var data = res.body.data;
-              //localStorage.setItem('token',JSON.stringify(data));
-              this.toast.success("User Successfully logged in");
-              this._router.navigate(['/timesheet']);
-          },
-          error(msg) {
-            this.errMessage = msg;
-          }
-        }
+       const url = `${this._url.user.submitOTP}/${otpValue}/${username}`;
+      this._http.get(url).subscribe((res)=>{
+        var data = res;
+        localStorage.setItem('token',JSON.stringify(data));
+        this.toast.success("User Successfully logged in");
+        this._router.navigate(['/timesheet']);
+      },(error)=>{
+        this.errMessage = error;
+      }
+        // {
+        //   next(res) {
+        //       var data = res;
+        //       localStorage.setItem('token',JSON.stringify(data));
+        //       this.toast.success("User Successfully logged in");
+        //       this._router.navigate(['/timesheet']);
+        //   },
+        //   error(msg) {
+        //     this.errMessage = msg;
+        //   }
+        // }
       )
     }
     else{
@@ -79,16 +88,20 @@ export class LoginComponent implements OnInit {
 
   }
   onResentOtp(){
-      let  emailAddress = this.loginForm.controls['email'].value
-      this._http.get(`${this._url.user.getOTP}?mailto=${emailAddress}`).subscribe(
-        {
-          next(res) {
-            this.formSubmitted = true;
-          },
-          error(msg) {
-            this.errMessage = msg;
-          }
-        }
+    this.loginOtpForm.controls.otp.setValue('');
+      let  emailAddress = this.loginForm.controls['email'].value;
+      const url = `${this._url.user.getOTP}?mailto=${emailAddress}`
+      this._http.post(url,{}).subscribe((res)=>{
+        this.toast.success("OTP Successfully Send to Your Email Id");
+        // {
+        //   next(res) {
+        //     this.formSubmitted = true;
+        //   },
+        //   error(msg) {
+        //     this.errMessage = msg;
+        //   }
+        // }
+      }
       )
   }
 

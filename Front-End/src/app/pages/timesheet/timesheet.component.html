@@ -85,7 +85,7 @@
                                 Delete
                             </th>
                         </thead>
-                        <tbody *ngFor="let row of timeSheetDetailsArray |
+                        <tbody *ngFor="let row of timeSheetDetails |
                             paginate: config; let i= index">
                             <tr>
                                 <td>
@@ -96,41 +96,44 @@
                                         true:false">
                                     <!-- <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault" 
                         (click)="onRowCheck(i)" [checked] = "selectAllTimesheet"> -->
-                                    {{row[0]}}
+                                  {{row.status}}
                                 </td>
                                 <td>
-                                    {{row[1]}}
+                                  {{row.projectName}}
                                 </td>
                                 <td>
-                                    {{row[2]}}
+                                  {{row.activityName}}
+                              </td>
+                                <td>
+                                    {{row.timeTaken[0].numberOfHours}}
                                 </td>
                                 <td>
-                                    {{row[3]}}
+                                    {{row.timeTaken[1].numberOfHours}}
                                 </td>
                                 <td>
-                                    {{row[4]}}
+                                  {{row.timeTaken[2].numberOfHours}}
                                 </td>
                                 <td>
-                                    {{row[5]}}
+                                  {{row.timeTaken[3].numberOfHours}}
                                 </td>
                                 <td>
-                                    {{row[6]}}
+                                  {{row.timeTaken[4].numberOfHours}}
                                 </td>
                                 <td>
-                                    {{row[7]}}
+                                  {{row.timeTaken[5].numberOfHours}}
                                 </td>
                                 <td>
-                                    {{row[8]}}
+                                  {{row.timeTaken[6].numberOfHours}}
                                 </td>
                                 <td>
-                                    {{row[9]}}
+                                  {{row.timeTaken[0].numberOfHours+row.timeTaken[1].numberOfHours+row.timeTaken[2].numberOfHours
+                                  +row.timeTaken[3].numberOfHours+row.timeTaken[4].numberOfHours+row.timeTaken[5].numberOfHours+row.timeTaken[6].numberOfHours
+                                  }}
                                 </td>
                                 <td>
-                                    {{row[10]}}
+                                    {{row.remarks}}
                                 </td>
-                                <td>
-                                    {{row[11]}}
-                                </td>
+
                                 <td>
                                     <button class="edit"
                                         (click)="onTimesheetAddEdit(i)"><img
@@ -195,14 +198,13 @@
                 nc-simple-remove"></i></button>
     </div>
     <div class="modal-body addproject-modal">
-        <form>
+        <form [formGroup]="addTimesheetForm">
           <div class="row fm-row">
             <div class="col-md-12">
                 <div class="form-group mb-3">
                     <label>Select Project</label>
-                    <select class="form-control" name = "project" [(ngModel)]="selectedProjectName"
-                    (change)="selectChanges('project')">
-                        <!-- <option selected>Select Project</option> -->
+                    <select class="form-control" formControlName = "project">
+                        <option selected>Select Project</option>
                         <option *ngFor="let item of projectList">{{item}}</option>
                     </select>
                     <div class="error"></div>
@@ -213,9 +215,8 @@
             <div class="col-md-12">
                 <div class="form-group mb-3">
                     <label>Activity</label>  
-                      <select class="form-control" name = "activity" [(ngModel)]="selectedActivityName"
-                        (change)="selectChanges('activity')">
-                            <!-- <option selected>Select Activity</option> -->
+                      <select class="form-control" id="activity" name = "activity" formControlName ="activity">
+                            <option selected>Select Activity</option>
                             <option *ngFor="let item of activityList">{{item}}</option>
                         </select>
                     <div class="error"></div>
@@ -226,7 +227,7 @@
                 <div class="col-md-12">
                     <div class="form-group mb-3">
                         <label>Remarks</label>
-                        <textarea class="form-control"></textarea>
+                        <textarea class="form-control" formControlName = "remarks"></textarea>
                         <div class="error"></div>
                     </div>
                 </div>
@@ -238,54 +239,58 @@
                             <thead class="text-primary">
                                 <th>
                                     Monday
+                                    {{currentWeek[0]}}
                                 </th>
                                 <th>
-                                    Tuesday
+                                    Tuesday {{currentWeek[1]}}
                                 </th>
                                 <th>
-                                    Wednesday
+                                    Wednesday {{currentWeek[2]}}
                                 </th>
                                 <th>
-                                    Thusday
+                                    Thusday {{currentWeek[3]}}
                                 </th>
                                 <th>
-                                    Friday
+                                    Friday {{currentWeek[4]}}
                                 </th>
                                 <th>
-                                    Saturday
+                                    Saturday {{currentWeek[5]}}
                                 </th>
                                 <th>
-                                    Sunday
+                                    Sunday {{currentWeek[6]}}
                                 </th>
                   
 
                             </thead>
                             <tbody>
+                              <ng-container>
                                 <tr>
-                                    <td>
-                                        <input type="number" class="h-input" value="5" />
-                                    </td>
-                                    <td>
-                                        <input type="number" class="h-input" value="5" />
-                                    </td>
-                                    <td>
-                                        <input type="number" class="h-input" value="5" />
-                                    </td>
-                                    <td>
-                                        <input type="number" class="h-input" value="5" />
-                                    </td>
-                                    <td>
-                                        <input type="number" class="h-input" value="5" />
-                                    </td>
-                                    <td>
-                                        <input type="number" class="h-input" value="5" />
-                                    </td>
-                                    <td>
-                                        <input type="number" class="h-input" value="4" />
-                                    </td>
+                                  <td>
+                                      <input type="text" class="h-input" [(ngModel)]="selectedDates[0].numberOfHours" />
+                                  </td>
+                                  <td>
+                                      <input type="number" class="h-input" value="5" />
+                                  </td>
+                                  <td>
+                                      <input type="number" class="h-input" value="5" />
+                                  </td>
+                                  <td>
+                                      <input type="number" class="h-input" value="5" />
+                                  </td>
+                                  <td>
+                                      <input type="number" class="h-input" value="5" />
+                                  </td>
+                                  <td>
+                                      <input type="number" class="h-input" value="5" />
+                                  </td>
+                                  <td>
+                                      <input type="number" class="h-input" value="4" />
+                                  </td>
 
 
-                                </tr>
+                              </tr>
+                              </ng-container>
+                                
                             </tbody>
                         </table>
                     </div>
@@ -295,6 +300,6 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-dark"
-            (click)="modal.close('Save click')">Save</button>
+            (click)="modal.close('Save click');onSaveTimesheetDetails()">Save</button>
     </div>
 </ng-template>
