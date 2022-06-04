@@ -41,7 +41,7 @@ namespace TestApplication
             {
                 swagger.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Swagger API DOC Test Application",
+                    Title = "A&L Timesheet Management",
                     Version = "v1.1",
                     Description = ""
 
@@ -100,7 +100,7 @@ namespace TestApplication
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Test Application");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "A&L Timesheet Management");
                 c.DefaultModelsExpandDepth(-1);
             });
         }

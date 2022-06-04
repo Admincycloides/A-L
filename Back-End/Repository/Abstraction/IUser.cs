@@ -9,7 +9,7 @@ namespace AnL.Repository.Abstraction
     public interface IUser : IRepository<UserLogin>
     {
         Task<UserLogin> GetLogin(string username);
-        Task<bool> UpdateOTP(int Otp,int UserID);
+        Task<UserLogin> UpdateOTP(int Otp,int UserID);
         UserLogin getLogindetails(int UserID);
     }
 }

@@ -6,6 +6,7 @@ namespace AnL.Repository.Implementation
     public class UnitOfWork : IUnitOfWork
     {
         private readonly Tan_DBContext _dbcontext;
+        private readonly IUnitOfWork _UOW;
 
         public UnitOfWork(Tan_DBContext dbcontext)
         {
@@ -13,14 +14,14 @@ namespace AnL.Repository.Implementation
         }
         private ITimesheetDetail _TimesheetDetailRepository;
         private IUser _UserRepository;
-        private IEmployeeDetail _EmployeeDetailRepository;
-        public IEmployeeDetail EmployeeDetailRepository
+        private IEmployeeDetails _EmployeeDetailRepository;
+        public IEmployeeDetails EmployeeDetailsRepository
         {
             get
             {
                 if (_EmployeeDetailRepository == null)
                 {
-                    _EmployeeDetailRepository = new EmployeeDetailRepository(_dbcontext);
+                    _EmployeeDetailRepository = new EmployeeDetailsRepository(_dbcontext, _UOW);
                 }
 
                 return _EmployeeDetailRepository;
@@ -32,7 +33,7 @@ namespace AnL.Repository.Implementation
             {
                 if (_TimesheetDetailRepository == null)
                 {
-                    _TimesheetDetailRepository = new TimesheetDetailRepository(_dbcontext);
+                    _TimesheetDetailRepository = new TimesheetDetailRepository(_dbcontext, _UOW);
                 }
 
                 return _TimesheetDetailRepository;

@@ -4,8 +4,7 @@
     {
         ITimesheetDetail TimesheetDetailRepository { get; }
         IUser UserRepository { get; }
-
-        IEmployeeDetail EmployeeDetailRepository { get; }
+        IEmployeeDetails EmployeeDetailsRepository { get; }
         void SaveChanges();
     }
 }
