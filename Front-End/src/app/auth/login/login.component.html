@@ -27,14 +27,14 @@
                             
                         </div>
                 </form>
-                <form [formGroup]="loginOtpForm" *ngIf="formSubmitted">
+                <form [formGroup]="loginOtpForm" *ngIf="formSubmitted" class="w-100 d-flex justify-content-center">
                         <div class="auth-form d-flex flex-column align-items-center">
                             <div class="af-row w-100">
                                 <input type="number" class="form-control" 
                                 formControlName="otp"
                                 placeholder="Enter your OTP"/>
                                 <div class="error" *ngIf="showOTPMessage">{{invalidOtp}}</div>
-                                <div class="re-otp"><button (click)="onResentOtp()">Resend OTP</button></div>
+                                <div class=""><button (click)="onResentOtp()" class="re-otp" >Resend OTP</button></div>
                             </div>
                             
                             <div class="af-row af-btnrow w-100">

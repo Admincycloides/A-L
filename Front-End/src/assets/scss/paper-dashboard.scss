@@ -68,6 +68,12 @@ table{
         }
     }
 }
+// toaster
+.toast-top-right{
+    display: flex;
+    justify-content: right;
+}
+
 // layout
 .sidebar .logo, .off-canvas-sidebar .logo{
     height: 62px;
@@ -130,19 +136,21 @@ table{
 .d-label{
     
 }
-.act-filter{
-    input{
-        &.date-input{
-            background-color: #dfdfdf!important;
-            height: 40px;
-            @include radius(5px 0 0 5px);
-        }
-        
-        // @include radoius
+
+// custom date picker
+input{
+    &.date-input{
+        background-color: #dfdfdf!important;
+        height: 40px;
+        @include radius(5px 0 0 5px);
     }
-    .week-range{
-        color: transparentize($dark-color,.3)
-    }
+}
+.week-range{
+    color: transparentize($dark-color,.3)
+}
+
+.date-select{
+
 }
 // inner page
 .page-title{
