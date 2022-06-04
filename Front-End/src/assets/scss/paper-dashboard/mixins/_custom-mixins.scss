@@ -42,3 +42,23 @@
     // overflow: hidden;
     
   }
+  //button
+  @mixin thm-btn{
+    padding: 5px;
+    outline: none;
+    height:38px;
+    outline: none;
+    border: none;
+    font-size: 14px!important;
+    &:focus{
+      outline: none;
+    }
+    min-width: 123px;
+    @include radius(5px);
+    i{
+      margin-right:8px
+    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }

@@ -1,9 +1,9 @@
-<div class="page-title w-100">Timesheet Management</div>
-<div class="action-head justify-content-between d-flex">
-    <!-- <div class="time"><i class="nc-icon nc-watch-time"></i> In hours</div> -->
+
+<div class="action-head justify-content-between d-flex align-items-center mb-4">
+    <div class="page-title w-100">Timesheet Management</div>
     <div class="act-filter d-flex align-items-center justify-content-center">
         <!-- <button class="left-date date-week"><i class="nc-icon nc-minimal-left"></i></button> <span class="d-label">From</span><input type="date" class="nm-date"/><span class="d-label">To</span><input type="date" class="nm-date"/><button class="right-date date-week"><i class="nc-icon nc-minimal-right"></i></button> -->
-        <div class="input-group date-line">
+        <div class="input-group date-line d-flex justify-content-center mb-0">
             <button class="left-date date-week" (click)="onPreviousClick()">
                 <i class="nc-icon nc-minimal-left"></i>
             </button>
@@ -15,7 +15,7 @@
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary calendar m-0 date-select"
                         (click)="d.toggle()" type="button">
-                        <i class="fas fa-calendar"></i>
+                        <i class="nc-icon nc-calendar-60"></i>
                     </button>
                 </div>
             </div>
@@ -24,8 +24,8 @@
             </button>
         </div>
     </div>
-    <div class="action">
-        <button class="act-btn thm-btn thm-btn-primary"
+    <div class="action d-flex justify-content-end">
+        <button class="act-btn thm-btn-primary"
             (click)="onTimesheetAddEdit(-1)"><i class="nc-icon nc-simple-add"></i>
             Add Time</button>
     </div>
