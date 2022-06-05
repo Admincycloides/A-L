@@ -213,6 +213,9 @@ input[type='number']::-webkit-inner-spin-button {
         }
     }
 }
+.modal-backdrop{
+    z-index: 88888!important;
+}
 // date picker native
 .date-week{
     border: none;
@@ -302,7 +305,7 @@ input{
 }
 .main-panel{
     background-color: $bg-color;
-    z-index: 99999999;
+    z-index: 9999;
 }
 .thm-btn-primary{
     @include thm-btn;
