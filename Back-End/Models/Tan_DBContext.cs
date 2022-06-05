@@ -22,7 +22,6 @@ namespace AnL.Models
         public virtual DbSet<ProjectDetails> ProjectDetails { get; set; }
         public virtual DbSet<TimesheetDetails> TimesheetDetails { get; set; }
         public virtual DbSet<UserData> UserData { get; set; }
-        public virtual DbSet<UserLogin> UserLogin { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -247,6 +246,11 @@ namespace AnL.Models
 
                 entity.Property(e => e.ActivityId).HasColumnName("Activity_ID");
 
+                entity.Property(e => e.ApprovedRejectedBy)
+                    .HasColumnName("Approved_Rejected_By")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
                 entity.Property(e => e.EmployeeId)
@@ -263,6 +267,11 @@ namespace AnL.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Status)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SubmittedTo)
+                    .HasColumnName("Submitted_To")
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
@@ -284,32 +293,6 @@ namespace AnL.Models
                 entity.HasNoKey();
 
                 entity.Property(e => e.Id).HasColumnName("ID");
-            });
-
-            modelBuilder.Entity<UserLogin>(entity =>
-            {
-                entity.HasKey(e => e.UserId);
-
-                entity.Property(e => e.UserId)
-                    .HasColumnName("UserID")
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.Otp).HasColumnName("OTP");
-
-                entity.Property(e => e.OtpexpiryDate)
-                    .HasColumnName("OTPExpiryDate")
-                    .HasColumnType("datetime");
-
-                entity.Property(e => e.Token)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.TokenExpiryDate).HasColumnType("datetime");
-
-                entity.Property(e => e.Username)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
             });
 
             OnModelCreatingPartial(modelBuilder);

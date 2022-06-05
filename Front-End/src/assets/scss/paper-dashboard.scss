@@ -58,14 +58,56 @@ body{
 .modal{
     z-index: 99999;
 }
+.table-responsive{
+    overflow: auto;
+}
 table{
     th,td{
-        .tbl-check{
-            margin-left: -27px;
-        }
+        text-align: center;
         &:first-child{
             padding-left: 28px!important;
         }
+    }
+    th{
+        border-top: none!important;
+        color: $dark-color;
+        font-weight: bold;
+        font-size: 13px;
+        vertical-align: middle!important;
+        .tbl-check{
+            margin-top: 3px;
+            margin-left: -27px;
+        }
+        span{
+            white-space: nowrap;
+        }
+    }
+    td{
+        color: $text-color;
+        font-size: 12px;
+        vertical-align: middle!important;
+        .tbl-check{
+            margin-left: -22px;
+            margin-top: 2px
+        }
+        .actico-btn{
+            height: 26px;
+            width: 26px;
+            border: none;
+            background-color: transparent;
+            outline: none;
+            .del-ico{
+                width: 84%;
+            }
+            &:hover{
+                opacity: .7;
+            }
+        }
+        padding: 16px 7px!important;
+        border-top: solid 1px #e6e6e6!important;
+    }
+    tbody{
+        border: none!important;
     }
 }
 input[type='number'] {
@@ -163,6 +205,8 @@ input{
         background-color: #dfdfdf!important;
         height: 40px;
         @include radius(5px 0 0 5px);
+        font-size:0;
+        width: 170px;
     }
     &:focus{
         border: none!important;
@@ -170,7 +214,8 @@ input{
     }
 }
 .week-range{
-    color: transparentize($dark-color,.3)
+    color: transparentize($dark-color,.6);
+    font-weight: 500;
 }
 .date-line{
     width: 318px;
@@ -198,9 +243,21 @@ input{
     }
 }
 // inner page
+.sheet-row{
+    flex-flow: row;
+}
+.sheet-col{
+    width: 100%;
+}
+.sheet-col{
+    padding: 0 15px;
+}
+.remarks-col{
+    padding: 0 15px 0 0;
+}
 .page-title{
     padding: 5px;
-    font-size: 19px;
+    font-size:  rem(18px);
     text-transform: uppercase;
     color: $secondary-color;
     font-weight: 500;

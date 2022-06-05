@@ -30,10 +30,10 @@
             Add Time</button>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-10">
+<div class="row sheet-row">
+    <div class="sheet-col">
         <div class="card">
-            <div class="card-body">
+            <div class="card-body pt-1">
                 <div class="table-responsive">
                     <table class="table">
                         <thead class="text-primary">
@@ -51,25 +51,25 @@
                                 Activities
                             </th>
                             <th>
-                                Monday<br>{{currentWeek[0]}}
+                                Mon<br><span>{{currentWeek[0]}}</span>
                             </th>
                             <th>
-                                Tuesday<br>{{currentWeek[1]}}
+                                Tue<br><span>{{currentWeek[1]}}</span>
                             </th>
                             <th>
-                                Wednesday<br>{{currentWeek[2] }}
+                                Wed<br><span>{{currentWeek[2] }}</span>
                             </th>
                             <th>
-                                Thusday<br>{{currentWeek[3]}}
+                                Thu<br><span>{{currentWeek[3]}}</span>
                             </th>
                             <th>
-                                Friday<br>{{currentWeek[4]}}
+                                Fri<br><span>{{currentWeek[4]}}</span>
                             </th>
                             <th>
-                                Saturday<br>{{currentWeek[5]}}
+                                Sat<br><span>{{currentWeek[5]}}</span>
                             </th>
                             <th>
-                                Sunday<br>{{currentWeek[6]}}
+                                Sun<br><span>{{currentWeek[6]}}</span>
                             </th>
                             <th>
                                 Total
@@ -95,6 +95,7 @@
                                         true:false">
                                     <!-- <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault" 
                         (click)="onRowCheck(i)" [checked] = "selectAllTimesheet"> -->
+                                 
                                   {{row.status}}
                                 </td>
                                 <td>
@@ -134,16 +135,16 @@
                                 </td>
 
                                 <td>
-                                    <button class="edit"
+                                    <button class="edit actico-btn"
                                         (click)="onTimesheetAddEdit(i)"><img
                                             src="../../../assets/img/edit.png"
                                             alt="" /></button>
                                 </td>
                                 <td>
-                                    <button class="delete"
+                                    <button class="delete actico-btn"
                                         (click)="onTimesheetDelete(i)"><img
                                             src="../../../assets/img/delete.png"
-                                            alt="" /></button>
+                                            alt="" class="del-ico"/></button>
                                 </td>
                             </tr>
                         </tbody>
@@ -171,21 +172,26 @@
         </div>
     </div>
 
-    <div class="col-md-2 remarks-col">
-        <div class="r-row">
-            <label>Send to</label>
-            <select>
-                <option>1</option>
-                <option>2</option>
-            </select>
+    <div class=" remarks-col">
+        <div class="card">
+            <div class="card-body pt-1">
+                <div class="r-row">
+                    <label>Send to</label>
+                    <select>
+                        <option>1</option>
+                        <option>2</option>
+                    </select>
+                </div>
+                <div class="r-row">
+                    <label>Remarks</label>
+                    <textarea></textarea>
+                </div>
+                <div class="r-row">
+                    <button>Submit</button>
+                </div>
+            </div>
         </div>
-        <div class="r-row">
-            <label>Remarks</label>
-            <textarea></textarea>
-        </div>
-        <div class="r-row">
-            <button>Submit</button>
-        </div>
+        
     </div>
 
 </div>
