@@ -236,8 +236,14 @@ input[type='number']::-webkit-inner-spin-button {
         margin: 0 15px;
     }
 }
-.d-label{
-    
+.ngb-dp-week{
+    .btn-light:hover{
+        background-color: $secondary-color;
+        color: #fff;
+    }
+    .btn-light.bg-primary {
+        background-color: #26c541!important;
+    }
 }
 
 // custom date picker
