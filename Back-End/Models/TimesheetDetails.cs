@@ -15,6 +15,9 @@ namespace AnL.Models
         public string Status { get; set; }
         public string ApprovedRejectedBy { get; set; }
         public string SubmittedTo { get; set; }
+        public DateTime? SubmittedDate { get; set; }
+        public string SupervisorRemarks { get; set; }
+        public string EmployeeRemarks { get; set; }
 
         public virtual ActivityDetails Activity { get; set; }
         public virtual ProjectDetails Project { get; set; }
