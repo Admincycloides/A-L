@@ -307,8 +307,8 @@ export class TimesheetComponent implements OnInit {
   }
 
   public onProjectSelect(event:any){
-    const project = event.target.value;
-    console.log(typeof(project));
+    const project = event.target.value.split(":")[1].trim();
+    console.log(project);
     if(project === 'Select Project') this.activityList =[];
     else{
       this.projectList.forEach((item)=>{
