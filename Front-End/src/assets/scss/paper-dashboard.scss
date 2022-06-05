@@ -145,6 +145,7 @@ input[type='number']::-webkit-inner-spin-button {
         padding-bottom: 2px;
         position: fixed;
         height: 62px;
+        box-shadow: 1px 0px 9px 6px rgba(0,0,0,0.11);
     }
 }
 .user-dp{
@@ -280,6 +281,11 @@ input{
         font-size: 16px;
         font-weight: bold;
         color: $secondary-color;
+    }
+}
+.date-holder{
+    .dropdown-menu{
+        box-shadow: 0px 0px 17px 5px rgba(0,0,0,.06);
     }
 }
 // inner page
