@@ -302,6 +302,7 @@ input{
     color: $secondary-color;
     font-weight: 500;
     flex: 1;
+    max-width: 300px;
 }
 .main-panel{
     background-color: $bg-color;
@@ -330,12 +331,18 @@ input{
 }
 //remarks 
 .remarks-col{
+    min-width: 225px;
     .r-row{
         label{
             width: 100%;
         }
-        select{
+        select,textarea{
             width: 100%;
+            font-size: 12px;
+        }
+        textarea{
+            padding: 4px;
+            height: auto;
         }
     }
 }

@@ -176,21 +176,21 @@
     <div class=" remarks-col">
         <div class="card">
             <div class="card-body pt-1">
-                <div class="r-row">
+                <div class="r-row mb-1">
                     <label>Send to</label>
-                    <select required (change)="onselectSupervisor($event)" >
+                    <select required (change)="onselectSupervisor($event)" class="form-control">
                         <option>(Supervisor)</option>
                         <option *ngFor="let item of superVisorList" [value]="item.managerId">{{item.firstName}} 
                             {{item.lastName}}
                         </option>
                     </select>
                 </div>
-                <div class="r-row">
+                <div class="r-row mb-1">
                     <label>Remarks</label>
-                    <textarea [(ngModel)]="submitRemarks"></textarea>
+                    <textarea [(ngModel)]="submitRemarks" class="form-control" rows="4"></textarea>
                 </div>
                 <div class="r-row">
-                    <button (click)="onSubmitTimesheet()">Submit</button>
+                    <button (click)="onSubmitTimesheet()" class="thm-btn-primary sm-btn w-100 my-2">Submit</button>
                 </div>
             </div>
         </div>
