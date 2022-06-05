@@ -198,30 +198,30 @@
     </div>
     <div class="modal-body addproject-modal">
         <form [formGroup]="addTimesheetForm">
-          <div class="row fm-row">
-            <div class="col-md-12">
-                <div class="form-group mb-3">
-                    <label>Select Project</label>
-                    <select class="form-control" formControlName = "project">
-                        <option selected>Select Project</option>
-                        <option *ngFor="let item of projectList">{{item}}</option>
-                    </select>
-                    <div class="error"></div>
+            <div class="row fm-row">
+                <div class="col-md-12">
+                    <div class="form-group mb-3">
+                        <label>Select Project</label>
+                        <select class="form-control" formControlName = "project">
+                            <option selected>Select Project</option>
+                            <option *ngFor="let item of projectList" [ngValue]="item">{{item}}</option>
+                        </select>
+                        <div class="error"></div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row fm-row">
-            <div class="col-md-12">
-                <div class="form-group mb-3">
-                    <label>Activity</label>  
-                      <select class="form-control" id="activity" name = "activity" formControlName ="activity">
+            <div class="row fm-row">
+                <div class="col-md-12">
+                    <div class="form-group mb-3">
+                        <label>Activity</label>  
+                        <select class="form-control" id="activity" name = "activity" formControlName ="activity">
                             <option selected>Select Activity</option>
-                            <option *ngFor="let item of activityList">{{item}}</option>
+                            <option *ngFor="let item of activityList" [ngValue]="item">{{item}}</option>
                         </select>
                     <div class="error"></div>
                 </div>
             </div>
-        </div>
+            </div>
             <div class="row fm-row">
                 <div class="col-md-12">
                     <div class="form-group mb-3">
@@ -265,25 +265,25 @@
                               <ng-container>
                                 <tr>
                                   <td>
-                                      <input type="text" class="h-input" [(ngModel)]="selectedDates[0].numberOfHours" />
+                                      <input type="text" class="h-input" formControlName="monday" />
                                   </td>
                                   <td>
-                                      <input type="number" class="h-input" value="5" />
+                                      <input type="number" class="h-input" formControlName="tuesday" />
                                   </td>
                                   <td>
-                                      <input type="number" class="h-input" value="5" />
+                                      <input type="number" class="h-input" formControlName="wednesday" />
                                   </td>
                                   <td>
-                                      <input type="number" class="h-input" value="5" />
+                                      <input type="number" class="h-input" formControlName="thursday" />
                                   </td>
                                   <td>
-                                      <input type="number" class="h-input" value="5" />
+                                      <input type="number" class="h-input" formControlName="friday" />
                                   </td>
                                   <td>
-                                      <input type="number" class="h-input" value="5" />
+                                      <input type="number" class="h-input" formControlName="saturday" />
                                   </td>
                                   <td>
-                                      <input type="number" class="h-input" value="4" />
+                                      <input type="number" class="h-input" formControlName="sunday" />
                                   </td>
 
 

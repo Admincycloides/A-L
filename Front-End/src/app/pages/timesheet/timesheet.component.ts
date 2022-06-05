@@ -38,6 +38,7 @@ export class TimesheetComponent implements OnInit {
   activityList:any[];
   selectedProjectName:any;
   selectedDates: any[];
+  selectedTimesheet ={}
   get f() {
     return this.addTimesheetForm.controls;
   }
@@ -280,11 +281,14 @@ export class TimesheetComponent implements OnInit {
     this.addTimesheetForm =this._fb.group({
       project: ['', Validators.required],
       activity: ['', Validators.required],
-      timeDetails: this._fb.array([
-        new FormControl(),
-        new FormControl(),
-        new FormControl(),
-      ]),
+      monday:[''],
+      tuesday:[''],
+      wednesday:[''],
+      thursday:[''],
+      friday:[''],
+      saturday:[''],
+      sunday:[''],
+      //timeDetails: this._fb.array([]),
       remarks:['']
     });
   }
@@ -307,14 +311,7 @@ export class TimesheetComponent implements OnInit {
     this.config.currentPage = event;
     //this.();
   }
-  // [
-  //   [projectName,projectID,monday,tues,]
-  //   [projectName,projectID,monday,tues,]
-  //   [projectName,projectID,monday,tues,]
-  // ]
   getTimesheetDetails(){
-
-
     // this.timeSheetDetails.forEach(
     //   (item,index)=>{
     //     let rowArray =[];
@@ -396,45 +393,60 @@ export class TimesheetComponent implements OnInit {
     }
   }
 
+  //Timesheet Editing and Add
   onTimesheetAddEdit(id:any){
     if(id == -1){
       this.open(this.content);
-      // this.selectedProjectName ='';
-      // this.selectedActivityName = '';
+      this.addTimesheetForm.reset();
+      this.selectedTimesheet = {};
     }
     else{
       this.open(this.content);
-      console.log(this.timeSheetDetails[id].projectName);
-      this.addTimesheetForm.controls.remarks.setValue('abccc');
+      this.addTimesheetForm.controls.remarks.setValue(this.timeSheetDetails[id].remarks);
       this.addTimesheetForm.controls.project.setValue(this.timeSheetDetails[id].projectName);
       this.addTimesheetForm.controls.activity.setValue(this.timeSheetDetails[id].activityName);
-      // const timeDetails = this.addTimesheetForm.get('timeDetails')['controls'] as FormArray;
+      this.addTimesheetForm.controls.monday.setValue(this.timeSheetDetails[id].timeTaken[0].numberOfHours);
+      this.addTimesheetForm.controls.tuesday.setValue(this.timeSheetDetails[id].timeTaken[1].numberOfHours);
+      this.addTimesheetForm.controls.wednesday.setValue(this.timeSheetDetails[id].timeTaken[2].numberOfHours);
+      this.addTimesheetForm.controls.thursday.setValue(this.timeSheetDetails[id].timeTaken[3].numberOfHours);
+      this.addTimesheetForm.controls.friday.setValue(this.timeSheetDetails[id].timeTaken[4].numberOfHours);
+      this.addTimesheetForm.controls.saturday.setValue(this.timeSheetDetails[id].timeTaken[5].numberOfHours);
+      this.addTimesheetForm.controls.sunday.setValue(this.timeSheetDetails[id].timeTaken[6].numberOfHours);
+      console.log(this.timeSheetDetails[id]);
+
+      this.selectedTimesheet = this.timeSheetDetails[id];
+
       
-      // timeDetails[0]= this._fb.group({
-      //     monday: 6,
+
+      
+      //const timeDetails = this.addTimesheetForm.get('timeDetails')['controls'] as FormArray;
+      
+      // timeDetails.push(this._fb.group({
+      //     monday: '',
       //     tuesday: '',
-      //     wednesday: '',
+      //     wednesday: 3,
       //     thursday: '',
       //     friday: '',
       //     saturday: '',
       //     sunday: ''
-      //   })
+      //   }))
       
       // console.log(this.addTimesheetForm.get('timeDetails')['controls'])
-      // this.addTimesheetForm.controls.timeDetails.setValue(timeDetails);
-      this.addTimesheetForm.controls.timeDetails.value.splice(0,0,this.timeSheetDetails[id].timeTaken);
-      this.selectedDates = this.addTimesheetForm.controls.timeDetails.value[0];
-      console.log("hi",this.addTimesheetForm.controls.timeDetails.value[0][0].numberOfHours);
+      //this.addTimesheetForm.controls.timeDetails.setValue(timeDetails);
+      // this.addTimesheetForm.controls.timeDetails.value.splice(0,0,this.timeSheetDetails[id].timeTaken);
+      // this.selectedDates = this.addTimesheetForm.controls.timeDetails.value[0];
+      // console.log("hi",this.addTimesheetForm.controls.timeDetails.value[0][0].numberOfHours);
       // this.addTimesheetForm.controls['project'].value = this.timeSheetDetails[id];
       // this.selectedActivityName = this.timeSheetDetails[id];
 
       // console.log(this.selectedActivityName,this.selectedProjectName);
+     
     }
 
 
   }
   onTimesheetDelete(id:any){
-    // const uniqueId = this.timeSheetDetailsArray[id].UniqueId;
+    // const data = this.timeSheetDetailsArray[id];
     // this._http.delete(`${this._url.timesheet.deleteTimesheet}/${uniqueId}`).subscribe(
     // {
     //   next(res) {
@@ -450,11 +462,38 @@ export class TimesheetComponent implements OnInit {
     }else{
       console.log(this.timeSheetDetailsArray[id])
     }
-    //console.log(this.selectAllTimesheet)
 
   }
   onSaveTimesheetDetails(){
-    console.log(this.addTimesheetForm.controls['timeDetails'].value);
+    // console.log("project",this.addTimesheetForm.controls.project.value);
+    // console.log("activity",this.addTimesheetForm.controls.project.value);
+    // console.log("remarks",this.addTimesheetForm.controls.project.value);
+    // console.log("remarks",this.addTimesheetForm.controls.timeDetails.value);
+    if(!Object.keys(this.selectedTimesheet).length){
+      console.log("Add")
+    }else{
+      let timeTaken = this.selectedTimesheet['timeTaken'];
+      timeTaken[0].numberOfHours = this.addTimesheetForm.controls.monday.value;
+      timeTaken[1].numberOfHours = this.addTimesheetForm.controls.tuesday.value;
+      timeTaken[2].numberOfHours = this.addTimesheetForm.controls.wednesday.value;
+      timeTaken[3].numberOfHours = this.addTimesheetForm.controls.thursday.value;
+      timeTaken[4].numberOfHours = this.addTimesheetForm.controls.friday.value;
+      timeTaken[5].numberOfHours = this.addTimesheetForm.controls.saturday.value;
+      timeTaken[6].numberOfHours =this.addTimesheetForm.controls.sunday.value;
+
+      const data = {
+      //status          : this.selectedTimesheet.status,
+      activityName    : this.addTimesheetForm.controls.activity.value,
+      projectName     : this.addTimesheetForm.controls.project.value,
+      timeTaken       : timeTaken,
+      remarks         : this.addTimesheetForm.controls.remarks.value
+      }
+      console.log("data",data);
+
+
+    }
+
+    
   }
   selectChanges(value:any){
 
