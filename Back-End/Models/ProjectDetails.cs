@@ -8,6 +8,7 @@ namespace AnL.Models
         public ProjectDetails()
         {
             ActivityMapping = new HashSet<ActivityMapping>();
+            ProjectMapping = new HashSet<ProjectMapping>();
             TimesheetDetails = new HashSet<TimesheetDetails>();
         }
 
@@ -23,6 +24,7 @@ namespace AnL.Models
 
         public virtual ClientDetails Client { get; set; }
         public virtual ICollection<ActivityMapping> ActivityMapping { get; set; }
+        public virtual ICollection<ProjectMapping> ProjectMapping { get; set; }
         public virtual ICollection<TimesheetDetails> TimesheetDetails { get; set; }
     }
 }

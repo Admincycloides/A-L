@@ -17,7 +17,6 @@
         public static readonly string InvalidOTP = "Invalid OTP";
         public static readonly string OTPTimedOUT = "OTP Expired";
         public static readonly string LoginSuccess = "Login Successful";
-    }
         public static readonly string TimesheetSubmissionSuccess = "Timesheet Submitted successfully";
         public static readonly string TimesheetSubmissionFailed = "Timesheet Submission Failed";
         public static readonly string SupervisorListingSuccess = "Supervisor records fetched successfully";
