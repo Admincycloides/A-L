@@ -163,6 +163,8 @@ input{
         background-color: #dfdfdf!important;
         height: 40px;
         @include radius(5px 0 0 5px);
+        font-size:0;
+        width: 170px;
     }
     &:focus{
         border: none!important;
