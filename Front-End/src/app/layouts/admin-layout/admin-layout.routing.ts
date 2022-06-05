@@ -11,6 +11,7 @@ import { UpgradeComponent } from '../../pages/upgrade/upgrade.component';
 import { TimesheetComponent } from '../../pages/timesheet/timesheet.component';
 import { AddtimesheetComponent } from '../../pages/timesheet/addtimesheet/addtimesheet.component';
 import { ProjectsComponent } from '../../pages/projects/projects.component';
+import { ActivitiesComponent } from '../../pages/projects/activities/activities.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
@@ -23,6 +24,8 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'upgrade',        component: UpgradeComponent },
     { path: 'timesheet',      component: TimesheetComponent },
     { path: 'addtimesheet',      component: AddtimesheetComponent },
-    { path: 'projects',      component: ProjectsComponent }
+    { path: 'projects',      component: ProjectsComponent },
+    { path: 'activities',      component: ActivitiesComponent }
+    
     
 ];

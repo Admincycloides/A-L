@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpService } from 'app/_services/http.service';
 import { UrlService } from 'app/_services/url.service';
@@ -37,7 +37,8 @@ export class TimesheetComponent implements OnInit {
   projectList:any[];
   activityList:any[];
   selectedProjectName:any;
-  selectedActivityName: any;
+  selectedDates: any[];
+  selectedTimesheet ={}
   get f() {
     return this.addTimesheetForm.controls;
   }
@@ -52,60 +53,257 @@ export class TimesheetComponent implements OnInit {
     console.log(this.content);
     this.projectList = ['Project 1','Project 2','Project 3','Project 4'];
     this.activityList = ['Activity 1','Activity 2','Activity 3','Activity 4'];
-    // this.userDetails = JSON.parse(localStorage.getItem('token'));
-    // this.getEmployeeDetails();
+    this.userDetails = JSON.parse(localStorage.getItem('token'));
+    this.getEmployeeDetails();
     this.startOfWeek = moment().startOf('isoWeek').toDate();
     this.endOfWeek = moment().endOf('isoWeek').toDate();
     this.weekShow = moment(this.startOfWeek).format("MMMM-DD")+"-"+moment(this.endOfWeek).format("MMMM-DD");
     this.currentWeek = this.dateFormatter(moment(this.startOfWeek).format("YYYY-MM-DD"),moment(this.endOfWeek).format("YYYY-MM-DD"))
     this.timeSheetDetails= [
       {
-        "Date": "2022-05-30 00:00:00.000",
-        "EmployeeId": "92S5000000423",
-        "EmployeeName": "Emp1",
-        "ProjectId": 10,
-        "ProjectName": "Project 1",
-        "ActivityId": 12,
-        "ActivityName": "Activity 1",
-        "NumberOfHours": 0.5,
-        "Remarks": null,
-        "Status": "In Progress",
-        "LastUpdatedDate": "2022-05-18 00:00:00.000",
-        "LastUpdatedBy": "Emp1",
-        "UniqueId": 4
+          "projectId": 9,
+          "projectName": "Project 1",
+          "activityId": 6,
+          "activityName": "Activity 1",
+          "timeTaken": [
+              {
+                  "date": "2022-05-30T00:00:00",
+                  "numberOfHours": 2
+              },
+              {
+                  "date": "2022-05-31T00:00:00",
+                  "numberOfHours": 1
+              },
+              {
+                  "date": "2022-06-01T00:00:00",
+                  "numberOfHours": 3
+              },
+              {
+                  "date": "2022-06-02T00:00:00",
+                  "numberOfHours": 4
+              },
+              {
+                  "date": "2022-06-03T00:00:00",
+                  "numberOfHours": 0.25
+              },
+              {
+                  "date": "2022-06-04T00:00:00",
+                  "numberOfHours": 2
+              },
+              {
+                  "date": "2022-06-05T00:00:00",
+                  "numberOfHours": 0
+              }
+          ]
       },
       {
-        "Date": "2022-06-03 00:00:00.000",
-        "EmployeeId": "92S5000000423",
-        "EmployeeName": "Emp1",
-        "ProjectId": 10,
-        "ProjectName": "Project 2",
-        "ActivityId": 13,
-        "ActivityName": "Activity 2",
-        "NumberOfHours": 0.5,
-        "Remarks": "Flagging potato and tomato plots",
-        "Status": "In Progress",
-        "LastUpdatedDate": "2022-05-19 00:00:00.000",
-        "LastUpdatedBy": "Emp1",
-        "UniqueId": 5
+          "projectId": 10,
+          "projectName": "Project 2",
+          "activityId": 10,
+          "activityName": "Activity 2",
+          "timeTaken": [
+              {
+                  "date": "2022-05-30T00:00:00",
+                  "numberOfHours": 2
+              },
+              {
+                  "date": "2022-05-31T00:00:00",
+                  "numberOfHours": 1
+              },
+              {
+                  "date": "2022-06-01T00:00:00",
+                  "numberOfHours": 3
+              },
+              {
+                  "date": "2022-06-02T00:00:00",
+                  "numberOfHours": 4
+              },
+              {
+                  "date": "2022-06-03T00:00:00",
+                  "numberOfHours": 0.25
+              },
+              {
+                  "date": "2022-06-04T00:00:00",
+                  "numberOfHours": 2
+              },
+              {
+                  "date": "2022-06-05T00:00:00",
+                  "numberOfHours": 0
+              }
+          ]
+      },
+      {
+          "projectId": 10,
+          "projectName": "Project 3",
+          "activityId": 12,
+          "activityName": "Activity 3",
+          "timeTaken": [
+              {
+                  "date": "2022-05-30T00:00:00",
+                  "numberOfHours": 4
+              },
+              {
+                  "date": "2022-05-31T00:00:00",
+                  "numberOfHours": 2
+              },
+              {
+                  "date": "2022-06-01T00:00:00",
+                  "numberOfHours": 2
+              },
+              {
+                  "date": "2022-06-02T00:00:00",
+                  "numberOfHours": 2
+              },
+              {
+                  "date": "2022-06-03T00:00:00",
+                  "numberOfHours": 4
+              },
+              {
+                  "date": "2022-06-04T00:00:00",
+                  "numberOfHours": 2
+              },
+              {
+                  "date": "2022-06-05T00:00:00",
+                  "numberOfHours": 0
+              }
+          ]
+      },
+      {
+          "projectId": 10,
+          "projectName": "Project 3",
+          "activityId": 13,
+          "activityName": "Activity 2",
+          "timeTaken": [
+              {
+                  "date": "2022-05-30T00:00:00",
+                  "numberOfHours": 0
+              },
+              {
+                  "date": "2022-05-31T00:00:00",
+                  "numberOfHours": 0
+              },
+              {
+                  "date": "2022-06-01T00:00:00",
+                  "numberOfHours": 0
+              },
+              {
+                  "date": "2022-06-02T00:00:00",
+                  "numberOfHours": 0
+              },
+              {
+                  "date": "2022-06-03T00:00:00",
+                  "numberOfHours": 1
+              },
+              {
+                  "date": "2022-06-04T00:00:00",
+                  "numberOfHours": 0
+              },
+              {
+                  "date": "2022-06-05T00:00:00",
+                  "numberOfHours": 0
+              }
+          ]
+      },
+      {
+          "projectId": 10,
+          "projectName": "Project 3",
+          "activityId": 14,
+          "activityName": "Activity 4",
+          "timeTaken": [
+              {
+                  "date": "2022-05-30T00:00:00",
+                  "numberOfHours": 0
+              },
+              {
+                  "date": "2022-05-31T00:00:00",
+                  "numberOfHours": 0
+              },
+              {
+                  "date": "2022-06-01T00:00:00",
+                  "numberOfHours": 0
+              },
+              {
+                  "date": "2022-06-02T00:00:00",
+                  "numberOfHours": 0
+              },
+              {
+                  "date": "2022-06-03T00:00:00",
+                  "numberOfHours": 0
+              },
+              {
+                  "date": "2022-06-04T00:00:00",
+                  "numberOfHours": 2
+              },
+              {
+                  "date": "2022-06-05T00:00:00",
+                  "numberOfHours": 0
+              }
+          ]
+      },
+      {
+          "projectId": 10,
+          "projectName": "Project 4",
+          "activityId": 16,
+          "activityName": "Activity 3",
+          "timeTaken": [
+              {
+                  "date": "2022-05-30T00:00:00",
+                  "numberOfHours": 0
+              },
+              {
+                  "date": "2022-05-31T00:00:00",
+                  "numberOfHours": 0
+              },
+              {
+                  "date": "2022-06-01T00:00:00",
+                  "numberOfHours": 0
+              },
+              {
+                  "date": "2022-06-02T00:00:00",
+                  "numberOfHours": 0
+              },
+              {
+                  "date": "2022-06-03T00:00:00",
+                  "numberOfHours": 0.1
+              },
+              {
+                  "date": "2022-06-04T00:00:00",
+                  "numberOfHours": 0
+              },
+              {
+                  "date": "2022-06-05T00:00:00",
+                  "numberOfHours": 0
+              }
+          ]
       }
-    ]
+  ]
     this.getTimesheetDetails();
-    this.addTimesheetForm = this._fb.group({
+    this.addTimesheetForm =this._fb.group({
       project: ['', Validators.required],
-      activity:['',Validators.required],
+      activity: ['', Validators.required],
+      monday:[''],
+      tuesday:[''],
+      wednesday:[''],
+      thursday:[''],
+      friday:[''],
+      saturday:[''],
+      sunday:[''],
+      //timeDetails: this._fb.array([]),
       remarks:['']
     });
-    this.getEmployeeDetails();
   }
   private getEmployeeDetails(){
-
-    this._http.get(`${this._url.Employee.getEmployeeDetails}?UserID=${this.userDetails.userId}`).subscribe(
-      {
-        next(res) {
-          //localStorage.setItem('user',JSON.stringify(res.data));
-        }
+    const url = `${this._url.Employee.getEmployeeDetails}?UserID=${this.userDetails.userId}`
+    this._http.get(url).subscribe(
+      (res)=>{
+        console.log(res);
+        //localStorage.setItem('user',JSON.stringify(res.data))
       }
+      // {
+      //   next(res) {
+      //     localStorage.setItem('user',JSON.stringify(res.data));
+      //   }
+      // }
     )
   }
 
@@ -113,34 +311,29 @@ export class TimesheetComponent implements OnInit {
     this.config.currentPage = event;
     //this.();
   }
-  // [
-  //   [projectName,projectID,monday,tues,]
-  //   [projectName,projectID,monday,tues,]
-  //   [projectName,projectID,monday,tues,]
-  // ]
   getTimesheetDetails(){
-    this.timeSheetDetails.forEach(
-      (item,index)=>{
-        let rowArray =[];
-        let itemIndex = this.currentWeek.indexOf(moment(item.Date).format("MMMM-DD"));
-        rowArray.push(item.Status,item.ProjectName,item.ActivityName);
-        while(rowArray.length < 10){
-          if(rowArray.length != 10){
-            if(rowArray.length == itemIndex+3){
-              rowArray.push(item.NumberOfHours);
-            }
-            else{
-              rowArray.push(0);
-            }
-          }
-        }
-        // rowArray.splice(itemIndex+2,0,item.NumberOfHours);
-        // rowArray.splice(9,0,5);
-        rowArray.push(item.NumberOfHours,item.Remarks,item.UniqueId);
-         this.timeSheetDetailsArray.push(rowArray);
-      }
+    // this.timeSheetDetails.forEach(
+    //   (item,index)=>{
+    //     let rowArray =[];
+    //     let itemIndex = this.currentWeek.indexOf(moment(item.Date).format("MMMM-DD"));
+    //     rowArray.push(item.Status,item.ProjectName,item.ActivityName);
+    //     while(rowArray.length < 10){
+    //       if(rowArray.length != 10){
+    //         if(rowArray.length == itemIndex+3){
+    //           rowArray.push(item.NumberOfHours);
+    //         }
+    //         else{
+    //           rowArray.push(0);
+    //         }
+    //       }
+    //     }
+    //     // rowArray.splice(itemIndex+2,0,item.NumberOfHours);
+    //     // rowArray.splice(9,0,5);
+    //     rowArray.push(item.NumberOfHours,item.Remarks,item.UniqueId);
+    //      this.timeSheetDetailsArray.push(rowArray);
+    //   }
       
-    )
+    // )
   }
   dateChange(event){
     const date = event.month +'-'+event.day+"-"+event.year
@@ -200,29 +393,66 @@ export class TimesheetComponent implements OnInit {
     }
   }
 
+  //Timesheet Editing and Add
   onTimesheetAddEdit(id:any){
     if(id == -1){
       this.open(this.content);
-      this.selectedProjectName ='';
-      this.selectedActivityName = '';
+      this.addTimesheetForm.reset();
+      this.selectedTimesheet = {};
     }
     else{
       this.open(this.content);
-      this.selectedProjectName = this.timeSheetDetailsArray[id][1];
-      this.selectedActivityName = this.timeSheetDetailsArray[id][2];
-      console.log(this.selectedActivityName,this.selectedProjectName);
+      this.addTimesheetForm.controls.remarks.setValue(this.timeSheetDetails[id].remarks);
+      this.addTimesheetForm.controls.project.setValue(this.timeSheetDetails[id].projectName);
+      this.addTimesheetForm.controls.activity.setValue(this.timeSheetDetails[id].activityName);
+      this.addTimesheetForm.controls.monday.setValue(this.timeSheetDetails[id].timeTaken[0].numberOfHours);
+      this.addTimesheetForm.controls.tuesday.setValue(this.timeSheetDetails[id].timeTaken[1].numberOfHours);
+      this.addTimesheetForm.controls.wednesday.setValue(this.timeSheetDetails[id].timeTaken[2].numberOfHours);
+      this.addTimesheetForm.controls.thursday.setValue(this.timeSheetDetails[id].timeTaken[3].numberOfHours);
+      this.addTimesheetForm.controls.friday.setValue(this.timeSheetDetails[id].timeTaken[4].numberOfHours);
+      this.addTimesheetForm.controls.saturday.setValue(this.timeSheetDetails[id].timeTaken[5].numberOfHours);
+      this.addTimesheetForm.controls.sunday.setValue(this.timeSheetDetails[id].timeTaken[6].numberOfHours);
+      console.log(this.timeSheetDetails[id]);
+
+      this.selectedTimesheet = this.timeSheetDetails[id];
+
+      
+
+      
+      //const timeDetails = this.addTimesheetForm.get('timeDetails')['controls'] as FormArray;
+      
+      // timeDetails.push(this._fb.group({
+      //     monday: '',
+      //     tuesday: '',
+      //     wednesday: 3,
+      //     thursday: '',
+      //     friday: '',
+      //     saturday: '',
+      //     sunday: ''
+      //   }))
+      
+      // console.log(this.addTimesheetForm.get('timeDetails')['controls'])
+      //this.addTimesheetForm.controls.timeDetails.setValue(timeDetails);
+      // this.addTimesheetForm.controls.timeDetails.value.splice(0,0,this.timeSheetDetails[id].timeTaken);
+      // this.selectedDates = this.addTimesheetForm.controls.timeDetails.value[0];
+      // console.log("hi",this.addTimesheetForm.controls.timeDetails.value[0][0].numberOfHours);
+      // this.addTimesheetForm.controls['project'].value = this.timeSheetDetails[id];
+      // this.selectedActivityName = this.timeSheetDetails[id];
+
+      // console.log(this.selectedActivityName,this.selectedProjectName);
+     
     }
 
 
   }
   onTimesheetDelete(id:any){
-    const uniqueId = this.timeSheetDetailsArray[id].UniqueId;
-    this._http.delete(`${this._url.timesheet.deleteTimesheet}/${uniqueId}`).subscribe(
-    {
-      next(res) {
-        //this.toastr.success(res.responseMessage)
-    }
-    });
+    // const data = this.timeSheetDetailsArray[id];
+    // this._http.delete(`${this._url.timesheet.deleteTimesheet}/${uniqueId}`).subscribe(
+    // {
+    //   next(res) {
+    //     //this.toastr.success(res.responseMessage)
+    // }
+    // });
   }
 
   onRowCheck(id: any){
@@ -232,11 +462,38 @@ export class TimesheetComponent implements OnInit {
     }else{
       console.log(this.timeSheetDetailsArray[id])
     }
-    //console.log(this.selectAllTimesheet)
 
   }
   onSaveTimesheetDetails(){
-    console.log(this.addTimesheetForm.controls['project'].value);
+    // console.log("project",this.addTimesheetForm.controls.project.value);
+    // console.log("activity",this.addTimesheetForm.controls.project.value);
+    // console.log("remarks",this.addTimesheetForm.controls.project.value);
+    // console.log("remarks",this.addTimesheetForm.controls.timeDetails.value);
+    if(!Object.keys(this.selectedTimesheet).length){
+      console.log("Add")
+    }else{
+      let timeTaken = this.selectedTimesheet['timeTaken'];
+      timeTaken[0].numberOfHours = this.addTimesheetForm.controls.monday.value;
+      timeTaken[1].numberOfHours = this.addTimesheetForm.controls.tuesday.value;
+      timeTaken[2].numberOfHours = this.addTimesheetForm.controls.wednesday.value;
+      timeTaken[3].numberOfHours = this.addTimesheetForm.controls.thursday.value;
+      timeTaken[4].numberOfHours = this.addTimesheetForm.controls.friday.value;
+      timeTaken[5].numberOfHours = this.addTimesheetForm.controls.saturday.value;
+      timeTaken[6].numberOfHours =this.addTimesheetForm.controls.sunday.value;
+
+      const data = {
+      //status          : this.selectedTimesheet.status,
+      activityName    : this.addTimesheetForm.controls.activity.value,
+      projectName     : this.addTimesheetForm.controls.project.value,
+      timeTaken       : timeTaken,
+      remarks         : this.addTimesheetForm.controls.remarks.value
+      }
+      console.log("data",data);
+
+
+    }
+
+    
   }
   selectChanges(value:any){
 

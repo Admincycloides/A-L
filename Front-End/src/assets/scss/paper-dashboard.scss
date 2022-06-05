@@ -68,6 +68,26 @@ table{
         }
     }
 }
+input[type='number'] {
+    -moz-appearance: textfield;
+}
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+.reset [type="number"] {
+    -moz-appearance: spinner-textfield;
+}
+.reset input[type='number']::-webkit-outer-spin-button,
+.reset input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: inner-spin-button;
+}
+// toaster
+.toast-top-right{
+    display: flex;
+    justify-content: right;
+}
+
 // layout
 .sidebar .logo, .off-canvas-sidebar .logo{
     height: 62px;
@@ -97,6 +117,7 @@ table{
 }
 .main-panel .content{
     padding: 0 15px 30px;
+    margin-top: 100px;
 }
 .sidebar .nav i, .off-canvas-sidebar .nav i{
     font-size: 18px;
@@ -109,6 +130,10 @@ table{
     padding: 5px 8px 5px 0px;
     line-height: 26px;
 }
+.action{
+    flex: 1;
+}
+
 // date picker native
 .date-week{
     border: none;
@@ -123,6 +148,7 @@ table{
     }
 }
 .act-filter{
+    flex: 1;
     input[type="date"]{
         margin: 0 15px;
     }
@@ -130,37 +156,66 @@ table{
 .d-label{
     
 }
-.act-filter{
-    input{
+
+// custom date picker
+input{
+    &.date-input{
         background-color: #dfdfdf!important;
-        height: 35px;
-        &::placeholder{
-            color: transparentize($dark-color,.3)
+        height: 40px;
+        @include radius(5px 0 0 5px);
+        font-size:0;
+        width: 170px;
+    }
+    &:focus{
+        border: none!important;
+        outline: none;
+    }
+}
+.week-range{
+    color: transparentize($dark-color,.3)
+}
+.date-line{
+    width: 318px;
+}
+.date-select{
+    background:#dfdfdf!important;
+    border-radius:0 5px 5px 0;
+    padding: 0;
+    height: 40px;
+    width: 50px;
+    &:hover, &:focus, &:active{
+        background-color: $secondary-color!important;
+        &:hover, &:focus{
+            background-color: $secondary-color!important;
         }
-        // @include radoius
+        i{
+            color: #fff!important;
+        }
+        outline: none;
+    }
+    i{
+        font-size: 16px;
+        font-weight: bold;
+        color: $secondary-color;
     }
 }
 // inner page
 .page-title{
     padding: 5px;
-    font-size: 20px;
+    font-size: 19px;
     text-transform: uppercase;
     color: $secondary-color;
-    font-weight: 700;
+    font-weight: 500;
+    flex: 1;
 }
 .main-panel{
     background-color: $bg-color;
 }
-.thm-btn{
-    padding: 5px;
-    @include radius(5px);
-    height:40px;
-    outline: none;
-    border: none;
+.thm-btn-primary{
+    @include thm-btn;
+    background-color:$secondary-color;
+    color: #fff;
     font-size: 16px;
-    &:focus{
-        outline: none;
-    }
 }
 .row-created{
     border: dashed 2px transparentize($secondary-color, .45);

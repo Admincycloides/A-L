@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 
 import { AdminLayoutRoutes } from './admin-layout.routing';
 
@@ -14,6 +14,7 @@ import { MapsComponent }            from '../../pages/maps/maps.component';
 import { NotificationsComponent }   from '../../pages/notifications/notifications.component';
 import { UpgradeComponent }         from '../../pages/upgrade/upgrade.component';
 import { TimesheetComponent }       from '../../pages/timesheet/timesheet.component';
+
 
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -30,7 +31,8 @@ import { AddtimesheetComponent } from '../../pages/timesheet/addtimesheet/addtim
     FormsModule,
     NgbModule,
     HttpClientModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    ReactiveFormsModule
   ],
   declarations: [
     DashboardComponent,
