@@ -4,7 +4,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpService } from 'app/_services/http.service';
 import { UrlService } from 'app/_services/url.service';
 import * as moment from 'moment';
-
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -52,6 +52,7 @@ export class TimesheetComponent implements OnInit {
   constructor(private _url: UrlService,
     private _http: HttpService,private modalService: NgbModal,
     private _fb: FormBuilder,
+    private toast: ToastrService
     ) { }
     
 
@@ -66,6 +67,8 @@ export class TimesheetComponent implements OnInit {
     this.endOfWeek = moment().endOf('isoWeek').toDate();
     this.weekShow = moment(this.startOfWeek).format("MMMM-DD")+"-"+moment(this.endOfWeek).format("MMMM-DD");
     this.currentWeek = this.dateFormatter(moment(this.startOfWeek).format("YYYY-MM-DD"),moment(this.endOfWeek).format("YYYY-MM-DD"));
+    this.getTimesheetDetails();
+    //console.log("hi",this.getSupervisorDetails())
 
 
 
@@ -169,7 +172,7 @@ export class TimesheetComponent implements OnInit {
 
 
 
-    this.getTimesheetDetails();
+    
     this.addTimesheetForm =this._fb.group({
       project: ['', Validators.required],
       activity: ['', Validators.required],
@@ -199,6 +202,15 @@ export class TimesheetComponent implements OnInit {
     )
   }
   private getSupervisorDetails(){
+
+    const url = `${this._url.Employee.getSupervisorDetails}`
+    this._http.get(url).subscribe({
+      next(res){
+        //this.superVisorList = res.data
+        console.log(res);
+      }
+
+    })
 
     this.superVisorList = [
       {
@@ -325,28 +337,22 @@ export class TimesheetComponent implements OnInit {
     //this.();
   }
   getTimesheetDetails(){
-    // this.timeSheetDetails.forEach(
-    //   (item,index)=>{
-    //     let rowArray =[];
-    //     let itemIndex = this.currentWeek.indexOf(moment(item.Date).format("MMMM-DD"));
-    //     rowArray.push(item.Status,item.ProjectName,item.ActivityName);
-    //     while(rowArray.length < 10){
-    //       if(rowArray.length != 10){
-    //         if(rowArray.length == itemIndex+3){
-    //           rowArray.push(item.NumberOfHours);
-    //         }
-    //         else{
-    //           rowArray.push(0);
-    //         }
-    //       }
-    //     }
-    //     // rowArray.splice(itemIndex+2,0,item.NumberOfHours);
-    //     // rowArray.splice(9,0,5);
-    //     rowArray.push(item.NumberOfHours,item.Remarks,item.UniqueId);
-    //      this.timeSheetDetailsArray.push(rowArray);
-    //   }
-      
-    // )
+    const fromDate = moment(this.startOfWeek).format("YYYY-MM-DD 00:00:00.000");
+    const toDate = moment(this.endOfWeek).format("YYYY-MM-DD 00:00:00.000");
+    const body = {
+      employeeId : this.userDetails.userId,
+      employeeName : this.userDetails.username,
+      fromDate : fromDate,
+      toDate : toDate
+    }
+    const url = `${this._url.timesheet.getTimesheet}`
+    this._http.post(url,body).subscribe({
+      next(res){
+        //this.timeSheetDetails = res.timesheetDetails
+        console.log(res);
+      }
+
+    })
   }
   dateChange(event){
     this.selectedTimesheetRow = [];
@@ -465,15 +471,17 @@ export class TimesheetComponent implements OnInit {
   }
   // Deleting Timesheet row
   onTimesheetDelete(id:any){
-    const data = this.timeSheetDetails[id];
-    console.log("delete data",data)
-        // const data = this.timeSheetDetails[id];
-    // this._http.delete(`${this._url.timesheet.deleteTimesheet}/${uniqueId}`).subscribe(
-    // {
-    //   next(res) {
-    //     //this.toastr.success(res.responseMessage)
-    // }
-    // });
+    const body = this.timeSheetDetails[id];
+    //console.log("delete data",body)
+    const url = `${this._url.timesheet.deleteTimesheet}`
+    this._http.post(url,body).subscribe({
+      next(res){
+        //this.timeSheetDetails = res.timesheetDetails
+        console.log(res);
+        //this.toast.success("User Successfully logged in");
+      }
+
+    })
   }
 
   onRowCheck(id: any){
@@ -512,7 +520,7 @@ export class TimesheetComponent implements OnInit {
         {date : date[6],numberOfHours: this.addTimesheetForm.controls.sunday.value}
       ]
 
-      const data ={
+      const body ={
         projectId       : 9,
         projectName     : this.addTimesheetForm.controls.project.value,
         activityId      : 15,
@@ -521,7 +529,16 @@ export class TimesheetComponent implements OnInit {
         remarks         : this.addTimesheetForm.controls.remarks.value,
         timeTaken       : timeTaken
       }
-      console.log("Add timesheet data",data);
+      console.log("Add timesheet data",body);
+      const url = `${this._url.timesheet.addTimesheet}?EmployeeId=${this.userDetails.userId}`
+      this._http.post(url,body).subscribe({
+      next(res){
+        //this.timeSheetDetails = res.timesheetDetails
+        console.log(res);
+        //this.toast.success("User Successfully logged in");
+      }
+
+    })
 
     }else{
       console.log("this.selectedTimesheet",this.selectedTimesheet);
@@ -534,7 +551,7 @@ export class TimesheetComponent implements OnInit {
       timeTaken[5].numberOfHours = this.addTimesheetForm.controls.saturday.value;
       timeTaken[6].numberOfHours = this.addTimesheetForm.controls.sunday.value;
 
-      const data = {
+      const body = {
       projectId       : 9,
       projectName     : this.addTimesheetForm.controls.project.value,
       activityId      : 15,
@@ -544,7 +561,18 @@ export class TimesheetComponent implements OnInit {
       remarks         : this.addTimesheetForm.controls.remarks.value
       }
       
-      console.log("Modify timesheet data",data);
+      const url = `${this._url.timesheet.editTimesheet}`
+      this._http.post(url,body).subscribe({
+      next(res){
+        //this.timeSheetDetails = res.timesheetDetails
+        console.log(res);
+        //this.toast.success("User Successfully logged in");
+      }
+
+    })
+
+      
+      console.log("Modify timesheet data",body);
 
     }
 
@@ -554,11 +582,20 @@ export class TimesheetComponent implements OnInit {
   onSubmitTimesheet(){
     //remarks =''
 
-    const data = this.selectedTimesheetRow;
+    const body = this.selectedTimesheetRow;
     //this.managerId
 
     
     console.log(this.managerId);
+    console.log("data submit",body)
+    const url = `${this._url.timesheet.submitTimesheet}?ManagerID=${this.managerId}&EmployeeName=${this.userDetails.username}`;
+    this._http.post(url,body).subscribe({
+        next(res){
+        //this.timeSheetDetails = res.timesheetDetails
+        console.log(res);
+        //this.toast.success("User Successfully logged in");
+      }
+    })
     this.selectedTimesheetRow = [];
     this.submitRemarks ='';
   }
