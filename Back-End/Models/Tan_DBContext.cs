@@ -20,15 +20,17 @@ namespace AnL.Models
         public virtual DbSet<ClientDetails> ClientDetails { get; set; }
         public virtual DbSet<EmployeeDetails> EmployeeDetails { get; set; }
         public virtual DbSet<ProjectDetails> ProjectDetails { get; set; }
+        public virtual DbSet<ProjectMapping> ProjectMapping { get; set; }
         public virtual DbSet<TimesheetDetails> TimesheetDetails { get; set; }
         public virtual DbSet<UserData> UserData { get; set; }
+        public virtual DbSet<UserLogin> UserLogin { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=Tan_DB;Trusted_Connection=True;MultipleActiveResultSets=true");
+                optionsBuilder.UseSqlServer("Server=72.138.132.250,8006;Database=Tan_DB;user id=sa;password=T@ngenti@12");
             }
         }
 
@@ -67,9 +69,7 @@ namespace AnL.Models
 
                 entity.ToTable("Activity Mapping");
 
-                entity.Property(e => e.UniqueId)
-                    .HasColumnName("Unique ID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.UniqueId).HasColumnName("Unique ID");
 
                 entity.Property(e => e.ActivityId).HasColumnName("Activity ID");
 
@@ -185,9 +185,7 @@ namespace AnL.Models
 
                 entity.ToTable("Project_Details");
 
-                entity.Property(e => e.ProjectId)
-                    .HasColumnName("Project_ID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.ProjectId).HasColumnName("Project_ID");
 
                 entity.Property(e => e.ClientId).HasColumnName("Client_ID");
 
@@ -233,6 +231,46 @@ namespace AnL.Models
                     .HasForeignKey(d => d.ClientId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Client Details-ProjectDet");
+            });
+
+            modelBuilder.Entity<ProjectMapping>(entity =>
+            {
+                entity.ToTable("Project_Mapping");
+
+                entity.Property(e => e.ProjectMappingId).HasColumnName("Project_mapping_ID");
+
+                entity.Property(e => e.EmployeeId)
+                    .IsRequired()
+                    .HasColumnName("Employee_ID")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LastUpdate).HasColumnType("datetime");
+
+                entity.Property(e => e.LastUpdatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ProjectId).HasColumnName("Project_ID");
+
+                entity.HasOne(d => d.Employee)
+                    .WithMany(p => p.ProjectMappingEmployee)
+                    .HasForeignKey(d => d.EmployeeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Project_Mapping_Employee_Details");
+
+                entity.HasOne(d => d.LastUpdatedByNavigation)
+                    .WithMany(p => p.ProjectMappingLastUpdatedByNavigation)
+                    .HasForeignKey(d => d.LastUpdatedBy)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Project_Mapping_Employee_Details1");
+
+                entity.HasOne(d => d.Project)
+                    .WithMany(p => p.ProjectMapping)
+                    .HasForeignKey(d => d.ProjectId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Project_Mapping_Project_Details");
             });
 
             modelBuilder.Entity<TimesheetDetails>(entity =>
@@ -293,6 +331,32 @@ namespace AnL.Models
                 entity.HasNoKey();
 
                 entity.Property(e => e.Id).HasColumnName("ID");
+            });
+
+            modelBuilder.Entity<UserLogin>(entity =>
+            {
+                entity.HasKey(e => e.UserId);
+
+                entity.Property(e => e.UserId)
+                    .HasColumnName("UserID")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Otp).HasColumnName("OTP");
+
+                entity.Property(e => e.OtpexpiryDate)
+                    .HasColumnName("OTPExpiryDate")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.Token)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TokenExpiryDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Username)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             OnModelCreatingPartial(modelBuilder);
