@@ -40,6 +40,11 @@ export class TimesheetComponent implements OnInit {
   selectedDates: any[];
   selectedTimesheet ={};
   superVisorList = [];
+  selectedTimesheetRow = [];
+  managerId: any;
+  timesheetRemarks :any;
+  submitRemarks :any;
+
   get f() {
     return this.addTimesheetForm.controls;
   }
@@ -51,11 +56,12 @@ export class TimesheetComponent implements OnInit {
     
 
   ngOnInit(): void {
-    this.projectList = ['Project 1','Project 2','Project 3','Project 4'];
-    this.activityList = ['Activity 1','Activity 2','Activity 3','Activity 4'];
+    //this.projectList = ['Project 1','Project 2','Project 3','Project 4'];
+    //this.activityList = ['Activity 1','Activity 2','Activity 3','Activity 4'];
     this.userDetails = JSON.parse(localStorage.getItem('token'));
     this.getEmployeeDetails();
     this.getSupervisorDetails();
+    this.getProjectActivityDetails();
     this.startOfWeek = moment().startOf('isoWeek').toDate();
     this.endOfWeek = moment().endOf('isoWeek').toDate();
     this.weekShow = moment(this.startOfWeek).format("MMMM-DD")+"-"+moment(this.endOfWeek).format("MMMM-DD");
@@ -67,9 +73,9 @@ export class TimesheetComponent implements OnInit {
     this.timeSheetDetails= [
       {
         "projectId": 9,
-        "projectName": null,
+        "projectName": 'Glyphosate',
         "activityId": 6,
-        "activityName": null,
+        "activityName": "Activity 2",
         "status": "Submitted",
         "remarks": "None",
         "timeTaken": [
@@ -112,10 +118,10 @@ export class TimesheetComponent implements OnInit {
     },
     {
         "projectId": 9,
-        "projectName": null,
+        "projectName": 'Glyphosate Phase 2',
         "activityId": 15,
-        "activityName": null,
-        "status": "Submitted",
+        "activityName": "Activity 2",
+        "status": "In progress",
         "remarks": "None",
         "timeTaken": [
             {
@@ -230,6 +236,90 @@ export class TimesheetComponent implements OnInit {
 
   }
 
+  private getProjectActivityDetails(){
+    this.projectList =[{
+      "ProjectId": 0,
+      "ProjectName": 'Glyphosate',
+      "ProjectDescription": null,
+      "ClientId": 0,
+      "StartDate": "0001-01-01T00:00:00",
+      "EndDate": null,
+      "CurrentStatus": null,
+      "SredProject": null,
+      "Activities": [
+          {
+              "ActivityId": 0,
+              "ActivityName": 'Activity 2',
+              "ActivityDescription": null
+          },
+          {
+              "ActivityId": 0,
+              "ActivityName": 'Activity 2',
+              "ActivityDescription": null
+          }
+      ]
+  },{
+      "ProjectId": 0,
+      "ProjectName": 'Glyphosate Phase 2',
+      "ProjectDescription": null,
+      "ClientId": 0,
+      "StartDate": "0001-01-01T00:00:00",
+      "EndDate": null,
+      "CurrentStatus": null,
+      "SredProject": null,
+      "Activities": [
+          {
+              "ActivityId": 0,
+              "ActivityName": 'Activity 2',
+              "ActivityDescription": null
+          },
+          {
+              "ActivityId": 0,
+              "ActivityName": 'Activity 2',
+              "ActivityDescription": null
+          }
+      ]
+  },
+  {
+      "ProjectId": 0,
+      "ProjectName": null,
+      "ProjectDescription": null,
+      "ClientId": 0,
+      "StartDate": "0001-01-01T00:00:00",
+      "EndDate": null,
+      "CurrentStatus": null,
+      "SredProject": null,
+      "Activities": [
+          {
+              "ActivityId": 0,
+              "ActivityName": 'Activity 2',
+              "ActivityDescription": null
+          },
+          {
+              "ActivityId": 0,
+              "ActivityName": 'Activity 2',
+              "ActivityDescription": null
+          }
+      ]
+  }
+  
+  ]
+  }
+
+  public onProjectSelect(event:any){
+    const project = event.target.value;
+    console.log(typeof(project));
+    if(project === 'Select Project') this.activityList =[];
+    else{
+      this.projectList.forEach((item)=>{
+        if(item.ProjectName == project) this.activityList = item.Activities;
+      })
+    }
+  }
+
+
+
+
   public pageChanged(event) {
     this.config.currentPage = event;
     //this.();
@@ -259,6 +349,7 @@ export class TimesheetComponent implements OnInit {
     // )
   }
   dateChange(event){
+    this.selectedTimesheetRow = [];
     const date = event.month +'-'+event.day+"-"+event.year
     this.startOfWeek = moment(date).startOf('isoWeek').toDate();
     this.endOfWeek = moment(date).endOf('isoWeek').toDate();
@@ -279,6 +370,7 @@ export class TimesheetComponent implements OnInit {
     return dateArray;
   }
   onPreviousClick(){
+    this.selectedTimesheetRow = [];
     this.startOfWeek = moment(this.startOfWeek).subtract(1,'weeks');
     this.endOfWeek = moment(this.endOfWeek).subtract(1,'weeks');
     this.currentWeek = this.dateFormatter(moment(this.startOfWeek).format("YYYY-MM-DD"),moment(this.endOfWeek).format("YYYY-MM-DD"));
@@ -286,6 +378,7 @@ export class TimesheetComponent implements OnInit {
     //console.log("this.currentWeek ",this.currentWeek )
   }
   onNextClick(){
+    this.selectedTimesheetRow = [];
     this.startOfWeek = moment(this.startOfWeek).add(1,'weeks');
     this.endOfWeek = moment(this.endOfWeek).add(1,'weeks');
     this.currentWeek = this.dateFormatter(moment(this.startOfWeek).format("YYYY-MM-DD"),moment(this.endOfWeek).format("YYYY-MM-DD"));
@@ -325,6 +418,7 @@ export class TimesheetComponent implements OnInit {
       this.selectedTimesheet = {};
     }
     else{
+      console.log(id)
       this.open(this.content);
       this.addTimesheetForm.controls.remarks.setValue(this.timeSheetDetails[id].remarks);
       this.addTimesheetForm.controls.project.setValue(this.timeSheetDetails[id].projectName);
@@ -336,7 +430,7 @@ export class TimesheetComponent implements OnInit {
       this.addTimesheetForm.controls.friday.setValue(this.timeSheetDetails[id].timeTaken[4].numberOfHours);
       this.addTimesheetForm.controls.saturday.setValue(this.timeSheetDetails[id].timeTaken[5].numberOfHours);
       this.addTimesheetForm.controls.sunday.setValue(this.timeSheetDetails[id].timeTaken[6].numberOfHours);
-      console.log(this.timeSheetDetails[id]);
+      console.log(this.addTimesheetForm.controls.activity.value);
 
       this.selectedTimesheet = this.timeSheetDetails[id];
 
@@ -387,12 +481,22 @@ export class TimesheetComponent implements OnInit {
     if(id == -1){
       this.selectAllTimesheet = !this.selectAllTimesheet;
     }else{
-      console.log(this.timeSheetDetailsArray[id])
+      // this.selectedTimesheetRow.includes(this.timeSheetDetails[id])? this.selectedTimesheetRow.push(this.timeSheetDetails[id])
+      // :this.selectedTimesheetRow.
+      if(!this.selectedTimesheetRow.includes(this.timeSheetDetails[id]))
+      {
+        console.log("hi")
+        this.selectedTimesheetRow.push(this.timeSheetDetails[id]);
+      }else{
+        this.selectedTimesheetRow.splice(this.selectedTimesheetRow.indexOf(this.timeSheetDetails[id]),1);
+      }
+      console.log(this.selectedTimesheetRow);
     }
 
   }
   //saving the timsheet details
   onSaveTimesheetDetails(){
+    this.activityList = [];
     if(!Object.keys(this.selectedTimesheet).length){
       let date = [];
       //console.log(moment(this.currentWeek[0]).format("YYYY-MM-DDT00:00:00"));
@@ -446,9 +550,22 @@ export class TimesheetComponent implements OnInit {
 
     
   }
-  selectChanges(value:any){
+  //submitting the timesheet
+  onSubmitTimesheet(){
+    //remarks =''
 
+    const data = this.selectedTimesheetRow;
+    //this.managerId
+
+    
+    console.log(this.managerId);
+    this.selectedTimesheetRow = [];
+    this.submitRemarks ='';
   }
+  onselectSupervisor(event:any){
+    this.managerId = event.target.value;
+  }
+  
 
   
 }

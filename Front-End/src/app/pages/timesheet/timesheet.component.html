@@ -51,25 +51,25 @@
                                 Activities
                             </th>
                             <th>
-                                Mon<br><span>{{currentWeek[0]}}</span>
+                                Mon<br><span>{{currentWeek[0] | date: "MMM-d"}}</span>
                             </th>
                             <th>
-                                Tue<br><span>{{currentWeek[1]}}</span>
+                                Tue<br><span>{{currentWeek[1] | date: "MMM-d"}}</span>
                             </th>
                             <th>
-                                Wed<br><span>{{currentWeek[2] }}</span>
+                                Wed<br><span>{{currentWeek[2] | date: "MMM-d"}}</span>
                             </th>
                             <th>
-                                Thu<br><span>{{currentWeek[3]}}</span>
+                                Thu<br><span>{{currentWeek[3] | date: "MMM-d"}}</span>
                             </th>
                             <th>
-                                Fri<br><span>{{currentWeek[4]}}</span>
+                                Fri<br><span>{{currentWeek[4] | date: "MMM-d"}}</span>
                             </th>
                             <th>
-                                Sat<br><span>{{currentWeek[5]}}</span>
+                                Sat<br><span>{{currentWeek[5] | date: "MMM-d"}}</span>
                             </th>
                             <th>
-                                Sun<br><span>{{currentWeek[6]}}</span>
+                                Sun<br><span>{{currentWeek[6] | date: "MMM-d"}}</span>
                             </th>
                             <th>
                                 Total
@@ -91,6 +91,7 @@
                                     <input class="form-check-input tbl-check"
                                         type="checkbox" value=""
                                         id="flexCheckDefault"
+                                        *ngIf="row.status == 'In progress' || row.status == 'Rejected'"
                                         (click)="onRowCheck(i)" [checked]="selectAllTimesheet?
                                         true:false">
                                     <!-- <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault" 
@@ -177,17 +178,19 @@
             <div class="card-body pt-1">
                 <div class="r-row">
                     <label>Send to</label>
-                    <select>
-                        <option>1</option>
-                        <option>2</option>
+                    <select required (change)="onselectSupervisor($event)" >
+                        <option>(Supervisor)</option>
+                        <option *ngFor="let item of superVisorList" [value]="item.managerId">{{item.firstName}} 
+                            {{item.lastName}}
+                        </option>
                     </select>
                 </div>
                 <div class="r-row">
                     <label>Remarks</label>
-                    <textarea></textarea>
+                    <textarea [(ngModel)]="submitRemarks"></textarea>
                 </div>
                 <div class="r-row">
-                    <button>Submit</button>
+                    <button (click)="onSubmitTimesheet()">Submit</button>
                 </div>
             </div>
         </div>
@@ -208,9 +211,9 @@
                 <div class="col-md-12">
                     <div class="form-group mb-3">
                         <label>Select Project</label>
-                        <select class="form-control" formControlName = "project">
+                        <select class="form-control" formControlName = "project" (change)="onProjectSelect($event)">
                             <option selected>Select Project</option>
-                            <option *ngFor="let item of projectList" [ngValue]="item">{{item}}</option>
+                            <option *ngFor="let item of projectList" [ngValue]="item.ProjectName">{{item.ProjectName}}</option>
                         </select>
                         <div class="error"></div>
                     </div>
@@ -222,7 +225,8 @@
                         <label>Activity</label>  
                         <select class="form-control" id="activity" name = "activity" formControlName ="activity">
                             <option selected>Select Activity</option>
-                            <option *ngFor="let item of activityList" [ngValue]="item">{{item}}</option>
+                            <option *ngFor="let item of activityList" [ngValue]="item.ActivityName"
+                            >{{item.ActivityName}}</option>
                         </select>
                     <div class="error"></div>
                 </div>
@@ -244,25 +248,25 @@
                             <thead class="text-primary">
                                 <th>
                                     Monday
-                                    {{currentWeek[0]}}
+                                    {{currentWeek[0] | date: "MMM-d"}}
                                 </th>
                                 <th>
-                                    Tuesday {{currentWeek[1]}}
+                                    Tuesday {{currentWeek[1] | date: "MMM-d"}}
                                 </th>
                                 <th>
-                                    Wednesday {{currentWeek[2]}}
+                                    Wednesday {{currentWeek[2] | date: "MMM-d"}}
                                 </th>
                                 <th>
-                                    Thusday {{currentWeek[3]}}
+                                    Thusday {{currentWeek[3] | date: "MMM-d"}}
                                 </th>
                                 <th>
-                                    Friday {{currentWeek[4]}}
+                                    Friday {{currentWeek[4] | date: "MMM-d"}}
                                 </th>
                                 <th>
-                                    Saturday {{currentWeek[5]}}
+                                    Saturday {{currentWeek[5] | date: "MMM-d"}}
                                 </th>
                                 <th>
-                                    Sunday {{currentWeek[6]}}
+                                    Sunday {{currentWeek[6] | date: "MMM-d"}}
                                 </th>
                   
 
