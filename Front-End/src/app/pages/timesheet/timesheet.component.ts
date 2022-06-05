@@ -44,6 +44,7 @@ export class TimesheetComponent implements OnInit {
   managerId: any;
   timesheetRemarks :any;
   submitRemarks :any;
+  showSideWindow = false
 
   get f() {
     return this.addTimesheetForm.controls;
@@ -485,15 +486,18 @@ export class TimesheetComponent implements OnInit {
   }
 
   onRowCheck(id: any){
-    console.log(id)
+    this.showSideWindow = !this.showSideWindow;
     if(id == -1){
       this.selectAllTimesheet = !this.selectAllTimesheet;
+      this.timeSheetDetails.forEach((item)=>{
+        if(item.status == 'In progress' || item.status == 'Rejected') this.selectedTimesheetRow.push(item)
+      })
+      console.log(this.selectedTimesheetRow);
     }else{
       // this.selectedTimesheetRow.includes(this.timeSheetDetails[id])? this.selectedTimesheetRow.push(this.timeSheetDetails[id])
       // :this.selectedTimesheetRow.
       if(!this.selectedTimesheetRow.includes(this.timeSheetDetails[id]))
       {
-        console.log("hi")
         this.selectedTimesheetRow.push(this.timeSheetDetails[id]);
       }else{
         this.selectedTimesheetRow.splice(this.selectedTimesheetRow.indexOf(this.timeSheetDetails[id]),1);
