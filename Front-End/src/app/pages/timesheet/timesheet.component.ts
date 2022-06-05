@@ -38,7 +38,8 @@ export class TimesheetComponent implements OnInit {
   activityList:any[];
   selectedProjectName:any;
   selectedDates: any[];
-  selectedTimesheet ={}
+  selectedTimesheet ={};
+  superVisorList = [];
   get f() {
     return this.addTimesheetForm.controls;
   }
@@ -50,233 +51,118 @@ export class TimesheetComponent implements OnInit {
     
 
   ngOnInit(): void {
-    console.log(this.content);
     this.projectList = ['Project 1','Project 2','Project 3','Project 4'];
     this.activityList = ['Activity 1','Activity 2','Activity 3','Activity 4'];
     this.userDetails = JSON.parse(localStorage.getItem('token'));
     this.getEmployeeDetails();
+    this.getSupervisorDetails();
     this.startOfWeek = moment().startOf('isoWeek').toDate();
     this.endOfWeek = moment().endOf('isoWeek').toDate();
     this.weekShow = moment(this.startOfWeek).format("MMMM-DD")+"-"+moment(this.endOfWeek).format("MMMM-DD");
-    this.currentWeek = this.dateFormatter(moment(this.startOfWeek).format("YYYY-MM-DD"),moment(this.endOfWeek).format("YYYY-MM-DD"))
+    this.currentWeek = this.dateFormatter(moment(this.startOfWeek).format("YYYY-MM-DD"),moment(this.endOfWeek).format("YYYY-MM-DD"));
+
+
+
+
     this.timeSheetDetails= [
       {
-          "projectId": 9,
-          "projectName": "Project 1",
-          "activityId": 6,
-          "activityName": "Activity 1",
-          "timeTaken": [
-              {
-                  "date": "2022-05-30T00:00:00",
-                  "numberOfHours": 2
-              },
-              {
-                  "date": "2022-05-31T00:00:00",
-                  "numberOfHours": 1
-              },
-              {
-                  "date": "2022-06-01T00:00:00",
-                  "numberOfHours": 3
-              },
-              {
-                  "date": "2022-06-02T00:00:00",
-                  "numberOfHours": 4
-              },
-              {
-                  "date": "2022-06-03T00:00:00",
-                  "numberOfHours": 0.25
-              },
-              {
-                  "date": "2022-06-04T00:00:00",
-                  "numberOfHours": 2
-              },
-              {
-                  "date": "2022-06-05T00:00:00",
-                  "numberOfHours": 0
-              }
-          ]
-      },
-      {
-          "projectId": 10,
-          "projectName": "Project 2",
-          "activityId": 10,
-          "activityName": "Activity 2",
-          "timeTaken": [
-              {
-                  "date": "2022-05-30T00:00:00",
-                  "numberOfHours": 2
-              },
-              {
-                  "date": "2022-05-31T00:00:00",
-                  "numberOfHours": 1
-              },
-              {
-                  "date": "2022-06-01T00:00:00",
-                  "numberOfHours": 3
-              },
-              {
-                  "date": "2022-06-02T00:00:00",
-                  "numberOfHours": 4
-              },
-              {
-                  "date": "2022-06-03T00:00:00",
-                  "numberOfHours": 0.25
-              },
-              {
-                  "date": "2022-06-04T00:00:00",
-                  "numberOfHours": 2
-              },
-              {
-                  "date": "2022-06-05T00:00:00",
-                  "numberOfHours": 0
-              }
-          ]
-      },
-      {
-          "projectId": 10,
-          "projectName": "Project 3",
-          "activityId": 12,
-          "activityName": "Activity 3",
-          "timeTaken": [
-              {
-                  "date": "2022-05-30T00:00:00",
-                  "numberOfHours": 4
-              },
-              {
-                  "date": "2022-05-31T00:00:00",
-                  "numberOfHours": 2
-              },
-              {
-                  "date": "2022-06-01T00:00:00",
-                  "numberOfHours": 2
-              },
-              {
-                  "date": "2022-06-02T00:00:00",
-                  "numberOfHours": 2
-              },
-              {
-                  "date": "2022-06-03T00:00:00",
-                  "numberOfHours": 4
-              },
-              {
-                  "date": "2022-06-04T00:00:00",
-                  "numberOfHours": 2
-              },
-              {
-                  "date": "2022-06-05T00:00:00",
-                  "numberOfHours": 0
-              }
-          ]
-      },
-      {
-          "projectId": 10,
-          "projectName": "Project 3",
-          "activityId": 13,
-          "activityName": "Activity 2",
-          "timeTaken": [
-              {
-                  "date": "2022-05-30T00:00:00",
-                  "numberOfHours": 0
-              },
-              {
-                  "date": "2022-05-31T00:00:00",
-                  "numberOfHours": 0
-              },
-              {
-                  "date": "2022-06-01T00:00:00",
-                  "numberOfHours": 0
-              },
-              {
-                  "date": "2022-06-02T00:00:00",
-                  "numberOfHours": 0
-              },
-              {
-                  "date": "2022-06-03T00:00:00",
-                  "numberOfHours": 1
-              },
-              {
-                  "date": "2022-06-04T00:00:00",
-                  "numberOfHours": 0
-              },
-              {
-                  "date": "2022-06-05T00:00:00",
-                  "numberOfHours": 0
-              }
-          ]
-      },
-      {
-          "projectId": 10,
-          "projectName": "Project 3",
-          "activityId": 14,
-          "activityName": "Activity 4",
-          "timeTaken": [
-              {
-                  "date": "2022-05-30T00:00:00",
-                  "numberOfHours": 0
-              },
-              {
-                  "date": "2022-05-31T00:00:00",
-                  "numberOfHours": 0
-              },
-              {
-                  "date": "2022-06-01T00:00:00",
-                  "numberOfHours": 0
-              },
-              {
-                  "date": "2022-06-02T00:00:00",
-                  "numberOfHours": 0
-              },
-              {
-                  "date": "2022-06-03T00:00:00",
-                  "numberOfHours": 0
-              },
-              {
-                  "date": "2022-06-04T00:00:00",
-                  "numberOfHours": 2
-              },
-              {
-                  "date": "2022-06-05T00:00:00",
-                  "numberOfHours": 0
-              }
-          ]
-      },
-      {
-          "projectId": 10,
-          "projectName": "Project 4",
-          "activityId": 16,
-          "activityName": "Activity 3",
-          "timeTaken": [
-              {
-                  "date": "2022-05-30T00:00:00",
-                  "numberOfHours": 0
-              },
-              {
-                  "date": "2022-05-31T00:00:00",
-                  "numberOfHours": 0
-              },
-              {
-                  "date": "2022-06-01T00:00:00",
-                  "numberOfHours": 0
-              },
-              {
-                  "date": "2022-06-02T00:00:00",
-                  "numberOfHours": 0
-              },
-              {
-                  "date": "2022-06-03T00:00:00",
-                  "numberOfHours": 0.1
-              },
-              {
-                  "date": "2022-06-04T00:00:00",
-                  "numberOfHours": 0
-              },
-              {
-                  "date": "2022-06-05T00:00:00",
-                  "numberOfHours": 0
-              }
-          ]
-      }
+        "projectId": 9,
+        "projectName": null,
+        "activityId": 6,
+        "activityName": null,
+        "status": "Submitted",
+        "remarks": "None",
+        "timeTaken": [
+            {
+                "date": "2022-05-30T00:00:00",
+                "numberOfHours": 0,
+                "uniqueId": 88
+            },
+            {
+                "date": "2022-05-31T00:00:00",
+                "numberOfHours": 0,
+                "uniqueId": 89
+            },
+            {
+                "date": "2022-06-01T00:00:00",
+                "numberOfHours": 0,
+                "uniqueId": 90
+            },
+            {
+                "date": "2022-06-02T00:00:00",
+                "numberOfHours": 0,
+                "uniqueId": 91
+            },
+            {
+                "date": "2022-06-03T00:00:00",
+                "numberOfHours": 0,
+                "uniqueId": 92
+            },
+            {
+                "date": "2022-06-04T00:00:00",
+                "numberOfHours": 0,
+                "uniqueId": 93
+            },
+            {
+                "date": "2022-06-05T00:00:00",
+                "numberOfHours": 0,
+                "uniqueId": 94
+            }
+        ]
+    },
+    {
+        "projectId": 9,
+        "projectName": null,
+        "activityId": 15,
+        "activityName": null,
+        "status": "Submitted",
+        "remarks": "None",
+        "timeTaken": [
+            {
+                "date": "2022-05-30T00:00:00",
+                "numberOfHours": 2,
+                "uniqueId": 113
+            },
+            {
+                "date": "2022-05-31T00:00:00",
+                "numberOfHours": 1,
+                "uniqueId": 114
+            },
+            {
+                "date": "2022-06-01T00:00:00",
+                "numberOfHours": 3,
+                "uniqueId": 115
+            },
+            {
+                "date": "2022-06-02T00:00:00",
+                "numberOfHours": 4,
+                "uniqueId": 116
+            },
+            {
+                "date": "2022-06-03T00:00:00",
+                "numberOfHours": 0.25,
+                "uniqueId": 117
+            },
+            {
+                "date": "2022-06-04T00:00:00",
+                "numberOfHours": 2,
+                "uniqueId": 118
+            },
+            {
+                "date": "2022-06-05T00:00:00",
+                "numberOfHours": 0,
+                "uniqueId": 119
+            }
+        ]
+    }
   ]
+
+
+
+
+
+
+
     this.getTimesheetDetails();
     this.addTimesheetForm =this._fb.group({
       project: ['', Validators.required],
@@ -305,6 +191,43 @@ export class TimesheetComponent implements OnInit {
       //   }
       // }
     )
+  }
+  private getSupervisorDetails(){
+
+    this.superVisorList = [
+      {
+          "employeeId": "92S5000000009",
+          "firstName": "wefwe",
+          "lastName": "wefwefw",
+          "emailAddress": "p@gmail.com",
+          "contactNumber": "1234567890",
+          "supervisorFlag": "Y",
+          "managerId": "92S5000000009",
+          "enabledFlag": "Enabled"
+      },
+      {
+          "employeeId": "92S5000000157",
+          "firstName": "wefwe",
+          "lastName": "wefwefwe",
+          "emailAddress": "dawea@gmail.com",
+          "contactNumber": "1234567890",
+          "supervisorFlag": "Y",
+          "managerId": "92S5000000157",
+          "enabledFlag": "Enabled"
+      },
+      {
+          "employeeId": "92S5000000165",
+          "firstName": "wefevv",
+          "lastName": "wefwefw",
+          "emailAddress": "dss@gmail.com",
+          "contactNumber": "1234567890",
+          "supervisorFlag": "Y",
+          "managerId": "92S5000000165",
+          "enabledFlag": "Enabled"
+      }
+  ]
+
+
   }
 
   public pageChanged(event) {
@@ -349,7 +272,8 @@ export class TimesheetComponent implements OnInit {
     var currentDate = moment(start);
     var stopDate = moment(end);
     while(currentDate<=stopDate){
-      dateArray.push(moment(currentDate).format("MMMM-DD"));
+      //dateArray.push(moment(currentDate).format("MMMM-DD"));
+      dateArray.push(currentDate);
       currentDate = moment(currentDate).add(1,'days');
     }
     return dateArray;
@@ -445,8 +369,11 @@ export class TimesheetComponent implements OnInit {
 
 
   }
+  // Deleting Timesheet row
   onTimesheetDelete(id:any){
-    // const data = this.timeSheetDetailsArray[id];
+    const data = this.timeSheetDetails[id];
+    console.log("delete data",data)
+        // const data = this.timeSheetDetails[id];
     // this._http.delete(`${this._url.timesheet.deleteTimesheet}/${uniqueId}`).subscribe(
     // {
     //   next(res) {
@@ -464,14 +391,36 @@ export class TimesheetComponent implements OnInit {
     }
 
   }
+  //saving the timsheet details
   onSaveTimesheetDetails(){
-    // console.log("project",this.addTimesheetForm.controls.project.value);
-    // console.log("activity",this.addTimesheetForm.controls.project.value);
-    // console.log("remarks",this.addTimesheetForm.controls.project.value);
-    // console.log("remarks",this.addTimesheetForm.controls.timeDetails.value);
     if(!Object.keys(this.selectedTimesheet).length){
-      console.log("Add")
+      let date = [];
+      //console.log(moment(this.currentWeek[0]).format("YYYY-MM-DDT00:00:00"));
+      this.currentWeek.forEach((day)=>{date.push(moment(day).format("YYYY-MM-DDT00:00:00"))});
+      //console.log("week",date);
+      const timeTaken = [
+        {date : date[0],numberOfHours: this.addTimesheetForm.controls.monday.value},
+        {date : date[1],numberOfHours: this.addTimesheetForm.controls.tuesday.value},
+        {date : date[2],numberOfHours: this.addTimesheetForm.controls.wednesday.value},
+        {date : date[3],numberOfHours: this.addTimesheetForm.controls.thursday.value},
+        {date : date[4],numberOfHours: this.addTimesheetForm.controls.friday.value},
+        {date : date[5],numberOfHours: this.addTimesheetForm.controls.saturday.value},
+        {date : date[6],numberOfHours: this.addTimesheetForm.controls.sunday.value}
+      ]
+
+      const data ={
+        projectId       : 9,
+        projectName     : this.addTimesheetForm.controls.project.value,
+        activityId      : 15,
+        activityName    : this.addTimesheetForm.controls.activity.value,
+        status          : 'In Progress',
+        remarks         : this.addTimesheetForm.controls.remarks.value,
+        timeTaken       : timeTaken
+      }
+      console.log("Add timesheet data",data);
+
     }else{
+      console.log("this.selectedTimesheet",this.selectedTimesheet);
       let timeTaken = this.selectedTimesheet['timeTaken'];
       timeTaken[0].numberOfHours = this.addTimesheetForm.controls.monday.value;
       timeTaken[1].numberOfHours = this.addTimesheetForm.controls.tuesday.value;
@@ -479,17 +428,19 @@ export class TimesheetComponent implements OnInit {
       timeTaken[3].numberOfHours = this.addTimesheetForm.controls.thursday.value;
       timeTaken[4].numberOfHours = this.addTimesheetForm.controls.friday.value;
       timeTaken[5].numberOfHours = this.addTimesheetForm.controls.saturday.value;
-      timeTaken[6].numberOfHours =this.addTimesheetForm.controls.sunday.value;
+      timeTaken[6].numberOfHours = this.addTimesheetForm.controls.sunday.value;
 
       const data = {
-      //status          : this.selectedTimesheet.status,
-      activityName    : this.addTimesheetForm.controls.activity.value,
+      projectId       : 9,
       projectName     : this.addTimesheetForm.controls.project.value,
+      activityId      : 15,
+      activityName    : this.addTimesheetForm.controls.activity.value, 
+      //status          : this.selectedTimesheet.status,
       timeTaken       : timeTaken,
       remarks         : this.addTimesheetForm.controls.remarks.value
       }
-      console.log("data",data);
-
+      
+      console.log("Modify timesheet data",data);
 
     }
 
