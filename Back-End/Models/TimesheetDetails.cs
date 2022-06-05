@@ -13,6 +13,8 @@ namespace AnL.Models
         public string Remarks { get; set; }
         public int UniqueId { get; set; }
         public string Status { get; set; }
+        public string ApprovedRejectedBy { get; set; }
+        public string SubmittedTo { get; set; }
 
         public virtual ActivityDetails Activity { get; set; }
         public virtual ProjectDetails Project { get; set; }

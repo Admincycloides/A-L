@@ -1,6 +1,9 @@
-﻿using AnL.Models;
+﻿using AnL.Constants;
+using AnL.Models;
 using AnL.Repository.Abstraction;
+using AnL.ViewModel;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +11,8 @@ using System.Threading.Tasks;
 
 namespace AnL.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]/[action]")]
+    //[ApiController]
+    //[Route("api/[controller]/[action]")]
     public class EmployeeController : Controller
     {
         private readonly IUnitOfWork _UOW;
@@ -23,5 +26,6 @@ namespace AnL.Controllers
             var Result= _UOW.EmployeeDetailsRepository.GetById(UserID);
             return Result;
         }
+        
     }
 }

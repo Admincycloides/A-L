@@ -22,12 +22,28 @@ namespace AnL.ViewModel
         public string LastUpdatedBy { get; set; }
         public int UniqueId { get; set; }
     }
+    public class TimeSpent
+    {
+        public DateTime Date { get; set; }
+        public double NumberOfHours { get; set; }
+        public int UniqueId { get; set; }
+    }
+    public class Details
+    {
+        public int ProjectId { get; set; }
+        public string ProjectName { get; set; }
+        public int ActivityId { get; set; }
+        public string ActivityName { get; set; }
+        public string Status { get; set; }
+        public string Remarks { get; set; }
+        public List<TimeSpent> TimeTaken { get; set; }
+    }
     public class MasterTimesheetViewModel
     {
         public string ManagerId { get; set; }
         public string ManagerName { get; set; }
         public string TimesheetStatus { get; set; }
-        public List<TimesheetViewModel> TimesheetDetails { get; set; }
+        public List<Details> TimesheetDetails { get; set; }
     }
 
 }

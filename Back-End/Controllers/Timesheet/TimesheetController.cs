@@ -4,10 +4,12 @@ using AnL.Repository.Abstraction;
 using AnL.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace AnL.Controllers
@@ -17,7 +19,7 @@ namespace AnL.Controllers
     public class TimesheetController : Controller
     {
         private readonly IUnitOfWork _UOW;
-        private readonly ITimesheetDetail _timesheetDetail;
+        private readonly IConfiguration _configuration;
         public TimesheetController( IUnitOfWork UOW)
         {
             _UOW = UOW;
@@ -25,8 +27,8 @@ namespace AnL.Controllers
         /// <summary>
         /// Fetch Timesheet Details based on the user Logged in
         /// </summary>
-        [HttpPost]
-        public async Task<ActionResult> GetDetails(TimesheetViewModel timesheetDetails)
+        [NonAction]
+        public async Task<ActionResult> TestGetDetails(TimesheetViewModel timesheetDetails)
         {
             try
             {
@@ -87,7 +89,7 @@ namespace AnL.Controllers
                     viewModel.UniqueId=data.UniqueId;
                     sheetDetails2.Add(viewModel);
                 }
-                model.TimesheetDetails = sheetDetails2;
+                //model.TimesheetDetails = sheetDetails2;
                 model.ManagerId = empDetails[0].ManagerId;
                 model.ManagerName = String.Concat(empDetails[0].FirstName, empDetails[0].LastName);
                 BaseResponse response = new BaseResponse();
@@ -120,21 +122,110 @@ namespace AnL.Controllers
                 return BadRequest("Oops! Something went wrong!" + ex);
             }
         }
+        /// <summary>
+        /// Fetch Timesheet Details based on the user Logged in
+        /// </summary>
+        [HttpPost]
+        public async Task<ActionResult> GetDetails(TimesheetViewModel timesheetDetails)
+        {
+            try
+            {
+                var data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.EmployeeId == timesheetDetails.EmployeeId && x.Date >= DateTime.Parse(timesheetDetails.FromDate) && x.Date <= DateTime.Parse(timesheetDetails.ToDate));
+
+                var projectList = data.Select(x => Tuple.Create(x.ProjectId, x.ActivityId)).Distinct().ToList();
+                MasterTimesheetViewModel model = new MasterTimesheetViewModel();
+                List<string> employeeIDs = new List<string>();
+                employeeIDs.Add(timesheetDetails.EmployeeId);
+                var empDetails = _UOW.EmployeeDetailsRepository.GetEmployeeDetails(employeeIDs);
+                model.ManagerId = empDetails[0].ManagerId;
+                model.ManagerName = String.Concat(empDetails[0].FirstName, empDetails[0].LastName);
+                List<Details> weekDetails = new List<Details>();
+                foreach (Tuple<int, int> tuple in projectList)
+                {
+                    Details details = new Details();
+                    details.ProjectId = tuple.Item1;
+                    //details.ProjectName=
+                    details.ActivityId = tuple.Item2;
+                    details.Remarks = data.Where(x => x.ProjectId == tuple.Item1 && x.ActivityId == tuple.Item2).Select(x => x.Remarks).FirstOrDefault();
+                    details.Status = data.Where(x => x.ProjectId == tuple.Item1 && x.ActivityId == tuple.Item2).Select(x => x.Status).FirstOrDefault();
+                    List<TimeSpent> timeSpentList = new List<TimeSpent>();
+                    foreach (DateTime day in EachDay(DateTime.Parse(timesheetDetails.FromDate), DateTime.Parse(timesheetDetails.ToDate)))
+                    {
+                        //details.UniqueId=data
+                        TimeSpent timeSpent = new TimeSpent();
+                        timeSpent.Date = day;
+                        timeSpent.NumberOfHours = data.Where(x => x.ProjectId == tuple.Item1 && x.ActivityId == tuple.Item2 && x.Date.Date == day.Date).Select(x => x.NumberOfHours).ToList().AsQueryable().Sum();
+                        timeSpent.UniqueId = data.Where(x => x.ProjectId == tuple.Item1 && x.ActivityId == tuple.Item2 && x.Date.Date == day.Date).Select(x => x.UniqueId).FirstOrDefault();
+                        timeSpentList.Add(timeSpent);
+
+                        details.TimeTaken = timeSpentList;
+                        //weekDetails.Add(details);
+                    }
+                    weekDetails.Add(details);
+                }
+                model.TimesheetDetails = weekDetails;
+                BaseResponse response = new BaseResponse();
+                if (model.TimesheetDetails.Count>0)
+                {
+                    response.Data = model;
+                    response.ResponseCode = HTTPConstants.OK;
+                    response.ResponseMessage = MessageConstants.TimsheetListingSuccess;
+                }
+                else if (model.TimesheetDetails.Count == 0)
+                {
+                    response.Data =null;
+                    response.ResponseCode = HTTPConstants.OK;
+                    response.ResponseMessage = MessageConstants.TimesheetListingNoRecords;
+                    return Ok(response);
+                }
+                else
+                {
+                    response.Data = null;
+                    response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                    response.ResponseMessage = MessageConstants.TimsheetListingFailed;
+                    return BadRequest(response);
+                }
+                return Ok(model);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+        }
+
+
+
+
+
 
         /// <summary>
         /// Adding Timesheet records based on Project and its Activities
         /// </summary>
         [HttpPost]
-        public async Task<ActionResult> AddTimesheetDetails(List<TimesheetViewModel> timesheetDetails)
+        public async Task<ActionResult> AddTimesheetDetails(Details timesheetDetails,string EmployeeId)
         {
             try
             {
-                var AddTimesheetDetailsResponse=_UOW.TimesheetDetailRepository.AddDetails(timesheetDetails);
+                List<TimesheetDetails> timesheetDetailsList = new List<TimesheetDetails>();
+                foreach (var timesheet in timesheetDetails.TimeTaken)
+                {
+                    TimesheetDetails data = new TimesheetDetails();
+                    data.ProjectId = timesheetDetails.ProjectId;
+                    data.ActivityId = timesheetDetails.ActivityId;
+                    data.EmployeeId = EmployeeId;
+                    data.Remarks = timesheetDetails.Remarks;
+                    data.Status = TimeSheetStatus.InProgress;
+                    data.Date = timesheet.Date;
+                    data.NumberOfHours = timesheet.NumberOfHours;
+                    timesheetDetailsList.Add(data);
+                }
+                var AddTimesheetDetailsResponse = _UOW.TimesheetDetailRepository.AddDetails(timesheetDetailsList);
                 BaseResponse response = new BaseResponse();
                 if (AddTimesheetDetailsResponse)
                 {
                     response.Data = AddTimesheetDetailsResponse;
-                    response.ResponseCode= HTTPConstants.OK;
+                    response.ResponseCode = HTTPConstants.OK;
                     response.ResponseMessage = MessageConstants.TimsheetAdditionSuccess;
 
                 }
@@ -158,19 +249,23 @@ namespace AnL.Controllers
         /// Modifying Timesheet records based on Project and its Activities
         /// </summary>
         [HttpPost]
-        public async Task<ActionResult> ModifyTimesheet(List<TimesheetViewModel> timesheetDetails)
+        public async Task<ActionResult> ModifyTimesheet(Details timesheetDetails)
         {
             try
             {
-                foreach (var timesheet in timesheetDetails)
+                List<TimesheetDetails> timesheetDetailsList = new List<TimesheetDetails>();
+
+                foreach (var timesheet in timesheetDetails.TimeTaken)
                 {
-                    TimesheetDetails existingSheet = _UOW.TimesheetDetailRepository.GetById(timesheet.UniqueId);
-                    existingSheet.ProjectId = timesheet.ProjectId;
-                    existingSheet.ActivityId = timesheet.ActivityId;
-                    existingSheet.NumberOfHours = timesheet.NumberOfHours;
-                    existingSheet.Remarks = timesheet.Remarks;
+                    TimesheetDetails details = new TimesheetDetails();
+                    details.UniqueId= timesheet.UniqueId;
+                    details.ProjectId = timesheetDetails.ProjectId;
+                    details.ActivityId=timesheetDetails.ActivityId;
+                    details.NumberOfHours = timesheet.NumberOfHours;
+                    details.Remarks=timesheetDetails.Remarks;
+                    timesheetDetailsList.Add(details);
                 }
-                var ModifyTimesheetResponse = _UOW.TimesheetDetailRepository.ModifyTimesheetDetails(timesheetDetails);
+                var ModifyTimesheetResponse = _UOW.TimesheetDetailRepository.ModifyTimesheetDetails(timesheetDetailsList);
                 BaseResponse response = new BaseResponse();
                 if (ModifyTimesheetResponse)
                 {
@@ -199,12 +294,12 @@ namespace AnL.Controllers
         /// Deletion of Timesheet records based on Project and its Activities
         /// </summary>
         [HttpPost]
-        public async Task<ActionResult> DeleteTimesheet(List<TimesheetViewModel> timesheetDetails)
+        public async Task<ActionResult> DeleteTimesheet(Details timesheetDetails)
         {
             try
             {
                 List<TimesheetDetails> details = new List<TimesheetDetails>();
-                foreach (var timesheet in timesheetDetails)
+                foreach (var timesheet in timesheetDetails.TimeTaken)
                 {
                     TimesheetDetails eachItem = new TimesheetDetails() { UniqueId = timesheet.UniqueId };
                     details.Add(eachItem);
@@ -232,6 +327,55 @@ namespace AnL.Controllers
                 Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
                 return BadRequest("Oops! Something went wrong!" + ex);
             }
+        }
+        [HttpPost]
+        public async Task<ActionResult> SubmitTimesheetDetails(List<Details> timesheetDetails,string ManagerID,string EmployeeName)
+        {
+            BaseResponse response = new BaseResponse();
+            try
+            {
+                var managerDetails = _UOW.EmployeeDetailsRepository.GetById(ManagerID);
+                bool result=false;
+                foreach (var listrecords in timesheetDetails)
+                {
+                    List<TimesheetDetails> timesheetDetailsList = new List<TimesheetDetails>();
+
+                    foreach (var timesheet in listrecords.TimeTaken)
+                    {
+                        TimesheetDetails details = new TimesheetDetails();
+                        details.UniqueId = timesheet.UniqueId;
+                        details.SubmittedTo = ManagerID;
+                        timesheetDetailsList.Add (details);
+                    }
+                    result = _UOW.TimesheetDetailRepository.SubmitTimesheet(timesheetDetailsList);
+                }
+                if (result)
+                {
+                    response.Data = result;
+                    response.ResponseCode = HTTPConstants.OK;
+                    response.ResponseMessage = MessageConstants.TimesheetSubmissionSuccess;
+                }
+                else
+                {
+                    response.Data = result;
+                    response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                    response.ResponseMessage = MessageConstants.TimesheetSubmissionFailed;
+                    return BadRequest(response);
+                }
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+        }
+
+        [NonAction]
+        public IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)
+        {
+            for (var day = from.Date; day.Date <= thru.Date; day = day.AddDays(1))
+                yield return day;
         }
     }
 }

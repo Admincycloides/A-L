@@ -55,40 +55,25 @@ namespace AnL.Repository.Implementation
                 return null;
         }
 
-        public bool ModifyTimesheetDetails(List<TimesheetViewModel> timesheetDetails)
+        public bool ModifyTimesheetDetails(List<TimesheetDetails> timesheetDetails)
         {
-            //foreach (var timesheet in timesheetDetails)
-            //{
-            //    TimesheetDetails existingSheet = _UOW.TimesheetDetailRepository.GetById(timesheet.UniqueId);
-            //    existingSheet.ProjectId = timesheet.ProjectId;
-            //    existingSheet.ActivityId = timesheet.ActivityId;
-            //    existingSheet.NumberOfHours = timesheet.NumberOfHours;
-            //    existingSheet.Remarks = timesheet.Remarks;
-            //}
+            foreach (var timesheet in timesheetDetails)
+            {
+                TimesheetDetails existingSheet = this.GetById(timesheet.UniqueId);
+                existingSheet.ProjectId = timesheet.ProjectId;
+                existingSheet.ActivityId = timesheet.ActivityId;
+                existingSheet.NumberOfHours = timesheet.NumberOfHours;
+                existingSheet.Remarks = timesheet.Remarks;
+            }
             this.SaveChanges();
             return true;
         }
 
-        public bool AddDetails(List<TimesheetViewModel> timesheetDetails)
+        public bool AddDetails(List<TimesheetDetails> timesheetdetails)
         {
-            foreach (var timesheet in timesheetDetails)
+            foreach (var timesheet in timesheetdetails)
             {
-                TimesheetDetails data = new TimesheetDetails();
-                data.Date = DateTime.UtcNow;
-                data.EmployeeId = timesheet.EmployeeId;
-                data.ProjectId = timesheet.ProjectId;
-                data.ActivityId = timesheet.ActivityId;
-                data.NumberOfHours = timesheet.NumberOfHours;
-                if (String.IsNullOrEmpty(timesheet.Remarks))
-                {
-                    data.Remarks = "None";
-                }
-                else
-                {
-                    data.Remarks = timesheet.Remarks;
-                }
-                data.Status = TimeSheetStatus.InProgress;
-                this.Add(data);
+                this.Add(timesheet);
             }
             this.SaveChanges();
             return true;
@@ -101,6 +86,17 @@ namespace AnL.Repository.Implementation
                 this.Delete(details);
                 _context.SaveChanges();
             }
+            return true;
+        }
+
+        public bool SubmitTimesheet(List<TimesheetDetails> timesheetDetails)
+        {
+            foreach (var timesheet in timesheetDetails)
+            {
+                TimesheetDetails existingSheet = this.GetById(timesheet.UniqueId);
+                existingSheet.Status = TimeSheetStatus.Submitted;
+            }
+            this.SaveChanges();
             return true;
         }
     }
