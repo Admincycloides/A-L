@@ -14,6 +14,7 @@ import { ProjectsComponent } from '../../pages/projects/projects.component';
 import { ActivitiesComponent } from '../../pages/projects/activities/activities.component';
 import { ReviewtimesheetComponent } from '../../pages/reviewtimesheet/reviewtimesheet.component';
 import { ReviewlinkComponent } from '../../pages/reviewtimesheet/reviewlink/reviewlink.component';
+import { LogComponent } from '../../pages/log/log.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
@@ -31,5 +32,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'activities',      component: ActivitiesComponent },
     { path: 'review',      component: ReviewtimesheetComponent},
     { path: 'reviewlink',      component: ReviewlinkComponent},
+    { path: 'log',      component: LogComponent},
+    
     ]
 
