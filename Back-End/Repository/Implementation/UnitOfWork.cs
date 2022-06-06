@@ -15,6 +15,20 @@ namespace AnL.Repository.Implementation
         private ITimesheetDetail _TimesheetDetailRepository;
         private IUser _UserRepository;
         private IEmployeeDetails _EmployeeDetailRepository;
+        private IProject _ProjectRepository;
+
+        public IProject ProjectRepository
+        {
+            get
+            {
+                if(_ProjectRepository==null)
+                {
+                    _ProjectRepository = new ProjectRepository(_dbcontext, _UOW);
+                }
+                return _ProjectRepository;
+            }
+        }
+
         public IEmployeeDetails EmployeeDetailsRepository
         {
             get
