@@ -588,7 +588,11 @@ export class TimesheetComponent implements OnInit {
   //submitting the timesheet
   onSubmitTimesheet(){
 
+    this.selectedTimesheetRow.forEach((item)=>{
+      item['employeeRemarks'] = this.submitRemarks;
+    })
     const body = this.selectedTimesheetRow;
+
     console.log(this.managerId);
     console.log("data submit",body)
     const url = `${this._url.timesheet.submitTimesheet}?ManagerID=${this.managerId}&EmployeeName=${this.userDetails.username}`;
