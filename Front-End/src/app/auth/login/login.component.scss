@@ -1,0 +1,63 @@
+@import "../../../assets/scss/paper-dashboard/mixins";
+@import "../../../assets/scss/paper-dashboard/variables";
+@import "../../../assets/scss/paper-dashboard/responsive";
+.auth-bg{
+    object-fit: cover;
+}
+.auth-column{
+    background-color: $secondary-color;
+}
+.auth-form,.auth-logo{
+    max-width: 360px;
+    width: 100%;
+}
+.auth-title{
+    font-weight: 700;
+    color: #fff;
+    font-size: rem(25px);
+    margin-bottom: 20px;
+}
+.auth-logo{
+    margin-bottom: 44px;
+}
+.af-row{
+    input,.auth-btn{
+        height:55px;
+        @include radius(8px);
+        outline:none;
+    }
+    .auth-btn{
+        border: solid 1px #fff;
+        font-size: 15px;
+        font-weight: 700;
+        background: transparent;
+        color: #fff;
+        &:hover{
+            background: #fff;
+            color: $secondary-color;
+        }
+    }
+    input{
+        background-color: #c7e5cc;
+        color: #252625;
+        &::placeholder{
+        color:transparentize($dark-color, .4);
+        font-weight: 500;
+        }
+        padding: 5px 17px;
+        font-size: 16px;
+        font-weight: 500;
+    }
+    margin-bottom: 20px;
+}
+.re-otp{
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 12px;
+    padding: 8px 0;
+    &:hover{
+        text-decoration: underline;
+    }
+}
+

@@ -1,0 +1,363 @@
+
+
+@import 'paper-dashboard/variables';
+@import 'paper-dashboard/mixins';
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap');
+
+// Plugins CSS
+@import "paper-dashboard/plugins/plugin-animate-bootstrap-notify";
+@import "paper-dashboard/plugins/plugin-perfect-scrollbar";
+
+// Core CSS
+@import "paper-dashboard/buttons";
+@import "paper-dashboard/inputs";
+@import "paper-dashboard/typography";
+@import "paper-dashboard/misc";
+@import "paper-dashboard/checkboxes-radio";
+
+
+// components
+@import "paper-dashboard/navbar";
+@import "paper-dashboard/page-header";
+@import "paper-dashboard/dropdown";
+@import "paper-dashboard/alerts";
+@import "paper-dashboard/images";
+@import "paper-dashboard/nucleo-outline";
+@import "paper-dashboard/tables";
+@import "paper-dashboard/sidebar-and-main-panel";
+@import "paper-dashboard/footers";
+@import "paper-dashboard/fixed-plugin";
+
+// cards
+@import "paper-dashboard/cards";
+@import "paper-dashboard/cards/card-plain";
+@import "paper-dashboard/cards/card-chart";
+@import "paper-dashboard/cards/card-user";
+@import "paper-dashboard/cards/card-map";
+@import "paper-dashboard/cards/card-stats";
+
+// angular differences
+@import "paper-dashboard/angular/plugin-ngx-toastr";
+@import "paper-dashboard/angular/sidebar-and-main-panel";
+@import "paper-dashboard/angular/dropdown";
+@import "paper-dashboard/angular/inputs";
+@import "paper-dashboard/angular/fixed-plugin";
+
+@import "paper-dashboard/responsive";
+
+// custom styles
+
+body{
+    font-family: 'Roboto', sans-serif;
+
+.error{
+    color: #9f1b19;
+    font-size: 12px;
+    padding: 5px 0 0;
+}
+.modal{
+    z-index: 99999;
+}
+.table-responsive{
+    overflow: auto;
+}
+table{
+    th,td{
+        text-align: center;
+        &:first-child{
+            padding-left: 28px!important;
+        }
+    }
+    th{
+        border-top: none!important;
+        color: $dark-color;
+        font-weight: bold;
+        font-size: 13px;
+        vertical-align: middle!important;
+        .tbl-check{
+            margin-top: 3px;
+            margin-left: -27px;
+        }
+        span{
+            white-space: nowrap;
+        }
+    }
+    td{
+        color: $text-color;
+        font-size: 12px;
+        vertical-align: middle!important;
+        .tbl-check{
+            margin-left: -22px;
+            margin-top: 2px
+        }
+        .actico-btn{
+            height: 26px;
+            width: 26px;
+            border: none;
+            background-color: transparent;
+            outline: none;
+            .del-ico{
+                width: 84%;
+            }
+            &:hover{
+                opacity: .7;
+            }
+        }
+        padding: 16px 7px!important;
+        border-top: solid 1px #e6e6e6!important;
+    }
+    tbody{
+        border: none!important;
+    }
+}
+input[type='number'] {
+    -moz-appearance: textfield;
+}
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+.reset [type="number"] {
+    -moz-appearance: spinner-textfield;
+}
+.reset input[type='number']::-webkit-outer-spin-button,
+.reset input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: inner-spin-button;
+}
+// toaster
+.toast-top-right{
+    display: flex;
+    justify-content: right;
+}
+
+// layout
+.sidebar .logo, .off-canvas-sidebar .logo{
+    height: 62px;
+    background-color: $secondary-color;
+    padding: 0 0 0 5pxpx;
+    display: flex;
+    align-items: center;
+}
+.main-panel{
+    .navbar{
+        background-color: $secondary-color!important;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        position: fixed;
+        height: 62px;
+        box-shadow: 1px 0px 9px 6px rgba(0,0,0,0.11);
+    }
+}
+.user-dp{
+    width: 42px;
+    height: 42px;
+    @include radius(50%);
+    object-fit: cover;
+}
+.sidebar, .off-canvas-sidebar,.sidebar .sidebar-wrapper, .off-canvas-sidebar .sidebar-wrapper{
+    width: 210px;
+}
+.main-panel{
+    width: calc(100% - 210px);
+}
+.main-panel .content{
+    padding: 0 15px 30px;
+    margin-top: 100px;
+}
+.sidebar .nav i, .off-canvas-sidebar .nav i{
+    font-size: 18px;
+    margin-right: 0px;
+    bottom: 3px;
+}
+.sidebar .nav li>a, .off-canvas-sidebar .nav li>a{
+    margin: 10px 0px 0;
+    font-size: 13px;
+    padding: 2px 8px 2px 0px;
+    line-height: 26px;
+}
+.sidebar .nav, .off-canvas-sidebar .nav{
+    margin-top: 42px;
+}
+.action{
+    flex: 1;
+}
+.sidebar .nav li.active>a,.sidebar .nav li.active>a i{
+    color: $secondary-color!important;
+}
+.sidebar .nav li.active>a{
+    font-weight: bold;
+}
+.logo-image-small.dsk-view{
+    width: 253px;
+    position: relative;
+    left: -20px;
+}
+.navbar-nav{
+    li{
+        a{
+            color: #fff!important;
+            &:hover{
+                color: #a5dbae;
+            }
+        }
+        .dropdown-menu{
+            a{
+                color: $secondary-color!important;
+                &:hover{
+                    color: #57bb68!important;
+                    background-color: #fff;
+                }
+            }
+            &:before{
+                top: -11px!important;
+            }
+        }
+    }
+}
+.modal-backdrop{
+    z-index: 88888!important;
+}
+// date picker native
+.date-week{
+    border: none;
+    background: transparent;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    margin: 0 5px;
+    display: flex;
+    &:focus{
+        outline: none;
+    }
+}
+.act-filter{
+    flex: 1;
+    input[type="date"]{
+        margin: 0 15px;
+    }
+}
+.ngb-dp-week{
+    .btn-light:hover{
+        background-color: $secondary-color;
+        color: #fff;
+    }
+    .btn-light.bg-primary {
+        background-color: #26c541!important;
+    }
+}
+
+// custom date picker
+input{
+    &.date-input{
+        background-color: #dfdfdf!important;
+        height: 40px;
+        @include radius(5px 0 0 5px);
+        font-size:0;
+        width: 170px;
+    }
+    &:focus,&:focus-visible{
+        border: none!important;
+        outline: none;
+    }
+}
+.week-range{
+    color: transparentize($dark-color,.6);
+    font-weight: 500;
+}
+.date-line{
+    width: 318px;
+}
+.date-select{
+    background:#dfdfdf!important;
+    border-radius:0 5px 5px 0;
+    padding: 0;
+    height: 40px;
+    width: 50px;
+    &:hover, &:focus, &:active{
+        background-color: $secondary-color!important;
+        &:hover, &:focus{
+            background-color: $secondary-color!important;
+        }
+        i{
+            color: #fff!important;
+        }
+        outline: none;
+    }
+    i{
+        font-size: 16px;
+        font-weight: bold;
+        color: $secondary-color;
+    }
+}
+.date-holder{
+    .dropdown-menu{
+        box-shadow: 0px 0px 17px 5px rgba(0,0,0,.06);
+    }
+}
+// inner page
+.sheet-row{
+    flex-flow: row;
+}
+.sheet-col{
+    width: 100%;
+}
+.sheet-col{
+    padding: 0 15px;
+}
+.remarks-col{
+    padding: 0 15px 0 0;
+}
+.page-title{
+    padding: 5px;
+    font-size:  rem(18px);
+    text-transform: uppercase;
+    color: $secondary-color;
+    font-weight: 500;
+    flex: 1;
+    max-width: 300px;
+}
+.main-panel{
+    background-color: $bg-color;
+    z-index: 9999;
+}
+.thm-btn-primary{
+    @include thm-btn;
+    background-color:$secondary-color;
+    color: #fff;
+    font-size: 16px;
+}
+.sm-btn{
+    font-size: 12px!important;
+    height: 30px!important;
+}
+.row-created{
+    border: dashed 2px transparentize($secondary-color, .45);
+    background: transparent;
+}
+.row-added{
+    border-left: solid 3px $secondary-color!important;
+    border-top: none!important;
+    border-bottom: none!important;
+    border-right: none!important;
+    background: #e3f6e6!important;
+}
+//remarks 
+.remarks-col{
+    min-width: 225px;
+    .r-row{
+        label{
+            width: 100%;
+        }
+        select,textarea{
+            width: 100%;
+            font-size: 12px;
+        }
+        textarea{
+            padding: 4px;
+            height: auto;
+        }
+    }
+}
+
+
+}//body END
