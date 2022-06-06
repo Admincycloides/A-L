@@ -20,6 +20,7 @@ namespace AnL.Models
         public string ManagerId { get; set; }
         public string EnabledFlag { get; set; }
 
+        public virtual UserLogin UserLogin { get; set; }
         public virtual ICollection<ProjectMapping> ProjectMappingEmployee { get; set; }
         public virtual ICollection<ProjectMapping> ProjectMappingLastUpdatedByNavigation { get; set; }
     }

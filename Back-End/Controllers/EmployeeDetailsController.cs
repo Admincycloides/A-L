@@ -35,6 +35,39 @@ namespace AnL.Controllers
             }
         }
         [HttpGet]
+        public ActionResult GetEmployee(string EmployeeID)
+        {
+            var results = _UOW.EmployeeDetailsRepository.GetById(EmployeeID);
+            
+            BaseResponse response = new BaseResponse();
+            if (results != null)
+            {
+                if((results.EnabledFlag).ToLower()=="enabled")
+                {
+                    response.Data = results;
+                    response.ResponseCode = HTTPConstants.OK;
+                    response.ResponseMessage = MessageConstants.EmployeeFetchSuccess;
+                }
+                else
+                {
+                    response.Data = results;
+                    response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                    response.ResponseMessage = MessageConstants.UserNotActive;
+                    return BadRequest(response);
+
+                }
+                
+            }
+            else
+            {
+                response.Data = results;
+                response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                response.ResponseMessage = MessageConstants.EmployeeFetchFailed;
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+        [HttpGet]
         public async Task<ActionResult> GetSupervisorDetails()
         {
             try
