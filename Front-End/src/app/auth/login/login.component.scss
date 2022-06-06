@@ -24,6 +24,7 @@
     input,.auth-btn{
         height:55px;
         @include radius(8px);
+        outline:none;
     }
     .auth-btn{
         border: solid 1px #fff;

@@ -143,6 +143,9 @@ input[type='number']::-webkit-inner-spin-button {
         background-color: $secondary-color!important;
         padding-top: 2px;
         padding-bottom: 2px;
+        position: fixed;
+        height: 62px;
+        box-shadow: 1px 0px 9px 6px rgba(0,0,0,0.11);
     }
 }
 .user-dp{
@@ -169,13 +172,51 @@ input[type='number']::-webkit-inner-spin-button {
 .sidebar .nav li>a, .off-canvas-sidebar .nav li>a{
     margin: 10px 0px 0;
     font-size: 13px;
-    padding: 5px 8px 5px 0px;
+    padding: 2px 8px 2px 0px;
     line-height: 26px;
+}
+.sidebar .nav, .off-canvas-sidebar .nav{
+    margin-top: 42px;
 }
 .action{
     flex: 1;
 }
-
+.sidebar .nav li.active>a,.sidebar .nav li.active>a i{
+    color: $secondary-color!important;
+}
+.sidebar .nav li.active>a{
+    font-weight: bold;
+}
+.logo-image-small.dsk-view{
+    width: 253px;
+    position: relative;
+    left: -20px;
+}
+.navbar-nav{
+    li{
+        a{
+            color: #fff!important;
+            &:hover{
+                color: #a5dbae;
+            }
+        }
+        .dropdown-menu{
+            a{
+                color: $secondary-color!important;
+                &:hover{
+                    color: #57bb68!important;
+                    background-color: #fff;
+                }
+            }
+            &:before{
+                top: -11px!important;
+            }
+        }
+    }
+}
+.modal-backdrop{
+    z-index: 88888!important;
+}
 // date picker native
 .date-week{
     border: none;
@@ -195,8 +236,14 @@ input[type='number']::-webkit-inner-spin-button {
         margin: 0 15px;
     }
 }
-.d-label{
-    
+.ngb-dp-week{
+    .btn-light:hover{
+        background-color: $secondary-color;
+        color: #fff;
+    }
+    .btn-light.bg-primary {
+        background-color: #26c541!important;
+    }
 }
 
 // custom date picker
@@ -208,7 +255,7 @@ input{
         font-size:0;
         width: 170px;
     }
-    &:focus{
+    &:focus,&:focus-visible{
         border: none!important;
         outline: none;
     }
@@ -242,6 +289,11 @@ input{
         color: $secondary-color;
     }
 }
+.date-holder{
+    .dropdown-menu{
+        box-shadow: 0px 0px 17px 5px rgba(0,0,0,.06);
+    }
+}
 // inner page
 .sheet-row{
     flex-flow: row;
@@ -262,15 +314,21 @@ input{
     color: $secondary-color;
     font-weight: 500;
     flex: 1;
+    max-width: 300px;
 }
 .main-panel{
     background-color: $bg-color;
+    z-index: 9999;
 }
 .thm-btn-primary{
     @include thm-btn;
     background-color:$secondary-color;
     color: #fff;
     font-size: 16px;
+}
+.sm-btn{
+    font-size: 12px!important;
+    height: 30px!important;
 }
 .row-created{
     border: dashed 2px transparentize($secondary-color, .45);
@@ -283,7 +341,23 @@ input{
     border-right: none!important;
     background: #e3f6e6!important;
 }
-
+//remarks 
+.remarks-col{
+    min-width: 225px;
+    .r-row{
+        label{
+            width: 100%;
+        }
+        select,textarea{
+            width: 100%;
+            font-size: 12px;
+        }
+        textarea{
+            padding: 4px;
+            height: auto;
+        }
+    }
+}
 
 
 }//body END

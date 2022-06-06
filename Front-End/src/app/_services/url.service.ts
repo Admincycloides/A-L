@@ -26,16 +26,18 @@ export class UrlService {
 
   // Login
   public user = {
-    getOTP              :'api/User/GenerateOTP',
-    submitOTP           :'api/User/SubmitOTP',
+    getOTP              : 'api/User/GenerateOTP',
+    submitOTP           : 'api/User/SubmitOTP',
   }
   public timesheet = {
-    getTimesheet      : 'Timesheet/GetDetails',
-    deleteTimesheet   : 'Timesheet/DeleteTimesheet',
-    addTimesheet      : 'Timesheet/AddTimesheetDetails',
-    editTimesheet     : 'Timesheet/ModifyTimesheet'
+    getTimesheet      : 'api/Timesheet/GetDetails',
+    deleteTimesheet   : 'api/Timesheet/DeleteTimesheet',
+    addTimesheet      : 'api/Timesheet/AddTimesheetDetails',
+    editTimesheet     : 'api/Timesheet/ModifyTimesheet',
+    submitTimesheet   : 'api/Timesheet/SubmitTimesheetDetails'
   }
   public Employee = {
-    getEmployeeDetails  :'api/Employee/getEmployeeDetails'
+    getEmployeeDetails    : 'api/Employee/getEmployeeDetails',
+    getSupervisorDetails  : 'api/Employee/GetSupervisorDetails'
   }
 }

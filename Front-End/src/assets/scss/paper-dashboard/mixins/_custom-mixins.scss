@@ -53,6 +53,9 @@
     &:focus{
       outline: none;
     }
+    &:hover{
+      opacity: .8;
+    }
     min-width: 123px;
     @include radius(5px);
     i{

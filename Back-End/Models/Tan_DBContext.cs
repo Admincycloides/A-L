@@ -296,6 +296,11 @@ namespace AnL.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.EmployeeRemarks)
+                    .HasColumnName("Employee_Remarks")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.NumberOfHours).HasColumnName("Number_of_Hours");
 
                 entity.Property(e => e.ProjectId).HasColumnName("Project_ID");
@@ -308,8 +313,17 @@ namespace AnL.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.SubmittedDate)
+                    .HasColumnName("Submitted_Date")
+                    .HasColumnType("datetime");
+
                 entity.Property(e => e.SubmittedTo)
                     .HasColumnName("Submitted_To")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SupervisorRemarks)
+                    .HasColumnName("Supervisor_Remarks")
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
