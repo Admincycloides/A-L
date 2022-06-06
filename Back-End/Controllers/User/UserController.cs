@@ -61,11 +61,24 @@ namespace TestApplication.Controllers
                 }
                 else
                 {
-                    var response = await _UOW.UserRepository.UpdateOTP(otp, details.UserId);
-                    baseResponse.Data = response;
-                    baseResponse.ResponseCode = HTTPConstants.OK;
-                    baseResponse.ResponseMessage = MessageConstants.GenerateOTPSuccess;
-                    return Ok(baseResponse);
+                    if (details.IsActive)
+                    {
+                        var response = await _UOW.UserRepository.UpdateOTP(otp, details.UserId);
+                        baseResponse.Data = response;
+                        baseResponse.ResponseCode = HTTPConstants.OK;
+                        baseResponse.ResponseMessage = MessageConstants.GenerateOTPSuccess;
+                        return Ok(baseResponse);
+
+                    }
+                    else
+                    {
+                        baseResponse.Data = details;
+                        baseResponse.ResponseCode = HTTPConstants.BAD_REQUEST;
+                        baseResponse.ResponseMessage = MessageConstants.UserNotActive;
+                        return BadRequest(baseResponse);
+
+                    }
+                    
                 }
             }
             catch (Exception ex)
@@ -109,6 +122,20 @@ namespace TestApplication.Controllers
             try
             {
                 var details = await _UOW.UserRepository.GetLogin(username);
+                var EmployeeDetails = _UOW.EmployeeDetailsRepository.GetById(details.UserId);
+                LoginViewModel loginView = new LoginViewModel();
+                loginView.EmployeeId = EmployeeDetails.EmployeeId;
+                loginView.Username = details.Username;
+                loginView.Token = details.Token;
+                loginView.Otp = details.Otp;
+                loginView.TokenExpiryDate = details.TokenExpiryDate;
+                loginView.OtpexpiryDate = details.OtpexpiryDate;
+                loginView.IsActive = details.IsActive;
+                loginView.FirstName = EmployeeDetails.FirstName;
+                loginView.LastName = EmployeeDetails.LastName;
+                loginView.ManagerId = EmployeeDetails.ManagerId;
+                loginView.SupervisorFlag = EmployeeDetails.SupervisorFlag;
+
                 BaseResponse baseResponse = new BaseResponse();
                 TimeSpan result = DateTime.UtcNow - details.OtpexpiryDate;
                 //int a = Convert.ToInt32(TempData["otp"]);
@@ -119,7 +146,7 @@ namespace TestApplication.Controllers
                     baseResponse.ResponseMessage = MessageConstants.InvalidOTP;
                     return Ok(baseResponse);
                 }
-                else if (result.TotalSeconds > 30)
+                else if (result.TotalSeconds > 90)
                 {
                     baseResponse.Data = result;
                     baseResponse.ResponseCode = HTTPConstants.BAD_REQUEST;
@@ -128,7 +155,7 @@ namespace TestApplication.Controllers
                 }
                 else if (finalDigit.ToString() == Convert.ToString(details.Otp))
                 {
-                    baseResponse.Data = details;
+                    baseResponse.Data = loginView;
                     baseResponse.ResponseCode = HTTPConstants.OK;
                     baseResponse.ResponseMessage = MessageConstants.LoginSuccess;
                     return Ok(baseResponse);
