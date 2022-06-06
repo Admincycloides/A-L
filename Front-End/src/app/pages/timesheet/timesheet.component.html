@@ -137,13 +137,13 @@
 
                                 <td>
                                     <button class="edit actico-btn"
-                                        (click)="onTimesheetAddEdit(i)"><img
+                                        (click)="onTimesheetAddEdit(i)" *ngIf="row.status == 'In progress' || row.status == 'Rejected'"><img
                                             src="../../../assets/img/edit.png"
                                             alt="" /></button>
                                 </td>
                                 <td>
                                     <button class="delete actico-btn"
-                                        (click)="onTimesheetDelete(i)"><img
+                                        (click)="onTimesheetDelete(i)" *ngIf="row.status == 'In progress' || row.status == 'Rejected'"><img
                                             src="../../../assets/img/delete.png"
                                             alt="" class="del-ico"/></button>
                                 </td>
@@ -173,7 +173,7 @@
         </div>
     </div>
 
-    <div class=" remarks-col">
+    <div class=" remarks-col" *ngIf="showSideWindow">
         <div class="card">
             <div class="card-body pt-1">
                 <div class="r-row mb-1">

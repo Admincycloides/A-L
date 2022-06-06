@@ -42,22 +42,28 @@ export class LoginComponent implements OnInit {
     
       let emailAddress = this.loginForm.controls['email'].value;
       const url = `${this._url.user.getOTP}?mailto=${emailAddress}`
-      this._http.post(url,{}).subscribe((res)=>{
-        this.showMessage = false;
-        this.formSubmitted = true;
-      },(err)=>{
-        this.showMessage = true;
-        this.errMessage = err.error.responseMessage
-      }
-      )
-        // {
-        //   next(res) {
-        //     console.log("res",this.formSubmitted);
-        //   },
-        //   error(msg) {
-        //     this.errMessage = msg;
-        //   }
-        // })
+      this._http.post(url,{}).subscribe(
+        {
+          next:(res:any)=> {
+            this.showMessage = false;
+            this.formSubmitted = true;
+          },
+          error:(msg) =>{
+            this.showMessage = true;
+            this.errMessage = msg.error.responseMessage;
+
+            
+          }
+        });
+      //   (res)=>{
+      //   this.showMessage = false;
+      //   this.formSubmitted = true;
+      // },(err)=>{
+      //   this.showMessage = true;
+      //   this.errMessage = err.error.responseMessage
+      // }
+      // )
+        
     }
     else{
       this.toast.error("Please Enter Valid Email Address");
@@ -68,27 +74,31 @@ export class LoginComponent implements OnInit {
        let  otpValue = this.loginOtpForm.controls['otp'].value;
        let username = this.loginForm.controls['email'].value;
        const url = `${this._url.user.submitOTP}/${otpValue}/${username}`;
-      this._http.get(url).subscribe((res)=>{
-        this.showOTPMessage = false;
-        var data = res;
-        localStorage.setItem('token',JSON.stringify(data));
-        this.toast.success("User Successfully logged in");
-        this._router.navigate(['/timesheet']);
-      },(error)=>{
-        this.showOTPMessage = true;
-        this.invalidOtp = error.error;
-      }
-        // {
-        //   next(res) {
-        //       var data = res;
-        //       localStorage.setItem('token',JSON.stringify(data));
-        //       this.toast.success("User Successfully logged in");
-        //       this._router.navigate(['/timesheet']);
-        //   },
-        //   error(msg) {
-        //     this.errMessage = msg;
-        //   }
-        // }
+      this._http.get(url).subscribe(
+
+        {
+          next:(res:any)=> {
+            this.showOTPMessage = false;
+            localStorage.setItem('token',JSON.stringify(res.data));
+            this.toast.success("User Successfully logged in");
+            this._router.navigate(['/timesheet']);
+          },
+          error:(msg) =>{
+             this.showOTPMessage = true;
+             this.invalidOtp = msg.error;
+          }
+        }
+        
+      //   (res)=>{
+      //   this.showOTPMessage = false;
+      //   var data = res;
+      //   localStorage.setItem('token',JSON.stringify(data));
+      //   this.toast.success("User Successfully logged in");
+      //   this._router.navigate(['/timesheet']);
+      // },(error)=>{
+      //   this.showOTPMessage = true;
+      //   this.invalidOtp = error.error;
+      // }
       )
     }
     else{
@@ -99,19 +109,22 @@ export class LoginComponent implements OnInit {
   onResentOtp(){
     this.loginOtpForm.controls.otp.setValue('');
       let  emailAddress = this.loginForm.controls['email'].value;
+
       const url = `${this._url.user.getOTP}?mailto=${emailAddress}`
-      this._http.post(url,{}).subscribe((res)=>{
-        this.toast.success("OTP Successfully Send to Your Email Id");
-        // {
-        //   next(res) {
-        //     this.formSubmitted = true;
-        //   },
-        //   error(msg) {
-        //     this.errMessage = msg;
-        //   }
-        // }
-      }
-      )
+      this._http.post(url,{}).subscribe(
+        {
+          next:(res:any)=> {
+            this.toast.success("OTP Successfully Send to Your Email Id");
+          }
+        });
+
+
+      // const url = `${this._url.user.getOTP}?mailto=${emailAddress}`
+      // this._http.post(url,{}).subscribe((res)=>{
+      //   this.toast.success("OTP Successfully Send to Your Email Id");
+        
+      //}
+      //)
   }
 
 }

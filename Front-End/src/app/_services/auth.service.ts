@@ -18,6 +18,7 @@ export class AuthService {
       localStorage.removeItem("token");
       return false;
     }
+    //return true;
   }
   logout() {
     //localStorage.removeItem("user");

@@ -4,7 +4,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpService } from 'app/_services/http.service';
 import { UrlService } from 'app/_services/url.service';
 import * as moment from 'moment';
-
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -44,6 +44,7 @@ export class TimesheetComponent implements OnInit {
   managerId: any;
   timesheetRemarks :any;
   submitRemarks :any;
+  showSideWindow = false
 
   get f() {
     return this.addTimesheetForm.controls;
@@ -52,20 +53,25 @@ export class TimesheetComponent implements OnInit {
   constructor(private _url: UrlService,
     private _http: HttpService,private modalService: NgbModal,
     private _fb: FormBuilder,
+    private toast: ToastrService
     ) { }
     
 
   ngOnInit(): void {
     //this.projectList = ['Project 1','Project 2','Project 3','Project 4'];
     //this.activityList = ['Activity 1','Activity 2','Activity 3','Activity 4'];
-    this.userDetails = JSON.parse(localStorage.getItem('token'));
+    
     this.getEmployeeDetails();
+    this.userDetails = JSON.parse(localStorage.getItem('user'));
     this.getSupervisorDetails();
     this.getProjectActivityDetails();
     this.startOfWeek = moment().startOf('isoWeek').toDate();
     this.endOfWeek = moment().endOf('isoWeek').toDate();
     this.weekShow = moment(this.startOfWeek).format("MMMM-DD")+"-"+moment(this.endOfWeek).format("MMMM-DD");
     this.currentWeek = this.dateFormatter(moment(this.startOfWeek).format("YYYY-MM-DD"),moment(this.endOfWeek).format("YYYY-MM-DD"));
+    this.getTimesheetDetails(this.startOfWeek,this.endOfWeek);
+    
+    //console.log("hi",this.getSupervisorDetails())
 
 
 
@@ -169,7 +175,7 @@ export class TimesheetComponent implements OnInit {
 
 
 
-    this.getTimesheetDetails();
+    
     this.addTimesheetForm =this._fb.group({
       project: ['', Validators.required],
       activity: ['', Validators.required],
@@ -187,18 +193,21 @@ export class TimesheetComponent implements OnInit {
   private getEmployeeDetails(){
     const url = `${this._url.Employee.getEmployeeDetails}?UserID=${this.userDetails.userId}`
     this._http.get(url).subscribe(
-      (res)=>{
-        console.log(res);
-        //localStorage.setItem('user',JSON.stringify(res.data))
+      {
+        next:(res:any)=> {
+          localStorage.setItem('user',JSON.stringify(res.data));
+        }
       }
-      // {
-      //   next(res) {
-      //     localStorage.setItem('user',JSON.stringify(res.data));
-      //   }
-      // }
     )
   }
   private getSupervisorDetails(){
+
+    const url = `${this._url.Employee.getSupervisorDetails}`
+    this._http.get(url).subscribe({
+      next:(res:any)=>{
+        this.superVisorList = res.data
+      }
+    })
 
     this.superVisorList = [
       {
@@ -307,8 +316,8 @@ export class TimesheetComponent implements OnInit {
   }
 
   public onProjectSelect(event:any){
-    const project = event.target.value;
-    console.log(typeof(project));
+    const project = event.target.value.split(":")[1].trim();
+    console.log(project);
     if(project === 'Select Project') this.activityList =[];
     else{
       this.projectList.forEach((item)=>{
@@ -322,31 +331,37 @@ export class TimesheetComponent implements OnInit {
 
   public pageChanged(event) {
     this.config.currentPage = event;
-    //this.();
+    this.getTimesheetDetails(this.startOfWeek,this.endOfWeek);
   }
-  getTimesheetDetails(){
-    // this.timeSheetDetails.forEach(
-    //   (item,index)=>{
-    //     let rowArray =[];
-    //     let itemIndex = this.currentWeek.indexOf(moment(item.Date).format("MMMM-DD"));
-    //     rowArray.push(item.Status,item.ProjectName,item.ActivityName);
-    //     while(rowArray.length < 10){
-    //       if(rowArray.length != 10){
-    //         if(rowArray.length == itemIndex+3){
-    //           rowArray.push(item.NumberOfHours);
-    //         }
-    //         else{
-    //           rowArray.push(0);
-    //         }
-    //       }
-    //     }
-    //     // rowArray.splice(itemIndex+2,0,item.NumberOfHours);
-    //     // rowArray.splice(9,0,5);
-    //     rowArray.push(item.NumberOfHours,item.Remarks,item.UniqueId);
-    //      this.timeSheetDetailsArray.push(rowArray);
-    //   }
-      
-    // )
+  // for viewing timsheet
+  private getTimesheetDetails(start:any,end:any){
+    const fromDate = moment(start).format("YYYY-MM-DD 00:00:00.000");
+    const toDate = moment(end).format("YYYY-MM-DD 00:00:00.000");
+
+
+
+    // const body = {
+    //   employeeId : this.userDetails.userId,
+    //   employeeName : this.userDetails.username,
+    //   fromDate : fromDate,
+    //   toDate : toDate
+    // }
+
+    const body = {
+      //employeeId : ,
+      //employeeName : this.userDetails.username,
+      fromDate : fromDate,
+      toDate : toDate
+    }
+
+
+    const url = `${this._url.timesheet.getTimesheet}`
+    this._http.post(url,body).subscribe({
+      next:(res:any)=>{
+        this.timeSheetDetails = res.timesheetDetails;
+      }
+
+    })
   }
   dateChange(event){
     this.selectedTimesheetRow = [];
@@ -356,7 +371,7 @@ export class TimesheetComponent implements OnInit {
     this.model = "2022-12-5";
     this.currentWeek = this.dateFormatter(moment(this.startOfWeek).format("YYYY-MM-DD"),moment(this.endOfWeek).format("YYYY-MM-DD"));
     this.weekShow = moment(this.startOfWeek).format("MMMM-DD")+"-"+moment(this.endOfWeek).format("MMMM-DD");
-    //console.log("this.currentWeek ",this.currentWeek )
+    this.getTimesheetDetails(this.startOfWeek,this.endOfWeek);
   }
   private dateFormatter(start:any,end:any){
     var dateArray = [];
@@ -375,7 +390,7 @@ export class TimesheetComponent implements OnInit {
     this.endOfWeek = moment(this.endOfWeek).subtract(1,'weeks');
     this.currentWeek = this.dateFormatter(moment(this.startOfWeek).format("YYYY-MM-DD"),moment(this.endOfWeek).format("YYYY-MM-DD"));
     this.weekShow = moment(this.startOfWeek).format("MMMM-DD")+"-"+moment(this.endOfWeek).format("MMMM-DD")
-    //console.log("this.currentWeek ",this.currentWeek )
+    this.getTimesheetDetails(this.startOfWeek,this.endOfWeek);
   }
   onNextClick(){
     this.selectedTimesheetRow = [];
@@ -383,7 +398,7 @@ export class TimesheetComponent implements OnInit {
     this.endOfWeek = moment(this.endOfWeek).add(1,'weeks');
     this.currentWeek = this.dateFormatter(moment(this.startOfWeek).format("YYYY-MM-DD"),moment(this.endOfWeek).format("YYYY-MM-DD"));
     this.weekShow = moment(this.startOfWeek).format("MMMM-DD")+"-"+moment(this.endOfWeek).format("MMMM-DD");
-    //console.log("this.currentWeek ",this.currentWeek )
+    this.getTimesheetDetails(this.startOfWeek,this.endOfWeek);
 
   }
   
@@ -401,6 +416,7 @@ export class TimesheetComponent implements OnInit {
   }
 
   private getDismissReason(reason: any): string {
+    console.log("hi");
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -465,27 +481,29 @@ export class TimesheetComponent implements OnInit {
   }
   // Deleting Timesheet row
   onTimesheetDelete(id:any){
-    const data = this.timeSheetDetails[id];
-    console.log("delete data",data)
-        // const data = this.timeSheetDetails[id];
-    // this._http.delete(`${this._url.timesheet.deleteTimesheet}/${uniqueId}`).subscribe(
-    // {
-    //   next(res) {
-    //     //this.toastr.success(res.responseMessage)
-    // }
-    // });
+    const body = this.timeSheetDetails[id];
+    //console.log("delete data",body)
+    const url = `${this._url.timesheet.deleteTimesheet}`
+    this._http.post(url,body).subscribe({
+      next:(res:any)=>{
+        this.toast.success("Successfully Deleted");
+      }
+
+    })
   }
 
+  //on checking checkbox of the table
   onRowCheck(id: any){
-    console.log(id)
+    this.showSideWindow = !this.showSideWindow;
     if(id == -1){
       this.selectAllTimesheet = !this.selectAllTimesheet;
+      this.timeSheetDetails.forEach((item)=>{
+        if(item.status == 'In progress' || item.status == 'Rejected') this.selectedTimesheetRow.push(item)
+      })
+      console.log(this.selectedTimesheetRow);
     }else{
-      // this.selectedTimesheetRow.includes(this.timeSheetDetails[id])? this.selectedTimesheetRow.push(this.timeSheetDetails[id])
-      // :this.selectedTimesheetRow.
       if(!this.selectedTimesheetRow.includes(this.timeSheetDetails[id]))
       {
-        console.log("hi")
         this.selectedTimesheetRow.push(this.timeSheetDetails[id]);
       }else{
         this.selectedTimesheetRow.splice(this.selectedTimesheetRow.indexOf(this.timeSheetDetails[id]),1);
@@ -512,7 +530,7 @@ export class TimesheetComponent implements OnInit {
         {date : date[6],numberOfHours: this.addTimesheetForm.controls.sunday.value}
       ]
 
-      const data ={
+      const body ={
         projectId       : 9,
         projectName     : this.addTimesheetForm.controls.project.value,
         activityId      : 15,
@@ -521,7 +539,15 @@ export class TimesheetComponent implements OnInit {
         remarks         : this.addTimesheetForm.controls.remarks.value,
         timeTaken       : timeTaken
       }
-      console.log("Add timesheet data",data);
+      console.log("Add timesheet data",body);
+      const url = `${this._url.timesheet.addTimesheet}?EmployeeId=${this.userDetails.userId}`
+      this._http.post(url,body).subscribe({
+      next:(res:any)=>{
+        //this.timeSheetDetails = res.timesheetDetails
+        this.toast.success(res.responseMessage);
+      }
+
+    })
 
     }else{
       console.log("this.selectedTimesheet",this.selectedTimesheet);
@@ -534,7 +560,7 @@ export class TimesheetComponent implements OnInit {
       timeTaken[5].numberOfHours = this.addTimesheetForm.controls.saturday.value;
       timeTaken[6].numberOfHours = this.addTimesheetForm.controls.sunday.value;
 
-      const data = {
+      const body = {
       projectId       : 9,
       projectName     : this.addTimesheetForm.controls.project.value,
       activityId      : 15,
@@ -544,7 +570,16 @@ export class TimesheetComponent implements OnInit {
       remarks         : this.addTimesheetForm.controls.remarks.value
       }
       
-      console.log("Modify timesheet data",data);
+      const url = `${this._url.timesheet.editTimesheet}`
+      this._http.post(url,body).subscribe({
+      next:(res:any)=>{
+        this.toast.success(res.responseMessage);
+      }
+
+    })
+
+      
+      console.log("Modify timesheet data",body);
 
     }
 
@@ -552,21 +587,21 @@ export class TimesheetComponent implements OnInit {
   }
   //submitting the timesheet
   onSubmitTimesheet(){
-    //remarks =''
 
-    const data = this.selectedTimesheetRow;
-    //this.managerId
-
-    
+    const body = this.selectedTimesheetRow;
     console.log(this.managerId);
+    console.log("data submit",body)
+    const url = `${this._url.timesheet.submitTimesheet}?ManagerID=${this.managerId}&EmployeeName=${this.userDetails.username}`;
+    this._http.post(url,body).subscribe({
+        next:(res:any)=>{
+        this.toast.success(res.responseMessage);
+      }
+    })
     this.selectedTimesheetRow = [];
     this.submitRemarks ='';
   }
   onselectSupervisor(event:any){
     this.managerId = event.target.value;
   }
-  
-
-  
 }
 
