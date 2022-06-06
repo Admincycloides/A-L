@@ -16,6 +16,8 @@ import { LogComponent } from './pages/log/log.component';
 import { LoginComponent } from './auth/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from "@angular/common/http";
+import { ReviewtimesheetComponent } from './pages/reviewtimesheet/reviewtimesheet.component';
+import { ReviewlinkComponent } from './pages/reviewtimesheet/reviewlink/reviewlink.component';
 
 
 @NgModule({
