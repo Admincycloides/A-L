@@ -14,6 +14,7 @@ import { MapsComponent }            from '../../pages/maps/maps.component';
 import { NotificationsComponent }   from '../../pages/notifications/notifications.component';
 import { UpgradeComponent }         from '../../pages/upgrade/upgrade.component';
 import { TimesheetComponent }       from '../../pages/timesheet/timesheet.component';
+import { ReviewtimesheetComponent }       from '../../pages/reviewtimesheet/reviewtimesheet.component';
 
 
 
@@ -44,6 +45,7 @@ import { AddtimesheetComponent } from '../../pages/timesheet/addtimesheet/addtim
     MapsComponent,
     NotificationsComponent,
     TimesheetComponent,
+    AddtimesheetComponent,
     AddtimesheetComponent,
     
   ],

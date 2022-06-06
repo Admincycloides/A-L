@@ -19,6 +19,7 @@ export const ROUTES: RouteInfo[] = [
     { path: 'timesheet',    title: 'Timesheet Management',  icon:'nc-watch-time', class: 'm-item' },
     { path: 'projects',    title: 'Projects',  icon:'nc-settings', class: 'm-item' },
     { path: 'log',    title: 'Log (Audit Trail)',  icon:'nc-paper', class: 'm-item' },
+    { path: 'review',    title: 'Review Timesheet',  icon:'nc-paper', class: 'm-item review-ico' },
 ];
 
 @Component({
