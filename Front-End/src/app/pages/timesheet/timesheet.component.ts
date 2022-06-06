@@ -60,15 +60,17 @@ export class TimesheetComponent implements OnInit {
   ngOnInit(): void {
     //this.projectList = ['Project 1','Project 2','Project 3','Project 4'];
     //this.activityList = ['Activity 1','Activity 2','Activity 3','Activity 4'];
-    this.userDetails = JSON.parse(localStorage.getItem('token'));
+    
     this.getEmployeeDetails();
+    this.userDetails = JSON.parse(localStorage.getItem('user'));
     this.getSupervisorDetails();
     this.getProjectActivityDetails();
     this.startOfWeek = moment().startOf('isoWeek').toDate();
     this.endOfWeek = moment().endOf('isoWeek').toDate();
     this.weekShow = moment(this.startOfWeek).format("MMMM-DD")+"-"+moment(this.endOfWeek).format("MMMM-DD");
     this.currentWeek = this.dateFormatter(moment(this.startOfWeek).format("YYYY-MM-DD"),moment(this.endOfWeek).format("YYYY-MM-DD"));
-    this.getTimesheetDetails();
+    this.getTimesheetDetails(this.startOfWeek,this.endOfWeek);
+    
     //console.log("hi",this.getSupervisorDetails())
 
 
@@ -191,26 +193,20 @@ export class TimesheetComponent implements OnInit {
   private getEmployeeDetails(){
     const url = `${this._url.Employee.getEmployeeDetails}?UserID=${this.userDetails.userId}`
     this._http.get(url).subscribe(
-      (res)=>{
-        console.log(res);
-        //localStorage.setItem('user',JSON.stringify(res.data))
+      {
+        next:(res:any)=> {
+          localStorage.setItem('user',JSON.stringify(res.data));
+        }
       }
-      // {
-      //   next(res) {
-      //     localStorage.setItem('user',JSON.stringify(res.data));
-      //   }
-      // }
     )
   }
   private getSupervisorDetails(){
 
     const url = `${this._url.Employee.getSupervisorDetails}`
     this._http.get(url).subscribe({
-      next(res){
-        //this.superVisorList = res.data
-        console.log(res);
+      next:(res:any)=>{
+        this.superVisorList = res.data
       }
-
     })
 
     this.superVisorList = [
@@ -335,22 +331,34 @@ export class TimesheetComponent implements OnInit {
 
   public pageChanged(event) {
     this.config.currentPage = event;
-    //this.();
+    this.getTimesheetDetails(this.startOfWeek,this.endOfWeek);
   }
-  getTimesheetDetails(){
-    const fromDate = moment(this.startOfWeek).format("YYYY-MM-DD 00:00:00.000");
-    const toDate = moment(this.endOfWeek).format("YYYY-MM-DD 00:00:00.000");
+  // for viewing timsheet
+  private getTimesheetDetails(start:any,end:any){
+    const fromDate = moment(start).format("YYYY-MM-DD 00:00:00.000");
+    const toDate = moment(end).format("YYYY-MM-DD 00:00:00.000");
+
+
+
+    // const body = {
+    //   employeeId : this.userDetails.userId,
+    //   employeeName : this.userDetails.username,
+    //   fromDate : fromDate,
+    //   toDate : toDate
+    // }
+
     const body = {
-      employeeId : this.userDetails.userId,
-      employeeName : this.userDetails.username,
+      //employeeId : ,
+      //employeeName : this.userDetails.username,
       fromDate : fromDate,
       toDate : toDate
     }
+
+
     const url = `${this._url.timesheet.getTimesheet}`
     this._http.post(url,body).subscribe({
-      next(res){
-        //this.timeSheetDetails = res.timesheetDetails
-        console.log(res);
+      next:(res:any)=>{
+        this.timeSheetDetails = res.timesheetDetails;
       }
 
     })
@@ -363,7 +371,7 @@ export class TimesheetComponent implements OnInit {
     this.model = "2022-12-5";
     this.currentWeek = this.dateFormatter(moment(this.startOfWeek).format("YYYY-MM-DD"),moment(this.endOfWeek).format("YYYY-MM-DD"));
     this.weekShow = moment(this.startOfWeek).format("MMMM-DD")+"-"+moment(this.endOfWeek).format("MMMM-DD");
-    //console.log("this.currentWeek ",this.currentWeek )
+    this.getTimesheetDetails(this.startOfWeek,this.endOfWeek);
   }
   private dateFormatter(start:any,end:any){
     var dateArray = [];
@@ -382,7 +390,7 @@ export class TimesheetComponent implements OnInit {
     this.endOfWeek = moment(this.endOfWeek).subtract(1,'weeks');
     this.currentWeek = this.dateFormatter(moment(this.startOfWeek).format("YYYY-MM-DD"),moment(this.endOfWeek).format("YYYY-MM-DD"));
     this.weekShow = moment(this.startOfWeek).format("MMMM-DD")+"-"+moment(this.endOfWeek).format("MMMM-DD")
-    //console.log("this.currentWeek ",this.currentWeek )
+    this.getTimesheetDetails(this.startOfWeek,this.endOfWeek);
   }
   onNextClick(){
     this.selectedTimesheetRow = [];
@@ -390,7 +398,7 @@ export class TimesheetComponent implements OnInit {
     this.endOfWeek = moment(this.endOfWeek).add(1,'weeks');
     this.currentWeek = this.dateFormatter(moment(this.startOfWeek).format("YYYY-MM-DD"),moment(this.endOfWeek).format("YYYY-MM-DD"));
     this.weekShow = moment(this.startOfWeek).format("MMMM-DD")+"-"+moment(this.endOfWeek).format("MMMM-DD");
-    //console.log("this.currentWeek ",this.currentWeek )
+    this.getTimesheetDetails(this.startOfWeek,this.endOfWeek);
 
   }
   
@@ -408,6 +416,7 @@ export class TimesheetComponent implements OnInit {
   }
 
   private getDismissReason(reason: any): string {
+    console.log("hi");
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -476,15 +485,14 @@ export class TimesheetComponent implements OnInit {
     //console.log("delete data",body)
     const url = `${this._url.timesheet.deleteTimesheet}`
     this._http.post(url,body).subscribe({
-      next(res){
-        //this.timeSheetDetails = res.timesheetDetails
-        console.log(res);
-        //this.toast.success("User Successfully logged in");
+      next:(res:any)=>{
+        this.toast.success("Successfully Deleted");
       }
 
     })
   }
 
+  //on checking checkbox of the table
   onRowCheck(id: any){
     this.showSideWindow = !this.showSideWindow;
     if(id == -1){
@@ -494,8 +502,6 @@ export class TimesheetComponent implements OnInit {
       })
       console.log(this.selectedTimesheetRow);
     }else{
-      // this.selectedTimesheetRow.includes(this.timeSheetDetails[id])? this.selectedTimesheetRow.push(this.timeSheetDetails[id])
-      // :this.selectedTimesheetRow.
       if(!this.selectedTimesheetRow.includes(this.timeSheetDetails[id]))
       {
         this.selectedTimesheetRow.push(this.timeSheetDetails[id]);
@@ -536,10 +542,9 @@ export class TimesheetComponent implements OnInit {
       console.log("Add timesheet data",body);
       const url = `${this._url.timesheet.addTimesheet}?EmployeeId=${this.userDetails.userId}`
       this._http.post(url,body).subscribe({
-      next(res){
+      next:(res:any)=>{
         //this.timeSheetDetails = res.timesheetDetails
-        console.log(res);
-        //this.toast.success("User Successfully logged in");
+        this.toast.success(res.responseMessage);
       }
 
     })
@@ -567,10 +572,8 @@ export class TimesheetComponent implements OnInit {
       
       const url = `${this._url.timesheet.editTimesheet}`
       this._http.post(url,body).subscribe({
-      next(res){
-        //this.timeSheetDetails = res.timesheetDetails
-        console.log(res);
-        //this.toast.success("User Successfully logged in");
+      next:(res:any)=>{
+        this.toast.success(res.responseMessage);
       }
 
     })
@@ -584,20 +587,14 @@ export class TimesheetComponent implements OnInit {
   }
   //submitting the timesheet
   onSubmitTimesheet(){
-    //remarks =''
 
     const body = this.selectedTimesheetRow;
-    //this.managerId
-
-    
     console.log(this.managerId);
     console.log("data submit",body)
     const url = `${this._url.timesheet.submitTimesheet}?ManagerID=${this.managerId}&EmployeeName=${this.userDetails.username}`;
     this._http.post(url,body).subscribe({
-        next(res){
-        //this.timeSheetDetails = res.timesheetDetails
-        console.log(res);
-        //this.toast.success("User Successfully logged in");
+        next:(res:any)=>{
+        this.toast.success(res.responseMessage);
       }
     })
     this.selectedTimesheetRow = [];
@@ -606,8 +603,5 @@ export class TimesheetComponent implements OnInit {
   onselectSupervisor(event:any){
     this.managerId = event.target.value;
   }
-  
-
-  
 }
 
