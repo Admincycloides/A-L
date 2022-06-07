@@ -1,4 +1,6 @@
 ﻿using AnL.Constants;
+using AnL.Filter;
+using AnL.Helpers;
 using AnL.Models;
 using AnL.Repository.Abstraction;
 using AnL.ViewModel;
@@ -20,9 +22,11 @@ namespace AnL.Controllers
     {
         private readonly IUnitOfWork _UOW;
         private readonly IConfiguration _configuration;
-        public TimesheetController( IUnitOfWork UOW)
+        private readonly IUriService uriService;
+        public TimesheetController( IUnitOfWork UOW, IUriService uriService)
         {
             _UOW = UOW;
+            this.uriService = uriService;
         }
         /// <summary>
         /// Fetch Timesheet Details based on the user Logged in
@@ -98,14 +102,14 @@ namespace AnL.Controllers
                 {
                     response.Data = model;
                     response.ResponseCode = HTTPConstants.OK;
-                    response.ResponseMessage = MessageConstants.TimsheetListingSuccess;
+                    response.ResponseMessage = MessageConstants.TimesheetListingSuccess;
                     return Ok(response);
                 }
                 else
                 {
                     response.Data = null;
                     response.ResponseCode = HTTPConstants.BAD_REQUEST;
-                    response.ResponseMessage = MessageConstants.TimsheetListingFailed;
+                    response.ResponseMessage = MessageConstants.TimesheetListingFailed;
                     return BadRequest(response);
                 }
                 //Controller Code
@@ -126,11 +130,11 @@ namespace AnL.Controllers
         /// Fetch Timesheet Details based on the user Logged in
         /// </summary>
         [HttpPost]
-        public async Task<ActionResult> GetDetails(TimesheetViewModel timesheetDetails)
+        public async Task<ActionResult> GetDetails([FromQuery] PaginationFilter filter,TimesheetViewModel timesheetDetails)
         {
             try
             {
-                var data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.EmployeeId == timesheetDetails.EmployeeId && x.Date >= DateTime.Parse(timesheetDetails.FromDate) && x.Date <= DateTime.Parse(timesheetDetails.ToDate));
+                var data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.EmployeeId == timesheetDetails.EmployeeId && x.Date >= DateTime.Parse(timesheetDetails.FromDate) && x.Date <= DateTime.Parse(timesheetDetails.ToDate)).Include(x=>x.Project).Include(x=>x.Activity);
 
                 var projectList = data.Select(x => Tuple.Create(x.ProjectId, x.ActivityId)).Distinct().ToList();
                 MasterTimesheetViewModel model = new MasterTimesheetViewModel();
@@ -144,8 +148,9 @@ namespace AnL.Controllers
                 {
                     Details details = new Details();
                     details.ProjectId = tuple.Item1;
-                    //details.ProjectName=
+                    details.ProjectName = data.Where(x => x.ProjectId == tuple.Item1).Select(x => x.Project.ProjectName).FirstOrDefault();
                     details.ActivityId = tuple.Item2;
+                    details.ActivityName= data.Where(x => x.ActivityId == tuple.Item2).Select(x=>x.Activity.ActivityName).FirstOrDefault();
                     details.Remarks = data.Where(x => x.ProjectId == tuple.Item1 && x.ActivityId == tuple.Item2).Select(x => x.Remarks).FirstOrDefault();
                     details.Status = data.Where(x => x.ProjectId == tuple.Item1 && x.ActivityId == tuple.Item2).Select(x => x.Status).FirstOrDefault();
                     List<TimeSpent> timeSpentList = new List<TimeSpent>();
@@ -164,28 +169,14 @@ namespace AnL.Controllers
                     weekDetails.Add(details);
                 }
                 model.TimesheetDetails = weekDetails;
-                BaseResponse response = new BaseResponse();
-                if (model.TimesheetDetails.Count>0)
-                {
-                    response.Data = model;
-                    response.ResponseCode = HTTPConstants.OK;
-                    response.ResponseMessage = MessageConstants.TimsheetListingSuccess;
-                }
-                else if (model.TimesheetDetails.Count == 0)
-                {
-                    response.Data =null;
-                    response.ResponseCode = HTTPConstants.OK;
-                    response.ResponseMessage = MessageConstants.TimesheetListingNoRecords;
-                    return Ok(response);
-                }
-                else
-                {
-                    response.Data = null;
-                    response.ResponseCode = HTTPConstants.BAD_REQUEST;
-                    response.ResponseMessage = MessageConstants.TimsheetListingFailed;
-                    return BadRequest(response);
-                }
-                return Ok(model);
+                var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+                var pagedData=model.TimesheetDetails.Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
+                                                    .Take(validFilter.PageSize)
+                                                    .ToList();
+                var totalRecords = model.TimesheetDetails.Count;
+                var route = Request.Path.Value;
+                var pagedReponse = PaginationHelper.CreatePagedReponse<Details>(pagedData, validFilter, totalRecords, uriService, route);
+                return Ok(pagedReponse);
             }
             catch (Exception ex)
             {
@@ -193,10 +184,6 @@ namespace AnL.Controllers
                 return BadRequest("Oops! Something went wrong!" + ex);
             }
         }
-
-
-
-
 
 
         /// <summary>
@@ -226,14 +213,14 @@ namespace AnL.Controllers
                 {
                     response.Data = AddTimesheetDetailsResponse;
                     response.ResponseCode = HTTPConstants.OK;
-                    response.ResponseMessage = MessageConstants.TimsheetAdditionSuccess;
+                    response.ResponseMessage = MessageConstants.TimesheetAdditionSuccess;
 
                 }
                 else
                 {
                     response.Data = AddTimesheetDetailsResponse;
                     response.ResponseCode = HTTPConstants.BAD_REQUEST;
-                    response.ResponseMessage = MessageConstants.TimsheetAdditionFailed;
+                    response.ResponseMessage = MessageConstants.TimesheetAdditionFailed;
                     return BadRequest(response);
                 }
                 return Ok(response);
@@ -271,13 +258,13 @@ namespace AnL.Controllers
                 {
                     response.Data = ModifyTimesheetResponse;
                     response.ResponseCode = HTTPConstants.OK;
-                    response.ResponseMessage = MessageConstants.TimsheetModificationSuccess;
+                    response.ResponseMessage = MessageConstants.TimesheetModificationSuccess;
                 }
                 else
                 {
                     response.Data = ModifyTimesheetResponse;
                     response.ResponseCode = HTTPConstants.BAD_REQUEST;
-                    response.ResponseMessage = MessageConstants.TimsheetModificationFailed;
+                    response.ResponseMessage = MessageConstants.TimesheetModificationFailed;
                     return BadRequest(response);
                 }
                 return Ok(response);
@@ -310,14 +297,13 @@ namespace AnL.Controllers
                 {
                     response.Data = DeleteTimesheetResponse;
                     response.ResponseCode = HTTPConstants.OK;
-                    response.ResponseMessage = MessageConstants.TimsheetDeletionSuccess;
-
+                    response.ResponseMessage = MessageConstants.TimesheetDeletionSuccess;
                 }
                 else
                 {
                     response.Data = DeleteTimesheetResponse;
                     response.ResponseCode = HTTPConstants.BAD_REQUEST;
-                    response.ResponseMessage = MessageConstants.TimsheetDeletionFailed;
+                    response.ResponseMessage = MessageConstants.TimesheetDeletionFailed;
                     return BadRequest(response);
                 }
                 return Ok(response);
@@ -345,7 +331,12 @@ namespace AnL.Controllers
                         TimesheetDetails details = new TimesheetDetails();
                         details.UniqueId = timesheet.UniqueId;
                         details.SubmittedTo = ManagerID;
-                        timesheetDetailsList.Add (details);
+                        details.SubmittedDate = DateTime.UtcNow;
+                        details.EmployeeRemarks = listrecords.EmployeeRemarks;
+                        if(details.UniqueId!=0)
+                        {
+                            timesheetDetailsList.Add(details);
+                        }
                     }
                     result = _UOW.TimesheetDetailRepository.SubmitTimesheet(timesheetDetailsList);
                 }
@@ -360,6 +351,161 @@ namespace AnL.Controllers
                     response.Data = result;
                     response.ResponseCode = HTTPConstants.BAD_REQUEST;
                     response.ResponseMessage = MessageConstants.TimesheetSubmissionFailed;
+                    return BadRequest(response);
+                }
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+        }
+        [HttpGet]
+        public async Task<ActionResult> GetReviewTimesheet([FromQuery] PaginationFilter filter, string EmployeeID)
+        {
+            List<TimesheetViewModel> result = new List<TimesheetViewModel>();
+            try
+            {
+                var data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.SubmittedTo.Contains(EmployeeID)).Include(x => x.Project).ToList();
+                var employeeList = data.Select(x => new
+                {
+                    x.Project.ProjectName,
+                    x.ProjectId,
+                    x.EmployeeId,
+                    x.SubmittedDate.Value.Date,
+                    x.Status,
+                    EmployeeName = String.Concat(_UOW.EmployeeDetailsRepository.GetById(x.EmployeeId).FirstName, " ", _UOW.EmployeeDetailsRepository.GetById(x.EmployeeId).LastName)
+                }).Distinct().ToList();
+                foreach (var employee in employeeList)
+                {
+                    TimesheetViewModel timesheetViewModel = new TimesheetViewModel();
+                    timesheetViewModel.ProjectName = employee.ProjectName;
+                    timesheetViewModel.ProjectId = employee.ProjectId;
+                    timesheetViewModel.EmployeeId = employee.EmployeeId;
+                    timesheetViewModel.EmployeeName = employee.EmployeeName;
+                    timesheetViewModel.Date = employee.Date;
+                    timesheetViewModel.Status = employee.Status;
+                    result.Add(timesheetViewModel);
+                }
+                BaseResponse response = new BaseResponse();
+                var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+                var pagedData = result.OrderByDescending(x=>x.Date).Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
+                                                    .Take(validFilter.PageSize)
+                                                    .ToList();
+                var totalRecords = result.Count;
+                var route = Request.Path.Value;
+                var pagedReponse = PaginationHelper.CreatePagedReponse<TimesheetViewModel>(pagedData, validFilter, totalRecords, uriService, route);
+                pagedReponse.ResponseCode=HTTPConstants.OK;
+                pagedReponse.ResponseMessage = MessageConstants.ReviewTimesheetListingSuccess;
+                return Ok(pagedReponse);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult> GetReviewTimesheetDetails([FromQuery] PaginationFilter filter, TimesheetViewModel model)
+        {
+            try
+            {
+                var data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.EmployeeId == model.EmployeeId && x.ProjectId == model.ProjectId && x.SubmittedDate.Value.Date == model.Date.Date).Include(x=>x.Project).Include(x=>x.Activity).ToList();
+                List<Details> weekDetails = new List<Details>();
+                //Tuple for project and its activity
+                var projectList = data.Select(x => Tuple.Create(x.ProjectId, x.ActivityId)).Distinct().ToList();
+                foreach (Tuple<int, int> tuple in projectList)
+                {
+                    Details details = new Details();
+                    details.ProjectName = model.ProjectName;
+                    details.ProjectId = tuple.Item1;
+                    details.ActivityId = tuple.Item2;
+                    details.ActivityName = data.Where(x => x.ProjectId == tuple.Item1 && x.ActivityId == tuple.Item2).Select(x=>x.Activity.ActivityName).FirstOrDefault();
+                    details.Remarks = data.Where(x => x.ProjectId == tuple.Item1 && x.ActivityId == tuple.Item2 && x.SubmittedDate.Value.Date == model.Date.Date).Select(x => x.Remarks).FirstOrDefault();
+                    List<TimeSpent> timeSpentList = new List<TimeSpent>();
+                    var fromDate = data.Where(x => x.ProjectId == tuple.Item1 && x.ActivityId == tuple.Item2).Min(x => x.Date);
+                    var toDate = data.Where(x => x.ProjectId == tuple.Item1 && x.ActivityId == tuple.Item2).Max(x => x.Date);
+                    foreach (DateTime day in EachDay(fromDate, toDate))
+                    {
+                        TimeSpent timeSpent = new TimeSpent();
+                        timeSpent.Date = day;
+                        timeSpent.NumberOfHours = data.Where(x => x.ProjectId == tuple.Item1 && x.ActivityId == tuple.Item2 && x.Date==day.Date).Select(x => x.NumberOfHours).SingleOrDefault();
+                        timeSpent.UniqueId = data.Where(x => x.ProjectId == tuple.Item1 && x.ActivityId == tuple.Item2 && x.Date == day.Date).Select(x => x.UniqueId).FirstOrDefault();
+                        timeSpentList.Add(timeSpent);
+                        details.TimeTaken = timeSpentList;
+                    }
+                    weekDetails.Add(details);
+                }
+                BaseResponse response = new BaseResponse();
+                var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+                var pagedData = weekDetails.OrderByDescending(x => x.ActivityId).Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
+                                                    .Take(validFilter.PageSize)
+                                                    .ToList();
+                var totalRecords = weekDetails.Count;
+                var route = Request.Path.Value;
+                var pagedReponse = PaginationHelper.CreatePagedReponse<Details>(pagedData, validFilter, totalRecords, uriService, route);
+                pagedReponse.ResponseCode = HTTPConstants.OK;
+                pagedReponse.ResponseMessage = MessageConstants.ReviewTimesheetListingSuccess;
+                return Ok(pagedReponse);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> SupervisorDecision( List<Details> model,string SupervisorID,string Action)
+        {
+            try
+            {
+                bool result = false;
+                List<TimesheetDetails> timesheetDetailsList = new List<TimesheetDetails>();
+                foreach (var listrecords in model)
+                {
+                    foreach (var timesheet in listrecords.TimeTaken)
+                    {
+                        TimesheetDetails details = new TimesheetDetails();
+                        details.UniqueId = timesheet.UniqueId;
+                        details.ApprovedRejectedBy = SupervisorID;
+                        details.SupervisorRemarks = listrecords.SupervisorRemarks;
+                        if (details.UniqueId != 0)
+                        {
+                            timesheetDetailsList.Add(details);
+                        }
+                    }
+                }
+                if (Action == TimeSheetStatus.Approved)
+                {
+                    result =  _UOW.TimesheetDetailRepository.SupervisorAction(timesheetDetailsList, TimeSheetStatus.Approved);
+                }
+                else if (Action == TimeSheetStatus.Rejected)
+                {
+                    result =  _UOW.TimesheetDetailRepository.SupervisorAction(timesheetDetailsList, TimeSheetStatus.Rejected);
+                }
+                else
+                {
+                    return BadRequest("Supervisor Action Status " + Action + "not acceptable!!");
+                }
+                BaseResponse response = new BaseResponse();
+                if (result)
+                {
+                    response.Data = result;
+                    response.ResponseCode = HTTPConstants.OK;
+                    if(Action == TimeSheetStatus.Approved)
+                        response.ResponseMessage = MessageConstants.SupervisorApproved;
+                    if(Action==TimeSheetStatus.Rejected)
+                        response.ResponseMessage = MessageConstants.SupervisorRejected;
+                }
+                else
+                {
+                    response.Data = result;
+                    response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                    response.ResponseMessage = MessageConstants.SupervisorActionFailed;
                     return BadRequest(response);
                 }
                 return Ok(response);
