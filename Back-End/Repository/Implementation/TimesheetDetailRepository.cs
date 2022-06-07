@@ -19,7 +19,7 @@ namespace AnL.Repository.Implementation
         DbSet<TimesheetDetails> dbSet;
         public TimesheetDetailRepository(DbContext context, IUnitOfWork UOW) : base(context)
         {
-            this._UOW= UOW;
+            this._UOW = UOW;
             this._context = context;
             dbSet = context.Set<TimesheetDetails>();
         }
@@ -32,16 +32,16 @@ namespace AnL.Repository.Implementation
             var empDetails = _UOW.EmployeeDetailsRepository.GetEmployeeDetails(employeeIDs);
             List<string> subEmpDetails = new List<string>();
             List<TimesheetDetails> sheetDetails = new List<TimesheetDetails>();
-            if (empDetails[0].SupervisorFlag=="Y" && empDetails.Count==1 )
+            if (empDetails[0].SupervisorFlag == "Y" && empDetails.Count == 1)
             {
-                subEmpDetails = _UOW.EmployeeDetailsRepository.GetAllByCondition(x => x.SupervisorFlag == "N").Select(x=>x.EmployeeId).ToList();
+                subEmpDetails = _UOW.EmployeeDetailsRepository.GetAllByCondition(x => x.SupervisorFlag == "N").Select(x => x.EmployeeId).ToList();
                 foreach (var emp in subEmpDetails)
                 {
-                    var result = this.GetAllByCondition(x => x.EmployeeId == timesheetDetails.EmployeeId && x.Date >= DateTime.Parse( timesheetDetails.FromDate) && x.Date <= DateTime.Parse(timesheetDetails.ToDate)).ToList();
-                    foreach(var data in result)
+                    var result = this.GetAllByCondition(x => x.EmployeeId == timesheetDetails.EmployeeId && x.Date >= DateTime.Parse(timesheetDetails.FromDate) && x.Date <= DateTime.Parse(timesheetDetails.ToDate)).ToList();
+                    foreach (var data in result)
                     {
                         sheetDetails.Add(data);
-                    }    
+                    }
                 }
             }
             else
@@ -49,7 +49,7 @@ namespace AnL.Repository.Implementation
                 sheetDetails.Add(this.GetById(empDetails[0]));
             }
             //if (subEmpDetails != null || subEmpDetails.Count() > 0)
-            if(sheetDetails.Count>0)
+            if (sheetDetails.Count > 0)
                 return sheetDetails;
             else
                 return null;
@@ -81,7 +81,7 @@ namespace AnL.Repository.Implementation
 
         public bool DeleteTimesheetDetails(List<TimesheetDetails> timesheetDetails)
         {
-            foreach(var details in timesheetDetails)
+            foreach (var details in timesheetDetails)
             {
                 this.Delete(details);
                 _context.SaveChanges();
@@ -95,6 +95,67 @@ namespace AnL.Repository.Implementation
             {
                 TimesheetDetails existingSheet = this.GetById(timesheet.UniqueId);
                 existingSheet.Status = TimeSheetStatus.Submitted;
+                existingSheet.EmployeeRemarks = timesheet.EmployeeRemarks;
+                existingSheet.SubmittedDate = timesheet.SubmittedDate;
+                existingSheet.SubmittedTo = timesheet.SubmittedTo;
+            }
+            this.SaveChanges();
+            return true;
+        }
+
+        public async Task<List<TimesheetViewModel>> GetReview(string EmployeeID)
+        {
+            List<TimesheetViewModel> result = new List<TimesheetViewModel>();
+            await Task.Run(() =>
+            {
+                var data = this.GetAllByCondition(x => x.SubmittedTo.Contains(EmployeeID)).Include(x => x.Project).ToList();
+            var employeeList = data.Select(x => new
+            {
+                x.Project.ProjectName,
+                x.ProjectId,
+                x.EmployeeId,
+                x.SubmittedDate.Value.Date,
+                x.Status,
+                EmployeeName = String.Concat(_UOW.EmployeeDetailsRepository.GetById(EmployeeID).FirstName, " ", _UOW.EmployeeDetailsRepository.GetById(EmployeeID).LastName)
+            }).Distinct().ToList();
+            foreach(var employee in employeeList)
+            {
+                TimesheetViewModel timesheetViewModel = new TimesheetViewModel();
+                timesheetViewModel.ProjectName = employee.ProjectName;
+                timesheetViewModel.ProjectId = employee.ProjectId;
+                timesheetViewModel.EmployeeId = employee.EmployeeId;
+                timesheetViewModel.EmployeeName= employee.EmployeeName;
+                timesheetViewModel.Date= employee.Date;
+                timesheetViewModel.Status= employee.Status;
+                result.Add(timesheetViewModel);
+            }
+            });
+            return result;
+        }
+
+        public bool SupervisorAction(List<TimesheetDetails> timesheetDetails,string Action)
+        {
+            if (Action == TimeSheetStatus.Approved)
+            {
+                foreach (var timesheet in timesheetDetails)
+                {
+                    TimesheetDetails existingSheet = this.GetById(timesheet.UniqueId);
+                    existingSheet.Status = TimeSheetStatus.Approved;
+                    existingSheet.EmployeeRemarks = timesheet.EmployeeRemarks;
+                    existingSheet.SubmittedDate = timesheet.SubmittedDate;
+                    existingSheet.SubmittedTo = timesheet.SubmittedTo;
+                }
+            }
+            else
+            {
+                foreach (var timesheet in timesheetDetails)
+                {
+                    TimesheetDetails existingSheet = this.GetById(timesheet.UniqueId);
+                    existingSheet.Status = TimeSheetStatus.Rejected;
+                    existingSheet.EmployeeRemarks = timesheet.EmployeeRemarks;
+                    existingSheet.SubmittedDate = timesheet.SubmittedDate;
+                    existingSheet.SubmittedTo = timesheet.SubmittedTo;
+                }
             }
             this.SaveChanges();
             return true;
