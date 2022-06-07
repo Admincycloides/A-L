@@ -29,7 +29,13 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'projects',      component: ProjectsComponent },
     { path: 'activities',      component: ActivitiesComponent },
     { path: 'activities',      component: ActivitiesComponent },
-    { path: 'review',      component: ReviewtimesheetComponent},
-    { path: 'reviewlink',      component: ReviewlinkComponent},
+    { path: 'review',      component: ReviewtimesheetComponent,
+    children: [
+        {
+            path:'reviewlink', component: ReviewlinkComponent
+        }
+    ]
+        },
+    // { path: 'reviewlink',      component: ReviewlinkComponent},
     ]
 

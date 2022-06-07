@@ -80,7 +80,7 @@ export class LoginComponent implements OnInit {
           next:(res:any)=> {
             if(res.responseCode == 200){
               this.showOTPMessage = false;
-              localStorage.setItem('token',JSON.stringify(res.data));
+              localStorage.setItem('user',JSON.stringify(res.data));
               this.toast.success("User Successfully logged in");
               this._router.navigate(['/timesheet']);
             }else this.invalidOtp = res.responseMessage;
