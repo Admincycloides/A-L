@@ -48,4 +48,8 @@ export class UrlService {
   public project = {
     getprojectListbyEmployeeID :'api/Project/GetprojectListbyEmployeeID'
   }
+  
+  public Project = {
+    addProject : 'api/Project/AddProject',
+  }
 }
