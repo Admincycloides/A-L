@@ -91,7 +91,7 @@ table{
     }
     th{
         border-top: none!important;
-        color: $dark-color;
+        color:  transparentize($dark-color, .3);
         font-weight: bold;
         font-size: 13px;
         vertical-align: middle!important;
