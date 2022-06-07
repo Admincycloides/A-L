@@ -30,7 +30,7 @@ namespace AnL.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=72.138.132.250,8006;Database=Tan_DB;user id=sa;password=T@ngenti@12");
+                optionsBuilder.UseSqlServer("Server=72.138.132.250,8006;Database=Tan_DB;user id=sa;password=T@ngenti@12;");
             }
         }
 
@@ -349,11 +349,13 @@ namespace AnL.Models
 
             modelBuilder.Entity<UserLogin>(entity =>
             {
-                entity.HasKey(e => e.UserId);
+                entity.HasKey(e => e.UserId)
+                    .HasName("PK__UserLogi__1788CCACA8FEEDF8");
 
                 entity.Property(e => e.UserId)
                     .HasColumnName("UserID")
-                    .ValueGeneratedNever();
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Otp).HasColumnName("OTP");
 
@@ -371,6 +373,12 @@ namespace AnL.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.User)
+                    .WithOne(p => p.UserLogin)
+                    .HasForeignKey<UserLogin>(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__UserLogin__UserI__5DCAEF64");
             });
 
             OnModelCreatingPartial(modelBuilder);

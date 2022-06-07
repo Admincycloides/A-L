@@ -14,6 +14,8 @@ import { ProjectsComponent } from '../../pages/projects/projects.component';
 import { ActivitiesComponent } from '../../pages/projects/activities/activities.component';
 import { ReviewtimesheetComponent } from '../../pages/reviewtimesheet/reviewtimesheet.component';
 import { ReviewlinkComponent } from '../../pages/reviewtimesheet/reviewlink/reviewlink.component';
+import { LogComponent } from '../../pages/log/log.component';
+import { ReportsComponent } from '../../pages/reports/reports.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
@@ -29,6 +31,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'projects',      component: ProjectsComponent },
     { path: 'activities',      component: ActivitiesComponent },
     { path: 'activities',      component: ActivitiesComponent },
+<<<<<<< HEAD
     { path: 'review',      component: ReviewtimesheetComponent,
     children: [
         {
@@ -37,5 +40,13 @@ export const AdminLayoutRoutes: Routes = [
     ]
         },
     // { path: 'reviewlink',      component: ReviewlinkComponent},
+=======
+    { path: 'review',      component: ReviewtimesheetComponent},
+    { path: 'reviewlink',      component: ReviewlinkComponent},
+    { path: 'log',      component: LogComponent},
+    { path: 'reports',      component: ReportsComponent},
+    
+    
+>>>>>>> 666cbb0f2f53c480ff4cb74bb3698126055f6133
     ]
 

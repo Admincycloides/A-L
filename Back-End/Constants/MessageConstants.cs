@@ -17,6 +17,7 @@
         public static readonly string InvalidOTP = "Invalid OTP";
         public static readonly string OTPTimedOUT = "OTP Expired";
         public static readonly string LoginSuccess = "Login Successful";
+        public static readonly string UserNotActive = "User has been deactivated";
 
         public static readonly string TimesheetSubmissionSuccess = "Timesheet Submitted successfully";
         public static readonly string TimesheetSubmissionFailed = "Timesheet Submission Failed";
@@ -25,6 +26,9 @@
 
         public static readonly string ProjectAllocationSuccess = "Resourcs Allocated to the project successfully";
         public static readonly string ProjectAdditionSuccess = "Porject Added successfully";
+
+        public static readonly string EmployeeFetchSuccess = "Employee records fetched successfully";
+        public static readonly string EmployeeFetchFailed = "Employee records fetch failed";
     }
 }
 

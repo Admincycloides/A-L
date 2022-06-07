@@ -27,7 +27,7 @@ namespace AnL.Repository.Implementation
             });
 
         }
-        public async Task<UserLogin> UpdateOTP(int Otp,int Userid)
+        public async Task<UserLogin> UpdateOTP(int Otp,string Userid)
         {
             return await Task.Run(() =>
             {
@@ -39,7 +39,7 @@ namespace AnL.Repository.Implementation
             });
             
         }
-        public UserLogin getLogindetails(int UserID)
+        public UserLogin getLogindetails(string UserID)
         {
             return(dbSet.Where(x => x.UserId == UserID).FirstOrDefault());
         }
