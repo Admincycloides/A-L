@@ -1,9 +1,19 @@
 
 <div class="page-title w-100">Review Timesheet</div>
-<div class="page-title w-100">Project Name</div>
+<div class="page-title w-100">{{projectName}}</div>
 <div class="action-head justify-content-between d-flex">
-    <div class="act-filter d-flex align-items-center justify-content-center">
-        <input type="text" class="search-filter" placeholder="Search Activities"/>
+    <div class="act-filter d-flex align-items-center justify-content-center search-hold position-relative">
+        <!-- <input type="text" class="search-filter" placeholder="Search Activities"/> -->
+        <input
+            #searchBar
+            type="text"
+            class="cpage-search"
+            placeholder="Search Activities"
+            (keyup)="searchItems($event)"
+            style="width: 370px"
+        />
+        <i *ngIf="searchTerm" class="pe-7s-close-circle" (click)="clearSearch(); searchBar.value = ''"></i>
+        <i *ngIf="!searchTerm" class="pe-7s-search"></i>
     </div>
 </div>
 <div class="row sheet-row">
@@ -17,25 +27,25 @@
                                 Activities
                             </th>
                             <th>
-                                Mon <br/>May 23
+                                Mon <br/>{{timesheetDates[0].date}}
                             </th>
                             <th>
-                                Tus <br/>May 23
+                                Tus <br/>{{timesheetDates[1].date}}
                             </th>
                             <th>
-                                Wed <br/>May 23
+                                Wed <br/>{{timesheetDates[2].date}}
                             </th>
                             <th>
-                                Thu <br/>May 23
+                                Thu <br/>{{timesheetDates[3].date}}
                             </th>
                             <th>
-                                Fri <br/>May 23
+                                Fri <br/>{{timesheetDates[4].date}}
                             </th>
                             <th>
-                                Sat <br/>May 23
+                                Sat <br/>{{timesheetDates[5].date}}
                             </th>
                             <th>
-                                Sun <br/>May 23
+                                Sun <br/>{{timesheetDates[6].date}}
                             </th>
                             <th>
                                Remarks
@@ -72,155 +82,60 @@
                                    <span>Remarks</span>
                                 </td>
                             </tr>
-                            <tr>
+                            <tr *ngFor="let item of timesheetDetails">
                                 <td>
-                                    Activity 1
+                                    {{item.activityName}}
                                 </td>
                                 <td>
-                                    5
+                                    {{item.timeTaken[0].numberOfHours}}
                                 </td>
                                 <td>
-                                    4
+                                    {{item.timeTaken[1].numberOfHours}}
                                 </td>
                                 <td>
-                                    4
+                                    {{item.timeTaken[2].numberOfHours}}
                                 </td>
                                 <td>
-                                    5
+                                    {{item.timeTaken[3].numberOfHours}}
                                 </td>
                                 <td>
-                                    4
+                                    {{item.timeTaken[4].numberOfHours}}
                                 </td>
                                 <td>
-
+                                    {{item.timeTaken[5].numberOfHours}}
                                 </td>
                                 <td>
-                                    
+                                    {{item.timeTaken[6].numberOfHours}}
                                 </td>
                                 <td>
-                                   <span>Remarks</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Activity 1
-                                </td>
-                                <td>
-                                    5
-                                </td>
-                                <td>
-                                    4
-                                </td>
-                                <td>
-                                    4
-                                </td>
-                                <td>
-                                    5
-                                </td>
-                                <td>
-                                    4
-                                </td>
-                                <td>
-
-                                </td>
-                                <td>
-                                    
-                                </td>
-                                <td>
-                                   <span>Remarks</span>
+                                   <span>{{item.remarks}</span>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    Activity 1
-                                </td>
-                                <td>
-                                    5
-                                </td>
-                                <td>
-                                    4
-                                </td>
-                                <td>
-                                    4
-                                </td>
-                                <td>
-                                    5
-                                </td>
-                                <td>
-                                    4
-                                </td>
-                                <td>
-
-                                </td>
-                                <td>
-                                    
-                                </td>
-                                <td>
-                                   <span>Remarks</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Activity 1
-                                </td>
-                                <td>
-                                    5
-                                </td>
-                                <td>
-                                    4
-                                </td>
-                                <td>
-                                    4
-                                </td>
-                                <td>
-                                    5
-                                </td>
-                                <td>
-                                    4
-                                </td>
-                                <td>
-
-                                </td>
-                                <td>
-                                    
-                                </td>
-                                <td>
-                                   <span>Remarks</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Activity 1
-                                </td>
-                                <td>
-                                    5
-                                </td>
-                                <td>
-                                    4
-                                </td>
-                                <td>
-                                    4
-                                </td>
-                                <td>
-                                    5
-                                </td>
-                                <td>
-                                    4
-                                </td>
-                                <td>
-
-                                </td>
-                                <td>
-                                    
-                                </td>
-                                <td>
-                                   <span>Remarks</span>
-                                </td>
-                            </tr>
+                            
                         </tbody>
                     </table>
                 </div>
             </div>
+        </div>
+
+        <!-- Pagenation -->
+
+        <div class="pagination-line d-flex justify-content-end" *ngIf="true">
+            <ul>
+                <pagination-controls
+                    id='activity'
+                    (pageChange)="pageChanged($event)"
+                    [directionLinks]="true"
+                    [autoHide]="false"
+                    [maxSize]="10"
+                    [responsive]="true"
+                    previousLabel="Previous"
+                    nextLabel="Next"
+                    screenReaderPaginationLabel="Pagination"
+                    screenReaderPageLabel="page"
+                    screenReaderCurrentLabel="You're on page">
+                </pagination-controls>
+            </ul>
         </div>
     </div>
 
@@ -229,11 +144,11 @@
             <div class="card-body pt-1">
                 <div class="r-row mb-1">
                     <label>Remarks</label>
-                    <textarea  class="form-control" rows="4"></textarea>
+                    <textarea #remarks class="form-control" rows="4" ></textarea>
                 </div>
                 <div class="r-row">
-                    <button  class="thm-btn-primary sm-btn w-100 my-2">Approve</button>
-                    <button  class="thm-btn-primary sm-btn w-100 my-2">Disapprove</button>
+                    <button  class="thm-btn-primary sm-btn w-100 my-2" (click)="onAcceptingTimesheet('Approve',remarks.value)">Approve</button>
+                    <button  class="thm-btn-primary sm-btn w-100 my-2" (click)="onAcceptingTimesheet('Rejected',remarks.value)">Disapprove</button>
                 </div>
             </div>
         </div>

@@ -37,7 +37,15 @@ export class UrlService {
     submitTimesheet   : 'api/Timesheet/SubmitTimesheetDetails'
   }
   public Employee = {
-    getEmployeeDetails    : 'api/Employee/getEmployeeDetails',
-    getSupervisorDetails  : 'api/Employee/GetSupervisorDetails'
+    //getEmployeeDetails    : 'api/Employee/getEmployeeDetails',
+    getSupervisorDetails  : 'api/EmployeeDetails/GetSupervisorDetails'
+  }
+  public review  = {
+    getReviewTimesheet        : 'api/review/GetReviewTimesheet',
+    getReviewTimesheetDetails : 'api/review/GetReviewTimesheetDetails',
+    supervisorDecision        : 'api/review/supervisorDecision'
+  }
+  public project = {
+    getprojectListbyEmployeeID :'api/Project/GetprojectListbyEmployeeID'
   }
 }

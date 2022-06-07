@@ -1,7 +1,17 @@
 <div class="page-title w-100">Review Timesheet</div>
 <div class="action-head justify-content-between d-flex">
     <div class="act-filter d-flex align-items-center justify-content-center">
-        <input type="text" class="search-filter" placeholder="Search Project"/>
+        <!-- <input type="text" class="search-filter" placeholder="Search Project"/> -->
+        <input
+            #searchBar
+            type="text"
+            class="cpage-search"
+            placeholder="Search Project"
+            (keyup)="searchItems($event)"
+            style="width: 370px"
+        />
+        <i *ngIf="searchTerm" class="pe-7s-close-circle" (click)="clearSearch(); searchBar.value = ''"></i>
+        <i *ngIf="!searchTerm" class="pe-7s-search"></i>
     </div>
 </div>
 <div class="row">
@@ -28,90 +38,23 @@
                             </th>
                             
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    Project 1
+                        <tbody *ngFor="let item of reviewTimesheetArray |
+                        paginate: config; let i= index">
+                            <tr >
+                                <td >
+                                    {{item.ProjectName}}
                                 </td>
                                 <td>
-                                    Alex
+                                    {{item.EmployeeName}}
                                 </td>
                                 <td>
-                                   5/23/2022
+                                    {{item.Date}}
                                 </td>
                                 <td>
-                                    <button class="link thm-linkbtn">Link</button>
+                                    <button class="link thm-linkbtn" (click)="onViewTimesheet(item,'projectName','Id','2022-06-12')">Link</button>
                                 </td>
                                 <td>
-                                    <span class="label-status approved"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Project 1
-                                </td>
-                                <td>
-                                    Alex
-                                </td>
-                                <td>
-                                   5/23/2022
-                                </td>
-                                <td>
-                                    <button class="link thm-linkbtn">Link</button>
-                                </td>
-                                <td>
-                                    <span class="label-status approved"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Project 1
-                                </td>
-                                <td>
-                                    Alex
-                                </td>
-                                <td>
-                                   5/23/2022
-                                </td>
-                                <td>
-                                    <button class="link thm-linkbtn">Link</button>
-                                </td>
-                                <td>
-                                    <span class="label-status approved"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Project 1
-                                </td>
-                                <td>
-                                    Alex
-                                </td>
-                                <td>
-                                   5/23/2022
-                                </td>
-                                <td>
-                                    <button class="link thm-linkbtn">Link</button>
-                                </td>
-                                <td>
-                                    <span class="label-status approved"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Project 1
-                                </td>
-                                <td>
-                                    Alex
-                                </td>
-                                <td>
-                                   5/23/2022
-                                </td>
-                                <td>
-                                    <button class="link thm-linkbtn">Link</button>
-                                </td>
-                                <td>
-                                    <span class="label-status approved"></span>
+                                    <span class="label-status approved">{{item.status}}</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -119,6 +62,24 @@
                 </div>
             </div>
         </div>
+    </div>
+    <!-- Pagination -->
+    <div class="pagination-line d-flex justify-content-end" *ngIf="true">
+        <ul>
+            <pagination-controls
+                id='activity'
+                (pageChange)="pageChanged($event)"
+                [directionLinks]="true"
+                [autoHide]="false"
+                [maxSize]="10"
+                [responsive]="true"
+                previousLabel="Previous"
+                nextLabel="Next"
+                screenReaderPaginationLabel="Pagination"
+                screenReaderPageLabel="page"
+                screenReaderCurrentLabel="You're on page">
+            </pagination-controls>
+        </ul>
     </div>
 
 

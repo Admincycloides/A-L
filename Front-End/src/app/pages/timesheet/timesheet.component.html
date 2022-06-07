@@ -91,7 +91,7 @@
                                     <input class="form-check-input tbl-check"
                                         type="checkbox" value=""
                                         id="flexCheckDefault"
-                                        *ngIf="row.status == 'In progress' || row.status == 'Rejected'"
+                                        *ngIf="row.status == 'In Progress' || row.status == 'Rejected'"
                                         (click)="onRowCheck(i)" [checked]="selectAllTimesheet?
                                         true:false">
                                     <!-- <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault" 
@@ -137,13 +137,13 @@
 
                                 <td>
                                     <button class="edit actico-btn"
-                                        (click)="onTimesheetAddEdit(i)" *ngIf="row.status == 'In progress' || row.status == 'Rejected'"><img
+                                        (click)="onTimesheetAddEdit(i)" *ngIf="row.status == 'In Progress' || row.status == 'Rejected'"><img
                                             src="../../../assets/img/edit.png"
                                             alt="" /></button>
                                 </td>
                                 <td>
                                     <button class="delete actico-btn"
-                                        (click)="onTimesheetDelete(i)" *ngIf="row.status == 'In progress' || row.status == 'Rejected'"><img
+                                        (click)="onTimesheetDelete(i)" *ngIf="row.status == 'In Progress' || row.status == 'Rejected'"><img
                                             src="../../../assets/img/delete.png"
                                             alt="" class="del-ico"/></button>
                                 </td>
@@ -171,6 +171,9 @@
                 </pagination-controls>
             </ul>
         </div>
+        <ng-container *ngIf="timeSheetDetails == null">
+            <div class="justify-content-center mb-5 mt-2 d-flex">No timesheet records during the selected week!!</div>
+          </ng-container>
     </div>
 
     <div class=" remarks-col" *ngIf="showSideWindow">
@@ -215,7 +218,9 @@
                             <option selected>Select Project</option>
                             <option *ngFor="let item of projectList" [ngValue]="item.ProjectName">{{item.ProjectName}}</option>
                         </select>
-                        <div class="error"></div>
+                        <small *ngIf="formSubmitted && !addTimesheetForm.controls.project.value">
+                            <span class="error">Project is required</span>
+                          </small>
                     </div>
                 </div>
             </div>
@@ -228,7 +233,9 @@
                             <option *ngFor="let item of activityList" [ngValue]="item.ActivityName"
                             >{{item.ActivityName}}</option>
                         </select>
-                    <div class="error"></div>
+                        <small *ngIf="formSubmitted && !addTimesheetForm.controls.activity.value">
+                            <span class="error">Activity is required</span>
+                          </small>
                 </div>
             </div>
             </div>
@@ -309,6 +316,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-dark"
-            (click)="modal.close('Save click');onSaveTimesheetDetails()">Save</button>
+            (click)="onSaveTimesheetDetails()">Save</button>
     </div>
 </ng-template>
+<!-- ;modal.close('Save click') -->

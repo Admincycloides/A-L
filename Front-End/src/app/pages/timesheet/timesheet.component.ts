@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { HttpService } from 'app/_services/http.service';
 import { UrlService } from 'app/_services/url.service';
 import * as moment from 'moment';
@@ -19,6 +19,7 @@ export class TimesheetComponent implements OnInit {
   userDetails: any;
   startOfWeek: any;
   endOfWeek: any;
+  private modalRef: NgbModalRef;
   
   timeSheetDetails:any[]
   currentWeek :any[];
@@ -28,7 +29,7 @@ export class TimesheetComponent implements OnInit {
     itemsPerPage: 10,
     totalItems: 1,
   };
-  //timeSheetDetailsArray = new Array(11);
+  formSubmitted = false;
   timeSheetDetailsArray =[];
   model;
   weekShow:any;
@@ -58,124 +59,15 @@ export class TimesheetComponent implements OnInit {
     
 
   ngOnInit(): void {
-    //this.projectList = ['Project 1','Project 2','Project 3','Project 4'];
-    //this.activityList = ['Activity 1','Activity 2','Activity 3','Activity 4'];
-    
-    this.getEmployeeDetails();
     this.userDetails = JSON.parse(localStorage.getItem('user'));
-    this.getSupervisorDetails();
-    this.getProjectActivityDetails();
     this.startOfWeek = moment().startOf('isoWeek').toDate();
     this.endOfWeek = moment().endOf('isoWeek').toDate();
     this.weekShow = moment(this.startOfWeek).format("MMMM-DD")+"-"+moment(this.endOfWeek).format("MMMM-DD");
     this.currentWeek = this.dateFormatter(moment(this.startOfWeek).format("YYYY-MM-DD"),moment(this.endOfWeek).format("YYYY-MM-DD"));
     this.getTimesheetDetails(this.startOfWeek,this.endOfWeek);
-    
-    //console.log("hi",this.getSupervisorDetails())
-
-
-
-
-    this.timeSheetDetails= [
-      {
-        "projectId": 9,
-        "projectName": 'Glyphosate',
-        "activityId": 6,
-        "activityName": "Activity 2",
-        "status": "Submitted",
-        "remarks": "None",
-        "timeTaken": [
-            {
-                "date": "2022-05-30T00:00:00",
-                "numberOfHours": 0,
-                "uniqueId": 88
-            },
-            {
-                "date": "2022-05-31T00:00:00",
-                "numberOfHours": 0,
-                "uniqueId": 89
-            },
-            {
-                "date": "2022-06-01T00:00:00",
-                "numberOfHours": 0,
-                "uniqueId": 90
-            },
-            {
-                "date": "2022-06-02T00:00:00",
-                "numberOfHours": 0,
-                "uniqueId": 91
-            },
-            {
-                "date": "2022-06-03T00:00:00",
-                "numberOfHours": 0,
-                "uniqueId": 92
-            },
-            {
-                "date": "2022-06-04T00:00:00",
-                "numberOfHours": 0,
-                "uniqueId": 93
-            },
-            {
-                "date": "2022-06-05T00:00:00",
-                "numberOfHours": 0,
-                "uniqueId": 94
-            }
-        ]
-    },
-    {
-        "projectId": 9,
-        "projectName": 'Glyphosate Phase 2',
-        "activityId": 15,
-        "activityName": "Activity 2",
-        "status": "In progress",
-        "remarks": "None",
-        "timeTaken": [
-            {
-                "date": "2022-05-30T00:00:00",
-                "numberOfHours": 2,
-                "uniqueId": 113
-            },
-            {
-                "date": "2022-05-31T00:00:00",
-                "numberOfHours": 1,
-                "uniqueId": 114
-            },
-            {
-                "date": "2022-06-01T00:00:00",
-                "numberOfHours": 3,
-                "uniqueId": 115
-            },
-            {
-                "date": "2022-06-02T00:00:00",
-                "numberOfHours": 4,
-                "uniqueId": 116
-            },
-            {
-                "date": "2022-06-03T00:00:00",
-                "numberOfHours": 0.25,
-                "uniqueId": 117
-            },
-            {
-                "date": "2022-06-04T00:00:00",
-                "numberOfHours": 2,
-                "uniqueId": 118
-            },
-            {
-                "date": "2022-06-05T00:00:00",
-                "numberOfHours": 0,
-                "uniqueId": 119
-            }
-        ]
-    }
-  ]
-
-
-
-
-
-
-
-    
+    this.getSupervisorDetails();
+    this.getProjectActivityDetails();
+  
     this.addTimesheetForm =this._fb.group({
       project: ['', Validators.required],
       activity: ['', Validators.required],
@@ -186,135 +78,142 @@ export class TimesheetComponent implements OnInit {
       friday:[''],
       saturday:[''],
       sunday:[''],
-      //timeDetails: this._fb.array([]),
       remarks:['']
     });
   }
-  private getEmployeeDetails(){
-    const url = `${this._url.Employee.getEmployeeDetails}?UserID=${this.userDetails.userId}`
-    this._http.get(url).subscribe(
-      {
-        next:(res:any)=> {
-          localStorage.setItem('user',JSON.stringify(res.data));
-        }
-      }
-    )
-  }
+  // private getEmployeeDetails(){
+  //   const url = `${this._url.Employee.getEmployeeDetails}?UserID=${this.userDetails.userId}`
+  //   this._http.get(url).subscribe(
+  //     {
+  //       next:(res:any)=> {
+  //         localStorage.setItem('user',JSON.stringify(res.data));
+  //       }
+  //     }
+  //   )
+  // }
   private getSupervisorDetails(){
 
     const url = `${this._url.Employee.getSupervisorDetails}`
     this._http.get(url).subscribe({
       next:(res:any)=>{
-        this.superVisorList = res.data
+        this.superVisorList = res.data;
       }
     })
 
-    this.superVisorList = [
-      {
-          "employeeId": "92S5000000009",
-          "firstName": "wefwe",
-          "lastName": "wefwefw",
-          "emailAddress": "p@gmail.com",
-          "contactNumber": "1234567890",
-          "supervisorFlag": "Y",
-          "managerId": "92S5000000009",
-          "enabledFlag": "Enabled"
-      },
-      {
-          "employeeId": "92S5000000157",
-          "firstName": "wefwe",
-          "lastName": "wefwefwe",
-          "emailAddress": "dawea@gmail.com",
-          "contactNumber": "1234567890",
-          "supervisorFlag": "Y",
-          "managerId": "92S5000000157",
-          "enabledFlag": "Enabled"
-      },
-      {
-          "employeeId": "92S5000000165",
-          "firstName": "wefevv",
-          "lastName": "wefwefw",
-          "emailAddress": "dss@gmail.com",
-          "contactNumber": "1234567890",
-          "supervisorFlag": "Y",
-          "managerId": "92S5000000165",
-          "enabledFlag": "Enabled"
-      }
-  ]
+  //   this.superVisorList = [
+  //     {
+  //         "employeeId": "92S5000000009",
+  //         "firstName": "wefwe",
+  //         "lastName": "wefwefw",
+  //         "emailAddress": "p@gmail.com",
+  //         "contactNumber": "1234567890",
+  //         "supervisorFlag": "Y",
+  //         "managerId": "92S5000000009",
+  //         "enabledFlag": "Enabled"
+  //     },
+  //     {
+  //         "employeeId": "92S5000000157",
+  //         "firstName": "wefwe",
+  //         "lastName": "wefwefwe",
+  //         "emailAddress": "dawea@gmail.com",
+  //         "contactNumber": "1234567890",
+  //         "supervisorFlag": "Y",
+  //         "managerId": "92S5000000157",
+  //         "enabledFlag": "Enabled"
+  //     },
+  //     {
+  //         "employeeId": "92S5000000165",
+  //         "firstName": "wefevv",
+  //         "lastName": "wefwefw",
+  //         "emailAddress": "dss@gmail.com",
+  //         "contactNumber": "1234567890",
+  //         "supervisorFlag": "Y",
+  //         "managerId": "92S5000000165",
+  //         "enabledFlag": "Enabled"
+  //     }
+  // ]
 
 
   }
 
   private getProjectActivityDetails(){
-    this.projectList =[{
-      "ProjectId": 0,
-      "ProjectName": 'Glyphosate',
-      "ProjectDescription": null,
-      "ClientId": 0,
-      "StartDate": "0001-01-01T00:00:00",
-      "EndDate": null,
-      "CurrentStatus": null,
-      "SredProject": null,
-      "Activities": [
-          {
-              "ActivityId": 0,
-              "ActivityName": 'Activity 2',
-              "ActivityDescription": null
-          },
-          {
-              "ActivityId": 0,
-              "ActivityName": 'Activity 2',
-              "ActivityDescription": null
-          }
-      ]
-  },{
-      "ProjectId": 0,
-      "ProjectName": 'Glyphosate Phase 2',
-      "ProjectDescription": null,
-      "ClientId": 0,
-      "StartDate": "0001-01-01T00:00:00",
-      "EndDate": null,
-      "CurrentStatus": null,
-      "SredProject": null,
-      "Activities": [
-          {
-              "ActivityId": 0,
-              "ActivityName": 'Activity 2',
-              "ActivityDescription": null
-          },
-          {
-              "ActivityId": 0,
-              "ActivityName": 'Activity 2',
-              "ActivityDescription": null
-          }
-      ]
-  },
-  {
-      "ProjectId": 0,
-      "ProjectName": null,
-      "ProjectDescription": null,
-      "ClientId": 0,
-      "StartDate": "0001-01-01T00:00:00",
-      "EndDate": null,
-      "CurrentStatus": null,
-      "SredProject": null,
-      "Activities": [
-          {
-              "ActivityId": 0,
-              "ActivityName": 'Activity 2',
-              "ActivityDescription": null
-          },
-          {
-              "ActivityId": 0,
-              "ActivityName": 'Activity 2',
-              "ActivityDescription": null
-          }
-      ]
-  }
+
+    const url = `${this._url.project.getprojectListbyEmployeeID}?EmployeeID=${this.userDetails.employeeId}`
+    this._http.get(url).subscribe({
+      next:(res:any)=>{
+        this.projectList = res.data;
+      }
+    })
+  //   this.projectList =[{
+  //     "ProjectId": 0,
+  //     "ProjectName": 'Glyphosate',
+  //     "ProjectDescription": null,
+  //     "ClientId": 0,
+  //     "StartDate": "0001-01-01T00:00:00",
+  //     "EndDate": null,
+  //     "CurrentStatus": null,
+  //     "SredProject": null,
+  //     "Activities": [
+  //         {
+  //             "ActivityId": 0,
+  //             "ActivityName": 'Activity 2',
+  //             "ActivityDescription": null
+  //         },
+  //         {
+  //             "ActivityId": 0,
+  //             "ActivityName": 'Activity 2',
+  //             "ActivityDescription": null
+  //         }
+  //     ]
+  // },{
+  //     "ProjectId": 0,
+  //     "ProjectName": 'Glyphosate Phase 2',
+  //     "ProjectDescription": null,
+  //     "ClientId": 0,
+  //     "StartDate": "0001-01-01T00:00:00",
+  //     "EndDate": null,
+  //     "CurrentStatus": null,
+  //     "SredProject": null,
+  //     "Activities": [
+  //         {
+  //             "ActivityId": 0,
+  //             "ActivityName": 'Activity 2',
+  //             "ActivityDescription": null
+  //         },
+  //         {
+  //             "ActivityId": 0,
+  //             "ActivityName": 'Activity 2',
+  //             "ActivityDescription": null
+  //         }
+  //     ]
+  // },
+  // {
+  //     "ProjectId": 0,
+  //     "ProjectName": null,
+  //     "ProjectDescription": null,
+  //     "ClientId": 0,
+  //     "StartDate": "0001-01-01T00:00:00",
+  //     "EndDate": null,
+  //     "CurrentStatus": null,
+  //     "SredProject": null,
+  //     "Activities": [
+  //         {
+  //             "ActivityId": 0,
+  //             "ActivityName": 'Activity 2',
+  //             "ActivityDescription": null
+  //         },
+  //         {
+  //             "ActivityId": 0,
+  //             "ActivityName": 'Activity 2',
+  //             "ActivityDescription": null
+  //         }
+  //     ]
+  // }
   
-  ]
+  // ]
   }
 
+  //when selecting project during entering timesheet.
   public onProjectSelect(event:any){
     const project = event.target.value.split(":")[1].trim();
     console.log(project);
@@ -326,34 +225,23 @@ export class TimesheetComponent implements OnInit {
     }
   }
 
-
-
-
   public pageChanged(event) {
     this.config.currentPage = event;
+    this.timeSheetDetails = [];
     this.getTimesheetDetails(this.startOfWeek,this.endOfWeek);
   }
   // for viewing timsheet
   private getTimesheetDetails(start:any,end:any){
     const fromDate = moment(start).format("YYYY-MM-DD 00:00:00.000");
     const toDate = moment(end).format("YYYY-MM-DD 00:00:00.000");
-
-
-
-    // const body = {
-    //   employeeId : this.userDetails.userId,
-    //   employeeName : this.userDetails.username,
-    //   fromDate : fromDate,
-    //   toDate : toDate
-    // }
-
+    const date = moment.utc().format();
     const body = {
-      //employeeId : ,
-      //employeeName : this.userDetails.username,
+      date: date,
+      employeeId : this.userDetails.employeeId,
+      employeeName : this.userDetails.username,
       fromDate : fromDate,
       toDate : toDate
     }
-
 
     const url = `${this._url.timesheet.getTimesheet}`
     this._http.post(url,body).subscribe({
@@ -386,6 +274,7 @@ export class TimesheetComponent implements OnInit {
   }
   onPreviousClick(){
     this.selectedTimesheetRow = [];
+    this.timeSheetDetails = [];
     this.startOfWeek = moment(this.startOfWeek).subtract(1,'weeks');
     this.endOfWeek = moment(this.endOfWeek).subtract(1,'weeks');
     this.currentWeek = this.dateFormatter(moment(this.startOfWeek).format("YYYY-MM-DD"),moment(this.endOfWeek).format("YYYY-MM-DD"));
@@ -394,6 +283,7 @@ export class TimesheetComponent implements OnInit {
   }
   onNextClick(){
     this.selectedTimesheetRow = [];
+    this.timeSheetDetails = [];
     this.startOfWeek = moment(this.startOfWeek).add(1,'weeks');
     this.endOfWeek = moment(this.endOfWeek).add(1,'weeks');
     this.currentWeek = this.dateFormatter(moment(this.startOfWeek).format("YYYY-MM-DD"),moment(this.endOfWeek).format("YYYY-MM-DD"));
@@ -404,8 +294,8 @@ export class TimesheetComponent implements OnInit {
   
 
   public open(content: any) {
-    console.log("open",content);
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'xl' }).result.then(
+    this.modalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'xl' });
+    this.modalRef.result.then(
       (result) => {
         this.closeResult = `Closed with: ${result}`;
       },
@@ -416,7 +306,6 @@ export class TimesheetComponent implements OnInit {
   }
 
   private getDismissReason(reason: any): string {
-    console.log("hi");
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -428,14 +317,13 @@ export class TimesheetComponent implements OnInit {
 
   //Timesheet Editing and Add
   onTimesheetAddEdit(id:any){
+    this.open(this.content);
     if(id == -1){
-      this.open(this.content);
+
       this.addTimesheetForm.reset();
       this.selectedTimesheet = {};
     }
     else{
-      console.log(id)
-      this.open(this.content);
       this.addTimesheetForm.controls.remarks.setValue(this.timeSheetDetails[id].remarks);
       this.addTimesheetForm.controls.project.setValue(this.timeSheetDetails[id].projectName);
       this.addTimesheetForm.controls.activity.setValue(this.timeSheetDetails[id].activityName);
@@ -514,98 +402,123 @@ export class TimesheetComponent implements OnInit {
   }
   //saving the timsheet details
   onSaveTimesheetDetails(){
+    this.formSubmitted = true;
     this.activityList = [];
-    if(!Object.keys(this.selectedTimesheet).length){
-      let date = [];
-      //console.log(moment(this.currentWeek[0]).format("YYYY-MM-DDT00:00:00"));
-      this.currentWeek.forEach((day)=>{date.push(moment(day).format("YYYY-MM-DDT00:00:00"))});
-      //console.log("week",date);
-      const timeTaken = [
-        {date : date[0],numberOfHours: this.addTimesheetForm.controls.monday.value},
-        {date : date[1],numberOfHours: this.addTimesheetForm.controls.tuesday.value},
-        {date : date[2],numberOfHours: this.addTimesheetForm.controls.wednesday.value},
-        {date : date[3],numberOfHours: this.addTimesheetForm.controls.thursday.value},
-        {date : date[4],numberOfHours: this.addTimesheetForm.controls.friday.value},
-        {date : date[5],numberOfHours: this.addTimesheetForm.controls.saturday.value},
-        {date : date[6],numberOfHours: this.addTimesheetForm.controls.sunday.value}
-      ]
-
-      const body ={
+    if(this.addTimesheetForm.valid){
+      this.formSubmitted = false;
+      this.modalRef.close();
+      if(!Object.keys(this.selectedTimesheet).length){
+        let date = [];
+        //console.log(moment(this.currentWeek[0]).format("YYYY-MM-DDT00:00:00"));
+        this.currentWeek.forEach((day)=>{date.push(moment(day).format("YYYY-MM-DDT00:00:00"))});
+        //console.log("week",date);
+        const timeTaken = [
+          {date : date[0],numberOfHours: this.addTimesheetForm.controls.monday.value},
+          {date : date[1],numberOfHours: this.addTimesheetForm.controls.tuesday.value},
+          {date : date[2],numberOfHours: this.addTimesheetForm.controls.wednesday.value},
+          {date : date[3],numberOfHours: this.addTimesheetForm.controls.thursday.value},
+          {date : date[4],numberOfHours: this.addTimesheetForm.controls.friday.value},
+          {date : date[5],numberOfHours: this.addTimesheetForm.controls.saturday.value},
+          {date : date[6],numberOfHours: this.addTimesheetForm.controls.sunday.value}
+        ]
+  
+        const body ={
+          projectId       : 3,
+          projectName     : this.addTimesheetForm.controls.project.value,
+          activityId      : 15,
+          activityName    : this.addTimesheetForm.controls.activity.value,
+          status          : 'In Progress',
+          remarks         : this.addTimesheetForm.controls.remarks.value,
+          timeTaken       : timeTaken
+        }
+        // const body ={
+        //   projectId       : 3,
+        //   projectName     : 'Glyphosate',
+        //   activityId      : 3,
+        //   activityName    : 'development',
+        //   status          : 'In Progress',
+        //   remarks         : this.addTimesheetForm.controls.remarks.value,
+        //   timeTaken       : timeTaken
+        // }
+        
+        console.log("Add timesheet data",body);
+        const url = `${this._url.timesheet.addTimesheet}?EmployeeId=${this.userDetails.employeeId}`
+        this._http.post(url,body).subscribe({
+        next:(res:any)=>{
+          //this.timeSheetDetails = res.timesheetDetails
+          this.toast.success(res.responseMessage);
+        }
+  
+      })
+  
+      }else{
+        console.log("this.selectedTimesheet",this.selectedTimesheet);
+        let timeTaken = this.selectedTimesheet['timeTaken'];
+        timeTaken[0].numberOfHours = this.addTimesheetForm.controls.monday.value;
+        timeTaken[1].numberOfHours = this.addTimesheetForm.controls.tuesday.value;
+        timeTaken[2].numberOfHours = this.addTimesheetForm.controls.wednesday.value;
+        timeTaken[3].numberOfHours = this.addTimesheetForm.controls.thursday.value;
+        timeTaken[4].numberOfHours = this.addTimesheetForm.controls.friday.value;
+        timeTaken[5].numberOfHours = this.addTimesheetForm.controls.saturday.value;
+        timeTaken[6].numberOfHours = this.addTimesheetForm.controls.sunday.value;
+  
+        const body = {
         projectId       : 9,
         projectName     : this.addTimesheetForm.controls.project.value,
         activityId      : 15,
-        activityName    : this.addTimesheetForm.controls.activity.value,
-        status          : 'In Progress',
-        remarks         : this.addTimesheetForm.controls.remarks.value,
-        timeTaken       : timeTaken
-      }
-      console.log("Add timesheet data",body);
-      const url = `${this._url.timesheet.addTimesheet}?EmployeeId=${this.userDetails.userId}`
-      this._http.post(url,body).subscribe({
-      next:(res:any)=>{
-        //this.timeSheetDetails = res.timesheetDetails
-        this.toast.success(res.responseMessage);
-      }
-
-    })
-
-    }else{
-      console.log("this.selectedTimesheet",this.selectedTimesheet);
-      let timeTaken = this.selectedTimesheet['timeTaken'];
-      timeTaken[0].numberOfHours = this.addTimesheetForm.controls.monday.value;
-      timeTaken[1].numberOfHours = this.addTimesheetForm.controls.tuesday.value;
-      timeTaken[2].numberOfHours = this.addTimesheetForm.controls.wednesday.value;
-      timeTaken[3].numberOfHours = this.addTimesheetForm.controls.thursday.value;
-      timeTaken[4].numberOfHours = this.addTimesheetForm.controls.friday.value;
-      timeTaken[5].numberOfHours = this.addTimesheetForm.controls.saturday.value;
-      timeTaken[6].numberOfHours = this.addTimesheetForm.controls.sunday.value;
-
-      const body = {
-      projectId       : 9,
-      projectName     : this.addTimesheetForm.controls.project.value,
-      activityId      : 15,
-      activityName    : this.addTimesheetForm.controls.activity.value, 
-      //status          : this.selectedTimesheet.status,
-      timeTaken       : timeTaken,
-      remarks         : this.addTimesheetForm.controls.remarks.value
-      }
-      
-      const url = `${this._url.timesheet.editTimesheet}`
-      this._http.post(url,body).subscribe({
-      next:(res:any)=>{
-        this.toast.success(res.responseMessage);
-      }
-
-    })
-
-      
-      console.log("Modify timesheet data",body);
+        activityName    : this.addTimesheetForm.controls.activity.value, 
+        //status          : this.selectedTimesheet.status,
+        timeTaken       : timeTaken,
+        remarks         : this.addTimesheetForm.controls.remarks.value
+        }
+        
+        const url = `${this._url.timesheet.editTimesheet}`
+        this._http.post(url,body).subscribe({
+        next:(res:any)=>{
+          this.toast.success(res.responseMessage);
+        }
+  
+      })
+  
+        
+        console.log("Modify timesheet data",body);
+  
+      }  
 
     }
-
+    
     
   }
   //submitting the timesheet
   onSubmitTimesheet(){
-
-    this.selectedTimesheetRow.forEach((item)=>{
-      item['employeeRemarks'] = this.submitRemarks;
-    })
-    const body = this.selectedTimesheetRow;
-
-    console.log(this.managerId);
-    console.log("data submit",body)
-    const url = `${this._url.timesheet.submitTimesheet}?ManagerID=${this.managerId}&EmployeeName=${this.userDetails.username}`;
-    this._http.post(url,body).subscribe({
-        next:(res:any)=>{
-        this.toast.success(res.responseMessage);
+    if(this.selectedTimesheetRow.length !=0){
+      if(this.managerId && this.managerId != '(Supervisor)'){
+        this.selectedTimesheetRow.forEach((item)=>{
+          item['employeeRemarks'] = this.submitRemarks;
+        })
+        const body = this.selectedTimesheetRow;
+    
+        console.log(this.managerId);
+        console.log("data submit",body)
+        const url = `${this._url.timesheet.submitTimesheet}?ManagerID=${this.managerId}&EmployeeName=${this.userDetails.username}`;
+        this._http.post(url,body).subscribe({
+            next:(res:any)=>{
+            this.toast.success(res.responseMessage);
+          }
+        })
+        this.selectedTimesheetRow = [];
+        this.submitRemarks ='';
+      }else{
+        this.toast.error("Please Select Your Supervisor.");
       }
-    })
-    this.selectedTimesheetRow = [];
-    this.submitRemarks ='';
+    }else{
+      this.toast.error("Please select the items you wish to apply an action to.");
+    }
   }
+
   onselectSupervisor(event:any){
     this.managerId = event.target.value;
+    console.log(this.managerId)
   }
 }
 
