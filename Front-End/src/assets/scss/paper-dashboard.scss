@@ -57,7 +57,28 @@ body{
 }
 .modal{
     z-index: 99999;
+    .modal-title{
+        margin-top: 0;
+    }
+    .modal-body{
+        margin-top: 5px;
+    }
+    .btn-close{
+        border: none;
+        background: transparent;
+        font-size: 18px;
+        position: absolute;
+        right: 10px;
+        top: 23px;
+        &:focus,&:focus-visible{
+            outline: none;
+        }
+        &:hover{
+            color: $secondary-color;
+        }
+    }
 }
+
 .table-responsive{
     overflow: auto;
 }
@@ -109,7 +130,33 @@ table{
     tbody{
         border: none!important;
     }
+    .h-input{
+        width: 55px; 
+        border: solid 1px #d5d5d5;
+        height: 29px;
+        border-radius: 4px;
+        padding: 3px;
+        text-align: center;
+        &:focus,&:focus-visible{
+            border: solid 1px #bdb9b9!important;
+        }
+    }
 }
+.modal-content{
+    table{
+        th,td{
+            text-align: center;
+            padding: 12px 4px!important;
+            &:first-child{
+                padding-left: 4px!important;
+            }
+        }
+        background-color: #f7f7f7;
+        border-radius: 5px;
+    }
+}
+
+body table th:first-child, body table td:first-child
 input[type='number'] {
     -moz-appearance: textfield;
 }
