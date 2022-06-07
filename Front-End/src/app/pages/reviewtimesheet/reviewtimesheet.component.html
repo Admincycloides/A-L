@@ -1,4 +1,4 @@
-<div class="page-title w-100">Review Timesheet</div>
+<div class="page-title w-100">{{caption}}</div>
 <div class="action-head justify-content-between d-flex">
     <div class="act-filter d-flex align-items-center justify-content-center">
         <!-- <input type="text" class="search-filter" placeholder="Search Project"/> -->
@@ -38,23 +38,24 @@
                             </th>
                             
                         </thead>
-                        <tbody *ngFor="let item of reviewTimesheetArray |
-                        paginate: config; let i= index">
-                            <tr >
+                        <!-- *ngFor="let item of reviewTimesheetArray " -->
+                        <tbody >
+                            <tr *ngFor="let group of reviewTimesheetArray" >
                                 <td >
-                                    {{item.ProjectName}}
+                                    {{group.ProjectName}}
                                 </td>
                                 <td>
-                                    {{item.EmployeeName}}
+                                    {{group.EmployeeName}}
                                 </td>
                                 <td>
-                                    {{item.Date}}
+                                    {{group.Date}}
                                 </td>
                                 <td>
-                                    <button class="link thm-linkbtn" (click)="onViewTimesheet(item,'projectName','Id','2022-06-12')">Link</button>
+                                    hi
+                                    <!-- <button class="link thm-linkbtn" (click)="onViewTimesheet(item,'projectName','Id','2022-06-12')">Link</button> -->
                                 </td>
                                 <td>
-                                    <span class="label-status approved">{{item.status}}</span>
+                                    <span class="label-status approved">{{group.status}}</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -66,8 +67,8 @@
     <!-- Pagination -->
     <div class="pagination-line d-flex justify-content-end" *ngIf="true">
         <ul>
-            <pagination-controls
-                id='activity'
+            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+            <!-- <pagination-controls
                 (pageChange)="pageChanged($event)"
                 [directionLinks]="true"
                 [autoHide]="false"
@@ -78,7 +79,7 @@
                 screenReaderPaginationLabel="Pagination"
                 screenReaderPageLabel="page"
                 screenReaderCurrentLabel="You're on page">
-            </pagination-controls>
+            </pagination-controls> -->
         </ul>
     </div>
 

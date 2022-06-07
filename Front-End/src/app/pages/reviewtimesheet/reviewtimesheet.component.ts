@@ -12,9 +12,9 @@ import { ToastrService } from 'ngx-toastr';
 export class ReviewtimesheetComponent implements OnInit {
   reviewTimesheetArray: any[];
   user:any;
+  caption:any;
   searchTerm :any;
   public config = {
-    id: 'timesheet',
     currentPage: 1,
     itemsPerPage: 10,
     totalItems: 1,
@@ -29,7 +29,8 @@ export class ReviewtimesheetComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('user'));
-    this.getTimesheets();
+    this.caption = "Review Timesheet"
+    //this.getTimesheets();
     this.reviewTimesheetArray= [
       {
         ProjectName :'Abc',
@@ -42,24 +43,17 @@ export class ReviewtimesheetComponent implements OnInit {
         EmployeeName :'Jishnu',
         Date      :'2022-02-30T00:00:00',
         status   : 'Approved'
-      },
-      {
-        ProjectName :'Abc',
-        EmployeeName :'Jishnu',
-        Date      :'2021-05-03T00:00:00',
-        status   : 'Rejected'
-      },
-      {
-        ProjectName :'Abc',
-        EmployeeName :'Jishnu',
-        Date      :'2022-05-30T00:00:00',
-        status   : 'submitted'
       }
     ]
+
+    this.reviewTimesheetArray.forEach((item)=>{
+      console.log(item.ProjectName)
+      console.log(item.EmployeeName)
+      console.log(item.Date)
+      console.log(item.status)
+    })
   }
-  onDestroy(){
-    
-  }
+
 
   //For Getting the timesheet
   private getTimesheets(){

@@ -154,7 +154,7 @@
             </div>
         </div>
         <!-- Pagination -->
-        <div class="pagination-line d-flex justify-content-end" *ngIf="true">
+        <div class="pagination-line d-flex justify-content-end" *ngIf="timeSheetDetails != null">
             <ul>
                 <pagination-controls
                     id='timesheet'
@@ -215,8 +215,8 @@
                     <div class="form-group mb-3">
                         <label>Select Project</label>
                         <select class="form-control" formControlName = "project" (change)="onProjectSelect($event)">
-                            <option selected>Select Project</option>
-                            <option *ngFor="let item of projectList" [ngValue]="item.ProjectName">{{item.ProjectName}}</option>
+                            <!-- <option selected >Select Project</option> -->
+                            <option *ngFor="let item of projectList" [ngValue]="item.projectName">{{item.projectName}}</option>
                         </select>
                         <small *ngIf="formSubmitted && !addTimesheetForm.controls.project.value">
                             <span class="error">Project is required</span>
@@ -229,9 +229,9 @@
                     <div class="form-group mb-3">
                         <label>Activity</label>  
                         <select class="form-control" id="activity" name = "activity" formControlName ="activity">
-                            <option selected>Select Activity</option>
-                            <option *ngFor="let item of activityList" [ngValue]="item.ActivityName"
-                            >{{item.ActivityName}}</option>
+                            <option selected >Select Activity</option>
+                            <option *ngFor="let item of activityList" [ngValue]="item.activityName"
+                            >{{item.activityName}}</option>
                         </select>
                         <small *ngIf="formSubmitted && !addTimesheetForm.controls.activity.value">
                             <span class="error">Activity is required</span>
