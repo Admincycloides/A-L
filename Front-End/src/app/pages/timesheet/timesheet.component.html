@@ -211,7 +211,7 @@
     <div class="modal-body addproject-modal">
         <form [formGroup]="addTimesheetForm">
             <div class="row fm-row">
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <div class="form-group mb-3">
                         <label>Select Project</label>
                         <select class="form-control" formControlName = "project" (change)="onProjectSelect($event)">
@@ -223,9 +223,7 @@
                           </small>
                     </div>
                 </div>
-            </div>
-            <div class="row fm-row">
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <div class="form-group mb-3">
                         <label>Activity</label>  
                         <select class="form-control" id="activity" name = "activity" formControlName ="activity">
@@ -239,6 +237,7 @@
                 </div>
             </div>
             </div>
+
             <div class="row fm-row">
                 <div class="col-md-12">
                     <div class="form-group mb-3">
