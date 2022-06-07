@@ -23,7 +23,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AddtimesheetComponent } from '../../pages/timesheet/addtimesheet/addtimesheet.component';
-import { ReportsComponent } from '../../pages/reports/reports.component';
+import { ReviewlinkComponent } from 'app/pages/reviewtimesheet/reviewlink/reviewlink.component';
+import { ReportsComponent } from 'app/pages/reports/reports.component';
 
 
 
@@ -49,6 +50,8 @@ import { ReportsComponent } from '../../pages/reports/reports.component';
     TimesheetComponent,
     AddtimesheetComponent,
     AddtimesheetComponent,
+    ReviewtimesheetComponent,
+    ReviewlinkComponent,
     ReportsComponent,
     
   ],

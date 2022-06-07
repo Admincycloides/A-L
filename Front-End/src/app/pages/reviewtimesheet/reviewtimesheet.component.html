@@ -1,4 +1,4 @@
-<div class="page-title w-100">{{caption}}</div>
+<div class="page-title w-100">Review Timesheet</div>
 <div class="action-head justify-content-between d-flex">
     <div class="act-filter d-flex align-items-center justify-content-center">
         <!-- <input type="text" class="search-filter" placeholder="Search Project"/> -->
@@ -38,37 +38,58 @@
                             </th>
                             
                         </thead>
-                        <!-- *ngFor="let item of reviewTimesheetArray " -->
                         <tbody >
-                            <tr *ngFor="let group of reviewTimesheetArray" >
+
+                            <!-- <tr >
                                 <td >
-                                    {{group.ProjectName}}
+                                    projectName
                                 </td>
                                 <td>
-                                    {{group.EmployeeName}}
+                                    employeeName
                                 </td>
                                 <td>
-                                    {{group.Date}}
+                                    date
                                 </td>
                                 <td>
-                                    hi
-                                    <!-- <button class="link thm-linkbtn" (click)="onViewTimesheet(item,'projectName','Id','2022-06-12')">Link</button> -->
+                                    <button class="link thm-linkbtn" (click)="onViewTimesheet('item')">Link</button>
                                 </td>
                                 <td>
-                                    <span class="label-status approved">{{group.status}}</span>
+                                    <span class="label-status approved">status</span>
+                                </td>
+                            </tr> -->
+
+
+
+                            <tr *ngFor="let item of reviewTimesheetArray | paginate: config; let i= index ">
+                                <td >
+                                    {{item.projectName}}
+                                </td>
+                                <td>
+                                    {{item.employeeName}}
+                                </td>
+                                <td>
+                                    {{date |date: "MM/DD/YYYY"}}
+                                </td>
+                                <td>
+                                    <button class="link thm-linkbtn" (click)="onViewTimesheet(item)">Link</button>
+                                </td>
+                                <td>
+                                    <span class="label-status approved">{{item.status}}</span>
                                 </td>
                             </tr>
                         </tbody>
+                        
                     </table>
+                    <ng-container *ngIf="!reviewTimesheetArray?.length">
+                        <div class="justify-content-center mb-5 mt-2 d-flex">No Timesheet Records For Review</div>
+                      </ng-container>
                 </div>
             </div>
         </div>
-    </div>
     <!-- Pagination -->
-    <div class="pagination-line d-flex justify-content-end" *ngIf="true">
+    <div class="pagination-line d-flex justify-content-end" *ngIf="reviewTimesheetArray?.length">
         <ul>
-            <pagination-controls (pageChange)="p = $event"></pagination-controls>
-            <!-- <pagination-controls
+            <pagination-controls
                 (pageChange)="pageChanged($event)"
                 [directionLinks]="true"
                 [autoHide]="false"
@@ -79,9 +100,8 @@
                 screenReaderPaginationLabel="Pagination"
                 screenReaderPageLabel="page"
                 screenReaderCurrentLabel="You're on page">
-            </pagination-controls> -->
+            </pagination-controls>
         </ul>
     </div>
-
-
+    </div>
 </div>

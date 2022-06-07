@@ -27,25 +27,25 @@
                                 Activities
                             </th>
                             <th>
-                                Mon <br/>{{timesheetDates[0].date}}
+                                Mon <br/>{{timesheetDates[0].date | date: "MMM-d"}}
                             </th>
                             <th>
-                                Tus <br/>{{timesheetDates[1].date}}
+                                Tus <br/>{{timesheetDates[1].date | date: "MMM-d"}}
                             </th>
                             <th>
-                                Wed <br/>{{timesheetDates[2].date}}
+                                Wed <br/>{{timesheetDates[2].date | date: "MMM-d"}}
                             </th>
                             <th>
-                                Thu <br/>{{timesheetDates[3].date}}
+                                Thu <br/>{{timesheetDates[3].date | date: "MMM-d"}}
                             </th>
                             <th>
-                                Fri <br/>{{timesheetDates[4].date}}
+                                Fri <br/>{{timesheetDates[4].date | date: "MMM-d"}}
                             </th>
                             <th>
-                                Sat <br/>{{timesheetDates[5].date}}
+                                Sat <br/>{{timesheetDates[5].date | date: "MMM-d"}}
                             </th>
                             <th>
-                                Sun <br/>{{timesheetDates[6].date}}
+                                Sun <br/>{{timesheetDates[6].date | date: "MMM-d"}}
                             </th>
                             <th>
                                Remarks
@@ -53,41 +53,12 @@
                            
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    Activity 1
-                                </td>
-                                <td>
-                                    5
-                                </td>
-                                <td>
-                                    4
-                                </td>
-                                <td>
-                                    4
-                                </td>
-                                <td>
-                                    5
-                                </td>
-                                <td>
-                                    4
-                                </td>
-                                <td>
-
-                                </td>
-                                <td>
-                                    
-                                </td>
-                                <td>
-                                   <span>Remarks</span>
-                                </td>
-                            </tr>
-                            <tr *ngFor="let item of timesheetDetails">
+                            <tr *ngFor="let item of timesheetDetails | paginate: config; let i= index">
                                 <td>
                                     {{item.activityName}}
                                 </td>
                                 <td>
-                                    {{item.timeTaken[0].numberOfHours}}
+                                    {{item.timeTaken[0].numberOfHours }}
                                 </td>
                                 <td>
                                     {{item.timeTaken[1].numberOfHours}}
@@ -108,7 +79,7 @@
                                     {{item.timeTaken[6].numberOfHours}}
                                 </td>
                                 <td>
-                                   <span>{{item.remarks}</span>
+                                   <span>{{item.remarks}}</span>
                                 </td>
                             </tr>
                             
@@ -117,13 +88,11 @@
                 </div>
             </div>
         </div>
-
-        <!-- Pagenation -->
-
-        <div class="pagination-line d-flex justify-content-end" *ngIf="true">
-            <ul>
-                <pagination-controls
-                    id='activity'
+        <!-- Pagination -->
+            <div class="pagination-line d-flex justify-content-end" *ngIf="timesheetDetails?.length">
+                <ul>
+                    <pagination-controls
+                    id ='timesheetDetails'
                     (pageChange)="pageChanged($event)"
                     [directionLinks]="true"
                     [autoHide]="false"
@@ -134,9 +103,9 @@
                     screenReaderPaginationLabel="Pagination"
                     screenReaderPageLabel="page"
                     screenReaderCurrentLabel="You're on page">
-                </pagination-controls>
-            </ul>
-        </div>
+                    </pagination-controls>
+                </ul>
+            </div>
     </div>
 
     <div class=" remarks-col">

@@ -150,6 +150,9 @@
                             </tr>
                         </tbody>
                     </table>
+                    <ng-container *ngIf="timeSheetDetails == null">
+                        <div class="justify-content-center mb-5 mt-2 d-flex">No timesheet records during the selected week!!</div>
+                      </ng-container>
                 </div>
             </div>
         </div>
@@ -171,9 +174,6 @@
                 </pagination-controls>
             </ul>
         </div>
-        <ng-container *ngIf="timeSheetDetails == null">
-            <div class="justify-content-center mb-5 mt-2 d-flex">No timesheet records during the selected week!!</div>
-          </ng-container>
     </div>
 
     <div class=" remarks-col" *ngIf="showSideWindow">
