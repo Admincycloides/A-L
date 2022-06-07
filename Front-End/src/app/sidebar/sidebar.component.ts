@@ -20,6 +20,7 @@ export const ROUTES: RouteInfo[] = [
     { path: 'projects',    title: 'Projects',  icon:'nc-settings', class: 'm-item' },
     { path: 'log',    title: 'Log (Audit Trail)',  icon:'nc-paper', class: 'm-item' },
     { path: 'review',    title: 'Review Timesheet',  icon:'nc-paper', class: 'm-item review-ico' },
+    { path: 'reports',    title: 'View Reports',  icon:'nc-paper', class: 'm-item report-ico' },
 ];
 
 @Component({
