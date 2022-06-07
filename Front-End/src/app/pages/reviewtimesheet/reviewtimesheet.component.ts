@@ -10,9 +10,8 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./reviewtimesheet.component.scss']
 })
 export class ReviewtimesheetComponent implements OnInit {
-  reviewTimesheetArray: any[];
+  reviewTimesheetArray : any[];
   user:any;
-  caption:any;
   searchTerm :any;
   public config = {
     currentPage: 1,
@@ -29,51 +28,48 @@ export class ReviewtimesheetComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('user'));
-    this.caption = "Review Timesheet"
-    //this.getTimesheets();
-    this.reviewTimesheetArray= [
-      {
-        ProjectName :'Abc',
-        EmployeeName :'Jishnu',
-        Date      :'2022-05-30T00:00:00',
-        status   : 'submitted'
-      },
-      {
-        ProjectName :'Abc',
-        EmployeeName :'Jishnu',
-        Date      :'2022-02-30T00:00:00',
-        status   : 'Approved'
-      }
-    ]
+    this.getTimesheets();
+    // this.reviewTimesheetArray= [
+    //   {
+    //     ProjectName :"Abc",
+    //     EmployeeName :"Jp",
+    //     Date      :"2022-05-30T00:00:00",
+    //     status   : "submitted"
+    //   },
+    //   {
+    //     ProjectName :"Abc",
+    //     EmployeeName :"Jishnu",
+    //     Date      :"2022-02-30T00:00:00",
+    //     status   : "Approved"
+    //   }
+    // ]
 
-    this.reviewTimesheetArray.forEach((item)=>{
-      console.log(item.ProjectName)
-      console.log(item.EmployeeName)
-      console.log(item.Date)
-      console.log(item.status)
-    })
   }
-
 
   //For Getting the timesheet
   private getTimesheets(){
-    // const url = `${this._url.review.getReviewTimesheet}?EmployeeID=${this.user.employeeId}`
-    // this._http.get(url).subscribe(
-    //   {
-    //     next:(res:any)=> {
-    //       this.reviewTimesheetArray = res.data
-    //     },
-    //     error:(msg) =>{ 
-    //     }
-    //   })
+    const pageNo = this.config.currentPage;
+    const pageSize = this.config.itemsPerPage;
+    const search = this.config.search;
+    const url = `${this._url.timesheet.getReviewTimesheet}?PageNumber=${pageNo}&PageSize=${pageSize}&EmployeeID=${this.user.employeeId}`
+    this._http.get(url).subscribe(
+      {
+        next:(res:any)=> {
+          this.reviewTimesheetArray = res.data;
+          let totalPage = res.totalPages;
+          let itemsPerPage = res.pageSize;
+          this.config.totalItems = totalPage * itemsPerPage;
+        },
+        error:(msg) =>{ 
+        }
+      })
 
   }
 
 
-  public onViewTimesheet(item:any,name:any,id:any,date:any){
-    //,item.ProjectName,item.Date
-    //this.router.navigate(['/reviewlink',{ projectId: item.ProjectId, projectName: item.ProjectName, Date: item.date}]);
-    this.router.navigate(['/reviewlink',{ projectId: id, projectName: name, date: date}],{relativeTo:this.activatedRoute});
+  public onViewTimesheet(item:any){
+    //this.router.navigate(['/reviewlink',{ projectId: id, projectName: name, Date: date}]);
+    this.router.navigate(['/reviewlink',{ projectId: item.ProjectId, projectName: item.projectName, date: item.date}]);
   }
   public pageChanged(event:any){
     this.config.currentPage =event;

@@ -258,7 +258,6 @@ export class TimesheetComponent implements OnInit {
         let totalPage = res.totalPages;
         let itemsPerPage = res.pageSize;
         this.config.totalItems = totalPage * itemsPerPage;
-        console.log(this.timeSheetDetails);
       }
 
     })

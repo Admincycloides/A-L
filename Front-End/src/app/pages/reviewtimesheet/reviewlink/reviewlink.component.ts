@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpService } from 'app/_services/http.service';
 import { UrlService } from 'app/_services/url.service';
+import * as moment from 'moment';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -10,7 +11,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./reviewlink.component.scss']
 })
 export class ReviewlinkComponent implements OnInit {
-  projectIid: any;
+  projectId: any;
   projectName :any;
   submitDate : any;
   user: any;
@@ -19,7 +20,7 @@ export class ReviewlinkComponent implements OnInit {
   searchTerm :any;
   submitRemarks: any;
   public config = {
-    id: 'timesheet',
+    id: 'timesheetDetails',
     currentPage: 1,
     itemsPerPage: 10,
     totalItems: 1,
@@ -33,23 +34,125 @@ export class ReviewlinkComponent implements OnInit {
 
   ngOnInit(): void {
     this.activedRouter.paramMap.subscribe((params: any) => {
-      console.log(params);
-      this.projectIid = params.params.projectId;
+      console.log("params",params);
+      this.projectId = parseInt(params.params.projectId);
       this.projectName = params.params.projectName;
       this.submitDate =params.params.date
     });
     this.user = JSON.parse(localStorage.getItem('user'));
     this.getReviewTimesheetDetails()
+
+
+  //   this.timesheetDetails =[
+  //     {
+  //         "projectId": 1,
+  //         "projectName": null,
+  //         "activityId": 6,
+  //         "activityName": 'activity',
+  //         "status": "In Progress",
+  //         "remarks": "None",
+  //         "employeeRemarks": null,
+  //         "supervisorRemarks": null,
+  //         "timeTaken": [
+  //             {
+  //                 "date": "2022-06-06T00:00:00",
+  //                 "numberOfHours": 2,
+  //                 "uniqueId": 27
+  //             },
+  //             {
+  //                 "date": "2022-06-07T00:00:00",
+  //                 "numberOfHours": 2,
+  //                 "uniqueId": 28
+  //             },
+  //             {
+  //                 "date": "2022-06-08T00:00:00",
+  //                 "numberOfHours": 2,
+  //                 "uniqueId": 29
+  //             },
+  //             {
+  //                 "date": "2022-06-09T00:00:00",
+  //                 "numberOfHours": 2,
+  //                 "uniqueId": 30
+  //             },
+  //             {
+  //                 "date": "2022-06-10T00:00:00",
+  //                 "numberOfHours": 2,
+  //                 "uniqueId": 31
+  //             },
+  //             {
+  //                 "date": "2022-06-11T00:00:00",
+  //                 "numberOfHours": 0,
+  //                 "uniqueId": 0
+  //             },
+  //             {
+  //                 "date": "2022-06-12T00:00:00",
+  //                 "numberOfHours": 0,
+  //                 "uniqueId": 0
+  //             }
+  //         ]
+  //     },
+  //     {
+  //         "projectId": 1,
+  //         "projectName": null,
+  //         "activityId": 7,
+  //         "activityName": 'activity',
+  //         "status": "In Progress",
+  //         "remarks": "None",
+  //         "employeeRemarks": null,
+  //         "supervisorRemarks": null,
+  //         "timeTaken": [
+  //             {
+  //                 "date": "2022-06-06T00:00:00",
+  //                 "numberOfHours": 2,
+  //                 "uniqueId": 27
+  //             },
+  //             {
+  //                 "date": "2022-06-07T00:00:00",
+  //                 "numberOfHours": 2,
+  //                 "uniqueId": 28
+  //             },
+  //             {
+  //                 "date": "2022-06-08T00:00:00",
+  //                 "numberOfHours": 2,
+  //                 "uniqueId": 29
+  //             },
+  //             {
+  //                 "date": "2022-06-09T00:00:00",
+  //                 "numberOfHours": 2,
+  //                 "uniqueId": 30
+  //             },
+  //             {
+  //                 "date": "2022-06-10T00:00:00",
+  //                 "numberOfHours": 2,
+  //                 "uniqueId": 31
+  //             },
+  //             {
+  //                 "date": "2022-06-11T00:00:00",
+  //                 "numberOfHours": 0,
+  //                 "uniqueId": 0
+  //             },
+  //             {
+  //                 "date": "2022-06-12T00:00:00",
+  //                 "numberOfHours": 0,
+  //                 "uniqueId": 0
+  //             }
+  //         ]
+  //     }
+  // ]
+
+  //this.timesheetDates = this.timesheetDetails[0].timeTaken
   }
 
   //For getting timesheet details
   private getReviewTimesheetDetails(){
-    const url = `${this._url.review.getReviewTimesheetDetails}?`
+    const pageNo = this.config.currentPage;
+    const pageSize = this.config.itemsPerPage;
+    const date = moment(this.submitDate).utc().format();
+    const url = `${this._url.timesheet.getReviewTimesheetDetails}?PageNumber=${pageNo}&PageSize=${pageSize}`
     const body = {
-      EmployeeId : this.user.userId,
-      ProjectId  : this.projectIid,
-      Date :this.submitDate
-
+      employeeId: this.user.employeeId,
+      projectId : this.projectId,
+      date : date
     }
       this._http.post(url,body).subscribe(
         {
@@ -66,13 +169,8 @@ export class ReviewlinkComponent implements OnInit {
   public onAcceptingTimesheet(value:string,remarks:any){
     const data = value;
     console.log(remarks);
-    // const remarks = remarks;
-    // if(value === 'approve'){
-    //   console.log(value);
-    // }else{
-    //   console.log(value);
-    // }
-    const url = `${this._url.review.supervisorDecision}?Action=${data}`
+    console.log(this.timesheetDates);
+    const url = `${this._url.timesheet.supervisorDecision}?SupervisorID=${this.user.employeeId}&Action=${data}`
     const body = this.timesheetDetails;
     body.forEach((item)=>{
       item.supervisorRemarks = remarks;
@@ -81,15 +179,15 @@ export class ReviewlinkComponent implements OnInit {
         {
           next:(res:any)=> {
             this.toast.success("Successfully "+value+" timesheet");
+            this.router.navigate(['/review']);
           },
           error:(error) =>{  
           }
         });
-
-    this.router.navigate(['/review']);
   }
   pageChanged(event:any){
     this.config.currentPage = event;
+    this.getReviewTimesheetDetails();
   }
   //To serach activity
   searchItems(event:any){
