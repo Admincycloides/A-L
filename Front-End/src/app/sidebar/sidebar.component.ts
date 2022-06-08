@@ -31,7 +31,21 @@ export const ROUTES: RouteInfo[] = [
 
 export class SidebarComponent implements OnInit {
     public menuItems: any[];
+    private items: any[];
+    user :any
     ngOnInit() {
-        this.menuItems = ROUTES.filter(menuItem => menuItem);
+        this.user = JSON.parse(localStorage.getItem('user'));
+        this.items = ROUTES.filter(menuItem => menuItem);
+        if(this.user.supervisorFlag == "Y")
+        {
+            this.menuItems = this.items;
+        }
+        if(this.user.supervisorFlag == "N"){
+           this.menuItems = this.items.filter((item)=>{
+                return item.title != 'Review Timesheet' && item.title != 'View Reports' ;
+           })
+ 
+        }
+        
     }
 }

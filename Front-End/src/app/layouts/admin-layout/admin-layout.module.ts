@@ -15,6 +15,7 @@ import { NotificationsComponent }   from '../../pages/notifications/notification
 import { UpgradeComponent }         from '../../pages/upgrade/upgrade.component';
 import { TimesheetComponent }       from '../../pages/timesheet/timesheet.component';
 import { ReviewtimesheetComponent }       from '../../pages/reviewtimesheet/reviewtimesheet.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown'
 
 
 
@@ -23,7 +24,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AddtimesheetComponent } from '../../pages/timesheet/addtimesheet/addtimesheet.component';
-import { ReportsComponent } from '../../pages/reports/reports.component';
+import { ReviewlinkComponent } from 'app/pages/reviewtimesheet/reviewlink/reviewlink.component';
+import { ReportsComponent } from 'app/pages/reports/reports.component';
 
 
 
@@ -35,7 +37,8 @@ import { ReportsComponent } from '../../pages/reports/reports.component';
     NgbModule,
     HttpClientModule,
     NgxPaginationModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgMultiSelectDropDownModule.forRoot()
   ],
   declarations: [
     DashboardComponent,
@@ -49,6 +52,8 @@ import { ReportsComponent } from '../../pages/reports/reports.component';
     TimesheetComponent,
     AddtimesheetComponent,
     AddtimesheetComponent,
+    ReviewtimesheetComponent,
+    ReviewlinkComponent,
     ReportsComponent,
     
   ],

@@ -141,9 +141,8 @@ namespace AnL.Repository.Implementation
                 {
                     TimesheetDetails existingSheet = this.GetById(timesheet.UniqueId);
                     existingSheet.Status = TimeSheetStatus.Approved;
-                    existingSheet.EmployeeRemarks = timesheet.EmployeeRemarks;
-                    existingSheet.SubmittedDate = timesheet.SubmittedDate;
-                    existingSheet.SubmittedTo = timesheet.SubmittedTo;
+                    existingSheet.SupervisorRemarks = timesheet.SupervisorRemarks;
+                    existingSheet.ApprovedRejectedBy = timesheet.ApprovedRejectedBy;
                 }
             }
             else
@@ -152,13 +151,24 @@ namespace AnL.Repository.Implementation
                 {
                     TimesheetDetails existingSheet = this.GetById(timesheet.UniqueId);
                     existingSheet.Status = TimeSheetStatus.Rejected;
-                    existingSheet.EmployeeRemarks = timesheet.EmployeeRemarks;
-                    existingSheet.SubmittedDate = timesheet.SubmittedDate;
-                    existingSheet.SubmittedTo = timesheet.SubmittedTo;
+                    existingSheet.SupervisorRemarks = timesheet.SupervisorRemarks;
+                    existingSheet.ApprovedRejectedBy = timesheet.ApprovedRejectedBy;
                 }
             }
             this.SaveChanges();
             return true;
+        }
+        public bool GetTimesheetDetailsForProject(int ProjectId)
+        {
+            List<TimesheetDetails> details = this.GetAllByCondition(x => x.ProjectId == ProjectId).ToList();
+            if(details==null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 }

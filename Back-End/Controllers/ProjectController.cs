@@ -5,6 +5,8 @@ using AnL.ViewModel;
 using System;
 using Serilog;
 using AnL.Constants;
+using AnL.Models;
+using System.Collections.Generic;
 
 namespace AnL.Controllers
 {
@@ -59,7 +61,7 @@ namespace AnL.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddProject(ProjectViewModel ProjectDetails)
+        public async Task<ActionResult> AddProject(List<ProjectViewModel> ProjectDetails)
         {
             try
             {
@@ -83,6 +85,32 @@ namespace AnL.Controllers
                 return BadRequest("Oops! Something went wrong!" + ex);
             }
         }
+        [HttpPost]
+        public async Task<ActionResult> AddActivity(List<ActivityMaster> ActivityDetails)
+        {
+            try
+            {
+                BaseResponse rsp = new BaseResponse();
+                var data = await _UOW.ProjectRepository.AddActivity(ActivityDetails);
+                if (data == null)
+                {
+                    rsp.Data = "Activity Name already exist.";
+                    return Conflict(rsp);
+                }
+                else
+                {
+                    rsp.Data = data;
+                    rsp.ResponseMessage = MessageConstants.ActivityAdditionSuccess;
+                }
+                return Ok(rsp);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+        }
+
 
         [HttpPost]
         public async Task<ActionResult> AllocateResources( MapProjectResources Data)
@@ -102,6 +130,43 @@ namespace AnL.Controllers
                     rsp.ResponseMessage = MessageConstants.ProjectAllocationSuccess;
                 }
                 return Ok(rsp);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> DeleteProject(List<ProjectViewModel> project )
+        {
+            try
+            {
+                BaseResponse response = new BaseResponse();
+                if (project==null)
+                {
+                    response.Data = project;
+                    response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                    response.ResponseMessage = MessageConstants.TimesheetDeletionSuccess;
+                }
+                var DeleteProjectResponse = _UOW.ProjectRepository.DeleteProject(project);
+                
+                if (DeleteProjectResponse)
+                {
+                    response.Data = DeleteProjectResponse;
+                    response.ResponseCode = HTTPConstants.OK;
+                    response.ResponseMessage = MessageConstants.ProjectDeletionSuccess;
+
+                }
+                else
+                {
+                    response.Data = DeleteProjectResponse;
+                    response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                    response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
+                    return BadRequest(response);
+                }
+                return Ok(response);
             }
             catch (Exception ex)
             {

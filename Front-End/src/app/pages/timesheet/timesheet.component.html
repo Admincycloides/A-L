@@ -41,6 +41,7 @@
                                 <input class="form-check-input tbl-check"
                                     type="checkbox" value=""
                                     id="flexCheckDefault"
+                                    *ngIf="timeSheetDetails?.length"
                                     (click)="onRowCheck(-1)">
                                 Status
                             </th>
@@ -150,11 +151,14 @@
                             </tr>
                         </tbody>
                     </table>
+                    <ng-container *ngIf="timeSheetDetails == null">
+                        <div class="justify-content-center mb-5 mt-2 d-flex">No timesheet records during the selected week!!</div>
+                      </ng-container>
                 </div>
             </div>
         </div>
         <!-- Pagination -->
-        <div class="pagination-line d-flex justify-content-end" *ngIf="true">
+        <div class="pagination-line d-flex justify-content-end" *ngIf="timeSheetDetails != null">
             <ul>
                 <pagination-controls
                     id='timesheet'
@@ -171,9 +175,6 @@
                 </pagination-controls>
             </ul>
         </div>
-        <ng-container *ngIf="timeSheetDetails == null">
-            <div class="justify-content-center mb-5 mt-2 d-flex">No timesheet records during the selected week!!</div>
-          </ng-container>
     </div>
 
     <div class=" remarks-col" *ngIf="showSideWindow">
@@ -211,27 +212,25 @@
     <div class="modal-body addproject-modal">
         <form [formGroup]="addTimesheetForm">
             <div class="row fm-row">
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <div class="form-group mb-3">
                         <label>Select Project</label>
                         <select class="form-control" formControlName = "project" (change)="onProjectSelect($event)">
-                            <option selected>Select Project</option>
-                            <option *ngFor="let item of projectList" [ngValue]="item.ProjectName">{{item.ProjectName}}</option>
+                            <!-- <option selected >Select Project</option> -->
+                            <option *ngFor="let item of projectList" [ngValue]="item.projectName">{{item.projectName}}</option>
                         </select>
                         <small *ngIf="formSubmitted && !addTimesheetForm.controls.project.value">
                             <span class="error">Project is required</span>
                           </small>
                     </div>
                 </div>
-            </div>
-            <div class="row fm-row">
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <div class="form-group mb-3">
                         <label>Activity</label>  
                         <select class="form-control" id="activity" name = "activity" formControlName ="activity">
-                            <option selected>Select Activity</option>
-                            <option *ngFor="let item of activityList" [ngValue]="item.ActivityName"
-                            >{{item.ActivityName}}</option>
+                            <option selected >Select Activity</option>
+                            <option *ngFor="let item of activityList" [ngValue]="item.activityName"
+                            >{{item.activityName}}</option>
                         </select>
                         <small *ngIf="formSubmitted && !addTimesheetForm.controls.activity.value">
                             <span class="error">Activity is required</span>
@@ -239,6 +238,7 @@
                 </div>
             </div>
             </div>
+
             <div class="row fm-row">
                 <div class="col-md-12">
                     <div class="form-group mb-3">
@@ -315,7 +315,7 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark"
+        <button type="button" class="act-btn thm-btn thm-btn-primary"
             (click)="onSaveTimesheetDetails()">Save</button>
     </div>
 </ng-template>

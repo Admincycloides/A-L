@@ -91,7 +91,7 @@ table{
     }
     th{
         border-top: none!important;
-        color: $dark-color;
+        color:  transparentize($dark-color, .3);
         font-weight: bold;
         font-size: 13px;
         vertical-align: middle!important;
@@ -141,6 +141,32 @@ table{
             border: solid 1px #bdb9b9!important;
         }
     }
+}
+//pagination
+.ngx-pagination .current{
+    background-color: $secondary-color;
+}
+.pagination-previous,.pagination-next,.ngx-pagination .disabled:hover{
+    background: url(../img/left-chevron.png) no-repeat center center;
+    background-size: 20px;
+    font-size: 0;
+    height: 24px;
+    bottom: 13px;
+    position: relative;
+    margin: 0 5px!important;
+    &:hover{
+        opacity: .6;
+    }
+}
+.pagination-previous,.pagination-next{
+    cursor: pointer;
+}
+.ngx-pagination .disabled:hover{
+    opacity: .3;
+    pointer-events: none;
+}
+.pagination-next{
+    transform: rotate(180deg);
 }
 .modal-content{
     table{
@@ -437,11 +463,44 @@ input{
         padding: 5px 10px;
          background: url(../img/search-ico.png) no-repeat 95% center;
          background-size: 18px;
+         padding-right: 35px;
     }
     &:focus,&:focus-visible{
         border: none!important;
         outline: none;
     }
+}
+.i-search{
+    .cs-ico{
+        position: absolute;
+        right: 0;
+        width: 30px;
+        height: 30px;
+        display: block;
+        background-color: #000;
+        bottom: 0;
+    }
+    .cs-ico, .s-ico{
+        position: absolute;
+        right: 0;
+        width: 38px;
+        height: 38px;
+        display: block;
+        bottom: 0;
+        cursor: pointer;
+    }
+    .s-ico{
+        background: url(../img/search-ico.png) no-repeat center center;
+        background-size: 18px;
+    }
+    .cs-ico{
+        background: url(../img/close.png) no-repeat center center;
+        background-size: 18px;
+    }
+    .cpage-search.search-filter{
+        background-image: none!important;
+    }
+    
 }
 //mega filter
 .mg-filter-row{

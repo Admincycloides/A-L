@@ -71,13 +71,13 @@ export class TimesheetComponent implements OnInit {
     this.addTimesheetForm =this._fb.group({
       project: ['', Validators.required],
       activity: ['', Validators.required],
-      monday:[''],
-      tuesday:[''],
-      wednesday:[''],
-      thursday:[''],
-      friday:[''],
-      saturday:[''],
-      sunday:[''],
+      monday:[0.00],
+      tuesday:[0.00],
+      wednesday:[0.00],
+      thursday:[0.00],
+      friday:[0.00],
+      saturday:[0.00],
+      sunday:[0.00],
       remarks:['']
     });
   }
@@ -141,9 +141,12 @@ export class TimesheetComponent implements OnInit {
     const url = `${this._url.project.getprojectListbyEmployeeID}?EmployeeID=${this.userDetails.employeeId}`
     this._http.get(url).subscribe({
       next:(res:any)=>{
+        console.log("hi",res.data)
         this.projectList = res.data;
+        console.log("hi",this.projectList)
       }
     })
+    
   //   this.projectList =[{
   //     "ProjectId": 0,
   //     "ProjectName": 'Glyphosate',
@@ -219,8 +222,12 @@ export class TimesheetComponent implements OnInit {
     console.log(project);
     if(project === 'Select Project') this.activityList =[];
     else{
+      console.log("inside else")
       this.projectList.forEach((item)=>{
-        if(item.ProjectName == project) this.activityList = item.Activities;
+        if(item.projectName == project){
+          console.log(item.activities);
+          this.activityList = item.activities;
+        }
       })
     }
   }
@@ -235,18 +242,22 @@ export class TimesheetComponent implements OnInit {
     const fromDate = moment(start).format("YYYY-MM-DD 00:00:00.000");
     const toDate = moment(end).format("YYYY-MM-DD 00:00:00.000");
     const date = moment.utc().format();
+    const pageNo = this.config.currentPage;
+    const pageSize = this.config.itemsPerPage;
     const body = {
-      date: date,
       employeeId : this.userDetails.employeeId,
-      employeeName : this.userDetails.username,
       fromDate : fromDate,
       toDate : toDate
     }
 
-    const url = `${this._url.timesheet.getTimesheet}`
+    const url = `${this._url.timesheet.getTimesheet}?PageNumber=${pageNo}&PageSize=${pageSize}`
     this._http.post(url,body).subscribe({
       next:(res:any)=>{
-        this.timeSheetDetails = res.timesheetDetails;
+        //this.timeSheetDetails = res.timesheetDetails;
+        this.timeSheetDetails = res.data;
+        let totalPage = res.totalPages;
+        let itemsPerPage = res.pageSize;
+        this.config.totalItems = totalPage * itemsPerPage;
       }
 
     })
@@ -319,8 +330,18 @@ export class TimesheetComponent implements OnInit {
   onTimesheetAddEdit(id:any){
     this.open(this.content);
     if(id == -1){
-
-      this.addTimesheetForm.reset();
+      this.addTimesheetForm.setValue({
+        project: '',
+        activity: '',
+        monday:0.00,
+        tuesday:0.00,
+        wednesday:0.00,
+        thursday:0.00,
+        friday:0.00,
+        saturday:0.00,
+        sunday:0.00,
+        remarks:''
+      })
       this.selectedTimesheet = {};
     }
     else{
@@ -334,34 +355,17 @@ export class TimesheetComponent implements OnInit {
       this.addTimesheetForm.controls.friday.setValue(this.timeSheetDetails[id].timeTaken[4].numberOfHours);
       this.addTimesheetForm.controls.saturday.setValue(this.timeSheetDetails[id].timeTaken[5].numberOfHours);
       this.addTimesheetForm.controls.sunday.setValue(this.timeSheetDetails[id].timeTaken[6].numberOfHours);
-      console.log(this.addTimesheetForm.controls.activity.value);
+      //console.log(this.addTimesheetForm.controls.activity.value);
+      this.projectList.forEach((item)=>{
+        if(item.projectName == this.addTimesheetForm.controls.project.value){
+          console.log(true);
+          this.activityList = item.activities;
+        }
+      })
+      console.log("activitylist",this.activityList)
 
       this.selectedTimesheet = this.timeSheetDetails[id];
 
-      
-
-      
-      //const timeDetails = this.addTimesheetForm.get('timeDetails')['controls'] as FormArray;
-      
-      // timeDetails.push(this._fb.group({
-      //     monday: '',
-      //     tuesday: '',
-      //     wednesday: 3,
-      //     thursday: '',
-      //     friday: '',
-      //     saturday: '',
-      //     sunday: ''
-      //   }))
-      
-      // console.log(this.addTimesheetForm.get('timeDetails')['controls'])
-      //this.addTimesheetForm.controls.timeDetails.setValue(timeDetails);
-      // this.addTimesheetForm.controls.timeDetails.value.splice(0,0,this.timeSheetDetails[id].timeTaken);
-      // this.selectedDates = this.addTimesheetForm.controls.timeDetails.value[0];
-      // console.log("hi",this.addTimesheetForm.controls.timeDetails.value[0][0].numberOfHours);
-      // this.addTimesheetForm.controls['project'].value = this.timeSheetDetails[id];
-      // this.selectedActivityName = this.timeSheetDetails[id];
-
-      // console.log(this.selectedActivityName,this.selectedProjectName);
      
     }
 
@@ -374,6 +378,7 @@ export class TimesheetComponent implements OnInit {
     const url = `${this._url.timesheet.deleteTimesheet}`
     this._http.post(url,body).subscribe({
       next:(res:any)=>{
+        this.getTimesheetDetails(this.startOfWeek,this.endOfWeek);
         this.toast.success("Successfully Deleted");
       }
 
@@ -386,7 +391,7 @@ export class TimesheetComponent implements OnInit {
     if(id == -1){
       this.selectAllTimesheet = !this.selectAllTimesheet;
       this.timeSheetDetails.forEach((item)=>{
-        if(item.status == 'In progress' || item.status == 'Rejected') this.selectedTimesheetRow.push(item)
+        if(item.status == 'In Progress' || item.status == 'Rejected') this.selectedTimesheetRow.push(item)
       })
       console.log(this.selectedTimesheetRow);
     }else{
@@ -405,69 +410,77 @@ export class TimesheetComponent implements OnInit {
     this.formSubmitted = true;
     this.activityList = [];
     if(this.addTimesheetForm.valid){
+      let projectId: any;
+      let activityId: any
       this.formSubmitted = false;
-      this.modalRef.close();
+      this.projectList.forEach((item)=>{
+        if(item.projectName == this.addTimesheetForm.controls.project.value){
+          projectId = item.projectId;
+          item.activities.forEach(el => {
+            if(el.activityName == this.addTimesheetForm.controls.activity.value) activityId = el.activityId;
+          });
+        }
+      })
       if(!Object.keys(this.selectedTimesheet).length){
         let date = [];
         //console.log(moment(this.currentWeek[0]).format("YYYY-MM-DDT00:00:00"));
         this.currentWeek.forEach((day)=>{date.push(moment(day).format("YYYY-MM-DDT00:00:00"))});
         //console.log("week",date);
         const timeTaken = [
-          {date : date[0],numberOfHours: this.addTimesheetForm.controls.monday.value},
-          {date : date[1],numberOfHours: this.addTimesheetForm.controls.tuesday.value},
-          {date : date[2],numberOfHours: this.addTimesheetForm.controls.wednesday.value},
-          {date : date[3],numberOfHours: this.addTimesheetForm.controls.thursday.value},
-          {date : date[4],numberOfHours: this.addTimesheetForm.controls.friday.value},
-          {date : date[5],numberOfHours: this.addTimesheetForm.controls.saturday.value},
-          {date : date[6],numberOfHours: this.addTimesheetForm.controls.sunday.value}
-        ]
+          {date : date[0],numberOfHours: parseFloat(this.addTimesheetForm.controls.monday.value)},
+          {date : date[1],numberOfHours: parseFloat(this.addTimesheetForm.controls.tuesday.value)},
+          {date : date[2],numberOfHours: parseFloat(this.addTimesheetForm.controls.wednesday.value)},
+          {date : date[3],numberOfHours: parseFloat(this.addTimesheetForm.controls.thursday.value)},
+          {date : date[4],numberOfHours: parseFloat(this.addTimesheetForm.controls.friday.value)},
+          {date : date[5],numberOfHours: parseFloat(this.addTimesheetForm.controls.saturday.value)},
+          {date : date[6],numberOfHours: parseFloat(this.addTimesheetForm.controls.sunday.value)}
+        ];
+        // this.projectList.forEach((item)=>{
+        //   if(item.projectName == this.addTimesheetForm.controls.project.value){
+        //     projectId = item.projectId;
+        //     item.activities.forEach(el => {
+        //       if(el.activityName == this.addTimesheetForm.controls.activity.value) activityId = el.activityId;
+        //     });
+        //   }
+        // })
   
         const body ={
-          projectId       : 3,
+          projectId       : projectId,
           projectName     : this.addTimesheetForm.controls.project.value,
-          activityId      : 15,
+          activityId      : activityId,
           activityName    : this.addTimesheetForm.controls.activity.value,
           status          : 'In Progress',
           remarks         : this.addTimesheetForm.controls.remarks.value,
           timeTaken       : timeTaken
         }
-        // const body ={
-        //   projectId       : 3,
-        //   projectName     : 'Glyphosate',
-        //   activityId      : 3,
-        //   activityName    : 'development',
-        //   status          : 'In Progress',
-        //   remarks         : this.addTimesheetForm.controls.remarks.value,
-        //   timeTaken       : timeTaken
-        // }
-        
         console.log("Add timesheet data",body);
         const url = `${this._url.timesheet.addTimesheet}?EmployeeId=${this.userDetails.employeeId}`
         this._http.post(url,body).subscribe({
         next:(res:any)=>{
-          //this.timeSheetDetails = res.timesheetDetails
           this.toast.success(res.responseMessage);
+          this.getTimesheetDetails(this.startOfWeek,this.endOfWeek);
         }
+        
   
       })
   
       }else{
         console.log("this.selectedTimesheet",this.selectedTimesheet);
         let timeTaken = this.selectedTimesheet['timeTaken'];
-        timeTaken[0].numberOfHours = this.addTimesheetForm.controls.monday.value;
-        timeTaken[1].numberOfHours = this.addTimesheetForm.controls.tuesday.value;
-        timeTaken[2].numberOfHours = this.addTimesheetForm.controls.wednesday.value;
-        timeTaken[3].numberOfHours = this.addTimesheetForm.controls.thursday.value;
-        timeTaken[4].numberOfHours = this.addTimesheetForm.controls.friday.value;
-        timeTaken[5].numberOfHours = this.addTimesheetForm.controls.saturday.value;
-        timeTaken[6].numberOfHours = this.addTimesheetForm.controls.sunday.value;
+        timeTaken[0].numberOfHours = parseFloat(this.addTimesheetForm.controls.monday.value);
+        timeTaken[1].numberOfHours = parseFloat(this.addTimesheetForm.controls.tuesday.value);
+        timeTaken[2].numberOfHours = parseFloat(this.addTimesheetForm.controls.wednesday.value);
+        timeTaken[3].numberOfHours = parseFloat(this.addTimesheetForm.controls.thursday.value);
+        timeTaken[4].numberOfHours = parseFloat(this.addTimesheetForm.controls.friday.value);
+        timeTaken[5].numberOfHours = parseFloat(this.addTimesheetForm.controls.saturday.value);
+        timeTaken[6].numberOfHours = parseFloat(this.addTimesheetForm.controls.sunday.value);
   
         const body = {
         projectId       : 9,
         projectName     : this.addTimesheetForm.controls.project.value,
         activityId      : 15,
         activityName    : this.addTimesheetForm.controls.activity.value, 
-        //status          : this.selectedTimesheet.status,
+        //status          : 'In Progress',
         timeTaken       : timeTaken,
         remarks         : this.addTimesheetForm.controls.remarks.value
         }
@@ -476,16 +489,18 @@ export class TimesheetComponent implements OnInit {
         this._http.post(url,body).subscribe({
         next:(res:any)=>{
           this.toast.success(res.responseMessage);
+          this.getTimesheetDetails(this.startOfWeek,this.endOfWeek);
         }
   
       })
   
         
-        console.log("Modify timesheet data",body);
+        
   
       }  
 
     }
+    this.modalRef.close();
     
     
   }
@@ -504,6 +519,7 @@ export class TimesheetComponent implements OnInit {
         this._http.post(url,body).subscribe({
             next:(res:any)=>{
             this.toast.success(res.responseMessage);
+            this.getTimesheetDetails(this.startOfWeek,this.endOfWeek);
           }
         })
         this.selectedTimesheetRow = [];
