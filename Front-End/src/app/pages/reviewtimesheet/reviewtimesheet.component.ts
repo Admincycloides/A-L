@@ -69,7 +69,7 @@ export class ReviewtimesheetComponent implements OnInit {
 
   public onViewTimesheet(item:any){
     //this.router.navigate(['/reviewlink',{ projectId: id, projectName: name, Date: date}]);
-    this.router.navigate(['/reviewlink',{ projectId: item.ProjectId, projectName: item.projectName, date: item.date}]);
+    this.router.navigate(['/reviewlink',{ projectId: item.projectId, projectName: item.projectName, date: item.date}]);
   }
   public pageChanged(event:any){
     this.config.currentPage =event;

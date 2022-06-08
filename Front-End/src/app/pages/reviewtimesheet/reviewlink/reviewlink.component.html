@@ -27,25 +27,25 @@
                                 Activities
                             </th>
                             <th>
-                                Mon <br/>{{timesheetDates[0].date | date: "MMM-d"}}
+                                Mon <br/>{{timesheetDates[0]?.date | date: "MMM-d"}}
                             </th>
                             <th>
-                                Tus <br/>{{timesheetDates[1].date | date: "MMM-d"}}
+                                Tus <br/>{{timesheetDates[1]?.date | date: "MMM-d"}}
                             </th>
                             <th>
-                                Wed <br/>{{timesheetDates[2].date | date: "MMM-d"}}
+                                Wed <br/>{{timesheetDates[2]?.date | date: "MMM-d"}}
                             </th>
                             <th>
-                                Thu <br/>{{timesheetDates[3].date | date: "MMM-d"}}
+                                Thu <br/>{{timesheetDates[3]?.date | date: "MMM-d"}}
                             </th>
                             <th>
-                                Fri <br/>{{timesheetDates[4].date | date: "MMM-d"}}
+                                Fri <br/>{{timesheetDates[4]?.date | date: "MMM-d"}}
                             </th>
                             <th>
-                                Sat <br/>{{timesheetDates[5].date | date: "MMM-d"}}
+                                Sat <br/>{{timesheetDates[5]?.date | date: "MMM-d"}}
                             </th>
                             <th>
-                                Sun <br/>{{timesheetDates[6].date | date: "MMM-d"}}
+                                Sun <br/>{{timesheetDates[6]?.date | date: "MMM-d"}}
                             </th>
                             <th>
                                Remarks
@@ -58,25 +58,25 @@
                                     {{item.activityName}}
                                 </td>
                                 <td>
-                                    {{item.timeTaken[0].numberOfHours }}
+                                    {{item.timeTaken[0]?.numberOfHours }}
                                 </td>
                                 <td>
-                                    {{item.timeTaken[1].numberOfHours}}
+                                    {{item.timeTaken[1]?.numberOfHours}}
                                 </td>
                                 <td>
-                                    {{item.timeTaken[2].numberOfHours}}
+                                    {{item.timeTaken[2]?.numberOfHours}}
                                 </td>
                                 <td>
-                                    {{item.timeTaken[3].numberOfHours}}
+                                    {{item.timeTaken[3]?.numberOfHours}}
                                 </td>
                                 <td>
-                                    {{item.timeTaken[4].numberOfHours}}
+                                    {{item.timeTaken[4]?.numberOfHours}}
                                 </td>
                                 <td>
-                                    {{item.timeTaken[5].numberOfHours}}
+                                    {{item.timeTaken[5]?.numberOfHours}}
                                 </td>
                                 <td>
-                                    {{item.timeTaken[6].numberOfHours}}
+                                    {{item.timeTaken[6]?.numberOfHours}}
                                 </td>
                                 <td>
                                    <span>{{item.remarks}}</span>
@@ -116,7 +116,7 @@
                     <textarea #remarks class="form-control" rows="4" ></textarea>
                 </div>
                 <div class="r-row">
-                    <button  class="thm-btn-primary sm-btn w-100 my-2" (click)="onAcceptingTimesheet('Approve',remarks.value)">Approve</button>
+                    <button  class="thm-btn-primary sm-btn w-100 my-2" (click)="onAcceptingTimesheet('Approved',remarks.value)">Approve</button>
                     <button  class="thm-btn-primary sm-btn w-100 my-2" (click)="onAcceptingTimesheet('Rejected',remarks.value)">Disapprove</button>
                 </div>
             </div>

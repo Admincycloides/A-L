@@ -480,7 +480,7 @@ export class TimesheetComponent implements OnInit {
         projectName     : this.addTimesheetForm.controls.project.value,
         activityId      : 15,
         activityName    : this.addTimesheetForm.controls.activity.value, 
-        //status          : this.selectedTimesheet.status,
+        //status          : 'In Progress',
         timeTaken       : timeTaken,
         remarks         : this.addTimesheetForm.controls.remarks.value
         }
@@ -495,7 +495,7 @@ export class TimesheetComponent implements OnInit {
       })
   
         
-        console.log("Modify timesheet data",body);
+        
   
       }  
 
