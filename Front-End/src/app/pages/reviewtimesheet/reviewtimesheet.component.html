@@ -1,17 +1,20 @@
-<div class="page-title w-100">Review Timesheet</div>
-<div class="action-head justify-content-between d-flex">
-    <div class="act-filter d-flex align-items-center justify-content-center">
+
+<div class="action-head justify-content-between d-flex align-items-center mb-4">
+    <div class="page-title w-100">Review Timesheet</div>
+    <div class="act-filter d-flex align-items-center justify-content-end">
         <!-- <input type="text" class="search-filter" placeholder="Search Project"/> -->
-        <input
+        <div class="i-search position-relative">
+            <input
             #searchBar
             type="text"
-            class="cpage-search"
+            class="cpage-search search-filter"
             placeholder="Search Project"
             (keyup)="searchItems($event)"
-            style="width: 370px"
         />
-        <i *ngIf="searchTerm" class="pe-7s-close-circle" (click)="clearSearch(); searchBar.value = ''"></i>
-        <i *ngIf="!searchTerm" class="pe-7s-search"></i>
+        <span *ngIf="searchTerm" class="pe-7s-close-circle cs-ico" (click)="clearSearch(); searchBar.value = ''"></span>
+        <span *ngIf="!searchTerm" class="pe-7s-search s-ico"></span>
+        </div>
+        
     </div>
 </div>
 <div class="row">

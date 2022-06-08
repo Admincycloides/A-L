@@ -160,5 +160,17 @@ namespace AnL.Repository.Implementation
             this.SaveChanges();
             return true;
         }
+        public bool GetTimesheetDetailsForProject(int ProjectId)
+        {
+            List<TimesheetDetails> details = this.GetAllByCondition(x => x.ProjectId == ProjectId).ToList();
+            if(details==null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
     }
 }
