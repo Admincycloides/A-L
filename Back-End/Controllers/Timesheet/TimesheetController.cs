@@ -362,12 +362,17 @@ namespace AnL.Controllers
             }
         }
         [HttpGet]
-        public async Task<ActionResult> GetReviewTimesheet([FromQuery] PaginationFilter filter, string EmployeeID)
+        public async Task<ActionResult> GetReviewTimesheet([FromQuery] PaginationFilter filter, string EmployeeID,string searchValue)
         {
             List<TimesheetViewModel> result = new List<TimesheetViewModel>();
             try
             {
                 var data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.SubmittedTo.Contains(EmployeeID)).Include(x => x.Project).ToList();
+                if (!string.IsNullOrEmpty(searchValue))
+                {   
+                    data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.SubmittedTo.Contains(EmployeeID)).Include(x => x.Project).Where(x=>x.Project.ProjectName== searchValue).ToList();
+                }
+                //var data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.SubmittedTo.Contains(EmployeeID)).Include(x => x.Project).ToList();
                 var employeeList = data.Select(x => new
                 {
                     x.Project.ProjectName,
@@ -409,11 +414,15 @@ namespace AnL.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> GetReviewTimesheetDetails([FromQuery] PaginationFilter filter, TimesheetViewModel model)
+        public async Task<ActionResult> GetReviewTimesheetDetails([FromQuery] PaginationFilter filter, TimesheetViewModel model,string search)
         {
             try
             {
-                var data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.EmployeeId == model.EmployeeId && x.ProjectId == model.ProjectId && x.SubmittedDate.Value.Date == model.Date.Date).Include(x=>x.Project).Include(x=>x.Activity).ToList();
+                var data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.EmployeeId == model.EmployeeId && x.ProjectId == model.ProjectId && x.SubmittedDate.Value.Date == model.Date.Date).Include(x => x.Project).Include(x => x.Activity).ToList();
+                if (!string.IsNullOrEmpty(search))
+                {
+                    data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.EmployeeId == model.EmployeeId && x.ProjectId == model.ProjectId && x.SubmittedDate.Value.Date == model.Date.Date).Include(x => x.Project).Include(x => x.Activity).Where(x=>x.Activity.ActivityName.Contains(search)).ToList();
+                }
                 List<Details> weekDetails = new List<Details>();
                 //Tuple for project and its activity
                 var projectList = data.Select(x => Tuple.Create(x.ProjectId, x.ActivityId)).Distinct().ToList();
@@ -425,6 +434,7 @@ namespace AnL.Controllers
                     details.ActivityId = tuple.Item2;
                     details.ActivityName = data.Where(x => x.ProjectId == tuple.Item1 && x.ActivityId == tuple.Item2).Select(x=>x.Activity.ActivityName).FirstOrDefault();
                     details.Remarks = data.Where(x => x.ProjectId == tuple.Item1 && x.ActivityId == tuple.Item2 && x.SubmittedDate.Value.Date == model.Date.Date).Select(x => x.Remarks).FirstOrDefault();
+                    details.Status = data.Where(x => x.ProjectId == tuple.Item1 && x.ActivityId == tuple.Item2).Select(x => x.Status).FirstOrDefault();
                     List<TimeSpent> timeSpentList = new List<TimeSpent>();
                     var fromDate = data.Where(x => x.ProjectId == tuple.Item1 && x.ActivityId == tuple.Item2).Min(x => x.Date);
                     var toDate = data.Where(x => x.ProjectId == tuple.Item1 && x.ActivityId == tuple.Item2).Max(x => x.Date);
