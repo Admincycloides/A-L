@@ -144,6 +144,62 @@ namespace AnL.Repository.Implementation
                 throw ex;
             }
             }
+
+        public async Task<object> EditProject(EditProjectView project)
+        {
+            try
+            {
+                List<int> Ids = new List<int>();
+                //validation
+                if (!await _context.Set<ProjectDetails>().Where(X => X.ProjectId == project.ProjectId).AnyAsync())
+                    return "Project dose not exist";
+
+
+                if (project.NewActivity != null)
+                    if (project.NewActivity.Count > 0)
+                    {
+                        var activty = new List<ActivityMapping>();
+                        foreach (var a in project.NewActivity)
+                        {
+                            activty.Add(new ActivityMapping { ActivityId = a.ActivityId, ProjectId=project.ProjectId });
+                        }
+                        this.dbActivityMapp.AddRange(activty);
+                        this.SaveChanges();
+                    }
+
+
+                var NewProject = this.dbSet.Where(X=>X.ProjectId== project.ProjectId).FirstOrDefault();
+                 NewProject.ProjectDescription = project.ProjectDescription;
+                NewProject.ProjectName = project.ProjectName;
+                NewProject.StartDate = project.StartDate;
+                NewProject.EndDate = project.EndDate;
+                NewProject.CurrentStatus = project.CurrentStatus;
+                NewProject.EnabledFlag = project.EnabledFlag;
+                NewProject.ClientId = project.ClientId;
+
+                //dbActivityMapp
+                if (project.RemoveActivity!=null)
+                    if(project.RemoveActivity.Count>0)
+                    {
+                        foreach(var a in project.RemoveActivity)
+                        {
+                            NewProject.ActivityMapping.Where(X => X.ActivityId == a.ActivityId).
+                                ToList().ForEach(X => X.ProjectId = 0);
+
+                        }
+
+
+                    }
+                this.SaveChanges();
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<object> AddActivity(List<ActivityMaster> viewModel)
         {
             try

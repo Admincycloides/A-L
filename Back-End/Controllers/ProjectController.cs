@@ -139,6 +139,39 @@ namespace AnL.Controllers
         }
 
         [HttpPost]
+        public async Task<ActionResult> EditProject(EditProjectView project)
+        {
+            BaseResponse response = new BaseResponse();
+            if (project == null)
+            {
+                response.Data = project;
+                response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
+            }
+            var EditProjectResponse = _UOW.ProjectRepository.EditProject(project);
+
+            if (EditProjectResponse != null)
+            {
+                response.Data = EditProjectResponse;
+                response.ResponseCode = HTTPConstants.OK;
+                response.ResponseMessage = MessageConstants.ProjectDeletionSuccess;
+
+            }
+            else
+            {
+                response.Data = EditProjectResponse;
+                response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
+                return BadRequest(response);
+            }
+            return Ok(response);
+
+
+        
+
+}
+
+        [HttpPost]
         public async Task<ActionResult> DeleteProject(List<ProjectViewModel> project )
         {
             try
@@ -148,7 +181,7 @@ namespace AnL.Controllers
                 {
                     response.Data = project;
                     response.ResponseCode = HTTPConstants.BAD_REQUEST;
-                    response.ResponseMessage = MessageConstants.TimsheetDeletionSuccess;
+                    response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
                 }
                 var DeleteProjectResponse = _UOW.ProjectRepository.DeleteProject(project);
                 
