@@ -148,7 +148,7 @@ namespace AnL.Controllers
                 {
                     response.Data = project;
                     response.ResponseCode = HTTPConstants.BAD_REQUEST;
-                    response.ResponseMessage = MessageConstants.TimsheetDeletionSuccess;
+                    response.ResponseMessage = MessageConstants.TimesheetDeletionSuccess;
                 }
                 var DeleteProjectResponse = _UOW.ProjectRepository.DeleteProject(project);
                 
