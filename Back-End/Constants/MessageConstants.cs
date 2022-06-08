@@ -31,6 +31,10 @@
 
         public static readonly string ProjectAllocationSuccess = "Resourcs Allocated to the project successfully";
         public static readonly string ProjectAdditionSuccess = "Porject Added successfully";
+        public static readonly string ActivityAdditionSuccess = "Activity Added successfully";
+
+        public static readonly string ProjectDeletionSuccess = "Project deleted successfully";
+        public static readonly string ProjectDeletionFailed = "Project deletion failed as timesheet record exist against Project";
 
         public static readonly string EmployeeFetchSuccess = "Employee records fetched successfully";
         public static readonly string EmployeeFetchFailed = "Employee records fetch failed";
