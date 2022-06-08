@@ -30,7 +30,7 @@ import { ReviewlinkComponent } from './pages/reviewtimesheet/reviewlink/reviewli
   imports: [
     BrowserAnimationsModule,
     RouterModule.forRoot(AppRoutes,{
-      useHash: true
+      useHash: false
     }),
     SidebarModule,
     NavbarModule,
