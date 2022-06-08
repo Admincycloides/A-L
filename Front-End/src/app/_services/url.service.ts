@@ -30,14 +30,20 @@ export class UrlService {
     submitOTP           : 'api/User/SubmitOTP',
   }
   public timesheet = {
-    getTimesheet      : 'api/Timesheet/GetDetails',
-    deleteTimesheet   : 'api/Timesheet/DeleteTimesheet',
-    addTimesheet      : 'api/Timesheet/AddTimesheetDetails',
-    editTimesheet     : 'api/Timesheet/ModifyTimesheet',
-    submitTimesheet   : 'api/Timesheet/SubmitTimesheetDetails'
+    getTimesheet              : 'api/Timesheet/GetDetails',
+    deleteTimesheet           : 'api/Timesheet/DeleteTimesheet',
+    addTimesheet              : 'api/Timesheet/AddTimesheetDetails',
+    editTimesheet             : 'api/Timesheet/ModifyTimesheet',
+    submitTimesheet           : 'api/Timesheet/SubmitTimesheetDetails',
+    getReviewTimesheet        : 'api/Timesheet/GetReviewTimesheet',
+    getReviewTimesheetDetails : 'api/Timesheet/GetReviewTimesheetDetails',
+    supervisorDecision        : 'api/Timesheet/supervisorDecision'
   }
   public Employee = {
-    getEmployeeDetails    : 'api/Employee/getEmployeeDetails',
-    getSupervisorDetails  : 'api/Employee/GetSupervisorDetails'
+    //getEmployeeDetails    : 'api/Employee/getEmployeeDetails',
+    getSupervisorDetails  : 'api/EmployeeDetails/GetSupervisorDetails'
+  }
+  public project = {
+    getprojectListbyEmployeeID :'api/Project/GetprojectListbyEmployeeID'
   }
 }

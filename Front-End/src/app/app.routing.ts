@@ -3,6 +3,7 @@ import { LoginComponent } from './auth/login/login.component';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { TimesheetComponent } from './pages/timesheet/timesheet.component';
+import AuthGuard from './_guards/auth.guard';
 
 export const AppRoutes: Routes = [
   // {
@@ -19,19 +20,20 @@ export const AppRoutes: Routes = [
   {
     path: '',
     component: AdminLayoutComponent,
+    canActivate :[AuthGuard],
     children: [
         {
       path: '',
       loadChildren: () => import('./layouts/admin-layout/admin-layout.module').then(x => x.AdminLayoutModule)
   }]},
-  {
-    path: 'timesheet',
-    component: AdminLayoutComponent,
-    children: [
-        {
-      path: '',
-      loadChildren: () => import('./layouts/admin-layout/admin-layout.module').then(x => x.AdminLayoutModule)
-  }]},
+  // {
+  //   path: 'timesheet',
+  //   component: AdminLayoutComponent,
+  //   children: [
+  //       {
+  //     path: '',
+  //     loadChildren: () => import('./layouts/admin-layout/admin-layout.module').then(x => x.AdminLayoutModule)
+  // }]},
   {
     path: '**',
     redirectTo: 'login'

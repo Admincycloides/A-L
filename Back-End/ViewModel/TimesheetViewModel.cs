@@ -36,6 +36,8 @@ namespace AnL.ViewModel
         public string ActivityName { get; set; }
         public string Status { get; set; }
         public string Remarks { get; set; }
+        public string EmployeeRemarks { get; set; }
+        public string SupervisorRemarks { get; set; }
         public List<TimeSpent> TimeTaken { get; set; }
     }
     public class MasterTimesheetViewModel

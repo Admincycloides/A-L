@@ -20,6 +20,7 @@ export const ROUTES: RouteInfo[] = [
     { path: 'projects',    title: 'Projects',  icon:'nc-settings', class: 'm-item' },
     { path: 'log',    title: 'Log (Audit Trail)',  icon:'nc-paper', class: 'm-item' },
     { path: 'review',    title: 'Review Timesheet',  icon:'nc-paper', class: 'm-item review-ico' },
+    { path: 'reports',    title: 'View Reports',  icon:'nc-paper', class: 'm-item report-ico' },
 ];
 
 @Component({
@@ -30,7 +31,21 @@ export const ROUTES: RouteInfo[] = [
 
 export class SidebarComponent implements OnInit {
     public menuItems: any[];
+    private items: any[];
+    user :any
     ngOnInit() {
-        this.menuItems = ROUTES.filter(menuItem => menuItem);
+        this.user = JSON.parse(localStorage.getItem('user'));
+        this.items = ROUTES.filter(menuItem => menuItem);
+        if(this.user.supervisorFlag == "Y")
+        {
+            this.menuItems = this.items;
+        }
+        if(this.user.supervisorFlag == "N"){
+           this.menuItems = this.items.filter((item)=>{
+                return item.title != 'Review Timesheet' && item.title != 'View Reports' ;
+           })
+ 
+        }
+        
     }
 }

@@ -57,7 +57,28 @@ body{
 }
 .modal{
     z-index: 99999;
+    .modal-title{
+        margin-top: 0;
+    }
+    .modal-body{
+        margin-top: 5px;
+    }
+    .btn-close{
+        border: none;
+        background: transparent;
+        font-size: 18px;
+        position: absolute;
+        right: 10px;
+        top: 23px;
+        &:focus,&:focus-visible{
+            outline: none;
+        }
+        &:hover{
+            color: $secondary-color;
+        }
+    }
 }
+
 .table-responsive{
     overflow: auto;
 }
@@ -70,7 +91,7 @@ table{
     }
     th{
         border-top: none!important;
-        color: $dark-color;
+        color:  transparentize($dark-color, .3);
         font-weight: bold;
         font-size: 13px;
         vertical-align: middle!important;
@@ -109,7 +130,59 @@ table{
     tbody{
         border: none!important;
     }
+    .h-input{
+        width: 55px; 
+        border: solid 1px #d5d5d5;
+        height: 29px;
+        border-radius: 4px;
+        padding: 3px;
+        text-align: center;
+        &:focus,&:focus-visible{
+            border: solid 1px #bdb9b9!important;
+        }
+    }
 }
+//pagination
+.ngx-pagination .current{
+    background-color: $secondary-color;
+}
+.pagination-previous,.pagination-next,.ngx-pagination .disabled:hover{
+    background: url(../img/left-chevron.png) no-repeat center center;
+    background-size: 20px;
+    font-size: 0;
+    height: 24px;
+    bottom: 13px;
+    position: relative;
+    margin: 0 5px!important;
+    &:hover{
+        opacity: .6;
+    }
+}
+.pagination-previous,.pagination-next{
+    cursor: pointer;
+}
+.ngx-pagination .disabled:hover{
+    opacity: .3;
+    pointer-events: none;
+}
+.pagination-next{
+    transform: rotate(180deg);
+}
+.modal-content{
+    table{
+        th,td{
+            text-align: center;
+            padding: 12px 4px!important;
+            &:first-child{
+                padding-left: 4px!important;
+            }
+        }
+        background-color: #f7f7f7;
+        border-radius: 5px;
+    }
+}
+
+body table th:first-child, body table td:first-child
 input[type='number'] {
     -moz-appearance: textfield;
 }
@@ -129,7 +202,21 @@ input[type='number']::-webkit-inner-spin-button {
     display: flex;
     justify-content: right;
 }
-
+.thm-linkbtn{
+    border: none;
+    outline: none;
+    color: $secondary-color; 
+    font-size: 14px;
+    background: transparent;
+    &:focus{
+        border: none;
+        outline: none;
+    }
+    &:hover{
+         color:#57bb68;
+         text-decoration: underline;
+    }
+}
 // layout
 .sidebar .logo, .off-canvas-sidebar .logo{
     height: 62px;
@@ -172,7 +259,7 @@ input[type='number']::-webkit-inner-spin-button {
 .sidebar .nav li>a, .off-canvas-sidebar .nav li>a{
     margin: 10px 0px 0;
     font-size: 13px;
-    padding: 2px 8px 2px 0px;
+    padding: 4px 8px 4px 0px;
     line-height: 26px;
 }
 .sidebar .nav, .off-canvas-sidebar .nav{
@@ -326,6 +413,11 @@ input{
     color: #fff;
     font-size: 16px;
 }
+.btn-row{
+    border-top: solid 1px #f1f1f1;
+    background: #f3f3f3;
+    margin-bottom: -10px;
+}
 .sm-btn{
     font-size: 12px!important;
     height: 30px!important;
@@ -358,6 +450,67 @@ input{
         }
     }
 }
+// search bar
+input{
+    &.search-filter{
+        background-color: #dfdfdf!important;
+        height: 40px;
+        @include radius(5px);
+        font-size:14px;
+        width: 280px;
+        border: none!important;
+        outline: none;
+        padding: 5px 10px;
+         background: url(../img/search-ico.png) no-repeat 95% center;
+         background-size: 18px;
+         padding-right: 35px;
+    }
+    &:focus,&:focus-visible{
+        border: none!important;
+        outline: none;
+    }
+}
+.i-search{
+    .cs-ico{
+        position: absolute;
+        right: 0;
+        width: 30px;
+        height: 30px;
+        display: block;
+        background-color: #000;
+        bottom: 0;
+    }
+    .cs-ico, .s-ico{
+        position: absolute;
+        right: 0;
+        width: 38px;
+        height: 38px;
+        display: block;
+        bottom: 0;
+        cursor: pointer;
+    }
+    .s-ico{
+        background: url(../img/search-ico.png) no-repeat center center;
+        background-size: 18px;
+    }
+    .cs-ico{
+        background: url(../img/close.png) no-repeat center center;
+        background-size: 18px;
+    }
+    .cpage-search.search-filter{
+        background-image: none!important;
+    }
+    
+}
+//mega filter
+.mg-filter-row{
+    background-color: #ededed;
+    padding: 16px;
+    border: solid 1px #dedede;
+    
+}
+
+
 
 
 }//body END

@@ -548,3 +548,31 @@
       }
     }
 }
+@media screen and (max-width: 990px){
+   .main-panel {
+    width: 100%!important;
+  }
+  .logo-image-small.dsk-view{
+    left: 10px!important;
+  }
+  .nav-open .main-panel {
+    transform: translate(210px)!important;
+  }
+  .navbar .navbar-toggler-bar{
+    background: #fff!important;
+  }
+  .navbar{
+    .navbar-collapse{
+      position: absolute;
+      top: 0;
+      right: 60px;
+      .dropdown-menu{
+        position: absolute!important  ;
+      }
+    }
+     .nav-link{
+       cursor: pointer;
+     }
+
+  }
+}

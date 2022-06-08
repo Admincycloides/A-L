@@ -1,7 +1,20 @@
-<div class="page-title w-100">Review Timesheet</div>
-<div class="action-head justify-content-between d-flex">
-    <div class="act-filter d-flex align-items-center justify-content-center">
-        <input type="text" class="search-filter" placeholder="Search Project"/>
+
+<div class="action-head justify-content-between d-flex align-items-center mb-4">
+    <div class="page-title w-100">Review Timesheet</div>
+    <div class="act-filter d-flex align-items-center justify-content-end">
+        <!-- <input type="text" class="search-filter" placeholder="Search Project"/> -->
+        <div class="i-search position-relative">
+            <input
+            #searchBar
+            type="text"
+            class="cpage-search search-filter"
+            placeholder="Search Project"
+            (keyup)="searchItems($event)"
+        />
+        <span *ngIf="searchTerm" class="pe-7s-close-circle cs-ico" (click)="clearSearch(); searchBar.value = ''"></span>
+        <span *ngIf="!searchTerm" class="pe-7s-search s-ico"></span>
+        </div>
+        
     </div>
 </div>
 <div class="row">
@@ -28,98 +41,70 @@
                             </th>
                             
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    Project 1
+                        <tbody >
+
+                            <!-- <tr >
+                                <td >
+                                    projectName
                                 </td>
                                 <td>
-                                    Alex
+                                    employeeName
                                 </td>
                                 <td>
-                                   5/23/2022
+                                    date
                                 </td>
                                 <td>
-                                    <button class="link thm-linkbtn">Link</button>
+                                    <button class="link thm-linkbtn" (click)="onViewTimesheet('item')">Link</button>
                                 </td>
                                 <td>
-                                    <span class="label-status approved"></span>
+                                    <span class="label-status approved">status</span>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Project 1
-                                </td>
-                                <td>
-                                    Alex
-                                </td>
-                                <td>
-                                   5/23/2022
+                            </tr> -->
+
+
+
+                            <tr *ngFor="let item of reviewTimesheetArray | paginate: config; let i= index ">
+                                <td >
+                                    {{item.projectName}}
                                 </td>
                                 <td>
-                                    <button class="link thm-linkbtn">Link</button>
+                                    {{item.employeeName}}
                                 </td>
                                 <td>
-                                    <span class="label-status approved"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Project 1
+                                    {{item.date |date: "MM/dd/YYYY"}}
                                 </td>
                                 <td>
-                                    Alex
+                                    <button class="link thm-linkbtn" (click)="onViewTimesheet(item)">Link</button>
                                 </td>
                                 <td>
-                                   5/23/2022
-                                </td>
-                                <td>
-                                    <button class="link thm-linkbtn">Link</button>
-                                </td>
-                                <td>
-                                    <span class="label-status approved"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Project 1
-                                </td>
-                                <td>
-                                    Alex
-                                </td>
-                                <td>
-                                   5/23/2022
-                                </td>
-                                <td>
-                                    <button class="link thm-linkbtn">Link</button>
-                                </td>
-                                <td>
-                                    <span class="label-status approved"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Project 1
-                                </td>
-                                <td>
-                                    Alex
-                                </td>
-                                <td>
-                                   5/23/2022
-                                </td>
-                                <td>
-                                    <button class="link thm-linkbtn">Link</button>
-                                </td>
-                                <td>
-                                    <span class="label-status approved"></span>
+                                    <span class="label-status approved">{{item.status}}</span>
                                 </td>
                             </tr>
                         </tbody>
+                        
                     </table>
+                    <ng-container *ngIf="!reviewTimesheetArray?.length">
+                        <div class="justify-content-center mb-5 mt-2 d-flex">No Timesheet Records For Review</div>
+                      </ng-container>
                 </div>
             </div>
         </div>
+    <!-- Pagination -->
+    <div class="pagination-line d-flex justify-content-end" *ngIf="reviewTimesheetArray?.length">
+        <ul>
+            <pagination-controls
+                (pageChange)="pageChanged($event)"
+                [directionLinks]="true"
+                [autoHide]="false"
+                [maxSize]="10"
+                [responsive]="true"
+                previousLabel="Previous"
+                nextLabel="Next"
+                screenReaderPaginationLabel="Pagination"
+                screenReaderPageLabel="page"
+                screenReaderCurrentLabel="You're on page">
+            </pagination-controls>
+        </ul>
     </div>
-
-
+    </div>
 </div>
