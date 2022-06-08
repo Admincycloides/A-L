@@ -41,7 +41,7 @@
                                 <input class="form-check-input tbl-check"
                                     type="checkbox" value=""
                                     id="flexCheckDefault"
-                                    *ngIf="timeSheetDetails != null"
+                                    *ngIf="timeSheetDetails?.length"
                                     (click)="onRowCheck(-1)">
                                 Status
                             </th>
