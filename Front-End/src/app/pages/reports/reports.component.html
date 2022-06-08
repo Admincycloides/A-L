@@ -27,16 +27,38 @@
             ></ng-multiselect-dropdown>
         </div>
         <div class="mg-filter col-md-3 pl-md-0  px-sm-2 px-0 px-lg-2 px-xl-2 mb-2 mb-sm-0 mb-md-0 mb-lg-0 mb-xl-0">
-            <select class="form-control">
-                <option>1</option>
-                <option>2</option>
-            </select>
+            <input
+                    class="form-control"
+                    placeholder="From Date"
+                    readonly
+                    name=""
+                    [maxDate]=""
+                    (dateSelect)="dateChange($event,'from')"
+                    [minDate]=""
+                    ngbDatepicker
+                    #from="ngbDatepicker"
+                  />
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" (click)="from.toggle()" type="button">
+                      <i class="fas fa-calendar"></i>
+                </button>
         </div>
         <div class="mg-filter col-md-3 pr-md-0 pr-lg-0 pr-xl-0  pl-sm-2 pl-md-2 pl-lg-2 pl-xl-2 px-0 mb-2 mb-sm-0 mb-md-0 mb-lg-0 mb-xl-0">
-            <select class="form-control">
-                <option>1</option>
-                <option>2</option>
-            </select>
+            <input
+                    class="form-control"
+                    placeholder="Till Date"
+                    readonly
+                    name="Till Date"
+                    [maxDate]="maxPickerDateTo"
+                    (dateSelect)="dateChange($event,'to')"
+                    [minDate]="minPickerDateTo"
+                    ngbDatepicker
+                    #to="ngbDatepicker"
+                  />
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" (click)="to.toggle()" type="button">
+                      <i class="fas fa-calendar"></i>
+                </button>
         </div>
     </div>
 </div>
@@ -244,7 +266,7 @@
                                                 </table>
                                             </div>
                                             <div class="row btn-row mt-3 d-flex justify-content-end py-3 px-2">
-                                                <button  class="act-btn thm-btn thm-btn-primary" >Generate</button>
+                                                <button  class="act-btn thm-btn thm-btn-primary" (click)="onGenerateReport()">Generate</button>
                                             </div>
                                         </div>
                                     </div>

@@ -147,8 +147,11 @@ export class ReviewlinkComponent implements OnInit {
   private getReviewTimesheetDetails(){
     const pageNo = this.config.currentPage;
     const pageSize = this.config.itemsPerPage;
-    const date = moment(this.submitDate).utc().format();
-    const url = `${this._url.timesheet.getReviewTimesheetDetails}?PageNumber=${pageNo}&PageSize=${pageSize}`
+    const search = this.config.search;
+    //const date = moment(this.submitDate).utc().format();
+    console.log(moment().utc(this.submitDate).format());
+    const date = this.submitDate;
+    const url = `${this._url.timesheet.getReviewTimesheetDetails}?PageNumber=${pageNo}&PageSize=${pageSize}&search=${search}`
     const body = {
       employeeId: this.user.employeeId,
       projectId : this.projectId,

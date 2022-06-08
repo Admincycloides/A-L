@@ -51,7 +51,8 @@ export class ReviewtimesheetComponent implements OnInit {
     const pageNo = this.config.currentPage;
     const pageSize = this.config.itemsPerPage;
     const search = this.config.search;
-    const url = `${this._url.timesheet.getReviewTimesheet}?PageNumber=${pageNo}&PageSize=${pageSize}&EmployeeID=${this.user.employeeId}`
+    console.log(typeof(this.user.employeeId))
+    const url = `${this._url.timesheet.getReviewTimesheet}?PageNumber=${pageNo}&PageSize=${pageSize}&EmployeeID=${this.user.employeeId}&searchValue=${search}`
     this._http.get(url).subscribe(
       {
         next:(res:any)=> {
