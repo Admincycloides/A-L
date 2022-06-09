@@ -17,6 +17,8 @@ export class ReportsComponent implements OnInit {
   minPickerDateTo : any;
   startDate: any;
   endDate: any;
+  selectedProjectList = [];
+  selectedEmployeeList = [];
   // maxPickerDateFrom : any;
   // minPickerDateFrom : any;
 
@@ -62,17 +64,27 @@ export class ReportsComponent implements OnInit {
       })
   }
   public onProjectEmployeeDeSelect(item:any,value:any){
-    console.log(item);
-
+    if(value === 'project'){
+      this.selectedProjectList.splice(this.selectedProjectList.indexOf(item),1);
+    }else{
+      this.selectedEmployeeList.splice(this.selectedEmployeeList.indexOf(item),1);
+    }
+    console.log(this.selectedProjectList);
   }
   public onProjectEmployeeSelect(item:any,value:any){
-    console.log(item);
+    if(value === 'project'){
+      this.selectedProjectList.push(item);
+    }else{
+      this.selectedEmployeeList.push(item)
+    }
   }
   public onProjectEmployeeSelectAll(item:any,value:any){
-    console.log(item);
+    if(value === 'project') this.selectedEmployeeList = this.employeeList;
+    if(value==='employee') this.selectedProjectList = this.projectList;
   }
   public onProjectEmployeeDeSelectAll(item:any,value:any){
-    console.log(item);
+    if(value === 'project') this.selectedEmployeeList = [];
+    if(value==='employee') this.selectedProjectList = [];
   }
   public dateChange(event:any,value:any){
     if(value === 'from'){
