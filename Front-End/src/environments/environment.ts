@@ -7,9 +7,9 @@ export const environment = {
   production: false,
   env:'A & L Dev',
   apiConfig: {
-    api: 'http://103.79.223.61:440',
+    api: 'https://103.79.223.61:440',
     server : ''
   }
 }
 //https://192.168.1.38:440/
-//http://103.79.223.61:440
+//https://103.79.223.61:440
