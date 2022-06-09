@@ -70,7 +70,7 @@
 </div>
 <!-- Action Head ENDS  -->
 <div class="w-100 mt-1 d-flex justify-content-end py-3 px-2 generate-btnrow mb-3">
-    <button class="act-btn thm-btn thm-btn-primary">Generate</button>
+    <button class="act-btn thm-btn thm-btn-primary" (click)="onGenerateReport()">Generate</button>
 </div>
 <!-- Button row  ENDS  -->
 
@@ -89,7 +89,10 @@
                             <th>
                                 Employee Name
                             </th>
-                            <th>
+                            <th *ngFor="let date of allDates">
+                                {{date |date: "EEE MMM-d"}}
+                            </th>
+                            <!-- <th>
                                 Mon<br/>May 26
                                 </th>
                                 <th>
@@ -109,14 +112,14 @@
                                                     </th>
                                                     <th>
                                                         Sun<br/>May 26
-                                                        </th>
-                                                        <th>
+                                                        </th>-->
+                                                        <th> 
                                                             Total
                                                         </th>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>
+                                                        <!--<tr>
+                                                             <td>
                                                                 Project name and
                                                                 relates labels
                                                                 of qa
@@ -148,134 +151,9 @@
                                                             <td>
                                                                 18
                                                             </td>
-                                                        </tr>
+                                                        </tr> -->
                                                         <tr>
-                                                            <td>
-                                                                Project 1
-                                                            </td>
-                                                            <td>
-                                                                Alex
-                                                            </td>
-                                                            <td>
-                                                                1
-                                                            </td>
-                                                            <td>
-                                                                1
-                                                            </td>
-                                                            <td>
-                                                                2
-                                                            </td>
-                                                            <td>
-                                                                5
-                                                            </td>
-                                                            <td>
-                                                                6
-                                                            </td>
-                                                            <td>
 
-                                                            </td>
-                                                            <td>
-
-                                                            </td>
-                                                            <td>
-                                                                18
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                Project 1
-                                                            </td>
-                                                            <td>
-                                                                Alex
-                                                            </td>
-                                                            <td>
-                                                                1
-                                                            </td>
-                                                            <td>
-                                                                1
-                                                            </td>
-                                                            <td>
-                                                                2
-                                                            </td>
-                                                            <td>
-                                                                5
-                                                            </td>
-                                                            <td>
-                                                                6
-                                                            </td>
-                                                            <td>
-
-                                                            </td>
-                                                            <td>
-
-                                                            </td>
-                                                            <td>
-                                                                18
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                Project 1
-                                                            </td>
-                                                            <td>
-                                                                Alex
-                                                            </td>
-                                                            <td>
-                                                                1
-                                                            </td>
-                                                            <td>
-                                                                1
-                                                            </td>
-                                                            <td>
-                                                                2
-                                                            </td>
-                                                            <td>
-                                                                5
-                                                            </td>
-                                                            <td>
-                                                                6
-                                                            </td>
-                                                            <td>
-
-                                                            </td>
-                                                            <td>
-
-                                                            </td>
-                                                            <td>
-                                                                18
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                Project 1
-                                                            </td>
-                                                            <td>
-                                                                Alex
-                                                            </td>
-                                                            <td>
-                                                                1
-                                                            </td>
-                                                            <td>
-                                                                1
-                                                            </td>
-                                                            <td>
-                                                                2
-                                                            </td>
-                                                            <td>
-                                                                5
-                                                            </td>
-                                                            <td>
-                                                                6
-                                                            </td>
-                                                            <td>
-
-                                                            </td>
-                                                            <td>
-
-                                                            </td>
-                                                            <td>
-                                                                18
-                                                            </td>
                                                         </tr>
 
                                                     </tbody>
