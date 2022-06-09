@@ -19,6 +19,7 @@ export class ReviewlinkComponent implements OnInit {
   timesheetDates: any[];
   searchTerm :any;
   submitRemarks: any;
+  status: any;
   public config = {
     id: 'timesheetDetails',
     currentPage: 1,
@@ -37,7 +38,8 @@ export class ReviewlinkComponent implements OnInit {
       console.log("params",params);
       this.projectId = parseInt(params.params.projectId);
       this.projectName = params.params.projectName;
-      this.submitDate =params.params.date
+      this.submitDate =params.params.date;
+      this.status = params.params.status;
     });
     this.user = JSON.parse(localStorage.getItem('user'));
     this.getReviewTimesheetDetails()

@@ -453,12 +453,14 @@ export class TimesheetComponent implements OnInit {
           remarks         : this.addTimesheetForm.controls.remarks.value,
           timeTaken       : timeTaken
         }
-        console.log("Add timesheet data",body);
         const url = `${this._url.timesheet.addTimesheet}?EmployeeId=${this.userDetails.employeeId}`
         this._http.post(url,body).subscribe({
         next:(res:any)=>{
           this.toast.success(res.responseMessage);
           this.getTimesheetDetails(this.startOfWeek,this.endOfWeek);
+        },
+        error:(err:any)=>{
+          this.toast.error(err.responseMessage);
         }
         
   
