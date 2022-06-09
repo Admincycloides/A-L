@@ -1,0 +1,52 @@
+.stick-page-base{
+    
+    th:first-child, td:first-child,th:nth-child(2), td:nth-child(2),th:last-child,td:last-child{
+        position: sticky;
+        background-color: #fff;
+    }
+    th:first-child, td:first-child{
+        left: 0;
+        width: 150px;
+        min-width: 150px;
+    }
+    th:nth-child(2), td:nth-child(2){
+        left: 150px;
+        width: 150px;
+        min-width: 150px;
+    }
+    th:last-child,td:last-child{
+        width: 150px;
+        right: 0;
+        min-width: 150px;
+    }
+    
+}
+.t-v-scroll-base{
+    max-height: 470px;
+    .stick-page-base{
+        min-width: 1600px;
+    }
+
+} 
+@media screen and (max-width: 990px){
+    .stick-page-base{
+    
+        th:first-child, td:first-child{
+            left: 0;
+            width: 80px;
+            min-width: 80px;
+        }
+        th:nth-child(2), td:nth-child(2){
+            left: 80px;
+            width: 80px;
+            min-width: 80px;
+        }
+        th:last-child,td:last-child{
+            width: 80px;
+            right: 0;
+            min-width: 80px;
+        }
+        
+    }
+    
+}

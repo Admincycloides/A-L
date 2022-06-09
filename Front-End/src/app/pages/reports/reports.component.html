@@ -1,76 +1,87 @@
 
-<div class="action-head justify-content-between d-flex align-items-center mb-4 flex-column">
-    <div class="page-title w-100 mw-100">Log (Audit Trail)</div>
+<div class="action-head justify-content-between d-flex align-items-center mb-1 flex-column">
+    <div class="page-title w-100 mw-100">View Reports</div>
     <div class="row mg-filter-row w-100 mt-2">
-        <div class="mg-filter col-md-3 pl-md-0 px-sm-2 px-0 px-lg-2 px-xl-2 mb-2 mb-sm-0 mb-md-0 mb-lg-0 mb-xl-0">
+        <div class="mg-filter col-md-3 pl-md-0 px-sm-2 px-0 px-lg-2 px-xl-2 mb-2
+            mb-sm-0 mb-md-0 mb-lg-0 mb-xl-0">
             <ng-multiselect-dropdown
-            name="project"
-            [placeholder]="'Select Project'"
-            [settings]="dropdownSettings"
-            [data]="projectList"
-            (onDeSelect)="onProjectEmployeeDeSelect($event,'project')"
-            (onSelect)="onProjectEmployeeSelect($event,'project')"
-            (onSelectAll)="onProjectEmployeeSelectAll($event,'project')"
-            (onDeSelectAll)="onProjectEmployeeDeSelectAll($event,'project')"
-    ></ng-multiselect-dropdown>
+                name="project"
+                [placeholder]="'Select Project'"
+                [settings]="dropdownSettings"
+                [data]="projectList"
+                (onDeSelect)="onProjectEmployeeDeSelect($event,'project')"
+                (onSelect)="onProjectEmployeeSelect($event,'project')"
+                (onSelectAll)="onProjectEmployeeSelectAll($event,'project')"
+                (onDeSelectAll)="onProjectEmployeeDeSelectAll($event,'project')"></ng-multiselect-dropdown>
         </div>
-        <div class="mg-filter col-md-3 pl-md-0  px-sm-2 px-0 px-lg-2 px-xl-2 mb-2 mb-sm-0 mb-md-0 mb-lg-0 mb-xl-0">
+        <div class="mg-filter col-md-3 pl-md-0 px-sm-2 px-0 px-lg-2 px-xl-2 mb-2
+            mb-sm-0 mb-md-0 mb-lg-0 mb-xl-0">
             <ng-multiselect-dropdown
-                    name="employee"
-                    [placeholder]="'Select Employee'"
-                    [settings]="dropdownSettings"
-                    [data]="employeeList"
-                    (onDeSelect)="onProjectEmployeeDeSelect($event,'employee')"
-                    (onSelect)="onProjectEmployeeSelect($event,'employee')"
-                    (onSelectAll)="onProjectEmployeeSelectAll($event,'employee')"
-                    (onDeSelectAll)="onProjectEmployeeDeSelectAll($event,'employee')"
-            ></ng-multiselect-dropdown>
+                name="employee"
+                [placeholder]="'Select Employee'"
+                [settings]="dropdownSettings"
+                [data]="employeeList"
+                (onDeSelect)="onProjectEmployeeDeSelect($event,'employee')"
+                (onSelect)="onProjectEmployeeSelect($event,'employee')"
+                (onSelectAll)="onProjectEmployeeSelectAll($event,'employee')"
+                (onDeSelectAll)="onProjectEmployeeDeSelectAll($event,'employee')"></ng-multiselect-dropdown>
         </div>
-        <div class="mg-filter col-md-3 pl-md-0  px-sm-2 px-0 px-lg-2 px-xl-2 mb-2 mb-sm-0 mb-md-0 mb-lg-0 mb-xl-0">
+        <div class="mg-filter col-md-3 pl-md-0 px-sm-2 px-0 px-lg-2 px-xl-2 mb-2
+            mb-sm-0 mb-md-0 mb-lg-0 mb-xl-0 fm-date position-relative">
             <input
-                    class="form-control"
-                    placeholder="From Date"
-                    readonly
-                    name=""
-                    [maxDate]=""
-                    (dateSelect)="dateChange($event,'from')"
-                    [minDate]=""
-                    ngbDatepicker
-                    #from="ngbDatepicker"
-                  />
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" (click)="from.toggle()" type="button">
-                      <i class="fas fa-calendar"></i>
+                class="form-control"
+                placeholder="From Date"
+                readonly
+                name=""
+                [maxDate]=""
+                (dateSelect)="dateChange($event,'from')"
+                [minDate]=""
+                ngbDatepicker
+                #from="ngbDatepicker"
+                />
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary"
+                    (click)="from.toggle()" type="button">
+                    <i class="nc-icon nc-calendar-60"></i>
                 </button>
-                </div>
+            </div>
         </div>
-        <div class="mg-filter col-md-3 pr-md-0 pr-lg-0 pr-xl-0  pl-sm-2 pl-md-2 pl-lg-2 pl-xl-2 px-0 mb-2 mb-sm-0 mb-md-0 mb-lg-0 mb-xl-0">
+        <div class="mg-filter col-md-3 pr-md-0 pr-lg-0 pr-xl-0 pl-sm-2 pl-md-2
+            pl-lg-2 pl-xl-2 px-0 mb-2 mb-sm-0 mb-md-0 mb-lg-0 mb-xl-0 tm-date">
             <input
-                    class="form-control"
-                    placeholder="Till Date"
-                    readonly
-                    name="Till Date"
-                    [maxDate]="maxPickerDateTo"
-                    (dateSelect)="dateChange($event,'to')"
-                    [minDate]="minPickerDateTo"
-                    ngbDatepicker
-                    #to="ngbDatepicker"
-                  />
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" (click)="to.toggle()" type="button">
-                      <i class="fas fa-calendar"></i>
+                class="form-control"
+                placeholder="Till Date"
+                readonly
+                name="Till Date"
+                [maxDate]="maxPickerDateTo"
+                (dateSelect)="dateChange($event,'to')"
+                [minDate]="minPickerDateTo"
+                ngbDatepicker
+                #to="ngbDatepicker"
+                />
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" (click)="to.toggle()"
+                    type="button">
+                    <i class="nc-icon nc-calendar-60"></i>
                 </button>
-                </div>
+            </div>
         </div>
     </div>
 </div>
+<!-- Action Head ENDS  -->
+<div class="w-100 mt-1 d-flex justify-content-end py-3 px-2 generate-btnrow mb-3">
+    <button class="act-btn thm-btn thm-btn-primary" (click)="onGenerateReport()">Generate</button>
+</div>
+<!-- Button row  ENDS  -->
 
+<!-- Card section starts  -->
 <div class="row">
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table">
+                <!-- Table section starts -->
+                <div class="table-responsive t-v-scroll-base">
+                    <table class="table stick-page-base">
                         <thead class="text-primary">
                             <th>
                                 Project
@@ -78,7 +89,10 @@
                             <th>
                                 Employee Name
                             </th>
-                            <th>
+                            <th *ngFor="let date of allDates">
+                                {{date |date: "EEE MMM-d"}}
+                            </th>
+                            <!-- <th>
                                 Mon<br/>May 26
                                 </th>
                                 <th>
@@ -98,15 +112,17 @@
                                                     </th>
                                                     <th>
                                                         Sun<br/>May 26
-                                                        </th>
-                                                        <th>
+                                                        </th>-->
+                                                        <th> 
                                                             Total
                                                         </th>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>
-                                                                Project 1
+                                                        <!--<tr>
+                                                             <td>
+                                                                Project name and
+                                                                relates labels
+                                                                of qa
                                                             </td>
                                                             <td>
                                                                 Alex
@@ -135,149 +151,20 @@
                                                             <td>
                                                                 18
                                                             </td>
-                                                        </tr>
+                                                        </tr> -->
                                                         <tr>
-                                                            <td>
-                                                                Project 1
-                                                            </td>
-                                                            <td>
-                                                                Alex
-                                                            </td>
-                                                            <td>
-                                                                1
-                                                            </td>
-                                                            <td>
-                                                                1
-                                                            </td>
-                                                            <td>
-                                                                2
-                                                            </td>
-                                                            <td>
-                                                                5
-                                                            </td>
-                                                            <td>
-                                                                6
-                                                            </td>
-                                                            <td>
 
-                                                            </td>
-                                                            <td>
-
-                                                            </td>
-                                                            <td>
-                                                                18
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                Project 1
-                                                            </td>
-                                                            <td>
-                                                                Alex
-                                                            </td>
-                                                            <td>
-                                                                1
-                                                            </td>
-                                                            <td>
-                                                                1
-                                                            </td>
-                                                            <td>
-                                                                2
-                                                            </td>
-                                                            <td>
-                                                                5
-                                                            </td>
-                                                            <td>
-                                                                6
-                                                            </td>
-                                                            <td>
-
-                                                            </td>
-                                                            <td>
-
-                                                            </td>
-                                                            <td>
-                                                                18
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                Project 1
-                                                            </td>
-                                                            <td>
-                                                                Alex
-                                                            </td>
-                                                            <td>
-                                                                1
-                                                            </td>
-                                                            <td>
-                                                                1
-                                                            </td>
-                                                            <td>
-                                                                2
-                                                            </td>
-                                                            <td>
-                                                                5
-                                                            </td>
-                                                            <td>
-                                                                6
-                                                            </td>
-                                                            <td>
-
-                                                            </td>
-                                                            <td>
-
-                                                            </td>
-                                                            <td>
-                                                                18
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                Project 1
-                                                            </td>
-                                                            <td>
-                                                                Alex
-                                                            </td>
-                                                            <td>
-                                                                1
-                                                            </td>
-                                                            <td>
-                                                                1
-                                                            </td>
-                                                            <td>
-                                                                2
-                                                            </td>
-                                                            <td>
-                                                                5
-                                                            </td>
-                                                            <td>
-                                                                6
-                                                            </td>
-                                                            <td>
-
-                                                            </td>
-                                                            <td>
-
-                                                            </td>
-                                                            <td>
-                                                                18
-                                                            </td>
                                                         </tr>
 
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div class="row btn-row mt-3 d-flex justify-content-end py-3 px-2">
-                                                <button  class="act-btn thm-btn thm-btn-primary">Generate</button>
-                                            </div>
+                                            <!-- Table section END -->
+
                                         </div>
                                     </div>
                                 </div>
 
 
                             </div>
-
-
-
-
+                            <!-- Card section ENDS  -->

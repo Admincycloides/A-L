@@ -85,9 +85,9 @@
                                 Delete
                             </th>
                         </thead>
-                        <tbody *ngFor="let row of timeSheetDetails |
+                        <tbody>
+                            <tr *ngFor="let row of timeSheetDetails |
                             paginate: config; let i= index">
-                            <tr>
                                 <td>
                                     <input class="form-check-input tbl-check"
                                         type="checkbox" value=""

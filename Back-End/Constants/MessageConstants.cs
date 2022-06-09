@@ -23,6 +23,7 @@
         public static readonly string UserNotActive = "User has been deactivated";
 
         public static readonly string TimesheetSubmissionSuccess = "Timesheet Submitted successfully";
+        public static readonly string TimesheetSubmissionSuccessMailFailure = "Timesheet Submitted successfully but email generation failed!!";
         public static readonly string TimesheetSubmissionFailed = "Timesheet Submission Failed";
         public static readonly string SupervisorListingSuccess = "Supervisor records fetched successfully";
         public static readonly string SupervisorListingFailed = "Supervisor records fetch failed";
