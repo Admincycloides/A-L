@@ -284,5 +284,30 @@ namespace AnL.Repository.Implementation
                 throw ex;
             }
         }
+
+        public async Task<List<ProjectListViewModel>> GetAllProject()
+        {
+            List<ProjectListViewModel> rsp = new List<ProjectListViewModel>();
+            try
+            {
+                await Task.Run(() =>
+                {
+                    rsp = (_context.Set<ProjectDetails>().Select(
+
+                       X => new ProjectListViewModel
+                       {
+                           ProjectId = X.ProjectId,
+                           ProjectName = X.ProjectName
+
+                       }
+                       )).ToList();
+                });
+                return rsp.Count > 0 ? rsp : null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
