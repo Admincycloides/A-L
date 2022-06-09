@@ -23,9 +23,10 @@ namespace AnL.Controllers
         private readonly IUnitOfWork _UOW;
         private readonly IConfiguration _configuration;
         private readonly IUriService uriService;
-        public TimesheetController( IUnitOfWork UOW, IUriService uriService)
+        public TimesheetController( IUnitOfWork UOW, IUriService uriService, IConfiguration configuration)
         {
             _UOW = UOW;
+            this._configuration= configuration;
             this.uriService = uriService;
         }
         /// <summary>
@@ -324,13 +325,15 @@ namespace AnL.Controllers
             }
         }
         [HttpPost]
-        public async Task<ActionResult> SubmitTimesheetDetails(List<Details> timesheetDetails,string ManagerID,string EmployeeName)
+        public async Task<ActionResult> SubmitTimesheetDetails(List<Details> timesheetDetails,string ManagerID,string EmployeeID)
         {
             BaseResponse response = new BaseResponse();
             try
             {
                 var managerDetails = _UOW.EmployeeDetailsRepository.GetById(ManagerID);
+                var employeeDetails = _UOW.EmployeeDetailsRepository.GetById(EmployeeID);
                 bool result=false;
+                bool mailSent = false;
                 foreach (var listrecords in timesheetDetails)
                 {
                     List<TimesheetDetails> timesheetDetailsList = new List<TimesheetDetails>();
@@ -349,11 +352,21 @@ namespace AnL.Controllers
                     }
                     result = _UOW.TimesheetDetailRepository.SubmitTimesheet(timesheetDetailsList);
                 }
-                if (result)
+                string subject = "Timesheet Submitted";
+                string body = "Dear " + String.Concat(employeeDetails.FirstName, " ", employeeDetails.LastName) +
+                    "\n\nYour Timesheet has been submitted successfully to Supervisor " + String.Concat(managerDetails.FirstName, " ", managerDetails.LastName)+".\n\n with remarks as below : \n\n"+ timesheetDetails[0].EmployeeRemarks;
+                mailSent = SendMail(employeeDetails.EmailAddress, subject, body);
+                if (result&&mailSent)
                 {
                     response.Data = result;
                     response.ResponseCode = HTTPConstants.OK;
                     response.ResponseMessage = MessageConstants.TimesheetSubmissionSuccess;
+                }
+                else if(result&&!mailSent)
+                {
+                    response.Data = result;
+                    response.ResponseCode = HTTPConstants.OK;
+                    response.ResponseMessage = MessageConstants.TimesheetSubmissionSuccessMailFailure;
                 }
                 else
                 {
@@ -478,7 +491,7 @@ namespace AnL.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> SupervisorDecision( List<Details> model,string SupervisorID,string Action)
+        public async Task<ActionResult> SupervisorDecision( List<Details> model,string SupervisorID, string EmployeeID, string Action)
         {
             try
             {
@@ -498,13 +511,23 @@ namespace AnL.Controllers
                         }
                     }
                 }
+                var managerDetails = _UOW.EmployeeDetailsRepository.GetById(SupervisorID);
+                var employeeDetails = _UOW.EmployeeDetailsRepository.GetById(EmployeeID);
                 if (Action == TimeSheetStatus.Approved)
                 {
                     result =  _UOW.TimesheetDetailRepository.SupervisorAction(timesheetDetailsList, TimeSheetStatus.Approved);
+                    string subject = "Timesheet Approved";
+                    string body = "Dear " + String.Concat(employeeDetails.FirstName, " ", employeeDetails.LastName) +
+                        "\n\nYour Timesheet has been approved by Supervisor " + String.Concat(managerDetails.FirstName, " ", managerDetails.LastName) + " with remarks as below : \n\n" + model[0].SupervisorRemarks;
+                    SendMail(employeeDetails.EmailAddress, subject, body);
                 }
                 else if (Action == TimeSheetStatus.Rejected)
                 {
                     result =  _UOW.TimesheetDetailRepository.SupervisorAction(timesheetDetailsList, TimeSheetStatus.Rejected);
+                    string subject = "Timesheet Rejected";
+                    string body = "Dear " + String.Concat(employeeDetails.FirstName, " ", employeeDetails.LastName) +
+                        "\n\nYour Timesheet has been rejected by Supervisor " + String.Concat(managerDetails.FirstName, " ", managerDetails.LastName) + " with remarks as below : \n\n" + model[0].SupervisorRemarks;
+                    SendMail(employeeDetails.EmailAddress, subject, body);
                 }
                 else
                 {
@@ -537,7 +560,7 @@ namespace AnL.Controllers
         }
 
 
-        [HttpPost]
+        [NonAction]
         public async Task<ActionResult> GetTimesheetReport(ReportRequest request)
         {
             //IQueryable data = _UOW.TimesheetDetailRepository.GetAll().Where(x => x.ProjectId == request.ProjectIds[0] && x.EmployeeId == request.EmployeeId[0] && x.Date.Date>=request.FromDate.Date && x.Date.Date <= request.ToDate.Date)
@@ -545,7 +568,39 @@ namespace AnL.Controllers
             //var result=data.AsQueryable().whe
             return Ok();
         }
+        [NonAction]
+        public bool SendMail(string mailto, string subject, string body)
+        {
+            bool f = false;
+            try
+            {
+                MailMessage mailMessage = new MailMessage();
+                mailMessage.To.Add(mailto);
+                mailMessage.From = new MailAddress(_configuration["Smtp:Sender"]);
+                mailMessage.Subject = subject;
+                mailMessage.Body = body;
+                System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient()
+                {
+                    Host = _configuration["Smtp:Server"],
+                    Port = Convert.ToInt32(_configuration["Smtp:Port"]),
+                    EnableSsl = true,
+                    Credentials = new System.Net.NetworkCredential(_configuration["Smtp:Sender"], _configuration["Smtp:Password"])
 
+                };
+                smtp.Send(mailMessage);
+                f = true;
+            }
+            catch (Exception ex)
+            {
+                f = false;
+            }
+            return f;
+        }
+        [NonAction]
+        public async Task<ActionResult> GetTimesheetReport(List<Details> timesheetDetails, string ManagerID, string EmployeeID)
+        {
+            return Ok();
+        }
 
             [NonAction]
         public IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)
