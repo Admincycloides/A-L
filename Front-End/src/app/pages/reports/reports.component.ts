@@ -34,7 +34,32 @@ export class ReportsComponent implements OnInit {
       itemsShowLimit: 3,
       allowSearchFilter: true,
     };
-    this.projectList = ['Project 1','Project 2','Project 2','Project 3','Project 4']
+    this.getProjectList();
+    this.getEmployeeList();
+  }
+  private getProjectList(){
+    this.projectList = ['Project 1','Project 2','Project 2','Project 3','Project 4'];
+    const url =`${this._url.project.getProjectList}`
+    this._http.get(url).subscribe(
+      {
+        next:(res:any)=> {
+          this.projectList = res.data;
+        },
+        error:(msg) =>{
+        }
+      })
+  }
+  private getEmployeeList(){
+    this.employeeList = ['Employee 1','Employee 2','Employee 2','Employee 3','Employee 4'];
+    const url =`${this._url.project.getProjectList}`
+    this._http.get(url).subscribe(
+      {
+        next:(res:any)=> {
+          this.projectList = res.data;
+        },
+        error:(msg) =>{
+        }
+      })
   }
   public onProjectEmployeeDeSelect(item:any,value:any){
     console.log(item);
