@@ -207,8 +207,17 @@ namespace AnL.Controllers
                     data.NumberOfHours = timesheet.NumberOfHours;
                     timesheetDetailsList.Add(data);
                 }
-                var AddTimesheetDetailsResponse = _UOW.TimesheetDetailRepository.AddDetails(timesheetDetailsList);
+                //Add check for existing record in DB for project and activity
                 BaseResponse response = new BaseResponse();
+                var existingProjectActivity = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.ProjectId == timesheetDetails.ProjectId && x.ActivityId == timesheetDetails.ActivityId && x.Date.Date == timesheetDetailsList[2].Date.Date);
+                if(existingProjectActivity.Count() > 0)
+                {
+                    response.Data = null;
+                    response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                    response.ResponseMessage = MessageConstants.TimesheetAlreadyExists;
+                    return BadRequest(response);
+                }
+                var AddTimesheetDetailsResponse = _UOW.TimesheetDetailRepository.AddDetails(timesheetDetailsList);
                 if (AddTimesheetDetailsResponse)
                 {
                     response.Data = AddTimesheetDetailsResponse;
@@ -370,7 +379,7 @@ namespace AnL.Controllers
                 var data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.SubmittedTo.Contains(EmployeeID)).Include(x => x.Project).ToList();
                 if (!string.IsNullOrEmpty(searchValue))
                 {   
-                    data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.SubmittedTo.Contains(EmployeeID)).Include(x => x.Project).Where(x=>x.Project.ProjectName== searchValue).ToList();
+                    data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.SubmittedTo.Contains(EmployeeID)).Include(x => x.Project).Where(x=>x.Project.ProjectName.Contains(searchValue)).ToList();
                 }
                 //var data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.SubmittedTo.Contains(EmployeeID)).Include(x => x.Project).ToList();
                 var employeeList = data.Select(x => new
@@ -527,7 +536,18 @@ namespace AnL.Controllers
             }
         }
 
-        [NonAction]
+
+        [HttpPost]
+        public async Task<ActionResult> GetTimesheetReport(ReportRequest request)
+        {
+            //IQueryable data = _UOW.TimesheetDetailRepository.GetAll().Where(x => x.ProjectId == request.ProjectIds[0] && x.EmployeeId == request.EmployeeId[0] && x.Date.Date>=request.FromDate.Date && x.Date.Date <= request.ToDate.Date)
+            //                    .Select(x=> new ReportViewModel { });
+            //var result=data.AsQueryable().whe
+            return Ok();
+        }
+
+
+            [NonAction]
         public IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)
         {
             for (var day = from.Date; day.Date <= thru.Date; day = day.AddDays(1))

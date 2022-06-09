@@ -19,6 +19,7 @@ export class ReviewlinkComponent implements OnInit {
   timesheetDates: any[];
   searchTerm :any;
   submitRemarks: any;
+  status: any;
   public config = {
     id: 'timesheetDetails',
     currentPage: 1,
@@ -34,10 +35,10 @@ export class ReviewlinkComponent implements OnInit {
 
   ngOnInit(): void {
     this.activedRouter.paramMap.subscribe((params: any) => {
-      console.log("params",params);
       this.projectId = parseInt(params.params.projectId);
       this.projectName = params.params.projectName;
-      this.submitDate =params.params.date
+      this.submitDate =params.params.date;
+      this.status = params.params.status;
     });
     this.user = JSON.parse(localStorage.getItem('user'));
     this.getReviewTimesheetDetails()
@@ -149,7 +150,6 @@ export class ReviewlinkComponent implements OnInit {
     const pageSize = this.config.itemsPerPage;
     const search = this.config.search;
     //const date = moment(this.submitDate).utc().format();
-    console.log(moment().utc(this.submitDate).format());
     const date = this.submitDate;
     const url = `${this._url.timesheet.getReviewTimesheetDetails}?PageNumber=${pageNo}&PageSize=${pageSize}&search=${search}`
     const body = {
@@ -171,8 +171,6 @@ export class ReviewlinkComponent implements OnInit {
   //on clicking approve or disapprove
   public onAcceptingTimesheet(value:string,remarks:any){
     const data = value;
-    console.log(remarks);
-    console.log(this.timesheetDates);
     const url = `${this._url.timesheet.supervisorDecision}?SupervisorID=${this.user.employeeId}&Action=${data}`
     const body = this.timesheetDetails;
     body.forEach((item)=>{

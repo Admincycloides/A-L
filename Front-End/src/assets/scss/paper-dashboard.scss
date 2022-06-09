@@ -510,6 +510,60 @@ input{
     
 }
 
+// table test
+.fixed-table{
+    table {
+        border-collapse: collapse;
+        color: lightgrey;
+        table-layout: fixed;
+      }
+      
+      thead {
+        // thead and tr don't currently support sticky
+        // position: -webkit-sticky;
+        // position: sticky;
+        // left: 0; top: 0;
+        
+        th {
+          position: -webkit-sticky; // for safari
+          position: sticky;
+          top: 0; left: 0;
+          
+          
+          &:first-child,&:nth-child(2),&:last-child {
+            z-index: 3;
+          }
+        }
+      }
+      
+      th, td {
+        padding: 10px 100px;
+      }
+      
+      th {
+    
+        white-space: nowrap;
+      }
+      
+    
+      
+      th, td {
+        &:first-child,&:nth-child(2),&:last-child{
+          position: -webkit-sticky; // for safari
+          position: sticky;
+          left: 0px;
+          // top: 0px; -> doesn't work in Safari 11
+          /*
+            thanks to https://github.com/jonjohnjohnson
+            explanation: https://github.com/w3c/csswg-drafts/issues/865 
+          */
+          z-index: 2;
+          width: 200px;
+        }
+      }
+}
+
+    
 
 
 

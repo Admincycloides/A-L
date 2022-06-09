@@ -4,6 +4,7 @@
     {
         public static readonly string TimesheetAdditionSuccess = "TimeSheet records added successfully";
         public static readonly string TimesheetAdditionFailed = "TimeSheet records addition failed";
+        public static readonly string TimesheetAlreadyExists = "Timesheet Records for the project and activity already exists!!";
         public static readonly string TimesheetDeletionSuccess = "TimeSheet records deleted successfully";
         public static readonly string TimesheetDeletionFailed = "TimeSheet records deletion failed";
         public static readonly string TimesheetModificationSuccess = "TimeSheet records modified successfully";

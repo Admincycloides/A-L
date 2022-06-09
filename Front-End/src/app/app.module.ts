@@ -38,7 +38,7 @@ import { ActivitiesComponent } from "./pages/projects/activities/activities.comp
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot(AppRoutes,{
-      useHash: false
+      useHash: true
     }),
     SidebarModule,
     NavbarModule,
