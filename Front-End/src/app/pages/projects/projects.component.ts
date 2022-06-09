@@ -24,48 +24,89 @@ export class ProjectsComponent implements OnInit {
 
   constructor(private _url: UrlService,
     private _fb:FormBuilder,private _http: HttpService
-  ) { }
-
-  ngOnInit(): void {
+  ) { 
     this.projectGroup = this._fb.group({
       itemRows:this._fb.array([this.initItemRow()]),
     });
-    this.toggleButton = true
   }
 
-  initItemRow(){
+  ngOnInit(): void {
+    this.toggleButton = true,
+    this.getProjectActivityDetails();
+  }
+
+  private getProjectActivityDetails(){
+
+    const url = `${this._url.project.getprojectListbyEmployeeID}`
+    this._http.get(url).subscribe({
+      next:(res:any)=>{
+        this.projectGroup['controls'].itemRows['controls'].value = res.data;}
+      })
+    }
+      
+
+
+
+  initItemRow():FormGroup{
     return this._fb.group({
-      projectName: [''],
-      projectDescription: [''],
-      clientName: [''],
-      startDate: [''],
-      endDate: [''],
-      currentStatus: [''],
-      shedoject:[''],
-      editable: true,
-      isNew: true,
-      assignedto:[''],
+    projectName:[""],
+    projectDescription: [""],
+    clientId: [0],
+    startDate: [""],
+    endDate: [""],
+    currentStatus: [""],
+    sredProject: [""],
+    activities: [
+      {
+      activityName:[""],
+      activityDescription:[""],
+      enabledFlag: [""]
+      }
+    ] 
     })
+  }
+
+  get itemRows() : FormArray {
+
+    return this.projectGroup.get("itemRows") as FormArray
   }
 
   saveField()
   {
-    console.log("hi");
-    let formObj = this.projectGroup.getRawValue(); // {name: '', description: ''}
-        let serializedForm = JSON.stringify(formObj);
-        console.log(serializedForm);
-    const url = `${"http://103.79.223.61:440/" + this._url.Project.addProject}`
+    console.log(this.projectGroup.value.itemRows)
 
-    const body = this.addProjects;
-    console.log(url);
-    this._http.post(url,body).subscribe
+    // let temp = [
+    //   {
+    //     "projectName": "prr",
+    //     "projectDescription": "prr",
+    //     "clientId": 1,
+    //     "startDate": "2022-06-08T14:12:39.719Z",
+    //     "endDate": "2022-06-08T14:12:39.719Z",
+    //     "currentStatus": "prr",
+    //     "sredProject": "prr",
+    //     "activities": [
+    //       {
+
+    //         "activityName": "prr",
+    //         "activityDescription": "prr",
+    //       }
+    //     ]
+    //   }
+    // ]
+    console.log("hi");
+    let formObj = this.projectGroup.value; // {name: '', description: ''}
+        let serializedForm = JSON.stringify(formObj.itemRows);
+        console.log(serializedForm);
+    const url = `${this._url.project.addProject}`
+
+    const body = this.projectGroup.value.itemRows;
+    console.log(body);
+    this._http.post(url,body).subscribe(
       {
         next:(res:any)=>{
           console.log(res.responseMessage);
-      
-      }
-    
-  }
+        }
+      });
   }
 //   public changeText(){
 //     if (this.text === 'Add Project') {
@@ -81,9 +122,60 @@ makeEditable(itemrow: any) {
   }
 
 public addFieldValue(){
-    const control = <FormArray>this.projectGroup.controls['itemRows'];
-    control.push(this.initItemRow());
+  this.itemRows.push(this.initItemRow());
+    // const control = <FormArray>this.projectGroup.controls['itemRows'];
+    // control.push(this.initItemRow());
     console.log("hey");
 }
+
+public deleteRow(index : any) {
+
+  // let temp = [
+  //   {
+  //     "projectName": "prr",
+  //     "projectDescription": "prr",
+  //     "clientId": 1,
+  //     "startDate": "2022-06-08T14:12:39.719Z",
+  //     "endDate": "2022-06-08T14:12:39.719Z",
+  //     "currentStatus": "prr",
+  //     "sredProject": "prr",
+  //     "activities": [
+  //       {
+
+  //         "activityName": "prr",
+  //         "activityDescription": "prr",
+  //       }
+  //     ]
+  //   }
+  // ]
+  console.log("hi");
+  let formObj = this.projectGroup.value; // {name: '', description: ''}
+      let serializedForm = JSON.stringify(formObj.itemRows);
+      console.log(serializedForm);
+  const url = `${this._url.project.deleteProject}`
+
+  const body = this.projectGroup.value.itemRows;
+  console.log(body);
+  this._http.post(url,body).subscribe(
+    {
+      next:(res:any)=>{
+        console.log(res.responseMessage);
+      }
+    });
+  console.log("hiii");
+  const control = <FormArray>this.projectGroup.controls['itemRows'];
+  if(control != null)
+  {
+    this.TotalRow = control.value.length;
+  }
+  if(this.TotalRow > 1)
+  {
+    control.removeAt(index);
+  }
+  else{
+    alert('one record is mendatory');
+    return false;
+}
+ }
 
 }

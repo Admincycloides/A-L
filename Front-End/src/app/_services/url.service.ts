@@ -46,10 +46,14 @@ export class UrlService {
   }
   public project = {
     getprojectListbyEmployeeID :'api/Project/GetprojectListbyEmployeeID',
-    getProjectList             : 'api/Project/GetprojectList'
-  }
-  
-  public Project = {
     addProject : 'api/Project/AddProject',
+    deleteProject : 'api/Project/DeleteProject',
+    allocateResources : 'api/Project/allocateResources',
+  }
+
+  public activity = {
+    addActivity : 'api/Project/AddActivity',
+    getActivityList : 'api/Project/GetActivityList',
+
   }
 }

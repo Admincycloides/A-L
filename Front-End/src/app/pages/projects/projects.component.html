@@ -4,9 +4,9 @@
         <input type="text" class="search-filter" placeholder="Search Project"/>
     </div>
     <div class="action d-flex justify-content-end">
-        <button class="act-btn thm-btn thm-btn-primary" (click)="addFieldValue()" [disabled]="projectGroup.invalid" ion-button><i class="nc-icon nc-simple-add"></i>Add Project</button>
+        <button class="act-btn thm-btn thm-btn-primary" type="button" (click)="addFieldValue()"><i class="nc-icon nc-simple-add"></i>Add Project</button>
         <!-- the below button have to be added conditionaly -->
-        <button class="act-btn thm-btn thm-btn-primary" (click)="saveField()"><i class="nc-icon nc-check-2"></i>Save</button>
+        <button class="act-btn thm-btn thm-btn-primary" type="button" (click)="saveField()"><i class="nc-icon nc-check-2"></i>Save</button>
     </div>
     <!-- <div class="action d-flex justify-content-end">
       <button (click)="addFieldValue()" [disabled]="projectGroup.invalid" ion-button>Add</button>
@@ -21,14 +21,16 @@
     <div class="col"> Start Date</div>
     <div class="col"> End Date</div>
     <div class="col"> Current Status</div>
-    <!-- <div class="col"> SHED Project</div> -->
+    <div class="col"> SHED Project</div>
     <div class="col"> Edit</div>
     <div class="col"> View</div>
     <div class="col"> Assigned to</div>
+    <div class="col">Delete</div>
   </div>
 </div>
-<form [formGroup]="projectGroup">
-  <ng-container projectGroup.controls.itemRows != null>
+<form [formGroup]="projectGroup" (ngSubmit)="saveField()">
+  <div formArrayName ="itemRows">
+  <ng-container projectGroupcontrols.itemRows != null>
       <div *ngFor="let itemrow of projectGroup['controls'].itemRows['controls']; let i = index" [formGroupName]="i">
           <div class="row">
                   <div class="col-md-12">
@@ -45,40 +47,47 @@
                                                   <input placeholder="Project Description" formControlName="itemrow.projectDescription" type="text" *ngIf="itemrow.editable"/>
                                             </td>
                                             <td class="col-md-2 form-group"> 
-                                                  <span *ngIf="!itemrow.editable">{{itemrow.clientName}}</span>
-                                                  <input placeholder="Client Name" formControlName="itemrow.clientName"  type="text" *ngIf="itemrow.editable" />
+                                                  <span *ngIf="!itemrow.editable">{{itemrow.clientId}}</span>
+                                                  <input placeholder="Client Name" formControlName="itemrow.clientId" type="int" *ngIf="itemrow.editable" />
                                             </td>
                                             <td class="col-md-2 form-group">
                                                   <span *ngIf="!itemrow.editable">{{itemrow.startDate}}</span>
-                                                  <input placeholder="StartDate" formControlName="itemrow.startDate"  type="date" *ngIf="itemrow.editable"/>
+                                                  <input placeholder="StartDate" formControlName="itemrow.startDate" type="date" *ngIf="itemrow.editable"/>
                                             </td>
                                             <td class="col-md-2 form-group">
                                                   <span *ngIf="!itemrow.editable">{{itemrow.endDate}}</span>
-                                                  <input placeholder="End Date" formControlName="itemrow.endDate"  type="date" *ngIf="itemrow.editable"/>
+                                                  <input placeholder="End Date" formControlName="itemrow.endDate" type="date" *ngIf="itemrow.editable"/>
                                             </td>
                                             <td class="col-md-2 form-group">
                                                  <span *ngIf="!itemrow.editable">{{itemrow.currentStatus}}</span>
-                                                 <input placeholder="Current Status" formControlName="itemrow.currentStatus"  type="text" *ngIf="itemrow.editable"/>
+                                                 <input placeholder="Current Status" formControlName="itemrow.currentStatus" type="text" *ngIf="itemrow.editable"/>
                                             </td>
-                                             <!-- <td class="col-md-2 form-group">
-                                                <span *ngIf="!itemrow.editable">{{itemrow.SHEDProject}}</span>
-                                                  <input placeholder="SHED Project" formControlName="itemrow.shedProject"  type="text" *ngIf="itemrow.editable"/>
-                                             </td> -->
+                                             <td class="col-md-2 form-group">
+                                                <span *ngIf="!itemrow.editable">{{itemrow.sredProject}}</span>
+                                                  <input placeholder="SHED Project" formControlName="itemrow.sredProject" type="text" *ngIf="itemrow.editable"/>
+                                             </td>
                                             <td class="col-md-2 form-group">
-                                              <button class="edit" (click)="makeEditable(itemrow)">
+                                              <button class="edit" type="button" (click)="makeEditable(itemrow)">
                                                 <!-- <img
                                                   src="../../../assets/img/edit.png"
                                                   alt="" /> -->Edit
                                                 </button></td>
                                             <td class="col-md-2 form-group">
-                                                <button class="view" routerLink="/activities">
+                                                <button class="view" routerLink="/activities" type="button">
                                                   <!-- <img src="../../../assets/img/view.png" alt="" /> -->view
                                                 </button>
                                            </td>
                                            <td class="col-md-2 form-group">
                                                 <span *ngIf="!itemrow.editable">{{itemrow.assignedto}}</span>
-                                                <input placeholder="Assigned To" formControlName="itemrow.assignedto"  type="text" *ngIf="itemrow.editable"/>
+                                                <input placeholder="Assigned To" formControlName="itemrow.assignedto" type="text" *ngIf="itemrow.editable"/>
                                           </td>
+                                          <td class="col-md-2 form-group" >
+                                            <button class="delete" type="button" (click)="deleteRow(i)" >
+                                                <!-- <img
+                                                src="../../../assets/img/delete.png"
+                                                alt="" /> -->Delete
+                                            </button>
+                                        </td>
                                   </table>
                               </div>
                           </div>
@@ -87,4 +96,5 @@
               </div> 
       </div>
   </ng-container>
+</div>
 </form>
