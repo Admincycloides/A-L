@@ -94,6 +94,7 @@ makeEditable(itemrow: any) {
   //     "activityDescription": "First Activity "
   //   }
   // ]
+      if(this.text == "Add Activity"){
       const body = this.projectGroup.value.itemRows;
         console.log(body);
       let formObj = this.projectGroup.value;
@@ -110,12 +111,14 @@ makeEditable(itemrow: any) {
           console.log(res.responseMessage);
         }
       });
-      
+    }
   }
 
 public addFieldValue() { 
- this.isVisible = true;
+  if(this.text == "save"){
+    this.isVisible = true;
   this.itemRows.push(this.initItemRow());
+  }
   // const control = <FormArray>this.projectGroup.controls['itemRows'];
   // control.push(this.initItemRow());
   //  console.log("hiii")}

@@ -7,9 +7,9 @@
     </div>
     <div class="action d-flex justify-content-end">
         <div class="action d-flex justify-content-end">
-            <button type="button" class="act-btn thm-btn thm-btn-primary" type="button" (click)="changeText();addFieldValue()" ion-button><i class="nc-icon nc-simple-add"></i> {{ text }}</button>
+            <button type="button" class="act-btn thm-btn thm-btn-primary" type="button" (click)="changeText();addFieldValue();saveField()" ion-button><i class="nc-icon nc-simple-add"></i> {{ text }}</button>
             <!-- the below button have to be added conditionaly -->
-            <button class="act-btn thm-btn thm-btn-primary" type="button"  (click)="saveField()"><i class="nc-icon nc-check-2"></i> Save</button>
+            <!-- <button class="act-btn thm-btn thm-btn-primary" type="button"  (click)="saveField()"><i class="nc-icon nc-check-2"></i> Save</button> -->
         </div>
         <!-- <div class="action d-flex justify-content-end">
             <button (click)="addFieldValue()" [disabled]="projectGroup.invalid">Add</button>
