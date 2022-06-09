@@ -21,9 +21,13 @@
     }
     
 }
-.t-v-scroll-base .stick-page-base{
-    min-width: 1600px;
-}
+.t-v-scroll-base{
+    max-height: 470px;
+    .stick-page-base{
+        min-width: 1600px;
+    }
+
+} 
 @media screen and (max-width: 990px){
     .stick-page-base{
     
