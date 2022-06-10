@@ -19,34 +19,33 @@ export class ActivitiesComponent implements OnInit {
   public index: any = '';
   public isSubmitted: boolean = false;
 
-  public addActivity = [];
+  // public addActivity = [];
 
   public isVisible : boolean = false;
 
   public text: string = 'Add Activity';
 
+  config: any;
+  collection = { count: 60, data: [] };
+
   constructor(private _fb:FormBuilder, public titleService: Title,private _http: HttpService,private _url: UrlService) {
     this.projectGroup = this._fb.group({
-      itemRows:this._fb.array([this.initItemRow()]),
+      itemRows:this._fb.array([]),
     });
+
+    this.getActivityDetails(),
+
+    this.config = {
+      itemsPerPage: 5,
+      currentPage: 1,
+      totalItems: this.collection.count
+    };
   }
 
-  ngOnInit() {
-    this.titleService.setTitle("Project Name");
-    this.getActivityDetails()
+  get itemRows() : FormArray {
+
+    return this.projectGroup.get("itemRows") as FormArray
   }
-  private getActivityDetails(){
-
-
-    const url = `${this._url.activity.getActivityList}`
-    this._http.get(url).subscribe({
-      next:(res:any)=>{
-        console.log("res",res)
-        this.projectGroup['controls'].itemRows['controls'] = res.data;
-      }
-
-      })
-    }
 
   initItemRow():FormGroup{
     return this._fb.group({
@@ -56,10 +55,24 @@ export class ActivitiesComponent implements OnInit {
     })
   }
 
-  get itemRows() : FormArray {
 
-    return this.projectGroup.get("itemRows") as FormArray
+
+  ngOnInit() {
+    this.titleService.setTitle("Project Name");
   }
+
+
+  private getActivityDetails(){
+    const url = `${this._url.activity.getActivityList}`
+    this._http.get(url).subscribe({
+      next:(res:any)=>{
+        this.itemRows['controls'] = res.data;
+      }
+
+      })
+    }
+
+  
   public changeText(){
     if (this.text === 'Add Activity') {
       this.text = 'save';
@@ -97,7 +110,7 @@ makeEditable(itemrow: any) {
       if(this.text == "Add Activity"){
       const body = this.projectGroup.value.itemRows;
         console.log(body);
-      let formObj = this.projectGroup.value;
+      let formObj = this.projectGroup.value.itemRows;
       console.log(formObj);
         let serializedForm = JSON.stringify(formObj.itemRows);
         console.log(serializedForm);
@@ -142,4 +155,10 @@ public addFieldValue() {
 //     return false;
 // }
  }
+ 
+ pageChanged(event){
+  this.config.currentPage = event;
 }
+
+}
+
