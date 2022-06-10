@@ -123,9 +123,18 @@ table{
             &:hover{
                 opacity: .7;
             }
+            &.view{
+                img{
+                    width: 20px;
+                    max-width: 20px;
+                }
+            }
         }
         padding: 16px 7px!important;
         border-top: solid 1px #e6e6e6!important;
+        .cd-input{
+            min-width: 124px;
+        }
     }
     tbody{
         border: none!important;
@@ -274,7 +283,7 @@ input[type='number']::-webkit-inner-spin-button {
     margin-top: 100px;
 }
 .sidebar .nav i, .off-canvas-sidebar .nav i{
-    font-size: 18px;
+    font-size: 15px;
     margin-right: 0px;
     bottom: 3px;
 }
