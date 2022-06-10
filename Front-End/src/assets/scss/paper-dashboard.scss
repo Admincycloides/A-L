@@ -142,6 +142,28 @@ table{
         }
     }
 }
+// custom scroll
+/* width */
+.table-responsive::-webkit-scrollbar {
+    width: 10px;
+    height: 13px;
+  }
+  
+  /* Track */
+  .table-responsive::-webkit-scrollbar-track {
+    background: #ededed;
+  }
+  
+  /* Handle */
+  .table-responsive::-webkit-scrollbar-thumb {
+    background:#c6c6c6;
+    @include radius(2px);
+  }
+  
+  /* Handle on hover */
+  .table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #b6b6b6;
+  }
 //pagination
 .ngx-pagination .current{
     background-color: $secondary-color;
@@ -421,6 +443,18 @@ ng-multiselect-dropdown{
         border-radius: 4px;
         font-size: 14px;
     }
+}
+.multiselect-dropdown .dropdown-btn .selected-item-container .selected-item,.multiselect-item-checkbox input[type=checkbox]:checked + div:before{
+    border: solid 1px $secondary-color!important;
+    background: $secondary-color!important;
+}
+.multiselect-item-checkbox input[type=checkbox]:checked + div:before{
+    background: $secondary-color!important;
+    color: $secondary-color!important;
+    border: solid 2px $secondary-color!important;
+}
+.multiselect-item-checkbox input[type=checkbox] + div:before{
+    border: solid 2px $secondary-color!important;
 }
 .fm-date,.tm-date{
     .form-control{
