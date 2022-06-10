@@ -7,9 +7,11 @@ using Serilog;
 using AnL.Constants;
 using AnL.Models;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AnL.Controllers
 {
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class ProjectController : Controller
@@ -50,6 +52,22 @@ namespace AnL.Controllers
             {
                 BaseResponse rsp = new BaseResponse();
                 rsp.Data = await _UOW.ProjectRepository.GetActivityList();
+                return Ok(rsp);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+
+        }
+        [HttpGet]
+        public async Task<ActionResult> GetClientList()
+        {
+            try
+            {
+                BaseResponse rsp = new BaseResponse();
+                rsp.Data = await _UOW.ProjectRepository.GetClientList();
                 return Ok(rsp);
             }
             catch (Exception ex)
@@ -139,6 +157,39 @@ namespace AnL.Controllers
         }
 
         [HttpPost]
+        public async Task<ActionResult> EditProject(EditProjectView project)
+        {
+            BaseResponse response = new BaseResponse();
+            if (project == null)
+            {
+                response.Data = project;
+                response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
+            }
+            var EditProjectResponse = _UOW.ProjectRepository.EditProject(project);
+
+            if (EditProjectResponse != null)
+            {
+                response.Data = EditProjectResponse;
+                response.ResponseCode = HTTPConstants.OK;
+                response.ResponseMessage = MessageConstants.ProjectDeletionSuccess;
+
+            }
+            else
+            {
+                response.Data = EditProjectResponse;
+                response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
+                return BadRequest(response);
+            }
+            return Ok(response);
+
+
+        
+
+}
+
+        [HttpPost]
         public async Task<ActionResult> DeleteProject(List<ProjectViewModel> project )
         {
             try
@@ -148,7 +199,7 @@ namespace AnL.Controllers
                 {
                     response.Data = project;
                     response.ResponseCode = HTTPConstants.BAD_REQUEST;
-                    response.ResponseMessage = MessageConstants.TimesheetDeletionSuccess;
+                    response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
                 }
                 var DeleteProjectResponse = _UOW.ProjectRepository.DeleteProject(project);
                 
