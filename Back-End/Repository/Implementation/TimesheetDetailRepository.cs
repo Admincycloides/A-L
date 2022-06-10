@@ -163,7 +163,7 @@ namespace AnL.Repository.Implementation
         public bool GetTimesheetDetailsForProject(int ProjectId)
         {
             List<TimesheetDetails> details = this.GetAllByCondition(x => x.ProjectId == ProjectId).ToList();
-            if(details==null)
+            if(details.Count==0)
             {
                 return false;
             }

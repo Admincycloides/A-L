@@ -10,11 +10,17 @@ using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using AnL.Constants;
 using AnL.ViewModel;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TestApplication.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
+    
     public class UserController : Controller
     {
         private readonly IUnitOfWork _UOW;
@@ -41,9 +47,9 @@ namespace TestApplication.Controllers
                 BaseResponse baseResponse = new BaseResponse();
                 int otp = rnd.Next(10000, 99999);
                 string msg = "Your otp from test.com is " + otp;
-                bool result = SendOTP(mailto, "Subjected to OTP", msg);
-                var details = await _UOW.UserRepository.GetLogin(mailto);
-
+                bool result = SendOTP(mailto.Trim(), "Subjected to OTP", msg);
+                var details = await _UOW.UserRepository.GetLogin(mailto.Trim());
+                
                 if (details == null)
                 {
                     baseResponse.Data = details;
@@ -53,7 +59,7 @@ namespace TestApplication.Controllers
                 }
                 else if (result == false)
                 {
-                    baseResponse.Data = details;
+                    baseResponse.Data = result;
                     baseResponse.ResponseCode = HTTPConstants.BAD_REQUEST;
                     baseResponse.ResponseMessage = MessageConstants.GenerateOTPFailed;
                     return BadRequest(baseResponse);
@@ -123,6 +129,8 @@ namespace TestApplication.Controllers
             {
                 var details = await _UOW.UserRepository.GetLogin(username);
                 var EmployeeDetails = _UOW.EmployeeDetailsRepository.GetById(details.UserId);
+                
+
                 LoginViewModel loginView = new LoginViewModel();
                 loginView.EmployeeId = EmployeeDetails.EmployeeId;
                 loginView.Username = details.Username;
@@ -135,7 +143,8 @@ namespace TestApplication.Controllers
                 loginView.LastName = EmployeeDetails.LastName;
                 loginView.ManagerId = EmployeeDetails.ManagerId;
                 loginView.SupervisorFlag = EmployeeDetails.SupervisorFlag;
-
+                
+                
                 BaseResponse baseResponse = new BaseResponse();
                 TimeSpan result = DateTime.UtcNow - details.OtpexpiryDate;
                 //int a = Convert.ToInt32(TempData["otp"]);

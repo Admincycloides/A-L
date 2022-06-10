@@ -19,6 +19,7 @@ namespace AnL.Repository.Implementation
         DbSet<ProjectMapping> dbSetProjectMapp;
         DbSet<ActivityMapping> dbActivityMapp;
         DbSet<ActivityDetails> dbActivity;
+        DbSet<ClientDetails> dbClient;
         public ProjectRepository(DbContext context, IUnitOfWork UOW) : base(context)
         {
             this._context = context;
@@ -80,11 +81,12 @@ namespace AnL.Repository.Implementation
                     {
 
                         var activty = new List<ActivityMapping>();
+
+
                         foreach (var a in proj.Activities)
                         {
-                            activty.Add(new ActivityMapping { ActivityId = a.ActivityId });
+                            activty.Add(new ActivityMapping { ActivityId = a.ActivityId, IsActive=true});
                         }
-
 
                         ProjectDetails Project = new ProjectDetails
                         {
@@ -102,7 +104,13 @@ namespace AnL.Repository.Implementation
 
                         this.Add(Project);
                         this.SaveChanges();
-
+                        
+                        //foreach (var a in proj.Activities)
+                        //{
+                        //    activty.Add(new ActivityMapping { ActivityId = a.ActivityId, ProjectId= Project.ProjectId });
+                        //}
+                        //Project.ActivityMapping = activty;
+                        //this.SaveChanges();
                         return (await _context.Set<ProjectDetails>().Where(X => X.ProjectName.Trim() == proj.ProjectName.Trim().ToLower()).Select(X => X.ProjectId).FirstOrDefaultAsync());
                     }
                     else
@@ -133,6 +141,7 @@ namespace AnL.Repository.Implementation
                            ActivityName = X.ActivityName,
                            EnabledFlag = X.EnabledFlag
 
+
                        }
                        )).ToList();
 
@@ -144,15 +153,44 @@ namespace AnL.Repository.Implementation
                 throw ex;
             }
             }
+        public async Task<List<ClientViewModel>> GetClientList()
+        {
+            List<ClientViewModel> rsp = new List<ClientViewModel>();
+            try
+            {
+                await Task.Run(() =>
+                {
+                    rsp = (_context.Set<ClientDetails>().Select(
 
+                        X => new ClientViewModel
+                        {
+                            ClientId=X.ClientId,
+                            ClientName=X.ClientName,
+                            ContactEmailAddress=X.ContactEmailAddress,
+                            PointOfContactName=X.PointOfContactName,
+                            Address=X.Address,
+                            ContactNumber=X.ContactNumber
+
+                        }
+                        )).ToList();
+
+                });
+                return rsp;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public async Task<object> EditProject(EditProjectView project)
         {
             try
             {
                 List<int> Ids = new List<int>();
                 //validation
-                if (!await _context.Set<ProjectDetails>().Where(X => X.ProjectId == project.ProjectId).AnyAsync())
-                    return "Project dose not exist";
+                //var projectDetails = !await _context.Set<ProjectDetails>().Where(X => X.ProjectId == project.ProjectId).AnyAsync();
+                //if (projectDetails)
+                //    return "Project dose not exist";
 
 
                 if (project.NewActivity != null)
@@ -185,9 +223,8 @@ namespace AnL.Repository.Implementation
                         {
                             NewProject.ActivityMapping.Where(X => X.ActivityId == a.ActivityId).
                                 ToList().ForEach(X => X.ProjectId = 0);
-
                         }
-
+                       
 
                     }
                 this.SaveChanges();
@@ -214,6 +251,7 @@ namespace AnL.Repository.Implementation
 
                         ActivityDetails activity = new ActivityDetails
                         {
+                            //ActivityId=proj.ActivityId,
                             ActivityName = proj.ActivityName,
                             ActivityDescription = proj.ActivityDescription,
                             EnabledFlag = "true"
@@ -231,6 +269,26 @@ namespace AnL.Repository.Implementation
                     }
                 }
                 return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public bool DeleteActivity(List<ActivityMaster> viewModel)
+        {
+            try
+            {
+                var activity = new List<ActivityDetails>();
+                foreach (var a in viewModel)
+                {
+                    //a.EnabledFlag = "false";
+                    activity.Add(new ActivityDetails { ActivityId = a.ActivityId, EnabledFlag="false" });
+                    
+                }
+                
+                return false;
             }
             catch (Exception ex)
             {
@@ -300,10 +358,11 @@ namespace AnL.Repository.Implementation
             try
             {
                 List<ProjectDetails> details = new List<ProjectDetails>();
-                
+                ProjectDetails project1 = new ProjectDetails();
                 foreach (var proj in project)
                 {
-                    
+
+                    //project1 = this.dbSet.Where(X => X.ProjectName == proj.ProjectName).FirstOrDefault();
                     bool TimesheetDetailForProjectPresent = timesheetDetail.GetTimesheetDetailsForProject(proj.ProjectId);
                     if (TimesheetDetailForProjectPresent)
                     {
@@ -312,24 +371,24 @@ namespace AnL.Repository.Implementation
                 }
                 foreach (var proj in project)
                 {
-                    //var projectMapp = new List<ProjectMapping>();
-                    IQueryable<ProjectMapping> result = (IQueryable<ProjectMapping>)_context.Set<ProjectMapping>().
-                                                         Include(c => c.Project).
-                                                        ThenInclude(Z => Z.ActivityMapping).ThenInclude(y => y.Activity);
-                    var activity = new List<ActivityMapping>();
-                    foreach (var a in proj.Activities)
-                    {
-                        a.EnabledFlag = "false";
-                        activity.Add(new ActivityMapping { ActivityId = a.ActivityId });
-                        
-                    }
-                    
-                    ProjectDetails eachItem = new ProjectDetails() { ProjectId = proj.ProjectId };
+                    var projectMapp = new List<ProjectMapping>();
+                    project1 = this.dbSet.Where(X => X.ProjectId == proj.ProjectId).FirstOrDefault();
+                    var activityMapp = new List<ActivityMapping>();
+                    //foreach (var a in proj.Activities)
+                    //{
+                    //    a.EnabledFlag = "false";
+                    //    var activitymapp = this.dbActivityMapp.Where(X => X.ProjectId == a.Pro).fi;//.Add(new ActivityMapping { ActivityId = a.ActivityId });
+
+                    //}
+                    activityMapp = this.dbActivityMapp.Where(X => X.ProjectId == proj.ProjectId).ToList();
+                    projectMapp = this.dbSetProjectMapp.Where(X => X.ProjectId == proj.ProjectId).ToList();
+                    ProjectDetails eachItem = this.GetById(project1.ProjectId);//new ProjectDetails() { ProjectId = proj.ProjectId };
                     
                     //ProjectMapping project1=_context.Add()
-                    eachItem.ActivityMapping = activity;
+                    eachItem.ActivityMapping = activityMapp;
+                    eachItem.ProjectMapping = projectMapp;
                     eachItem.EnabledFlag = "FALSE";
-                        this.Modify(eachItem);
+                       // this.Add(eachItem);
                         this.SaveChanges();
                     
                 }

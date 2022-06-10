@@ -7,9 +7,11 @@ using Serilog;
 using AnL.Constants;
 using AnL.Models;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AnL.Controllers
 {
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class ProjectController : Controller
@@ -50,6 +52,22 @@ namespace AnL.Controllers
             {
                 BaseResponse rsp = new BaseResponse();
                 rsp.Data = await _UOW.ProjectRepository.GetActivityList();
+                return Ok(rsp);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+
+        }
+        [HttpGet]
+        public async Task<ActionResult> GetClientList()
+        {
+            try
+            {
+                BaseResponse rsp = new BaseResponse();
+                rsp.Data = await _UOW.ProjectRepository.GetClientList();
                 return Ok(rsp);
             }
             catch (Exception ex)
