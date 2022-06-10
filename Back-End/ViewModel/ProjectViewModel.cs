@@ -23,4 +23,10 @@ namespace AnL.ViewModel
         public string EnabledFlag { get; set; }
         public List<ProjectActivities> Activities{ get; set; }
     }
+
+    public class ProjectListViewModel
+    {
+        public int ProjectId { get; set; }
+        public string ProjectName { get; set; }
+    }
 }
