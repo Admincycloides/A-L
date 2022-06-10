@@ -21,6 +21,8 @@ import { ReviewtimesheetComponent } from './pages/reviewtimesheet/reviewtimeshee
 import { ReviewlinkComponent } from './pages/reviewtimesheet/reviewlink/reviewlink.component';
 import { ProjectsComponent } from "./pages/projects/projects.component";
 import { ActivitiesComponent } from "./pages/projects/activities/activities.component";
+import { NgxPaginationModule } from 'ngx-pagination';
+
 
 
 
@@ -37,6 +39,7 @@ import { ActivitiesComponent } from "./pages/projects/activities/activities.comp
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
+    NgxPaginationModule,
     RouterModule.forRoot(AppRoutes,{
       useHash: false
     }),

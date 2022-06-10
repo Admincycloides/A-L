@@ -17,47 +17,47 @@
     </div>
 </div>
 <br>
-<div id="headers">
-    <div class="row align-items-start">
-        <div class="col">
-            Activity Name 
-        </div>
-        <div class="col">
-            Activity Description 
-        </div>
-        <div class="col">
-          Edit 
-        </div>
-        <div class="col">
-            Delete 
-          </div>
-    </div>
-</div>
+
 <form [formGroup]="projectGroup">
-    <div formArrayName ="itemRows">
-        <ng-container projectGroup.controls.itemRows != null>
-            <div *ngFor="let itemrow of projectGroup['controls'].itemRows['controls']; let i = index" [formGroupName]="i">
+    <div>
+            <div>
                 <div class="row">
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table class="table">
-                                            <tr class="text-primary">
-                                                <td class="col-md-2 form-group">
+                                            <thead class="text-primary">
+                                                    <th>
+                                                        Activity Name 
+                                                    </th>
+                                                    <th>
+                                                        Activity Description 
+                                                    </th>
+                                                    <th>
+                                                      Edit 
+                                                    </th>
+                                                    <th>
+                                                        Delete 
+                                                    </th>
+                                            </thead>
+                                        <ng-container projectGroup.controls.itemRows>
+                                         <tbody formArrayName ="itemRows">
+                                            <tr *ngFor="let itemrow of itemRows['controls']; let i = index" [formGroupName]="i">
+                                                <td class="col-md-2">
                                                     <span *ngIf="!itemrow.editable">{{itemrow.activityName}}</span>
                                                     <input placeholder="Activity Name" formControlName="activityName" *ngIf="itemrow.editable" />
                                                 </td>
-                                                <td class="col-md-2 form-group">
+                                                <td class="col-md-2">
                                                     <span *ngIf="!itemrow.editable">{{itemrow.activityDescription}}</span>
                                                     <input placeholder="Activity Description" formControlName="activityDescription" *ngIf="itemrow.editable" />
                                                 </td>
-                                                <td class="col-md-2 form-group">
+                                                <td class="col-md-2">
                                                     <button class="edit" (click)="makeEditable(itemrow)"><img
                                                         src="../../../assets/img/edit.png"
                                                         alt="" /></button>
                                                 </td>
-                                                <td class="col-md-2 form-group">
+                                                <td class="col-md-2">
                                                     <button class="delete" (click)="deleteRow(i)" >
                                                         <img
                                                         src="../../../assets/img/delete.png"
@@ -65,13 +65,18 @@
                                                     </button>
                                                 </td>
                                             </tr>
+                                         </tbody>
+                                        </ng-container>
                                         </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div> 
+                </div> 
             </div>
-        </ng-container>
+            <pagination-controls (pageChange)="pageChanged($event)"
+            [maxSize]="5"></pagination-controls>
     </div>
+    
 </form>
+ 

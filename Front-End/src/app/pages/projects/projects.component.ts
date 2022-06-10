@@ -13,26 +13,37 @@ import { ToastrService } from 'ngx-toastr';
 export class ProjectsComponent implements OnInit {
   public index: any = '';
   userDetails: any;
-  addProjects = [];
+  
   public isSubmitted: boolean = false;
   projectGroup : FormGroup;
   TotalRow : number; 
   public toggleButton: boolean = false;
 
+  // public addProjects = [];
 
   public text: string = 'Add Project';
+  config: any;
+  collection = { count: 60, data: [] };
 
   constructor(private _url: UrlService,
     private _fb:FormBuilder,private _http: HttpService
   ) { 
     this.projectGroup = this._fb.group({
-      itemRows:this._fb.array([this.initItemRow()]),
+      itemRows:this._fb.array([]),
     });
+
+    this.config = {
+      itemsPerPage: 5,
+      currentPage: 1,
+      totalItems: this.collection.count
+    };
   }
+  
 
   ngOnInit(): void {
     this.toggleButton = true,
-    this.getProjectActivityDetails();
+    this.getProjectActivityDetails(),
+    this.getListofProjects()
   }
 
   private getProjectActivityDetails(){
@@ -40,10 +51,20 @@ export class ProjectsComponent implements OnInit {
     const url = `${this._url.project.getprojectListbyEmployeeID}`
     this._http.get(url).subscribe({
       next:(res:any)=>{
-        this.projectGroup['controls'].itemRows['controls'].value = res.data;}
+        this.projectGroup.value.itemRows = res.data;}
       })
     }
-      
+
+
+    private getListofProjects(){
+
+      const url = `${this._url.project.getallprojectlist}`
+    this._http.get(url).subscribe({
+      next:(res:any)=>{
+        this.projectGroup.value.itemRows = res.data;}
+      })
+
+    }
 
 
 
@@ -52,16 +73,11 @@ export class ProjectsComponent implements OnInit {
     projectName:[""],
     projectDescription: [""],
     clientId: [0],
-    startDate: [""],
-    endDate: [""],
+    startDate: ["29/11/2022"],
+    endDate: ["29/12/2022"],
     currentStatus: [""],
     sredProject: [""],
     activities: [
-      {
-      activityName:[""],
-      activityDescription:[""],
-      enabledFlag: [""]
-      }
     ] 
     })
   }
@@ -108,14 +124,14 @@ export class ProjectsComponent implements OnInit {
         }
       });
   }
-//   public changeText(){
-//     if (this.text === 'Add Project') {
-//       this.text = 'Save';
-//     } else {
-//       this.text = 'Add Project';
-//     }
+  public changeText(){
+    if (this.text === 'Add Project') {
+      this.text = 'save';
+    } else {
+      this.text = 'Add Project';
+    }
 
-// }
+}
 
 makeEditable(itemrow: any) {
   itemrow.editable = !itemrow.editable;
@@ -129,7 +145,7 @@ public addFieldValue(){
 }
 
 public deleteRow(index : any) {
-
+  
   // let temp = [
   //   {
   //     "projectName": "prr",
@@ -177,5 +193,9 @@ public deleteRow(index : any) {
     return false;
 }
  }
+
+ pageChanged(event){
+  this.config.currentPage = event;
+}
 
 }

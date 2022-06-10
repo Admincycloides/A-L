@@ -50,6 +50,7 @@ export class UrlService {
     addProject : 'api/Project/AddProject',
     deleteProject : 'api/Project/DeleteProject',
     allocateResources : 'api/Project/allocateResources',
+    getallprojectlist : 'api/Project/GetAllProjectList'
   }
 
   public activity = {
