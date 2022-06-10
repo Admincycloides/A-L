@@ -378,13 +378,17 @@ export class TimesheetComponent implements OnInit {
   }
 
   //on checking checkbox of the table
-  onRowCheck(id: any){
+  onRowCheck(id: any,event:any){
     if(id == -1){
       this.showSideWindowCheckAll = !this.showSideWindowCheckAll;
       this.showSideWindow = false;
       this.selectAllTimesheet = !this.selectAllTimesheet;
       this.timeSheetDetails.forEach((item)=>{
-        if(item.status == 'In Progress' || item.status == 'Rejected') this.selectedTimesheetRow.push(item)
+        if(item.status == 'In Progress' || item.status == 'Rejected'){
+          if(!this.selectedTimesheetRow.includes(item)){
+            this.selectedTimesheetRow.push(item);
+          }
+        }
       })
     }else{
       this.showSideWindow = !this.showSideWindow;
@@ -396,6 +400,7 @@ export class TimesheetComponent implements OnInit {
         this.selectedTimesheetRow.splice(this.selectedTimesheetRow.indexOf(this.timeSheetDetails[id]),1);
       }
     }
+    //console.log("ske",this.selectedTimesheetRow);
 
   }
   //saving the timsheet details
@@ -489,10 +494,6 @@ export class TimesheetComponent implements OnInit {
         }
   
       })
-  
-        
-        
-  
       }  
 
     }
@@ -501,6 +502,7 @@ export class TimesheetComponent implements OnInit {
   }
   //submitting the timesheet
   onSubmitTimesheet(){
+    console.log(this.selectedTimesheetRow);
     if(this.selectedTimesheetRow.length !=0){
       if(this.managerId && this.managerId != '(Supervisor)'){
         this.selectedTimesheetRow.forEach((item)=>{
@@ -511,11 +513,11 @@ export class TimesheetComponent implements OnInit {
         this._http.post(url,body).subscribe({
             next:(res:any)=>{
             this.toast.success(res.responseMessage);
+            this.selectedTimesheetRow = [];
+            this.submitRemarks ='';
             this.getTimesheetDetails(this.startOfWeek,this.endOfWeek);
           }
         })
-        this.selectedTimesheetRow = [];
-        this.submitRemarks ='';
       }else{
         this.toast.error("Please Select Your Supervisor.");
       }
