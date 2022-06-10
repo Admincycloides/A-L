@@ -508,7 +508,7 @@ export class TimesheetComponent implements OnInit {
           item['employeeRemarks'] = this.submitRemarks;
         })
         const body = this.selectedTimesheetRow;
-        const url = `${this._url.timesheet.submitTimesheet}?ManagerID=${this.managerId}&EmployeeName=${this.userDetails.username}`;
+        const url = `${this._url.timesheet.submitTimesheet}?ManagerID=${this.managerId}&EmployeeID=${this.userDetails.employeeId}`;
         this._http.post(url,body).subscribe({
             next:(res:any)=>{
             this.toast.success(res.responseMessage);

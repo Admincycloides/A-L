@@ -20,6 +20,7 @@ export class ReviewlinkComponent implements OnInit {
   searchTerm :any;
   submitRemarks: any;
   status: any;
+  empID:any;
   public config = {
     id: 'timesheetDetails',
     currentPage: 1,
@@ -39,6 +40,7 @@ export class ReviewlinkComponent implements OnInit {
       this.projectName = params.params.projectName;
       this.submitDate =params.params.date;
       this.status = params.params.status;
+      this.empID = params.params.empID;
     });
     this.user = JSON.parse(localStorage.getItem('user'));
     this.getReviewTimesheetDetails()
@@ -171,7 +173,7 @@ export class ReviewlinkComponent implements OnInit {
   //on clicking approve or disapprove
   public onAcceptingTimesheet(value:string,remarks:any){
     const data = value;
-    const url = `${this._url.timesheet.supervisorDecision}?SupervisorID=${this.user.employeeId}&Action=${data}`
+    const url = `${this._url.timesheet.supervisorDecision}?SupervisorID=${this.user.employeeId}&EmployeeID=${this.empID}&Action=${data}`
     const body = this.timesheetDetails;
     body.forEach((item)=>{
       item.supervisorRemarks = remarks;
