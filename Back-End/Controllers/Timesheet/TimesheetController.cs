@@ -560,7 +560,7 @@ namespace AnL.Controllers
         }
 
 
-        [NonAction]
+        [HttpPost]
         public async Task<ActionResult> GetTimesheetReport(ReportRequest model)
         {
             Dictionary<string, string[]> parameters = new Dictionary<string, string[]>();
@@ -570,21 +570,9 @@ namespace AnL.Controllers
             parameters.Add("TO_DATE", null);//, new string[] { model.ToDate });
             List<SPViewModel> countList = _UOW.ExcecuteSP("USP_GET_TIMESHEET_REPORT", parameters);
             var queryable = countList.ToList();
-            //     public class TimeSpentperDay
-            //{
-            //    public DateTime Date { get; set; }
-            //    public double NumberOfHours { get; set; }
-            //}
-            //public class ReportViewModel
-            //{
-            //    public string ProjectName { get; set; }
-            //    public string EmployeeName { get; set; }
-            //    public List<TimeSpentperDay> TimeSpent { get; set; }
-
-            // }
-            //order by date 
+          
             List<ReportViewModel> reports = new List<ReportViewModel>();
-
+            List<ReportDayWiseTotal> days = new List<ReportDayWiseTotal>();
             foreach (var a in queryable.Select(x => x.ProjectId).Distinct())
             {
 
@@ -599,8 +587,34 @@ namespace AnL.Controllers
                 }).ToList();
                 reports.AddRange(recd);
 
+                
             }
-            return Ok(reports);
+            //        var result =
+            //from s in meter_readings.Take(10)
+            //group s by new { date = new DateTime(s.read_date.Year, s.read_date.Month, 1) } into g
+            //select new
+            //{
+            //    read_date = g.Key.date,
+            //    T1 = g.Sum(x => x.T1),
+            //    T2 = g.Sum(x => x.T2)
+            //  };
+            //run and check ok
+            var dateRange = reports.SelectMany(X => X.TimeSpent).ToList();
+
+            var abc= (from dr in dateRange
+                     group dr by dr.Date into g
+
+                     select new ReportDayWiseTotal
+                     {
+                          Date = g.Key.Date,
+                          NumberOfHours = g.Sum(x => x.NumberOfHours),
+                        
+                     }).ToList();
+
+            ProjectLevelReport projectLevelReport = new ProjectLevelReport();
+            projectLevelReport.reportViewModels= reports;
+            projectLevelReport.reportDayWiseTotals=abc;
+            return Ok(projectLevelReport);
         }
 
         [NonAction]
