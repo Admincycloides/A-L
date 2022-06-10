@@ -177,7 +177,7 @@
         </div>
     </div>
 
-    <div class=" remarks-col" *ngIf="showSideWindow">
+    <div class=" remarks-col" *ngIf="showSideWindow || showSideWindowCheckAll">
         <div class="card">
             <div class="card-body pt-1">
                 <div class="r-row mb-1">
@@ -282,25 +282,25 @@
                               <ng-container>
                                 <tr>
                                   <td>
-                                      <input type="text" class="h-input" formControlName="monday" />
+                                      <input type="number" class="h-input" formControlName="monday"  min="0" max="24" />
                                   </td>
                                   <td>
-                                      <input type="number" class="h-input" formControlName="tuesday" />
+                                      <input type="number" class="h-input" formControlName="tuesday" min="0" max="24"/>
                                   </td>
                                   <td>
-                                      <input type="number" class="h-input" formControlName="wednesday" />
+                                      <input type="number" class="h-input" formControlName="wednesday" min="0" max="24" />
                                   </td>
                                   <td>
-                                      <input type="number" class="h-input" formControlName="thursday" />
+                                      <input type="number" class="h-input" formControlName="thursday" min="0" max="24" />
                                   </td>
                                   <td>
-                                      <input type="number" class="h-input" formControlName="friday" />
+                                      <input type="number" class="h-input" formControlName="friday" min="0" max="24" />
                                   </td>
                                   <td>
-                                      <input type="number" class="h-input" formControlName="saturday" />
+                                      <input type="number" class="h-input" formControlName="saturday" min="0" max="24" />
                                   </td>
                                   <td>
-                                      <input type="number" class="h-input" formControlName="sunday" />
+                                      <input type="number" class="h-input" formControlName="sunday" min="0" max="24" />
                                   </td>
 
 

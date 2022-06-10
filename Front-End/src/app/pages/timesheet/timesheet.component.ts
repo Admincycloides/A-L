@@ -45,7 +45,8 @@ export class TimesheetComponent implements OnInit {
   managerId: any;
   timesheetRemarks :any;
   submitRemarks :any;
-  showSideWindow = false
+  showSideWindow = false;
+  showSideWindowCheckAll = false;
 
   get f() {
     return this.addTimesheetForm.controls;
@@ -378,13 +379,16 @@ export class TimesheetComponent implements OnInit {
 
   //on checking checkbox of the table
   onRowCheck(id: any){
-    this.showSideWindow = !this.showSideWindow;
     if(id == -1){
+      this.showSideWindowCheckAll = !this.showSideWindowCheckAll;
+      this.showSideWindow = false;
       this.selectAllTimesheet = !this.selectAllTimesheet;
       this.timeSheetDetails.forEach((item)=>{
         if(item.status == 'In Progress' || item.status == 'Rejected') this.selectedTimesheetRow.push(item)
       })
     }else{
+      this.showSideWindow = !this.showSideWindow;
+      this.showSideWindowCheckAll = false;
       if(!this.selectedTimesheetRow.includes(this.timeSheetDetails[id]))
       {
         this.selectedTimesheetRow.push(this.timeSheetDetails[id]);
@@ -397,7 +401,6 @@ export class TimesheetComponent implements OnInit {
   //saving the timsheet details
   onSaveTimesheetDetails(){
     this.formSubmitted = true;
-    this.activityList = [];
     if(this.addTimesheetForm.valid){
       let projectId: any;
       let activityId: any
@@ -445,6 +448,7 @@ export class TimesheetComponent implements OnInit {
         next:(res:any)=>{
           this.toast.success(res.responseMessage);
           this.getTimesheetDetails(this.startOfWeek,this.endOfWeek);
+          this.activityList = [];
           this.modalRef.close();
         },
         error:(err:any)=>{

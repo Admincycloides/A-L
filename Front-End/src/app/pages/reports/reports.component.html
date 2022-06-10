@@ -5,10 +5,10 @@
         <div class="mg-filter col-md-3 pl-md-0 px-sm-2 px-0 px-lg-2 px-xl-2 mb-2
             mb-sm-0 mb-md-0 mb-lg-0 mb-xl-0">
             <ng-multiselect-dropdown
-                name="project"
                 [placeholder]="'Select Project'"
                 [settings]="dropdownSettings"
                 [data]="projectList"
+                name="project"
                 (onDeSelect)="onProjectEmployeeDeSelect($event,'project')"
                 (onSelect)="onProjectEmployeeSelect($event,'project')"
                 (onSelectAll)="onProjectEmployeeSelectAll($event,'project')"
@@ -17,14 +17,15 @@
         <div class="mg-filter col-md-3 pl-md-0 px-sm-2 px-0 px-lg-2 px-xl-2 mb-2
             mb-sm-0 mb-md-0 mb-lg-0 mb-xl-0">
             <ng-multiselect-dropdown
-                name="employee"
                 [placeholder]="'Select Employee'"
-                [settings]="dropdownSettings"
+                [settings]="dropdownEmployeeSettings"
                 [data]="employeeList"
+                name="employee"
                 (onDeSelect)="onProjectEmployeeDeSelect($event,'employee')"
                 (onSelect)="onProjectEmployeeSelect($event,'employee')"
                 (onSelectAll)="onProjectEmployeeSelectAll($event,'employee')"
-                (onDeSelectAll)="onProjectEmployeeDeSelectAll($event,'employee')"></ng-multiselect-dropdown>
+                (onDeSelectAll)="onProjectEmployeeDeSelectAll($event,'employee')"
+                ></ng-multiselect-dropdown>
         </div>
         <div class="mg-filter col-md-3 pl-md-0 px-sm-2 px-0 px-lg-2 px-xl-2 mb-2
             mb-sm-0 mb-md-0 mb-lg-0 mb-xl-0 fm-date position-relative">
@@ -50,9 +51,9 @@
             pl-lg-2 pl-xl-2 px-0 mb-2 mb-sm-0 mb-md-0 mb-lg-0 mb-xl-0 tm-date">
             <input
                 class="form-control"
-                placeholder="Till Date"
+                placeholder="To Date"
                 readonly
-                name="Till Date"
+                name="To Date"
                 [maxDate]="maxPickerDateTo"
                 (dateSelect)="dateChange($event,'to')"
                 [minDate]="minPickerDateTo"
@@ -92,32 +93,25 @@
                             <th *ngFor="let date of allDates">
                                 {{date |date: "EEE MMM-d"}}
                             </th>
-                            <!-- <th>
-                                Mon<br/>May 26
-                                </th>
-                                <th>
-                                    Tue<br/>May 26
-                                    </th>
-                                    <th>
-                                        Wed<br/>May 26
-                                        </th>
-                                        <th>
-                                            Thu<br/>May 26
-                                            </th>
-                                            <th>
-                                                Fri<br/>May 26
-                                                </th>
-                                                <th>
-                                                    Sat<br/>May 26
-                                                    </th>
-                                                    <th>
-                                                        Sun<br/>May 26
-                                                        </th>-->
                                                         <th> 
                                                             Total
                                                         </th>
                                                     </thead>
                                                     <tbody>
+                                                        <tr *ngFor="let item of reportList">
+                                                            <td>
+                                                                {{item.projectName}}
+                                                            </td>
+                                                            <td>
+                                                                {{item.employeeName}}
+                                                            </td>
+                                                            <td *ngFor="let hours of item.timeSpent">
+                                                                {{hours.numberOfHours}}
+                                                            </td>
+                                                            <td>
+                                                                {{getTotalHours(item)}}
+                                                            </td>
+                                                        </tr>
                                                         <!--<tr>
                                                              <td>
                                                                 Project name and
@@ -168,3 +162,6 @@
 
                             </div>
                             <!-- Card section ENDS  -->
+<ng-container *ngIf="!reportList?.length">
+    <div class="justify-content-center mb-5 mt-2 d-flex">No Report Found!!</div>
+</ng-container>

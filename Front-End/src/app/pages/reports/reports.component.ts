@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class ReportsComponent implements OnInit {
   dropdownSettings: IDropdownSettings = {};
+  dropdownEmployeeSettings: IDropdownSettings = {};
   projectList: any[];
   employeeList: any[];
   maxPickerDateTo : any;
@@ -32,13 +33,22 @@ export class ReportsComponent implements OnInit {
   ngOnInit(): void {
     this.dropdownSettings = {
       singleSelection: false,
-      idField: 'id',
-      textField: 'name',
+      idField: 'projectId',
+      textField: 'projectName',
       selectAllText: 'Select All',
       unSelectAllText: 'UnSelect All',
       itemsShowLimit: 3,
       allowSearchFilter: true,
     };
+    this.dropdownEmployeeSettings = {
+      singleSelection: false,
+      idField: 'employeeId',
+      textField: 'employeeName',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 3,
+      allowSearchFilter: true,
+    }
     this.getProjectList();
     this.getEmployeeList();
 
@@ -47,84 +57,84 @@ export class ReportsComponent implements OnInit {
 
     this.reportList = [
       {
-        "ProjectName": 'prjc 1',
-        "EmployeeName": 'emp 1',
-        "TimeSpent": [
+        "projectName": 'prjc 1',
+        "employeeName": 'emp 1',
+        "timeSpent": [
           {
             "Date": "2022-06-06T00:00:00",
-            "NumberOfHours": 0,
+            "numberOfHours": 2,
             "UniqueId": 0
           },
           {
             "Date": "2022-06-07T00:00:00",
-            "NumberOfHours": 0,
+            "numberOfHours": 0,
             "UniqueId": 0
           },
           {
             "Date": "2022-06-08T00:00:00",
-            "NumberOfHours": 0,
+            "numberOfHours": 0,
             "UniqueId": 0
           },
           {
             "Date": "2022-06-09T00:00:00",
-            "NumberOfHours": 0,
+            "numberOfHours": 0,
             "UniqueId": 0
           },{
             "Date": "2022-06-010T00:00:00",
-            "NumberOfHours": 0,
+            "numberOfHours": 0,
             "UniqueId": 0
           },
           {
             "Date": "2022-06-11T00:00:00",
-            "NumberOfHours": 0,
+            "numberOfHours": 0,
             "UniqueId": 0
           },
           {
             "Date": "2022-06-01200:00:00",
-            "NumberOfHours": 0,
+            "numberOfHours": 0,
             "UniqueId": 0
           },
           {
             "Date": "2022-06-13T00:00:00",
-            "NumberOfHours": 0,
+            "numberOfHours": 0,
             "UniqueId": 0
           },{
             "Date": "2022-06-14T00:00:00",
-            "NumberOfHours": 0,
+            "numberOfHours": 0,
             "UniqueId": 0
           },
           {
             "Date": "2022-06-15T00:00:00",
-            "NumberOfHours": 0,
+            "numberOfHours": 0,
             "UniqueId": 0
           },
           {
-            "Date": "2022-06-08T00:00:00",
-            "NumberOfHours": 0,
+            "Date": "2022-06-16T00:00:00",
+            "numberOfHours": 0,
             "UniqueId": 0
           },
           {
-            "Date": "2022-06-09T00:00:00",
-            "NumberOfHours": 0,
+            "Date": "2022-06-17T00:00:00",
+            "numberOfHours": 0,
             "UniqueId": 0
           },{
-            "Date": "2022-06-06T00:00:00",
-            "NumberOfHours": 0,
+            "Date": "2022-06-18T00:00:00",
+            "numberOfHours": 0,
             "UniqueId": 0
           },
           {
-            "Date": "2022-06-07T00:00:00",
-            "NumberOfHours": 0,
+            "Date": "2022-06-19T00:00:00",
+            "numberOfHours": 0,
             "UniqueId": 0
           },
           {
-            "Date": "2022-06-08T00:00:00",
-            "NumberOfHours": 0,
+            "Date": "2022-06-20T00:00:00",
+            "numberOfHours": 2,
             "UniqueId": 0
           },
           {
-            "Date": "2022-06-09T00:00:00",
-            "NumberOfHours": 0,
+            "Date": "2022-06-21T00:00:00",
+            "numberOfHours": 4,
             "UniqueId": 0
           }
         ]
@@ -134,28 +144,29 @@ export class ReportsComponent implements OnInit {
 
   }
   private getProjectList(){
-    this.projectList = ['Project 1','Project 2','Project 2','Project 3','Project 4'];
-    // const url =`${this._url.project.getProjectList}`
-    // this._http.get(url).subscribe(
-    //   {
-    //     next:(res:any)=> {
-    //       this.projectList = res.data;
-    //     },
-    //     error:(msg) =>{
-    //     }
-    //   })
+    //this.projectList = ['Project 1','Project 2','Project 2','Project 3','Project 4'];
+    const url =`${this._url.project.getProjectList}`
+    this._http.get(url).subscribe(
+      {
+        next:(res:any)=> {
+          this.projectList = res.data;
+          //console.log(this.projectList)
+        },
+        error:(msg) =>{
+        }
+      })
   }
   private getEmployeeList(){
-    this.employeeList = ['Employee 1','Employee 2','Employee 2','Employee 3','Employee 4'];
-    // const url =`${this._url.project.getProjectList}`
-    // this._http.get(url).subscribe(
-    //   {
-    //     next:(res:any)=> {
-    //       this.projectList = res.data;
-    //     },
-    //     error:(msg) =>{
-    //     }
-    //   })
+    //this.employeeList = ['Employee 1','Employee 2','Employee 2','Employee 3','Employee 4'];
+    const url =`${this._url.Employee.getAllEmployeeList}`
+    this._http.get(url).subscribe(
+      {
+        next:(res:any)=> {
+          this.employeeList = res.data;
+        },
+        error:(msg) =>{
+        }
+      })
   }
   public onProjectEmployeeDeSelect(item:any,value:any){
     if(value === 'project'){
@@ -223,23 +234,38 @@ export class ReportsComponent implements OnInit {
     return dateArray;
   }
 
+  //To get total hour spent to a project by a employee
+  public getTotalHours(item:any){
+    let total = 0;
+    item.timeSpent.forEach(el => {
+      total = total + el.numberOfHours
+    });
+    return total;
+  }
+  //To check whether all 4 fields are selected or not
+  private setStatus(){
+
+    if(this.selectedEmployeeList?.length && this.selectedProjectList?.length && this.startDate && this.endDate) return true;
+    else return false;
+  }
+
+  //To Genearet Report
   public onGenerateReport(){
-    if(this.endDate.getFullYear() - this.startDate.getFullYear() <= 1){
+    if(this.setStatus()){
+      if(this.endDate.getFullYear() - this.startDate.getFullYear() <= 1){
       
-      this.allDates = this.dateFormatter(this.startDate,this.endDate)
-      //console.log(this.endDate.getFullYear() - this.startDate.getFullYear());
-      console.log("all dated",this.allDates);
-
-
-
-
-
+        this.allDates = this.dateFormatter(this.startDate,this.endDate)
+        //console.log(this.endDate.getFullYear() - this.startDate.getFullYear());
+        // console.log("all dated",this.allDates);
+        // console.log("Employee",this.selectedEmployeeList);
+        // console.log("project",this.selectedProjectList);
+      }else{  
+        this.toast.error("Please select date with in one year!!")
+      }
 
     }else{
-      console.log(this.startDate.year - this.endDate )
-      this.toast.error("Please select date with in one year!!")
+      this.toast.error("All Filds Are Mandatory!!")
     }
-
   }
 
 }

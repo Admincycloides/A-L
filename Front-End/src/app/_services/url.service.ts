@@ -41,11 +41,11 @@ export class UrlService {
   }
   public Employee = {
     //getEmployeeDetails    : 'api/Employee/getEmployeeDetails',
-    getSupervisorDetails  : 'api/EmployeeDetails/GetSupervisorDetails',
-    getEmployeeList       : 'api/EmployeeDetails/GetSupervisorDetails'
+    getSupervisorDetails     : 'api/EmployeeDetails/GetSupervisorDetails',
+    getAllEmployeeList       : 'api/EmployeeDetails/GetAllEmployeeList'
   }
   public project = {
     getprojectListbyEmployeeID :'api/Project/GetprojectListbyEmployeeID',
-    getProjectList             : 'api/Project/GetprojectList'
+    getProjectList             : 'api/Project/GetAllProjectList'
   }
 }
