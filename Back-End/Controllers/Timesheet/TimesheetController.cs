@@ -7,6 +7,7 @@ using AnL.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -210,7 +211,7 @@ namespace AnL.Controllers
                 }
                 //Add check for existing record in DB for project and activity
                 BaseResponse response = new BaseResponse();
-                var existingProjectActivity = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.ProjectId == timesheetDetails.ProjectId && x.ActivityId == timesheetDetails.ActivityId && x.Date.Date == timesheetDetailsList[2].Date.Date);
+                var existingProjectActivity = _UOW.TimesheetDetailRepository.GetAllByCondition(x=>x.EmployeeId==EmployeeId && x.ProjectId == timesheetDetails.ProjectId && x.ActivityId == timesheetDetails.ActivityId && x.Date.Date == timesheetDetails.TimeTaken[2].Date.Date);
                 if(existingProjectActivity.Count() > 0)
                 {
                     response.Data = null;
@@ -355,7 +356,7 @@ namespace AnL.Controllers
                 string subject = "Timesheet Submitted";
                 string body = "Dear " + String.Concat(employeeDetails.FirstName, " ", employeeDetails.LastName) +
                     "\n\nYour Timesheet has been submitted successfully to Supervisor " + String.Concat(managerDetails.FirstName, " ", managerDetails.LastName)+".\n\n with remarks as below : \n\n"+ timesheetDetails[0].EmployeeRemarks;
-                mailSent = SendMail(employeeDetails.EmailAddress, subject, body);
+                mailSent = SendMail(managerDetails.EmailAddress, subject, body);
                 if (result&&mailSent)
                 {
                     response.Data = result;
@@ -389,12 +390,11 @@ namespace AnL.Controllers
             List<TimesheetViewModel> result = new List<TimesheetViewModel>();
             try
             {
-                var data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.SubmittedTo.Contains(EmployeeID)).Include(x => x.Project).ToList();
+                var data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.SubmittedTo==EmployeeID).Include(x => x.Project).ToList();
                 if (!string.IsNullOrEmpty(searchValue))
                 {   
-                    data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.SubmittedTo.Contains(EmployeeID)).Include(x => x.Project).Where(x=>x.Project.ProjectName.Contains(searchValue)).ToList();
+                    data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.SubmittedTo==EmployeeID).Include(x => x.Project).Where(x=>x.Project.ProjectName.Contains(searchValue)).ToList();
                 }
-                //var data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.SubmittedTo.Contains(EmployeeID)).Include(x => x.Project).ToList();
                 var employeeList = data.Select(x => new
                 {
                     x.Project.ProjectName,
@@ -515,19 +515,19 @@ namespace AnL.Controllers
                 var employeeDetails = _UOW.EmployeeDetailsRepository.GetById(EmployeeID);
                 if (Action == TimeSheetStatus.Approved)
                 {
-                    result =  _UOW.TimesheetDetailRepository.SupervisorAction(timesheetDetailsList, TimeSheetStatus.Approved);
                     string subject = "Timesheet Approved";
                     string body = "Dear " + String.Concat(employeeDetails.FirstName, " ", employeeDetails.LastName) +
                         "\n\nYour Timesheet has been approved by Supervisor " + String.Concat(managerDetails.FirstName, " ", managerDetails.LastName) + " with remarks as below : \n\n" + model[0].SupervisorRemarks;
                     SendMail(employeeDetails.EmailAddress, subject, body);
+                    result = _UOW.TimesheetDetailRepository.SupervisorAction(timesheetDetailsList, TimeSheetStatus.Approved);
                 }
                 else if (Action == TimeSheetStatus.Rejected)
                 {
-                    result =  _UOW.TimesheetDetailRepository.SupervisorAction(timesheetDetailsList, TimeSheetStatus.Rejected);
                     string subject = "Timesheet Rejected";
                     string body = "Dear " + String.Concat(employeeDetails.FirstName, " ", employeeDetails.LastName) +
                         "\n\nYour Timesheet has been rejected by Supervisor " + String.Concat(managerDetails.FirstName, " ", managerDetails.LastName) + " with remarks as below : \n\n" + model[0].SupervisorRemarks;
                     SendMail(employeeDetails.EmailAddress, subject, body);
+                    result = _UOW.TimesheetDetailRepository.SupervisorAction(timesheetDetailsList, TimeSheetStatus.Rejected);
                 }
                 else
                 {
@@ -561,13 +561,48 @@ namespace AnL.Controllers
 
 
         [NonAction]
-        public async Task<ActionResult> GetTimesheetReport(ReportRequest request)
+        public async Task<ActionResult> GetTimesheetReport(ReportRequest model)
         {
-            //IQueryable data = _UOW.TimesheetDetailRepository.GetAll().Where(x => x.ProjectId == request.ProjectIds[0] && x.EmployeeId == request.EmployeeId[0] && x.Date.Date>=request.FromDate.Date && x.Date.Date <= request.ToDate.Date)
-            //                    .Select(x=> new ReportViewModel { });
-            //var result=data.AsQueryable().whe
-            return Ok();
+            Dictionary<string, string[]> parameters = new Dictionary<string, string[]>();
+            parameters.Add("EMPLOYEE_ID_LIST", null);//, new string[] { string.Join(",", model.EmployeeId), "nvarchar" });   
+            parameters.Add("PROJECT_ID", null);//, new string[] { string.Join(",", model.ProjectIds), "nvarchar" });
+            parameters.Add("FROM_DATE", null);//, new string[] { model.FromDate});
+            parameters.Add("TO_DATE", null);//, new string[] { model.ToDate });
+            List<SPViewModel> countList = _UOW.ExcecuteSP("USP_GET_TIMESHEET_REPORT", parameters);
+            var queryable = countList.ToList();
+            //     public class TimeSpentperDay
+            //{
+            //    public DateTime Date { get; set; }
+            //    public double NumberOfHours { get; set; }
+            //}
+            //public class ReportViewModel
+            //{
+            //    public string ProjectName { get; set; }
+            //    public string EmployeeName { get; set; }
+            //    public List<TimeSpentperDay> TimeSpent { get; set; }
+
+            // }
+            //order by date 
+            List<ReportViewModel> reports = new List<ReportViewModel>();
+
+            foreach (var a in queryable.Select(x => x.ProjectId).Distinct())
+            {
+
+                var recd = queryable.Where(X => X.ProjectId == a).Select(X => new ReportViewModel
+                {
+                    ProjectName = X.ProjectName,
+                    EmployeeName = X.EmployeeName,
+                    TimeSpent = ( queryable.Where(y => y.ProjectId == a && y.EmployeeId== X.EmployeeId)
+                         .Select(z=> new TimeSpentperDay {  Date=z.Date, NumberOfHours=z.NumberOfHours}).ToList()
+                               )
+
+                }).ToList();
+                reports.AddRange(recd);
+
+            }
+            return Ok(reports);
         }
+
         [NonAction]
         public bool SendMail(string mailto, string subject, string body)
         {
@@ -596,11 +631,7 @@ namespace AnL.Controllers
             }
             return f;
         }
-        [NonAction]
-        public async Task<ActionResult> GetTimesheetReport(List<Details> timesheetDetails, string ManagerID, string EmployeeID)
-        {
-            return Ok();
-        }
+        
 
             [NonAction]
         public IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)
