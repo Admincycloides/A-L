@@ -2,6 +2,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ToastrModule } from "ngx-toastr";
+import { FormsModule } from '@angular/forms';
 
 import { SidebarModule } from './sidebar/sidebar.module';
 import { FooterModule } from './shared/footer/footer.module';
@@ -18,6 +19,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from "@angular/common/http";
 import { ReviewtimesheetComponent } from './pages/reviewtimesheet/reviewtimesheet.component';
 import { ReviewlinkComponent } from './pages/reviewtimesheet/reviewlink/reviewlink.component';
+import { ProjectsComponent } from "./pages/projects/projects.component";
+import { ActivitiesComponent } from "./pages/projects/activities/activities.component";
+import { NgxPaginationModule } from 'ngx-pagination';
+
+
 
 
 @NgModule({
@@ -26,11 +32,16 @@ import { ReviewlinkComponent } from './pages/reviewtimesheet/reviewlink/reviewli
     AdminLayoutComponent,
     LogComponent,
     LoginComponent,
+    ProjectsComponent,
+    ActivitiesComponent
   ],
   imports: [
     BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgxPaginationModule,
     RouterModule.forRoot(AppRoutes,{
-      useHash: true
+      useHash: false
     }),
     SidebarModule,
     NavbarModule,

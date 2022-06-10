@@ -24,8 +24,6 @@ namespace AnL.ViewModel
         public List<ProjectActivities> Activities{ get; set; }
     }
 
-
-
     public class EditProjectView
     {
         public int ProjectId { get; set; }
@@ -44,4 +42,9 @@ namespace AnL.ViewModel
     }
 
 
+    public class ProjectListViewModel
+    {
+        public int ProjectId { get; set; }
+        public string ProjectName { get; set; }
+    }
 }

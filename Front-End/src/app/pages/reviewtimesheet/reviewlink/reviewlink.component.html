@@ -1,19 +1,21 @@
 
-<div class="page-title w-100">Review Timesheet</div>
-<div class="page-title w-100">{{projectName}}</div>
-<div class="action-head justify-content-between d-flex">
-    <div class="act-filter d-flex align-items-center justify-content-center search-hold position-relative">
+<!-- <div class="page-title w-100">Review Timesheet</div> -->
+<div class="action-head justify-content-between d-flex align-items-center mb-4">
+    <div class="page-title w-100">{{projectName}} Project Links conent</div>
+    <div class="act-filter d-flex align-items-center justify-content-end search-hold position-relative">
         <!-- <input type="text" class="search-filter" placeholder="Search Activities"/> -->
-        <input
-            #searchBar
-            type="text"
-            class="cpage-search"
-            placeholder="Search Activities"
-            (keyup)="searchItems($event)"
-            style="width: 370px"
-        />
-        <i *ngIf="searchTerm" class="pe-7s-close-circle" (click)="clearSearch(); searchBar.value = ''"></i>
-        <i *ngIf="!searchTerm" class="pe-7s-search"></i>
+        <div class="i-search position-relative">
+            <input
+                #searchBar
+                type="text"
+                class="cpage-search search-filter"
+                placeholder="Search Activities"
+                (keyup)="searchItems($event)"   
+                />
+            <i *ngIf="searchTerm" class="pe-7s-close-circle"
+                (click)="clearSearch(); searchBar.value= ''"></i>
+            <i *ngIf="!searchTerm" class="pe-7s-search"></i>
+        </div>
     </div>
 </div>
 <div class="row sheet-row">
@@ -27,101 +29,121 @@
                                 Activities
                             </th>
                             <th>
-                                Mon <br/>{{timesheetDates[0]?.date | date: "MMM-d"}}
-                            </th>
-                            <th>
-                                Tus <br/>{{timesheetDates[1]?.date | date: "MMM-d"}}
-                            </th>
-                            <th>
-                                Wed <br/>{{timesheetDates[2]?.date | date: "MMM-d"}}
-                            </th>
-                            <th>
-                                Thu <br/>{{timesheetDates[3]?.date | date: "MMM-d"}}
-                            </th>
-                            <th>
-                                Fri <br/>{{timesheetDates[4]?.date | date: "MMM-d"}}
-                            </th>
-                            <th>
-                                Sat <br/>{{timesheetDates[5]?.date | date: "MMM-d"}}
-                            </th>
-                            <th>
-                                Sun <br/>{{timesheetDates[6]?.date | date: "MMM-d"}}
-                            </th>
-                            <th>
-                               Remarks
-                            </th>
-                           
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let item of timesheetDetails | paginate: config; let i= index">
-                                <td>
-                                    {{item.activityName}}
-                                </td>
-                                <td>
-                                    {{item.timeTaken[0]?.numberOfHours }}
-                                </td>
-                                <td>
-                                    {{item.timeTaken[1]?.numberOfHours}}
-                                </td>
-                                <td>
-                                    {{item.timeTaken[2]?.numberOfHours}}
-                                </td>
-                                <td>
-                                    {{item.timeTaken[3]?.numberOfHours}}
-                                </td>
-                                <td>
-                                    {{item.timeTaken[4]?.numberOfHours}}
-                                </td>
-                                <td>
-                                    {{item.timeTaken[5]?.numberOfHours}}
-                                </td>
-                                <td>
-                                    {{item.timeTaken[6]?.numberOfHours}}
-                                </td>
-                                <td>
-                                   <span>{{item.remarks}}</span>
-                                </td>
-                            </tr>
-                            
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <!-- Pagination -->
-            <div class="pagination-line d-flex justify-content-end" *ngIf="timesheetDetails?.length">
-                <ul>
-                    <pagination-controls
-                    id ='timesheetDetails'
-                    (pageChange)="pageChanged($event)"
-                    [directionLinks]="true"
-                    [autoHide]="false"
-                    [maxSize]="10"
-                    [responsive]="true"
-                    previousLabel="Previous"
-                    nextLabel="Next"
-                    screenReaderPaginationLabel="Pagination"
-                    screenReaderPageLabel="page"
-                    screenReaderCurrentLabel="You're on page">
-                    </pagination-controls>
-                </ul>
-            </div>
-    </div>
+                                Mon <br/>{{timesheetDates[0]?.date | date:
+                                    "MMM-d"}}
+                                </th>
+                                <th>
+                                    Tus <br/>{{timesheetDates[1]?.date | date:
+                                        "MMM-d"}}
+                                    </th>
+                                    <th>
+                                        Wed <br/>{{timesheetDates[2]?.date |
+                                            date: "MMM-d"}}
+                                        </th>
+                                        <th>
+                                            Thu <br/>{{timesheetDates[3]?.date |
+                                                date: "MMM-d"}}
+                                            </th>
+                                            <th>
+                                                Fri <br/>{{timesheetDates[4]?.date
+                                                    | date: "MMM-d"}}
+                                                </th>
+                                                <th>
+                                                    Sat <br/>{{timesheetDates[5]?.date
+                                                        | date: "MMM-d"}}
+                                                    </th>
+                                                    <th>
+                                                        Sun <br/>{{timesheetDates[6]?.date
+                                                            | date: "MMM-d"}}
+                                                        </th>
+                                                        <th>
+                                                            Remarks
+                                                        </th>
 
-    <div class=" remarks-col">
-        <div class="card">
-            <div class="card-body pt-1">
-                <div class="r-row mb-1">
-                    <label>Remarks</label>
-                    <textarea #remarks class="form-control" rows="4" ></textarea>
-                </div>
-                <div class="r-row">
-                    <button  class="thm-btn-primary sm-btn w-100 my-2" (click)="onAcceptingTimesheet('Approved',remarks.value)">Approve</button>
-                    <button  class="thm-btn-primary sm-btn w-100 my-2" (click)="onAcceptingTimesheet('Rejected',remarks.value)">Disapprove</button>
-                </div>
-            </div>
-        </div>
-        
-    </div>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let item of
+                                                            timesheetDetails |
+                                                            paginate: config;
+                                                            let i= index">
+                                                            <td>
+                                                                {{item.activityName}}
+                                                            </td>
+                                                            <td>
+                                                                {{item.timeTaken[0]?.numberOfHours
+                                                                }}
+                                                            </td>
+                                                            <td>
+                                                                {{item.timeTaken[1]?.numberOfHours}}
+                                                            </td>
+                                                            <td>
+                                                                {{item.timeTaken[2]?.numberOfHours}}
+                                                            </td>
+                                                            <td>
+                                                                {{item.timeTaken[3]?.numberOfHours}}
+                                                            </td>
+                                                            <td>
+                                                                {{item.timeTaken[4]?.numberOfHours}}
+                                                            </td>
+                                                            <td>
+                                                                {{item.timeTaken[5]?.numberOfHours}}
+                                                            </td>
+                                                            <td>
+                                                                {{item.timeTaken[6]?.numberOfHours}}
+                                                            </td>
+                                                            <td>
+                                                                <span>{{item.remarks}}</span>
+                                                            </td>
+                                                        </tr>
 
-</div>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Pagination -->
+                                    <div class="pagination-line d-flex
+                                        justify-content-end"
+                                        *ngIf="timesheetDetails?.length">
+                                        <ul>
+                                            <pagination-controls
+                                                id='timesheetDetails'
+                                                (pageChange)="pageChanged($event)"
+                                                [directionLinks]="true"
+                                                [autoHide]="false"
+                                                [maxSize]="10"
+                                                [responsive]="true"
+                                                previousLabel="Previous"
+                                                nextLabel="Next"
+                                                screenReaderPaginationLabel="Pagination"
+                                                screenReaderPageLabel="page"
+                                                screenReaderCurrentLabel="You're
+                                                on page">
+                                            </pagination-controls>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="remarks-col" *ngIf="status == 'Submitted'">
+                                    <div class="card">
+                                        <div class="card-body pt-1">
+                                            <div class="r-row mb-1">
+                                                <label>Remarks</label>
+                                                <textarea #remarks
+                                                    class="form-control"
+                                                    rows="4"></textarea>
+                                            </div>
+                                            <div class="r-row">
+                                                <button class="thm-btn-primary
+                                                    sm-btn w-100 my-2"
+                                                    (click)="onAcceptingTimesheet('Approved',remarks.value)">Approve</button>
+                                                <button class="thm-btn-primary
+                                                    sm-btn w-100 my-2"
+                                                    (click)="onAcceptingTimesheet('Rejected',remarks.value)">Disapprove</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>

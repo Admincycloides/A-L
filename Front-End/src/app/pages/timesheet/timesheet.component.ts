@@ -45,7 +45,8 @@ export class TimesheetComponent implements OnInit {
   managerId: any;
   timesheetRemarks :any;
   submitRemarks :any;
-  showSideWindow = false
+  showSideWindow = false;
+  showSideWindowCheckAll = false;
 
   get f() {
     return this.addTimesheetForm.controls;
@@ -141,9 +142,7 @@ export class TimesheetComponent implements OnInit {
     const url = `${this._url.project.getprojectListbyEmployeeID}?EmployeeID=${this.userDetails.employeeId}`
     this._http.get(url).subscribe({
       next:(res:any)=>{
-        console.log("hi",res.data)
         this.projectList = res.data;
-        console.log("hi",this.projectList)
       }
     })
     
@@ -219,13 +218,10 @@ export class TimesheetComponent implements OnInit {
   //when selecting project during entering timesheet.
   public onProjectSelect(event:any){
     const project = event.target.value.split(":")[1].trim();
-    console.log(project);
     if(project === 'Select Project') this.activityList =[];
     else{
-      console.log("inside else")
       this.projectList.forEach((item)=>{
         if(item.projectName == project){
-          console.log(item.activities);
           this.activityList = item.activities;
         }
       })
@@ -355,14 +351,11 @@ export class TimesheetComponent implements OnInit {
       this.addTimesheetForm.controls.friday.setValue(this.timeSheetDetails[id].timeTaken[4].numberOfHours);
       this.addTimesheetForm.controls.saturday.setValue(this.timeSheetDetails[id].timeTaken[5].numberOfHours);
       this.addTimesheetForm.controls.sunday.setValue(this.timeSheetDetails[id].timeTaken[6].numberOfHours);
-      //console.log(this.addTimesheetForm.controls.activity.value);
       this.projectList.forEach((item)=>{
         if(item.projectName == this.addTimesheetForm.controls.project.value){
-          console.log(true);
           this.activityList = item.activities;
         }
       })
-      console.log("activitylist",this.activityList)
 
       this.selectedTimesheet = this.timeSheetDetails[id];
 
@@ -374,7 +367,6 @@ export class TimesheetComponent implements OnInit {
   // Deleting Timesheet row
   onTimesheetDelete(id:any){
     const body = this.timeSheetDetails[id];
-    //console.log("delete data",body)
     const url = `${this._url.timesheet.deleteTimesheet}`
     this._http.post(url,body).subscribe({
       next:(res:any)=>{
@@ -387,28 +379,32 @@ export class TimesheetComponent implements OnInit {
 
   //on checking checkbox of the table
   onRowCheck(id: any){
-    this.showSideWindow = !this.showSideWindow;
     if(id == -1){
+      this.selectedTimesheetRow = [];
+      this.showSideWindowCheckAll = !this.showSideWindowCheckAll;
+      this.showSideWindow = false;
       this.selectAllTimesheet = !this.selectAllTimesheet;
       this.timeSheetDetails.forEach((item)=>{
-        if(item.status == 'In Progress' || item.status == 'Rejected') this.selectedTimesheetRow.push(item)
+        if(item.status == 'In Progress' || item.status == 'Rejected'){
+          if(!this.selectedTimesheetRow.includes(item)){
+            this.selectedTimesheetRow.push(item);
+          }
+        }
       })
-      console.log(this.selectedTimesheetRow);
     }else{
+      this.showSideWindow = !this.showSideWindow;
+      this.showSideWindowCheckAll = false;
       if(!this.selectedTimesheetRow.includes(this.timeSheetDetails[id]))
       {
         this.selectedTimesheetRow.push(this.timeSheetDetails[id]);
       }else{
         this.selectedTimesheetRow.splice(this.selectedTimesheetRow.indexOf(this.timeSheetDetails[id]),1);
       }
-      console.log(this.selectedTimesheetRow);
     }
-
   }
   //saving the timsheet details
   onSaveTimesheetDetails(){
     this.formSubmitted = true;
-    this.activityList = [];
     if(this.addTimesheetForm.valid){
       let projectId: any;
       let activityId: any
@@ -423,9 +419,7 @@ export class TimesheetComponent implements OnInit {
       })
       if(!Object.keys(this.selectedTimesheet).length){
         let date = [];
-        //console.log(moment(this.currentWeek[0]).format("YYYY-MM-DDT00:00:00"));
         this.currentWeek.forEach((day)=>{date.push(moment(day).format("YYYY-MM-DDT00:00:00"))});
-        //console.log("week",date);
         const timeTaken = [
           {date : date[0],numberOfHours: parseFloat(this.addTimesheetForm.controls.monday.value)},
           {date : date[1],numberOfHours: parseFloat(this.addTimesheetForm.controls.tuesday.value)},
@@ -453,19 +447,22 @@ export class TimesheetComponent implements OnInit {
           remarks         : this.addTimesheetForm.controls.remarks.value,
           timeTaken       : timeTaken
         }
-        console.log("Add timesheet data",body);
         const url = `${this._url.timesheet.addTimesheet}?EmployeeId=${this.userDetails.employeeId}`
         this._http.post(url,body).subscribe({
         next:(res:any)=>{
           this.toast.success(res.responseMessage);
           this.getTimesheetDetails(this.startOfWeek,this.endOfWeek);
+          this.activityList = [];
+          this.modalRef.close();
+        },
+        error:(err:any)=>{
+          this.toast.error(err.error.responseMessage);
         }
         
   
       })
   
       }else{
-        console.log("this.selectedTimesheet",this.selectedTimesheet);
         let timeTaken = this.selectedTimesheet['timeTaken'];
         timeTaken[0].numberOfHours = parseFloat(this.addTimesheetForm.controls.monday.value);
         timeTaken[1].numberOfHours = parseFloat(this.addTimesheetForm.controls.tuesday.value);
@@ -490,40 +487,36 @@ export class TimesheetComponent implements OnInit {
         next:(res:any)=>{
           this.toast.success(res.responseMessage);
           this.getTimesheetDetails(this.startOfWeek,this.endOfWeek);
+          this.modalRef.close();
+        },error:(err:any)=>{
+          this.toast.error(err.responseMessage);
         }
   
       })
-  
-        
-        
-  
       }  
 
     }
-    this.modalRef.close();
     
     
   }
   //submitting the timesheet
   onSubmitTimesheet(){
+    //console.log(this.selectedTimesheetRow);
     if(this.selectedTimesheetRow.length !=0){
       if(this.managerId && this.managerId != '(Supervisor)'){
         this.selectedTimesheetRow.forEach((item)=>{
           item['employeeRemarks'] = this.submitRemarks;
         })
         const body = this.selectedTimesheetRow;
-    
-        console.log(this.managerId);
-        console.log("data submit",body)
-        const url = `${this._url.timesheet.submitTimesheet}?ManagerID=${this.managerId}&EmployeeName=${this.userDetails.username}`;
+        const url = `${this._url.timesheet.submitTimesheet}?ManagerID=${this.managerId}&EmployeeID=${this.userDetails.employeeId}`;
         this._http.post(url,body).subscribe({
             next:(res:any)=>{
             this.toast.success(res.responseMessage);
+            this.selectedTimesheetRow = [];
+            this.submitRemarks ='';
             this.getTimesheetDetails(this.startOfWeek,this.endOfWeek);
           }
         })
-        this.selectedTimesheetRow = [];
-        this.submitRemarks ='';
       }else{
         this.toast.error("Please Select Your Supervisor.");
       }
@@ -534,7 +527,6 @@ export class TimesheetComponent implements OnInit {
 
   onselectSupervisor(event:any){
     this.managerId = event.target.value;
-    console.log(this.managerId)
   }
 }
 

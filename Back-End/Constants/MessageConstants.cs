@@ -4,6 +4,7 @@
     {
         public static readonly string TimesheetAdditionSuccess = "TimeSheet records added successfully";
         public static readonly string TimesheetAdditionFailed = "TimeSheet records addition failed";
+        public static readonly string TimesheetAlreadyExists = "Timesheet Records for the project and activity already exists!!";
         public static readonly string TimesheetDeletionSuccess = "TimeSheet records deleted successfully";
         public static readonly string TimesheetDeletionFailed = "TimeSheet records deletion failed";
         public static readonly string TimesheetModificationSuccess = "TimeSheet records modified successfully";
@@ -22,6 +23,7 @@
         public static readonly string UserNotActive = "User has been deactivated";
 
         public static readonly string TimesheetSubmissionSuccess = "Timesheet Submitted successfully";
+        public static readonly string TimesheetSubmissionSuccessMailFailure = "Timesheet Submitted successfully but email generation failed!!";
         public static readonly string TimesheetSubmissionFailed = "Timesheet Submission Failed";
         public static readonly string SupervisorListingSuccess = "Supervisor records fetched successfully";
         public static readonly string SupervisorListingFailed = "Supervisor records fetch failed";

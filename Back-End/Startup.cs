@@ -50,8 +50,14 @@ namespace TestApplication
             services.AddControllers();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddDbContext<Tan_DBContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
-            );
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                    sqlServerOptionsAction:sqlOption=>
+                    {
+                        sqlOption.EnableRetryOnFailure(
+                            maxRetryCount:10,
+                            maxRetryDelay: TimeSpan.FromSeconds(5),
+                            errorNumbersToAdd: null);
+                    }));
             services.AddHttpContextAccessor();
             services.AddSingleton<IUriService>(o =>
             {

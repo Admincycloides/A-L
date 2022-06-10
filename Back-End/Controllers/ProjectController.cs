@@ -225,8 +225,22 @@ namespace AnL.Controllers
                 return BadRequest("Oops! Something went wrong!" + ex);
             }
         }
+        [HttpGet]
+        public async Task<ActionResult> GetAllProjectList()
+        {
+            try
+            {
+                BaseResponse rsp = new BaseResponse();
+                rsp.Data = await _UOW.ProjectRepository.GetAllProject();
+                return Ok(rsp);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
 
-
+        }
 
     }
 }

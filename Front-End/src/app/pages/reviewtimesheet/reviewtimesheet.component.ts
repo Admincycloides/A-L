@@ -51,7 +51,7 @@ export class ReviewtimesheetComponent implements OnInit {
     const pageNo = this.config.currentPage;
     const pageSize = this.config.itemsPerPage;
     const search = this.config.search;
-    const url = `${this._url.timesheet.getReviewTimesheet}?PageNumber=${pageNo}&PageSize=${pageSize}&EmployeeID=${this.user.employeeId}`
+    const url = `${this._url.timesheet.getReviewTimesheet}?PageNumber=${pageNo}&PageSize=${pageSize}&EmployeeID=${this.user.employeeId}&searchValue=${search}`
     this._http.get(url).subscribe(
       {
         next:(res:any)=> {
@@ -69,7 +69,7 @@ export class ReviewtimesheetComponent implements OnInit {
 
   public onViewTimesheet(item:any){
     //this.router.navigate(['/reviewlink',{ projectId: id, projectName: name, Date: date}]);
-    this.router.navigate(['/reviewlink',{ projectId: item.projectId, projectName: item.projectName, date: item.date}]);
+    this.router.navigate(['/reviewlink',{ projectId: item.projectId, projectName: item.projectName, date: item.date,status:item.status,empID:item.employeeId}]);
   }
   public pageChanged(event:any){
     this.config.currentPage =event;

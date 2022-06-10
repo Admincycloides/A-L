@@ -11,3 +11,5 @@ export const environment = {
     server : ''
   }
 }
+//https://192.168.1.38:440/
+//https://103.79.223.61:440

@@ -15,6 +15,7 @@ import { NotificationsComponent }   from '../../pages/notifications/notification
 import { UpgradeComponent }         from '../../pages/upgrade/upgrade.component';
 import { TimesheetComponent }       from '../../pages/timesheet/timesheet.component';
 import { ReviewtimesheetComponent }       from '../../pages/reviewtimesheet/reviewtimesheet.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown'
 
 
 
@@ -36,7 +37,8 @@ import { ReportsComponent } from 'app/pages/reports/reports.component';
     NgbModule,
     HttpClientModule,
     NgxPaginationModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgMultiSelectDropDownModule.forRoot()
   ],
   declarations: [
     DashboardComponent,

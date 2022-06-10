@@ -1,257 +1,100 @@
-<div class="page-title w-100">PROJECTS</div>
-<div class="action-head justify-content-between d-flex">
+
+<div class="action-head justify-content-between d-flex align-items-center mb-4">
+  <div class="page-title w-100">PROJECTS</div>
     <div class="act-filter d-flex align-items-center justify-content-center">
         <input type="text" class="search-filter" placeholder="Search Project"/>
     </div>
     <div class="action d-flex justify-content-end">
-        <button class="act-btn thm-btn thm-btn-primary"><i class="nc-icon nc-simple-add"></i> Add Project</button>
+        <button class="act-btn thm-btn thm-btn-primary" type="button" (click)="addFieldValue();changeText()" ion-button><i class="nc-icon nc-simple-add"></i>Add Project</button>
         <!-- the below button have to be added conditionaly -->
-        <button class="act-btn thm-btn thm-btn-primary"><i class="nc-icon nc-check-2"></i> Save</button>
+        <button class="act-btn thm-btn thm-btn-primary" type="button" (click)="saveField()"><i class="nc-icon nc-check-2"></i>Save</button>
     </div>
+    <!-- <div class="action d-flex justify-content-end">
+      <button (click)="addFieldValue()" [disabled]="projectGroup.invalid" ion-button>Add</button>
+  </div> -->
 </div>
-<div class="row">
+<form [formGroup]="projectGroup">
+  <div class="row">
     <div class="col-md-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead class="text-primary">
-                            <th>
-                                Project Name
-                            </th>
-                            <th>
-                                Project Description
-                            </th>
-                            <th>
-                                Client Name
-                            </th>
-                            <th>
-                                Start Date
-                            </th>
-                            <th>
-                                End Date
-                            </th>
-                            <th>
-                                Current Status
-                            </th>
-                            <th>
-                                SHED Project
-                            </th>
-                            <th>
-                                Edit
-                            </th>
-                            <th>
-                                Activities
-                            </th>
-                            <th>
-                                Assigned to
-                            </th>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    Project 1
-                                </td>
-                                <td>
-                                    This is a sample project
-                                </td>
-                                <td>
-                                    Peter
-                                </td>
-                                <td>
-                                    5/23/2022
-                                </td>
-                                <td>
-                                    7/21/2022
-                                </td>
-                                <td>
-                                    Sprint1
-                                </td>
-                                <td>
-
-                                </td>
-                                <td>
-                                    <button class="edit"><img src="../../../assets/img/edit.png" alt="" /></button>
-                                </td>
-                                <td>
-                                    <button class="view"><img src="../../../assets/img/view.png" alt="" /></button>
-                                </td>
-                                <td>
-                                    Peter & Alex
-                                </td>
-
-                            </tr>
-                            <tr>
-                                <td>
-                                    Project 1
-                                </td>
-                                <td>
-                                    This is a sample project
-                                </td>
-                                <td>
-                                    Peter
-                                </td>
-                                <td>
-                                    5/23/2022
-                                </td>
-                                <td>
-                                    7/21/2022
-                                </td>
-                                <td>
-                                    Sprint1
-                                </td>
-                                <td>
-
-                                </td>
-                                <td>
-                                    <button class="edit"><img src="../../../assets/img/edit.png" alt="" /></button>
-                                </td>
-                                <td>
-                                    <button class="view"><img src="../../../assets/img/view.png" alt="" /></button>
-                                </td>
-                                <td>
-                                    Peter & Alex
-                                </td>
-
-                            </tr>
-                            <tr>
-                                <td>
-                                    Project 1
-                                </td>
-                                <td>
-                                    This is a sample project
-                                </td>
-                                <td>
-                                    Peter
-                                </td>
-                                <td>
-                                    5/23/2022
-                                </td>
-                                <td>
-                                    7/21/2022
-                                </td>
-                                <td>
-                                    Sprint1
-                                </td>
-                                <td>
-
-                                </td>
-                                <td>
-                                    <button class="edit"><img src="../../../assets/img/edit.png" alt="" /></button>
-                                </td>
-                                <td>
-                                    <button class="view"><img src="../../../assets/img/view.png" alt="" /></button>
-                                </td>
-                                <td>
-                                    Peter & Alex
-                                </td>
-
-                            </tr>
-                            <tr>
-                                <td>
-                                    Project 1
-                                </td>
-                                <td>
-                                    This is a sample project
-                                </td>
-                                <td>
-                                    Peter
-                                </td>
-                                <td>
-                                    5/23/2022
-                                </td>
-                                <td>
-                                    7/21/2022
-                                </td>
-                                <td>
-                                    Sprint1
-                                </td>
-                                <td>
-
-                                </td>
-                                <td>
-                                    <button class="edit"><img src="../../../assets/img/edit.png" alt="" /></button>
-                                </td>
-                                <td>
-                                    <button class="view"><img src="../../../assets/img/view.png" alt="" /></button>
-                                </td>
-                                <td>
-                                    Peter & Alex
-                                </td>
-
-                            </tr>
-                            <tr>
-                                <td>
-                                    Project 1
-                                </td>
-                                <td>
-                                    This is a sample project
-                                </td>
-                                <td>
-                                    Peter
-                                </td>
-                                <td>
-                                    5/23/2022
-                                </td>
-                                <td>
-                                    7/21/2022
-                                </td>
-                                <td>
-                                    Sprint1
-                                </td>
-                                <td>
-
-                                </td>
-                                <td>
-                                    <button class="edit"><img src="../../../assets/img/edit.png" alt="" /></button>
-                                </td>
-                                <td>
-                                    <button class="view"><img src="../../../assets/img/view.png" alt="" /></button>
-                                </td>
-                                <td>
-                                    Peter & Alex
-                                </td>
-
-                            </tr>
-                            <tr class="row-created row-added">
-                                <td>
-                                    Project 1
-                                </td>
-                                <td>
-                                    This is a sample project
-                                </td>
-                                <td>
-                                    Peter
-                                </td>
-                                <td>
-                                    5/23/2022
-                                </td>
-                                <td>
-                                    7/21/2022
-                                </td>
-                                <td>
-                                    Sprint1
-                                </td>
-                                <td>
-
-                                </td>
-                                <td>
-                                    <button class="edit"><img src="../../../assets/img/edit.png" alt="" /></button>
-                                </td>
-                                <td>
-                                    <button class="view"><img src="../../../assets/img/view.png" alt="" /></button>
-                                </td>
-                                <td>
-                                    Peter & Alex
-                                </td>
-
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+      <div class="card">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class="text-primary">
+                <th>Project Name</th>
+                <th>Project Description</th>
+                <th nowrap>Client Name</th>
+                <th> Start Date</th>
+                <th> End Date</th>
+                <th> Current Status</th>
+                <th nowrap> SHED Project</th>
+                <th> Edit</th>
+                <th> View</th>
+                <th nowrap> Assigned to</th>
+                <th>Delete</th>
+              </thead>
+              <ng-container projectGroup.controls.itemRows>
+                <tbody formArrayName ="itemRows">
+                  <tr *ngFor="let itemrow of projectGroup['controls'].itemRows['controls']; let i = index" [formGroupName]="i">
+                      <td class="col-md-2 form-group">
+                            <span *ngIf="!itemrow.editable">{{itemrow.projectName}}</span>
+                            <input placeholder="Project Name" formControlName="projectName" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/>
+                      </td>
+                      <td class="col-md-2 form-group">
+                            <span *ngIf="!itemrow.editable">{{itemrow.projectDescription}}</span>
+                            <input placeholder="Project Description" formControlName="projectDescription" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/>
+                      </td>
+                      <td class="col-md-2 form-group"> 
+                            <span *ngIf="!itemrow.editable">{{itemrow.clientId}}</span>
+                            <input placeholder="Client Name" formControlName="clientId" type="int" *ngIf="itemrow.editable" class="cd-input h-input"/>
+                      </td>
+                      <td class="col-md-2 form-group">
+                            <span *ngIf="!itemrow.editable">{{itemrow.startDate}}</span>
+                            <input placeholder="StartDate" formControlName="startDate" type="date" *ngIf="itemrow.editable" class="cd-input h-input"/>
+                      </td>
+                      <td class="col-md-2 form-group">
+                            <span *ngIf="!itemrow.editable">{{itemrow.endDate}}</span>
+                            <input placeholder="End Date" formControlName="endDate" type="date" *ngIf="itemrow.editable" class="cd-input h-input"/>
+                      </td>
+                      <td class="col-md-2 form-group">
+                           <span *ngIf="!itemrow.editable">{{itemrow.currentStatus}}</span>
+                           <input placeholder="Current Status" formControlName="currentStatus" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/>
+                      </td>
+                       <td class="col-md-2 form-group">
+                          <span *ngIf="!itemrow.editable">{{itemrow.sredProject}}</span>
+                            <input placeholder="SHED Project" formControlName="sredProject" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/>
+                       </td>
+                      <td class="col-md-2 form-group">
+                        <button class="edit actico-btn" type="button" (click)="makeEditable(itemrow)">
+                            <img src="../../../assets/img/edit.png" alt="">
+                        </button>
+                      </td>
+                      <td class="col-md-2 form-group">
+                          <button class="view actico-btn" routerLink="/activities" type="button">
+                            <img src="../../../assets/img/view.png" alt="" />
+                          </button>
+                     </td>
+                     <td class="col-md-2 form-group">
+                          <span *ngIf="!itemrow.editable">{{itemrow.assignedto}}</span>
+                          <input placeholder="Assigned To" formControlName="assignedto" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/>
+                    </td>
+                    <td class="col-md-2 form-group" >
+                      <button class="delete actico-btn" type="button" (click)="deleteRow(i)" >
+                          <img
+                          src="../../../assets/img/delete.png"
+                          alt="" class="del-ico"/>
+                      </button>
+                  </td>
+                </tr>
+                </tbody>
+              </ng-container>
+            </table>
+          </div>
+            
         </div>
+      </div>
     </div>
-
-
-</div>
+  </div>
+  <pagination-controls (pageChange)="pageChanged($event)"
+            [maxSize]="5"></pagination-controls>
+</form>

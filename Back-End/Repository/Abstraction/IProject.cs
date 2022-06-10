@@ -22,6 +22,7 @@ namespace AnL.Repository.Abstraction
         public Task<object> EditProject(EditProjectView project);
 
         public Task<List<ClientViewModel>> GetClientList();
+        public Task<List<ProjectListViewModel>> GetAllProject();
 
     }
 }

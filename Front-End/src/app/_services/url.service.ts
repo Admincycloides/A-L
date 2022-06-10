@@ -41,9 +41,21 @@ export class UrlService {
   }
   public Employee = {
     //getEmployeeDetails    : 'api/Employee/getEmployeeDetails',
-    getSupervisorDetails  : 'api/EmployeeDetails/GetSupervisorDetails'
+    getSupervisorDetails     : 'api/EmployeeDetails/GetSupervisorDetails',
+    getAllEmployeeList       : 'api/EmployeeDetails/GetAllEmployeeList'
   }
   public project = {
-    getprojectListbyEmployeeID :'api/Project/GetprojectListbyEmployeeID'
+    getprojectListbyEmployeeID :'api/Project/GetprojectListbyEmployeeID',
+    getProjectList             : 'api/Project/GetAllProjectList',
+    addProject : 'api/Project/AddProject',
+    deleteProject : 'api/Project/DeleteProject',
+    allocateResources : 'api/Project/allocateResources',
+    getallprojectlist : 'api/Project/GetAllProjectList'
+  }
+
+  public activity = {
+    addActivity : 'api/Project/AddActivity',
+    getActivityList : 'api/Project/GetActivityList',
+
   }
 }
