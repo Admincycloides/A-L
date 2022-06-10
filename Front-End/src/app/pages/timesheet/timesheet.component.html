@@ -42,7 +42,7 @@
                                     type="checkbox" value=""
                                     id="flexCheckDefault"
                                     *ngIf="timeSheetDetails?.length"
-                                    (click)="onRowCheck(-1,$event)">
+                                    (click)="onRowCheck(-1)">
                                 Status
                             </th>
                             <th>
@@ -93,8 +93,7 @@
                                         type="checkbox" value=""
                                         id="flexCheckDefault"
                                         *ngIf="row.status == 'In Progress' || row.status == 'Rejected'"
-                                        #value
-                                        (click)="onRowCheck(i,value)" [checked]="selectAllTimesheet?
+                                        (click)="onRowCheck(i)" [checked]="selectAllTimesheet?
                                         true:false">
                                     <!-- <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault" 
                         (click)="onRowCheck(i)" [checked] = "selectAllTimesheet"> -->

@@ -378,8 +378,9 @@ export class TimesheetComponent implements OnInit {
   }
 
   //on checking checkbox of the table
-  onRowCheck(id: any,event:any){
+  onRowCheck(id: any){
     if(id == -1){
+      this.selectedTimesheetRow = [];
       this.showSideWindowCheckAll = !this.showSideWindowCheckAll;
       this.showSideWindow = false;
       this.selectAllTimesheet = !this.selectAllTimesheet;
@@ -400,8 +401,6 @@ export class TimesheetComponent implements OnInit {
         this.selectedTimesheetRow.splice(this.selectedTimesheetRow.indexOf(this.timeSheetDetails[id]),1);
       }
     }
-    //console.log("ske",this.selectedTimesheetRow);
-
   }
   //saving the timsheet details
   onSaveTimesheetDetails(){
@@ -502,7 +501,7 @@ export class TimesheetComponent implements OnInit {
   }
   //submitting the timesheet
   onSubmitTimesheet(){
-    console.log(this.selectedTimesheetRow);
+    //console.log(this.selectedTimesheetRow);
     if(this.selectedTimesheetRow.length !=0){
       if(this.managerId && this.managerId != '(Supervisor)'){
         this.selectedTimesheetRow.forEach((item)=>{
