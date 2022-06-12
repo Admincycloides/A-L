@@ -1,6 +1,6 @@
-<div class="page-title w-100">Activities</div>
-<div class="action-head justify-content-between d-flex">
-    <div class="sub-ptitle"><h6>{{titleService.getTitle()}}</h6></div>
+
+<div class="action-head justify-content-between d-flex align-items-center mb-4">
+    <div class="page-title w-100">Activities</div>
     <div class="act-filter d-flex align-items-center justify-content-center">
         <input type="text" class="search-filter" placeholder="Search Activities"
             />
@@ -16,7 +16,7 @@
         </div> -->
     </div>
 </div>
-<br>
+<div class="sub-ptitle w-100">{{titleService.getTitle()}}</div>
 
 <form [formGroup]="projectGroup">
     <div>
@@ -44,21 +44,21 @@
                                         <ng-container projectGroup.controls.itemRows>
                                          <tbody formArrayName ="itemRows">
                                             <tr *ngFor="let itemrow of itemRows['controls']; let i = index" [formGroupName]="i">
-                                                <td class="col-md-2">
+                                                <td class="">
                                                     <span *ngIf="!itemrow.editable">{{itemrow.activityName}}</span>
                                                     <input placeholder="Activity Name" formControlName="activityName" *ngIf="itemrow.editable" />
                                                 </td>
-                                                <td class="col-md-2">
+                                                <td class="">
                                                     <span *ngIf="!itemrow.editable">{{itemrow.activityDescription}}</span>
                                                     <input placeholder="Activity Description" formControlName="activityDescription" *ngIf="itemrow.editable" />
                                                 </td>
-                                                <td class="col-md-2">
-                                                    <button class="edit" (click)="makeEditable(itemrow)"><img
+                                                <td class="">
+                                                    <button class="edit actico-btn" (click)="makeEditable(itemrow)"><img
                                                         src="../../../assets/img/edit.png"
                                                         alt="" /></button>
                                                 </td>
-                                                <td class="col-md-2">
-                                                    <button class="delete" (click)="deleteRow(i)" >
+                                                <td class="">
+                                                    <button class="delete actico-btn" (click)="deleteRow(i)" >
                                                         <img
                                                         src="../../../assets/img/delete.png"
                                                         alt="" />

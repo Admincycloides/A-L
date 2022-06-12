@@ -1,6 +1,8 @@
 using AnL.Models;
 using AnL.Repository.Abstraction;
 using AnL.Repository.Implementation;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -12,12 +14,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace TestApplication
@@ -46,8 +50,14 @@ namespace TestApplication
             services.AddControllers();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddDbContext<Tan_DBContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
-            );
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                    sqlServerOptionsAction:sqlOption=>
+                    {
+                        sqlOption.EnableRetryOnFailure(
+                            maxRetryCount:10,
+                            maxRetryDelay: TimeSpan.FromSeconds(5),
+                            errorNumbersToAdd: null);
+                    }));
             services.AddHttpContextAccessor();
             services.AddSingleton<IUriService>(o =>
             {
@@ -56,6 +66,50 @@ namespace TestApplication
                 var uri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
                 return new UriService(uri);
             });
+
+            //var AuthenticationProviderKey = "Tangentia";
+            ////var ValidIssuer = Configuration.GetSection("Jwt").GetSection("Issuer").Value;
+            ////var ValidAudience = Configuration.GetSection("Jwt").GetSection("Audience").Value;
+            ////var SecreteKey = Configuration.GetSection("Jwt").GetSection("SecretKey").Value;
+            //var tokenValidationParameters = new TokenValidationParameters
+            //{
+            //    ValidateIssuer = true,
+            //    ValidateAudience = true,
+            //    ValidateLifetime = true,
+            //    RequireSignedTokens = true,
+            //    ValidateIssuerSigningKey = true,
+            //    ValidIssuer = "Issuer",//Configuration["Jwt:Issuer"],
+            //    ValidAudience = "Audience",//Configuration["Jwt:Audience"],
+            //    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("KqcL7s998JrfFHRP"/*_configuration["Jwt:SecretKey"]*/)),
+            //    ClockSkew = TimeSpan.FromMinutes(20),
+            //    RequireExpirationTime = true,
+            //    LifetimeValidator = (DateTime? notBefore, DateTime? expires, SecurityToken securityToken,
+            //                         TokenValidationParameters validationParameters) =>
+            //    {
+            //        return notBefore <= DateTime.UtcNow &&
+            //               expires >= DateTime.UtcNow;
+            //    }
+            //};
+
+
+            //services.AddAuthentication(options =>
+            //{
+            //    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //}).AddJwtBearer(config =>
+            //{
+            //    config.RequireHttpsMetadata = false;
+            //    config.SaveToken = true;
+            //    config.TokenValidationParameters = tokenValidationParameters;
+            //    config.Authority = "https://localhost:44351";
+            //});
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
+            options => Configuration.Bind("JwtSettings", options))
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
+        options => Configuration.Bind("CookieSettings", options));
             services.AddSwaggerGen(swagger =>
             {
                 swagger.SwaggerDoc("v1", new OpenApiInfo

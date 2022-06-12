@@ -1,3 +1,8 @@
+@import "../../../../assets/scss/paper-dashboard/mixins";
+@import "../../../../assets/scss/paper-dashboard/variables";
+@import "../../../../assets/scss/paper-dashboard/responsive";
+
+
 #headers {
     padding-top: 12px;
     padding-bottom: 12px;
@@ -8,4 +13,12 @@
     border-collapse: collapse;
 
 }
+.sub-ptitle{
+    font-size: 15px;
+    color: $secondary-color;
+    font-weight: 400;
+    border-top: 1px #e7e7e7 solid;
+    padding: 12px 8px;
+}
+
 

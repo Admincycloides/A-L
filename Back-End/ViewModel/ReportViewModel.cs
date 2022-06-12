@@ -33,4 +33,16 @@ namespace AnL.ViewModel
         public DateTime Date { get; set; }
         public double NumberOfHours { get; set; }
     }
+
+    public class ReportDayWiseTotal
+    {
+        public DateTime Date { get; set; }
+        public double NumberOfHours { get; set; }
+    }
+
+    public class ProjectLevelReport
+    {
+        public List<ReportViewModel> reportViewModels { get; set; }
+        public List<ReportDayWiseTotal> reportDayWiseTotals { get; set; }
+    }
 }

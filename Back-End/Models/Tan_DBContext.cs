@@ -1,9 +1,11 @@
 ﻿using System;
+//using Audit.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace AnL.Models
 {
+    //[AuditDbContext(Mode = AuditOptionMode.OptOut, IncludeEntityObjects = false, AuditEventType = "{database}_{context}")]
     public partial class Tan_DBContext : DbContext
     {
         public Tan_DBContext()
@@ -30,7 +32,7 @@ namespace AnL.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=72.138.132.250,8006;Database=Tan_DB;user id=sa;password=T@ngenti@12;");
+                optionsBuilder.UseSqlServer("Server=72.138.132.250,8006;Database=Tan_DB;user id=sa;password=T@ngenti@12");
             }
         }
 
@@ -43,9 +45,7 @@ namespace AnL.Models
 
                 entity.ToTable("Activity_Details");
 
-                entity.Property(e => e.ActivityId)
-                    .HasColumnName("Activity_ID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.ActivityId).HasColumnName("Activity_ID");
 
                 entity.Property(e => e.ActivityDescription)
                     .HasColumnName("Activity_Description")
@@ -362,10 +362,6 @@ namespace AnL.Models
                 entity.Property(e => e.OtpexpiryDate)
                     .HasColumnName("OTPExpiryDate")
                     .HasColumnType("datetime");
-
-                entity.Property(e => e.Token)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
 
                 entity.Property(e => e.TokenExpiryDate).HasColumnType("datetime");
 
