@@ -41,7 +41,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
     ReactiveFormsModule,
     NgxPaginationModule,
     RouterModule.forRoot(AppRoutes,{
-      useHash: false
+      useHash: true
     }),
     SidebarModule,
     NavbarModule,

@@ -37,7 +37,8 @@ export class UrlService {
     submitTimesheet           : 'api/Timesheet/SubmitTimesheetDetails',
     getReviewTimesheet        : 'api/Timesheet/GetReviewTimesheet',
     getReviewTimesheetDetails : 'api/Timesheet/GetReviewTimesheetDetails',
-    supervisorDecision        : 'api/Timesheet/supervisorDecision'
+    supervisorDecision        : 'api/Timesheet/supervisorDecision',
+    getTimesheetReport        : 'api/Timesheet/GetTimesheetReport'
   }
   public Employee = {
     //getEmployeeDetails    : 'api/Employee/getEmployeeDetails',

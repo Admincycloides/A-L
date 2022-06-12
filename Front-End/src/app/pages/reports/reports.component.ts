@@ -254,11 +254,21 @@ export class ReportsComponent implements OnInit {
     if(this.setStatus()){
       if(this.endDate.getFullYear() - this.startDate.getFullYear() <= 1){
       
-        this.allDates = this.dateFormatter(this.startDate,this.endDate)
-        //console.log(this.endDate.getFullYear() - this.startDate.getFullYear());
-        // console.log("all dated",this.allDates);
-        // console.log("Employee",this.selectedEmployeeList);
-        // console.log("project",this.selectedProjectList);
+        this.allDates = this.dateFormatter(this.startDate,this.endDate);
+
+        const body = {
+          projectIds:'',
+          employeeId:'',
+          fromDate:'',
+          toDate: ''
+        };
+        const url = `${this._url.timesheet.getTimesheetReport}`;
+        this._http.post(url,body).subscribe({
+            next:(res:any)=>{
+              console.log(res);
+          }
+        })
+
       }else{  
         this.toast.error("Please select date with in one year!!")
       }
