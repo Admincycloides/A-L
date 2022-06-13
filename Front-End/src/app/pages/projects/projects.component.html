@@ -26,16 +26,16 @@
           <div class="table-responsive">
             <table class="table">
               <thead class="text-primary">
-                <th>Project Name</th>
-                <th>Project Description</th>
-                <th>Client Name</th>
-                <th> Start Date</th>
-                <th> End Date</th>
-                <th> Current Status</th>
-                <th> SHED Project</th>
+                <th nowrap>Project Name</th>
+                <th nowrap>Project Description</th>
+                <th nowrap>Client Name</th>
+                <th nowrap> Start Date</th>
+                <th nowrap> End Date</th>
+                <th nowrap> Current Status</th>
+                <th nowrap> SHED Project</th>
                 <th *ngIf="supervisorFlag != 'Y'"> Edit</th>
                 <th> View</th>
-                <th> Assigned to</th>
+                <th nowrap> Assigned to</th>
                 <th *ngIf="supervisorFlag != 'Y'">Delete</th>
               </thead>
               <ng-container projectGroup.controls.itemRows>
