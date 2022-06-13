@@ -1,34 +1,46 @@
-
 <div class="action-head justify-content-between d-flex align-items-center mb-4">
-    <div class="page-title w-100">Timesheet Management</div>
-    <div class="act-filter d-flex align-items-center justify-content-center">
-        <!-- <button class="left-date date-week"><i class="nc-icon nc-minimal-left"></i></button> <span class="d-label">From</span><input type="date" class="nm-date"/><span class="d-label">To</span><input type="date" class="nm-date"/><button class="right-date date-week"><i class="nc-icon nc-minimal-right"></i></button> -->
-        <div class="input-group date-line d-flex justify-content-center mb-0">
-            <button class="left-date date-week" (click)="onPreviousClick()">
-                <i class="nc-icon nc-minimal-left"></i>
-            </button>
-            <div class="date-custom d-flex">
-                <div class="date-holder position-relative d-flex justify-content-center align-items-center">
-                    <input class="form-control date-input" readonly name="dp" [(ngModel)]="model" ngbDatepicker (dateSelect)="dateChange($event)" #d="ngbDatepicker">
-                    <div class="week-range position-absolute">{{weekShow}}</div>
-                </div>
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary calendar m-0 date-select"
-                        (click)="d.toggle()" type="button">
-                        <i class="nc-icon nc-calendar-60"></i>
-                    </button>
-                </div>
-            </div>
-            <button class="right-date date-week" (click)="onNextClick()">
-                <i class="nc-icon nc-minimal-right"></i>
-            </button>
+  <div class="page-title w-100">Timesheet Management</div>
+  <div class="act-filter d-flex align-items-center justify-content-center">
+    <!-- <button class="left-date date-week"><i class="nc-icon nc-minimal-left"></i></button> <span class="d-label">From</span><input type="date" class="nm-date"/><span class="d-label">To</span><input type="date" class="nm-date"/><button class="right-date date-week"><i class="nc-icon nc-minimal-right"></i></button> -->
+    <div class="input-group date-line d-flex justify-content-center mb-0">
+      <button class="left-date date-week" (click)="onPreviousClick()">
+        <i class="nc-icon nc-minimal-left"></i>
+      </button>
+      <div class="date-custom d-flex">
+        <div
+          class="date-holder position-relative d-flex justify-content-center align-items-center"
+        >
+          <input
+            class="form-control date-input"
+            readonly
+            name="dp"
+            [(ngModel)]="model"
+            ngbDatepicker
+            (dateSelect)="dateChange($event)"
+            #d="ngbDatepicker"
+          />
+          <div class="week-range position-absolute">{{ weekShow }}</div>
         </div>
+        <div class="input-group-append">
+          <button
+            class="btn btn-outline-secondary calendar m-0 date-select"
+            (click)="d.toggle()"
+            type="button"
+          >
+            <i class="nc-icon nc-calendar-60"></i>
+          </button>
+        </div>
+      </div>
+      <button class="right-date date-week" (click)="onNextClick()">
+        <i class="nc-icon nc-minimal-right"></i>
+      </button>
     </div>
-    <div class="action d-flex justify-content-end">
-        <button class="act-btn thm-btn-primary"
-            (click)="onTimesheetAddEdit(-1)"><i class="nc-icon nc-simple-add"></i>
-            Add Time</button>
-    </div>
+  </div>
+  <div class="action d-flex justify-content-end">
+    <button class="act-btn thm-btn-primary" (click)="onTimesheetAddEdit(-1)">
+      <i class="nc-icon nc-simple-add"></i> Add Time
+    </button>
+  </div>
 </div>
 <div class="sheet-row" [ngClass]="showSideWindow || showSideWindowCheckAll ? 'split-col':''">
     <div class="sheet-col">
@@ -97,226 +109,326 @@
                                         true:false">
                                     <!-- <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault" 
                         (click)="onRowCheck(i)" [checked] = "selectAllTimesheet"> -->
-                                 
-                                  {{row.status}}
-                                </td>
-                                <td>
-                                  {{row.projectName}}
-                                </td>
-                                <td>
-                                  {{row.activityName}}
-                              </td>
-                                <td>
-                                    {{row.timeTaken[0].numberOfHours}}
-                                </td>
-                                <td>
-                                    {{row.timeTaken[1].numberOfHours}}
-                                </td>
-                                <td>
-                                  {{row.timeTaken[2].numberOfHours}}
-                                </td>
-                                <td>
-                                  {{row.timeTaken[3].numberOfHours}}
-                                </td>
-                                <td>
-                                  {{row.timeTaken[4].numberOfHours}}
-                                </td>
-                                <td>
-                                  {{row.timeTaken[5].numberOfHours}}
-                                </td>
-                                <td>
-                                  {{row.timeTaken[6].numberOfHours}}
-                                </td>
-                                <td>
-                                  {{row.timeTaken[0].numberOfHours+row.timeTaken[1].numberOfHours+row.timeTaken[2].numberOfHours
-                                  +row.timeTaken[3].numberOfHours+row.timeTaken[4].numberOfHours+row.timeTaken[5].numberOfHours+row.timeTaken[6].numberOfHours
-                                  }}
-                                </td>
-                                <td>
-                                    {{row.remarks}}
-                                </td>
 
-                                <td>
-                                    <button class="edit actico-btn"
-                                        (click)="onTimesheetAddEdit(i)" *ngIf="row.status == 'In Progress' || row.status == 'Rejected' || row.status == 'Submitted'"><img
-                                            src="../../../assets/img/edit.png"
-                                            alt="" /></button>
-                                </td>
-                                <td>
-                                    <button class="delete actico-btn"
-                                        (click)="onTimesheetDelete(i)" *ngIf="row.status == 'In Progress' || row.status == 'Rejected' || row.status == 'Submitted'"><img
-                                            src="../../../assets/img/delete.png"
-                                            alt="" class="del-ico"/></button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <ng-container *ngIf="timeSheetDetails == null">
-                        <div class="justify-content-center mb-5 mt-2 d-flex">No timesheet records during the selected week!!</div>
-                      </ng-container>
-                </div>
+                  {{ row.status }}
+                </td>
+                <td>
+                  {{ row.projectName }}
+                </td>
+                <td>
+                  {{ row.activityName }}
+                </td>
+                <td>
+                  {{ row.timeTaken[0].numberOfHours }}
+                </td>
+                <td>
+                  {{ row.timeTaken[1].numberOfHours }}
+                </td>
+                <td>
+                  {{ row.timeTaken[2].numberOfHours }}
+                </td>
+                <td>
+                  {{ row.timeTaken[3].numberOfHours }}
+                </td>
+                <td>
+                  {{ row.timeTaken[4].numberOfHours }}
+                </td>
+                <td>
+                  {{ row.timeTaken[5].numberOfHours }}
+                </td>
+                <td>
+                  {{ row.timeTaken[6].numberOfHours }}
+                </td>
+                <td>
+                  {{
+                    row.timeTaken[0].numberOfHours +
+                      row.timeTaken[1].numberOfHours +
+                      row.timeTaken[2].numberOfHours +
+                      row.timeTaken[3].numberOfHours +
+                      row.timeTaken[4].numberOfHours +
+                      row.timeTaken[5].numberOfHours +
+                      row.timeTaken[6].numberOfHours
+                  }}
+                </td>
+                <td>
+                  {{ row.remarks }}
+                </td>
+
+                <td>
+                  <button
+                    class="edit actico-btn"
+                    (click)="onTimesheetAddEdit(i)"
+                    *ngIf="
+                      row.status == 'In Progress' ||
+                      row.status == 'Rejected' ||
+                      row.status == 'Submitted'
+                    "
+                  >
+                    <img src="../../../assets/img/edit.png" alt="" />
+                  </button>
+                </td>
+                <td>
+                  <button
+                    class="delete actico-btn"
+                    (click)="onTimesheetDelete(i)"
+                    *ngIf="
+                      row.status == 'In Progress' || row.status == 'Rejected'
+                    "
+                  >
+                    <img
+                      src="../../../assets/img/delete.png"
+                      alt=""
+                      class="del-ico"
+                    />
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <ng-container *ngIf="timeSheetDetails == null">
+            <div class="justify-content-center mb-5 mt-2 d-flex">
+              No timesheet records during the selected week!!
             </div>
+          </ng-container>
         </div>
-        <!-- Pagination -->
-        <div class="pagination-line d-flex justify-content-end" *ngIf="timeSheetDetails != null">
-            <ul>
-                <pagination-controls
-                    id='timesheet'
-                    (pageChange)="pageChanged($event)"
-                    [directionLinks]="true"
-                    [autoHide]="false"
-                    [maxSize]="10"
-                    [responsive]="true"
-                    previousLabel="Previous"
-                    nextLabel="Next"
-                    screenReaderPaginationLabel="Pagination"
-                    screenReaderPageLabel="page"
-                    screenReaderCurrentLabel="You're on page">
-                </pagination-controls>
-            </ul>
-        </div>
+      </div>
     </div>
-
-    <div class=" remarks-col" *ngIf="showSideWindow || showSideWindowCheckAll">
-        <div class="card">
-            <div class="card-body pt-1">
-                <div class="r-row mb-1">
-                    <label>Send to</label>
-                    <select required (change)="onselectSupervisor($event)" class="form-control">
-                        <option>(Supervisor)</option>
-                        <option *ngFor="let item of superVisorList" [value]="item.managerId">{{item.firstName}} 
-                            {{item.lastName}}
-                        </option>
-                    </select>
-                </div>
-                <div class="r-row mb-1">
-                    <label>Remarks</label>
-                    <textarea [(ngModel)]="submitRemarks" class="form-control" rows="4"></textarea>
-                </div>
-                <div class="r-row">
-                    <button (click)="onSubmitTimesheet()" class="thm-btn-primary sm-btn w-100 my-2">Submit</button>
-                </div>
-            </div>
-        </div>
-        
+    <!-- Pagination -->
+    <div
+      class="pagination-line d-flex justify-content-end"
+      *ngIf="timeSheetDetails != null"
+    >
+      <ul>
+        <pagination-controls
+          id="timesheet"
+          (pageChange)="pageChanged($event)"
+          [directionLinks]="true"
+          [autoHide]="false"
+          [maxSize]="10"
+          [responsive]="true"
+          previousLabel="Previous"
+          nextLabel="Next"
+          screenReaderPaginationLabel="Pagination"
+          screenReaderPageLabel="page"
+          screenReaderCurrentLabel="You're on page"
+        >
+        </pagination-controls>
+      </ul>
     </div>
+  </div>
 
+  <div class="remarks-col" *ngIf="showSideWindow || showSideWindowCheckAll">
+    <div class="card">
+      <div class="card-body pt-1">
+        <div class="r-row mb-1">
+          <label>Send to</label>
+          <select
+            required
+            (change)="onselectSupervisor($event)"
+            class="form-control"
+          >
+            <option>(Supervisor)</option>
+            <option
+              *ngFor="let item of superVisorList"
+              [value]="item.managerId"
+            >
+              {{ item.firstName }}
+              {{ item.lastName }}
+            </option>
+          </select>
+        </div>
+        <div class="r-row mb-1">
+          <label>Remarks</label>
+          <textarea
+            [(ngModel)]="submitRemarks"
+            class="form-control"
+            rows="4"
+          ></textarea>
+        </div>
+        <div class="r-row">
+          <button
+            (click)="onSubmitTimesheet()"
+            class="thm-btn-primary sm-btn w-100 my-2"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <ng-template #content let-modal>
-    <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Add Time</h4>
-        <button type="button" class="btn-close" aria-label="Close"
-            (click)="modal.dismiss('Cross click')"><i class="nc-icon
-                nc-simple-remove"></i></button>
-    </div>
-    <div class="modal-body addproject-modal">
-        <form [formGroup]="addTimesheetForm">
-            <div class="row fm-row">
-                <div class="col-md-6">
-                    <div class="form-group mb-3">
-                        <label>Select Project</label>
-                        <select class="form-control" formControlName = "project" (change)="onProjectSelect($event)">
-                            <!-- <option selected >Select Project</option> -->
-                            <option *ngFor="let item of projectList" [ngValue]="item.projectName">{{item.projectName}}</option>
-                        </select>
-                        <small *ngIf="formSubmitted && !addTimesheetForm.controls.project.value">
-                            <span class="error">Project is required</span>
-                          </small>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group mb-3">
-                        <label>Activity</label>  
-                        <select class="form-control" id="activity" name = "activity" formControlName ="activity">
-                            <option selected >Select Activity</option>
-                            <option *ngFor="let item of activityList" [ngValue]="item.activityName"
-                            >{{item.activityName}}</option>
-                        </select>
-                        <small *ngIf="formSubmitted && !addTimesheetForm.controls.activity.value">
-                            <span class="error">Activity is required</span>
-                          </small>
-                </div>
-            </div>
-            </div>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add Time</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="nc-icon nc-simple-remove"></i>
+    </button>
+  </div>
+  <div class="modal-body addproject-modal">
+    <form [formGroup]="addTimesheetForm">
+      <div class="row fm-row">
+        <div class="col-md-6">
+          <div class="form-group mb-3">
+            <label>Select Project</label>
+            <select
+              class="form-control"
+              formControlName="project"
+              (change)="onProjectSelect($event)"
+            >
+              <!-- <option selected >Select Project</option> -->
+              <option
+                *ngFor="let item of projectList"
+                [ngValue]="item.projectName"
+              >
+                {{ item.projectName }}
+              </option>
+            </select>
+            <small
+              *ngIf="formSubmitted && !addTimesheetForm.controls.project.value"
+            >
+              <span class="error">Project is required</span>
+            </small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group mb-3">
+            <label>Activity</label>
+            <select
+              class="form-control"
+              id="activity"
+              name="activity"
+              formControlName="activity"
+            >
+              <option selected>Select Activity</option>
+              <option
+                *ngFor="let item of activityList"
+                [ngValue]="item.activityName"
+              >
+                {{ item.activityName }}
+              </option>
+            </select>
+            <small
+              *ngIf="formSubmitted && !addTimesheetForm.controls.activity.value"
+            >
+              <span class="error">Activity is required</span>
+            </small>
+          </div>
+        </div>
+      </div>
 
-            <div class="row fm-row">
-                <div class="col-md-12">
-                    <div class="form-group mb-3">
-                        <label>Remarks</label>
-                        <textarea class="form-control" formControlName = "remarks"></textarea>
-                        <div class="error"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="row fm-row">
-                <div class="col-md-12">
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead class="text-primary">
-                                <th>
-                                    Monday
-                                    {{currentWeek[0] | date: "MMM-d"}}
-                                </th>
-                                <th>
-                                    Tuesday {{currentWeek[1] | date: "MMM-d"}}
-                                </th>
-                                <th>
-                                    Wednesday {{currentWeek[2] | date: "MMM-d"}}
-                                </th>
-                                <th>
-                                    Thusday {{currentWeek[3] | date: "MMM-d"}}
-                                </th>
-                                <th>
-                                    Friday {{currentWeek[4] | date: "MMM-d"}}
-                                </th>
-                                <th>
-                                    Saturday {{currentWeek[5] | date: "MMM-d"}}
-                                </th>
-                                <th>
-                                    Sunday {{currentWeek[6] | date: "MMM-d"}}
-                                </th>
-                  
-
-                            </thead>
-                            <tbody>
-                              <ng-container>
-                                <tr>
-                                  <td>
-                                      <input type="number" class="h-input" formControlName="monday"  min="0" max="24" />
-                                  </td>
-                                  <td>
-                                      <input type="number" class="h-input" formControlName="tuesday" min="0" max="24"/>
-                                  </td>
-                                  <td>
-                                      <input type="number" class="h-input" formControlName="wednesday" min="0" max="24" />
-                                  </td>
-                                  <td>
-                                      <input type="number" class="h-input" formControlName="thursday" min="0" max="24" />
-                                  </td>
-                                  <td>
-                                      <input type="number" class="h-input" formControlName="friday" min="0" max="24" />
-                                  </td>
-                                  <td>
-                                      <input type="number" class="h-input" formControlName="saturday" min="0" max="24" />
-                                  </td>
-                                  <td>
-                                      <input type="number" class="h-input" formControlName="sunday" min="0" max="24" />
-                                  </td>
-
-
-                              </tr>
-                              </ng-container>
-                                
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="act-btn thm-btn thm-btn-primary"
-            (click)="onSaveTimesheetDetails()">Save</button>
-    </div>
+      <div class="row fm-row">
+        <div class="col-md-12">
+          <div class="form-group mb-3">
+            <label>Remarks</label>
+            <textarea class="form-control" formControlName="remarks"></textarea>
+            <div class="error"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row fm-row">
+        <div class="col-md-12">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class="text-primary">
+                <th>
+                  Monday
+                  {{ currentWeek[0] | date: "MMM-d" }}
+                </th>
+                <th>Tuesday {{ currentWeek[1] | date: "MMM-d" }}</th>
+                <th>Wednesday {{ currentWeek[2] | date: "MMM-d" }}</th>
+                <th>Thusday {{ currentWeek[3] | date: "MMM-d" }}</th>
+                <th>Friday {{ currentWeek[4] | date: "MMM-d" }}</th>
+                <th>Saturday {{ currentWeek[5] | date: "MMM-d" }}</th>
+                <th>Sunday {{ currentWeek[6] | date: "MMM-d" }}</th>
+              </thead>
+              <tbody>
+                <ng-container>
+                  <tr>
+                    <td>
+                      <input
+                        type="number"
+                        class="h-input"
+                        formControlName="monday"
+                        min="0"
+                        max="24"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        class="h-input"
+                        formControlName="tuesday"
+                        min="0"
+                        max="24"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        class="h-input"
+                        formControlName="wednesday"
+                        min="0"
+                        max="24"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        class="h-input"
+                        formControlName="thursday"
+                        min="0"
+                        max="24"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        class="h-input"
+                        formControlName="friday"
+                        min="0"
+                        max="24"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        class="h-input"
+                        formControlName="saturday"
+                        min="0"
+                        max="24"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        class="h-input"
+                        formControlName="sunday"
+                        min="0"
+                        max="24"
+                      />
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="act-btn thm-btn thm-btn-primary"
+      (click)="onSaveTimesheetDetails()"
+    >
+      Save
+    </button>
+  </div>
 </ng-template>
 <!-- ;modal.close('Save click') -->

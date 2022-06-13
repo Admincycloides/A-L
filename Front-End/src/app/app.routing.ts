@@ -6,11 +6,6 @@ import { TimesheetComponent } from './pages/timesheet/timesheet.component';
 import AuthGuard from './_guards/auth.guard';
 
 export const AppRoutes: Routes = [
-  // {
-  //   path: '',
-  //   redirectTo: 'dashboard',
-  //   pathMatch: 'full',
-  // },
   {
     path: '',
     redirectTo: 'login',
