@@ -1,110 +1,95 @@
-
 <div class="action-head justify-content-between d-flex align-items-center mb-4">
-    <div class="page-title w-100">Review Timesheet</div>
-    <div class="act-filter d-flex align-items-center justify-content-end">
-        <!-- <input type="text" class="search-filter" placeholder="Search Project"/> -->
-        <div class="i-search position-relative">
-            <input
-            #searchBar
-            type="text"
-            class="cpage-search search-filter"
-            placeholder="Search Project"
-            (keyup)="searchItems($event)"
-        />
-        <span *ngIf="searchTerm" class="pe-7s-close-circle cs-ico" (click)="clearSearch(); searchBar.value = ''"></span>
-        <span *ngIf="!searchTerm" class="pe-7s-search s-ico"></span>
-        </div>
-        
+  <div class="page-title w-100">Review Timesheet</div>
+  <div class="act-filter d-flex align-items-center justify-content-end">
+    <!-- <input type="text" class="search-filter" placeholder="Search Project"/> -->
+    <div class="i-search position-relative">
+      <input
+        #searchBar
+        type="text"
+        class="cpage-search search-filter"
+        placeholder="Search Project"
+        (keyup)="searchItems($event)"
+      />
+      <span
+        *ngIf="searchTerm"
+        class="pe-7s-close-circle cs-ico"
+        (click)="clearSearch(); searchBar.value = ''"
+      ></span>
+      <span *ngIf="!searchTerm" class="pe-7s-search s-ico"></span>
     </div>
+  </div>
 </div>
 <div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead class="text-primary">
-                            <th class="sort-thm">
-                                Project
-                            </th>
-                            <th>
-                                Employee Name
-                            </th>
-                            <th class="sort-thm">
-                                Submitted Date
-                            </th>
-                            <th>
-                               Open Time sheet
-                            </th>
-                            <th class="sort-thm">
-                               Status
-                            </th>
-                            
-                        </thead>
-                        <tbody >
-
-                            <!-- <tr >
-                                <td >
-                                    projectName
-                                </td>
-                                <td>
-                                    employeeName
-                                </td>
-                                <td>
-                                    date
-                                </td>
-                                <td>
-                                    <button class="link thm-linkbtn" (click)="onViewTimesheet('item')">Link</button>
-                                </td>
-                                <td>
-                                    <span class="label-status approved">status</span>
-                                </td>
-                            </tr> -->
-
-
-
-                            <tr *ngFor="let item of reviewTimesheetArray | paginate: config; let i= index ">
-                                <td >
-                                    {{item.projectName}}
-                                </td>
-                                <td>
-                                    {{item.employeeName}}
-                                </td>
-                                <td>
-                                    {{item.date |date: "MM/dd/YYYY"}}
-                                </td>
-                                <td>
-                                    <button class="link thm-linkbtn" (click)="onViewTimesheet(item)">Link</button>
-                                </td>
-                                <td>
-                                    <span class="label-status approved">{{item.status}}</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                        
-                    </table>
-                    <ng-container *ngIf="!reviewTimesheetArray?.length">
-                        <div class="justify-content-center mb-5 mt-2 d-flex">No Timesheet Records For Review</div>
-                      </ng-container>
-                </div>
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead class="text-primary">
+              <th class="sort-thm">Project</th>
+              <th>Employee Name</th>
+              <th class="sort-thm">Submitted Date</th>
+              <th>Open Time sheet</th>
+              <th class="sort-thm">Status</th>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="
+                  let item of reviewTimesheetArray | paginate: config;
+                  let i = index
+                "
+              >
+                <td>
+                  {{ item.projectName }}
+                </td>
+                <td>
+                  {{ item.employeeName }}
+                </td>
+                <td>
+                  {{ item.date | date: "MM/dd/YYYY" }}
+                </td>
+                <td>
+                  <button
+                    class="link thm-linkbtn"
+                    (click)="onViewTimesheet(item)"
+                  >
+                    Link
+                  </button>
+                </td>
+                <td>
+                  <span class="label-status approved">{{ item.status }}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <ng-container *ngIf="!reviewTimesheetArray?.length">
+            <div class="justify-content-center mb-5 mt-2 d-flex">
+              No Timesheet Records For Review
             </div>
+          </ng-container>
         </div>
+      </div>
+    </div>
     <!-- Pagination -->
-    <div class="pagination-line d-flex justify-content-end" *ngIf="reviewTimesheetArray?.length">
-        <ul>
-            <pagination-controls
-                (pageChange)="pageChanged($event)"
-                [directionLinks]="true"
-                [autoHide]="false"
-                [maxSize]="10"
-                [responsive]="true"
-                previousLabel="Previous"
-                nextLabel="Next"
-                screenReaderPaginationLabel="Pagination"
-                screenReaderPageLabel="page"
-                screenReaderCurrentLabel="You're on page">
-            </pagination-controls>
-        </ul>
+    <div
+      class="pagination-line d-flex justify-content-end"
+      *ngIf="reviewTimesheetArray?.length"
+    >
+      <ul>
+        <pagination-controls
+          (pageChange)="pageChanged($event)"
+          [directionLinks]="true"
+          [autoHide]="false"
+          [maxSize]="10"
+          [responsive]="true"
+          previousLabel="Previous"
+          nextLabel="Next"
+          screenReaderPaginationLabel="Pagination"
+          screenReaderPageLabel="page"
+          screenReaderCurrentLabel="You're on page"
+        >
+        </pagination-controls>
+      </ul>
     </div>
-    </div>
+  </div>
 </div>

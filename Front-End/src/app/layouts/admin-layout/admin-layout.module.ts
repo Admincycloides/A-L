@@ -5,14 +5,14 @@ import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 
 import { AdminLayoutRoutes } from './admin-layout.routing';
 
-import { DashboardComponent }       from '../../pages/dashboard/dashboard.component';
-import { UserComponent }            from '../../pages/user/user.component';
-import { TableComponent }           from '../../pages/table/table.component';
-import { TypographyComponent }      from '../../pages/typography/typography.component';
-import { IconsComponent }           from '../../pages/icons/icons.component';
-import { MapsComponent }            from '../../pages/maps/maps.component';
-import { NotificationsComponent }   from '../../pages/notifications/notifications.component';
-import { UpgradeComponent }         from '../../pages/upgrade/upgrade.component';
+// import { DashboardComponent }       from '../../pages/dashboard/dashboard.component';
+// import { UserComponent }            from '../../pages/user/user.component';
+// import { TableComponent }           from '../../pages/table/table.component';
+// import { TypographyComponent }      from '../../pages/typography/typography.component';
+// import { IconsComponent }           from '../../pages/icons/icons.component';
+// import { MapsComponent }            from '../../pages/maps/maps.component';
+// import { NotificationsComponent }   from '../../pages/notifications/notifications.component';
+// import { UpgradeComponent }         from '../../pages/upgrade/upgrade.component';
 import { TimesheetComponent }       from '../../pages/timesheet/timesheet.component';
 import { ReviewtimesheetComponent }       from '../../pages/reviewtimesheet/reviewtimesheet.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown'
@@ -41,21 +41,12 @@ import { ReportsComponent } from 'app/pages/reports/reports.component';
     NgMultiSelectDropDownModule.forRoot()
   ],
   declarations: [
-    DashboardComponent,
-    UserComponent,
-    TableComponent,
-    UpgradeComponent,
-    TypographyComponent,
-    IconsComponent,
-    MapsComponent,
-    NotificationsComponent,
     TimesheetComponent,
     AddtimesheetComponent,
     AddtimesheetComponent,
     ReviewtimesheetComponent,
     ReviewlinkComponent,
-    ReportsComponent,
-    
+    ReportsComponent,  
   ],
   providers: [],
 })

@@ -13,7 +13,6 @@ import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routing';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
-import { LogComponent } from './pages/log/log.component';
 import { LoginComponent } from './auth/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from "@angular/common/http";
@@ -30,7 +29,6 @@ import { NgxPaginationModule } from 'ngx-pagination';
   declarations: [
     AppComponent,
     AdminLayoutComponent,
-    LogComponent,
     LoginComponent,
     ProjectsComponent,
     ActivitiesComponent
