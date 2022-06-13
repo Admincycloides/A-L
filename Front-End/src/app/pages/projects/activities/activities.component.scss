@@ -13,12 +13,16 @@
     border-collapse: collapse;
 
 }
-.sub-ptitle{
-    font-size: 15px;
-    color: $secondary-color;
-    font-weight: 400;
-    border-top: 1px #e7e7e7 solid;
-    padding: 12px 8px;
+.sp-row{
+    padding: 0px 15px;
+    .sub-ptitle{
+        font-size: 15px;
+        color: $secondary-color;
+        font-weight: 400;
+        border-top: 1px #e7e7e7 solid;
+        padding: 12px 0;
+    }
 }
+
 
 

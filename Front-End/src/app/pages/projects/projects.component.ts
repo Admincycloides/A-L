@@ -17,6 +17,9 @@ export class ProjectsComponent implements OnInit {
   getActivityName:any;
   ProjectItems:any;
   selectedactivity:any;
+  supervisorFlag: string;
+  user:any;
+  getclientdescription:any;
   
   public isSubmitted: boolean = false;
   projectGroup : FormGroup;
@@ -52,19 +55,22 @@ export class ProjectsComponent implements OnInit {
 
   ngOnInit(): void {
     this.toggleButton = true,
-    this.getProjectActivityDetails(),
+    // this.getProjectActivityDetails(),
     this.getListofProjects(),
-    this.getActivityLists()
+    this.getActivityLists(),
+    this.GetClientLists(),
+        this.user = JSON.parse(localStorage.getItem('user'));
+        console.log("macha",this.user)
   }
 
-  private getProjectActivityDetails(){
+  // private getProjectActivityDetails(){
 
-    const url = `${this._url.project.getprojectListbyEmployeeID}`
-    this._http.get(url).subscribe({
-      next:(res:any)=>{
-        this.itemRows.controls = (res.data);}
-      })
-    }
+  //   const url = `${this._url.project.getprojectListbyEmployeeID}`
+  //   this._http.get(url).subscribe({
+  //     next:(res:any)=>{
+  //       this.projectGroup['controls'].itemRows['controls'] = (res.data);}
+  //     })
+  //   }
 
     private getActivityLists(){
       console.log("first call")
@@ -75,14 +81,20 @@ export class ProjectsComponent implements OnInit {
         })
         }
 
-
+    private GetClientLists(){
+      const url = `${this._url.project.getclientlist}`
+      this._http.get(url).subscribe({next:(res:any)=>{
+        this.getclientdescription = res.data;
+        console.log("client",res.data)}
+      })
+    }
 
     private getListofProjects(){
 
       const url = `${this._url.project.getallprojectlist}`
     this._http.get(url).subscribe({
       next:(res:any)=>{
-        this.itemRows.controls = (res.data);
+        this.projectGroup.setValue(res.data);
       console.log("aaaa",res.data)
     }
       })
@@ -93,13 +105,14 @@ export class ProjectsComponent implements OnInit {
 
   initItemRow():FormGroup{
     return this._fb.group({
-    projectName:new FormControl('',Validators.required),
-    projectDescription: new FormControl('',Validators.required),
+    projectName:[''],
+    projectDescription: [''],
     clientId: [0],
-    startDate: new FormControl('29/11/2022',Validators.required),
-    endDate: new FormControl('29/12/2022',Validators.required),
-    currentStatus: new FormControl('',Validators.required),
-    sredProject: new FormControl('',Validators.required),
+    startDate: [''],
+    endDate: [''],
+    currentStatus: [''],
+    sredProject: [''],
+    enabledFlag: ['true'],
     activities: [
      ] 
     })
@@ -122,7 +135,7 @@ export class ProjectsComponent implements OnInit {
     var body = this.projectGroup.value.itemRows;
 
     body.forEach(function (value,index) {
-      body[index].activities = [{activityId: this.selectedactivity}]
+      body[index].activities = [{activityId: 2}]
   });
     // body.activities.push({activityId: this.selectedactivity})
     console.log("boddddy",body);
@@ -143,8 +156,24 @@ export class ProjectsComponent implements OnInit {
 
 }
 
-makeEditable(itemrow: any) {
+makeEditable(itemrow: any,) {
   itemrow.editable = !itemrow.editable;
+
+  const url = `${this._url.project.editproject}`
+
+  var body = this.projectGroup.value.itemRows;
+
+  body.forEach(function (value,index) {
+    body[index].activities = [{activityId: 4}]
+  });
+
+  console.log(body);
+  this._http.post(url,[body]).subscribe(
+    {
+      next:(res:any)=>{
+        console.log(res.responseMessage);
+      }
+    });
   }
 
 public addFieldValue(){
@@ -171,6 +200,8 @@ public deleteRow(index : any) {
         console.log(res.responseMessage);
       }
     });
+
+    // this.itemRows.removeAt(index)
 //   console.log("hiii");
 //   const control = <FormArray>this.projectGroup.controls['itemRows'];
 //   if(control != null)
