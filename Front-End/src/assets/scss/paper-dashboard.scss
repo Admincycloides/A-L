@@ -85,6 +85,7 @@ body{
 table{
     th,td{
         text-align: center;
+        position: relative;
         &:first-child{
             padding-left: 28px!important;
         }
@@ -97,7 +98,7 @@ table{
         vertical-align: middle!important;
         .tbl-check{
             margin-top: 3px;
-            margin-left: -27px;
+            margin-left: -31px;
         }
         span{
             white-space: nowrap;
@@ -475,9 +476,18 @@ ng-multiselect-dropdown{
 
 // inner page
 .sheet-row{
-    flex-flow: row;
+    display: flex;
+    flex-wrap: wrap;
+    &.split-col{
+        .sheet-col{
+            width: 80%;
+        }
+        .remarks-col{
+            width: 20%;
+        }
+    }
 }
-.sheet-col{
+.sheet-row .sheet-col:not(.sheet-row.split-col .sheet-col){
     width: 100%;
 }
 .sheet-col{
@@ -527,7 +537,6 @@ ng-multiselect-dropdown{
 }
 //remarks 
 .remarks-col{
-    min-width: 225px;
     .r-row{
         label{
             width: 100%;
@@ -602,7 +611,7 @@ input{
     
 }
 
-// table test
+// table fixed
 .fixed-table{
     table {
         border-collapse: collapse;

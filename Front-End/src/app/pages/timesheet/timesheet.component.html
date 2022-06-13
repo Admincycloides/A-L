@@ -30,14 +30,14 @@
             Add Time</button>
     </div>
 </div>
-<div class="row sheet-row" [ngClass]="showSideWindow || showSideWindowCheckAll ? 'split-col':''">
+<div class="sheet-row" [ngClass]="showSideWindow || showSideWindowCheckAll ? 'split-col':''">
     <div class="sheet-col">
         <div class="card">
             <div class="card-body pt-1">
                 <div class="table-responsive">
                     <table class="table">
                         <thead class="text-primary">
-                            <th>
+                            <th nowrap>
                                 <input class="form-check-input tbl-check"
                                     type="checkbox" value=""
                                     id="flexCheckDefault"
@@ -88,7 +88,7 @@
                         <tbody>
                             <tr *ngFor="let row of timeSheetDetails |
                             paginate: config; let i= index">
-                                <td>
+                                <td nowrap>
                                     <input class="form-check-input tbl-check"
                                         type="checkbox" value=""
                                         id="flexCheckDefault"
