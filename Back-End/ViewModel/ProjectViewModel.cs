@@ -28,23 +28,26 @@ namespace AnL.ViewModel
     {
         public int ProjectId { get; set; }
         public string ProjectName { get; set; }
-        public string ProjectDescription { get; set; }
+        public string ProjectDescription { get; set; }        
         public int ClientId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public string CurrentStatus { get; set; }
         public string SredProject { get; set; }
         public string EnabledFlag { get; set; }
-
         public List<ProjectActivities> NewActivity { get; set; }
         public List<ProjectActivities> RemoveActivity { get; set; }
 
     }
 
 
-    public class ProjectListViewModel
+    public class ProjectListViewModel : EditProjectView
     {
-        public int ProjectId { get; set; }
-        public string ProjectName { get; set; }
+        public string clientName { get; set; }
+
+        public List<string> EmployeeList { get; set; } = new List<string>();
+        public List<string> SupervisorList { get; set; }= new List<string>();
+
+
     }
 }

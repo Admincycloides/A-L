@@ -225,6 +225,23 @@ namespace AnL.Controllers
                 return BadRequest("Oops! Something went wrong!" + ex);
             }
         }
+       
+ [HttpGet]
+        public async Task<ActionResult> GetprojectDetailsByID(int ProjectID)
+        {
+            try
+            {
+                BaseResponse rsp = new BaseResponse();
+                rsp.Data = await _UOW.ProjectRepository.GetprojectDetailsByID(ProjectID);
+                return Ok(rsp);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+
+        } 
         [HttpGet]
         public async Task<ActionResult> GetAllProjectList()
         {
@@ -232,6 +249,22 @@ namespace AnL.Controllers
             {
                 BaseResponse rsp = new BaseResponse();
                 rsp.Data = await _UOW.ProjectRepository.GetAllProject();
+                return Ok(rsp);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+
+        } 
+        [HttpGet]
+        public async Task<ActionResult> GetProjectList(string EmpID, string ProjectName)
+        {
+            try
+            {
+                BaseResponse rsp = new BaseResponse();
+                rsp.Data = await _UOW.ProjectRepository.GetProjectList( EmpID, ProjectName);
                 return Ok(rsp);
             }
             catch (Exception ex)

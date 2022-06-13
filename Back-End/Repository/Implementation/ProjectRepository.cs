@@ -424,5 +424,128 @@ namespace AnL.Repository.Implementation
                 throw ex;
             }
         }
+
+        public async Task<ProjectViewModel> GetprojectDetailsByID(int ProjectID)
+        {
+            List<ProjectViewModel> rsp = new List<ProjectViewModel>();
+            try
+            {
+                await Task.Run(() =>
+                {
+                    IQueryable<ProjectMapping> result = (IQueryable<ProjectMapping>)_context.Set<ProjectMapping>().
+                                                        Where(X => X.ProjectId == ProjectID && X.Active == true).Include(c => c.Project).
+                                                        ThenInclude(Z => Z.ActivityMapping).ThenInclude(y => y.Activity);
+
+                    if (result.Any())
+                    {
+                        foreach (var i in result.Select(X => X.Project).Distinct())
+                        {
+                            var activities = i.ActivityMapping.Select(
+                                X => new ProjectActivities
+                                {
+                                    ActivityDescription = X.Activity.ActivityDescription,
+                                    ActivityId = X.ActivityId,
+                                    ActivityName = X.Activity.ActivityName,
+                                    EnabledFlag = X.Activity.EnabledFlag
+                                }
+
+
+                                ).ToList();
+
+                            rsp.Add(new ProjectViewModel
+                            {
+                                ClientId = i.ClientId,
+                                CurrentStatus = i.CurrentStatus,
+                                EnabledFlag = i.EnabledFlag,
+                                EndDate = i.EndDate,
+                                ProjectId = i.ProjectId,
+                                ProjectDescription = i.ProjectDescription,
+                                ProjectName = i.ProjectName,
+                                SredProject = i.SredProject,
+                                StartDate = i.StartDate,
+                                Activities = activities
+
+
+                            });
+
+
+                        }
+
+
+                    }
+                });
+                return rsp.Count > 0 ? rsp[0] : null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public async Task<List<ProjectListViewModel>> GetProjectList(string EmployeeID , string ProjectName)
+        {
+            List<ProjectListViewModel> rsp = new List<ProjectListViewModel>();
+            try
+            {
+                await Task.Run(() =>
+                {
+                    if (string.IsNullOrEmpty(ProjectName))
+                    {
+                        rsp = (_context.Set<ProjectDetails>().Where(y => y.ClientId != null).Include(d => d.ProjectMapping).Include(X => X.Client).Select(
+
+                           X => new ProjectListViewModel
+                           {
+                               ProjectId = X.ProjectId,
+                               ProjectName = X.ProjectName,
+                               ClientId = X.ClientId,
+                               CurrentStatus = X.CurrentStatus,
+                               EnabledFlag = X.EnabledFlag,
+                               ProjectDescription = X.ProjectDescription,
+                               SredProject = X.SredProject,
+                               StartDate = X.StartDate,
+                               EndDate = X.EndDate,
+                               clientName = X.Client.ClientName,
+                               EmployeeList = X.ProjectMapping.Where(a => a.Active == true && a.Employee.SupervisorFlag == "N").Select(u => u.Employee.FirstName + " " + u.Employee.LastName).ToList(),
+                               SupervisorList = X.ProjectMapping.Where(a => a.Active == true && a.Employee.SupervisorFlag == "Y").Select(u => u.Employee.FirstName + " " + u.Employee.LastName).ToList()
+
+                           }
+                           )).ToList();
+                    }
+                    else
+                    {
+                        rsp = (_context.Set<ProjectDetails>().Where( y=>y.ProjectName.Trim().ToLower().Contains(ProjectName.Trim().ToLower())
+                        ).Include(d => d.ProjectMapping).Include(X => X.Client).Select(
+
+                         X => new ProjectListViewModel
+                         {
+                             ProjectId = X.ProjectId,
+                             ProjectName = X.ProjectName,
+                             ClientId = X.ClientId,
+                             CurrentStatus = X.CurrentStatus,
+                             EnabledFlag = X.EnabledFlag,
+                             ProjectDescription = X.ProjectDescription,
+                             SredProject = X.SredProject,
+                             StartDate = X.StartDate,
+                             EndDate = X.EndDate,
+                             clientName = X.Client.ClientName,
+                             EmployeeList = X.ProjectMapping.Where(a => a.Active == true && a.Employee.SupervisorFlag == "N").Select(u => u.Employee.FirstName + " " + u.Employee.LastName).ToList(),
+                             SupervisorList = X.ProjectMapping.Where(a => a.Active == true && a.Employee.SupervisorFlag == "Y").Select(u => u.Employee.FirstName + " " + u.Employee.LastName).ToList()
+
+                         }
+                         )).ToList();
+                    }
+                });
+                return rsp.Count > 0 ? rsp : null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+
+
     }
 }
