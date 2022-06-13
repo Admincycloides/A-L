@@ -66,9 +66,9 @@ export class ActivitiesComponent implements OnInit {
     const url = `${this._url.activity.getActivityList}`
     this._http.get(url).subscribe({
       next:(res:any)=>{
-        this.itemRows['controls'] = res.data;
+        this.itemRows.setValue(res.data);
+        console.log("data",res.data)
       }
-
       })
     }
 
@@ -96,24 +96,13 @@ makeEditable(itemrow: any) {
   }
 
   saveField(){
-
-    // console.log(this.projectGroup.value)
-    // console.log(this.projectGroup['controls'].itemRows['controls']);
-
-  //  let temp = [
-  //   {
-  //     "activityId": 2989,
-  //     "activityName": "Activity1",
-  //     "activityDescription": "First Activity "
-  //   }
-  // ]
       if(this.text == "Add Activity"){
       const body = this.projectGroup.value.itemRows;
         console.log(body);
-      let formObj = this.projectGroup.value.itemRows;
-      console.log(formObj);
-        let serializedForm = JSON.stringify(formObj.itemRows);
-        console.log(serializedForm);
+      // let formObj = this.projectGroup.value.itemRows;
+      // console.log(formObj);
+      //   let serializedForm = JSON.stringify(formObj.itemRows);
+      //   console.log(serializedForm);
       const url = `${this._url.activity.addActivity}`
 
     // const body = this.addActivity;

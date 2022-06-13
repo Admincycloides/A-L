@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormGroup, FormControl, Validators } from '@ang
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpService } from 'app/_services/http.service';
 import { UrlService } from 'app/_services/url.service';
+import { data } from 'jquery';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -13,12 +14,21 @@ import { ToastrService } from 'ngx-toastr';
 export class ProjectsComponent implements OnInit {
   public index: any = '';
   userDetails: any;
+  getActivityName:any;
+  ProjectItems:any;
+  selectedactivity:any;
   
   public isSubmitted: boolean = false;
   projectGroup : FormGroup;
   TotalRow : number; 
+  SelectedValue:any;
   public toggleButton: boolean = false;
 
+  changeid(e)
+  {
+    this.SelectedValue= e.target.value;
+    console.log(this.SelectedValue)
+  }
   // public addProjects = [];
 
   public text: string = 'Add Project';
@@ -29,7 +39,7 @@ export class ProjectsComponent implements OnInit {
     private _fb:FormBuilder,private _http: HttpService
   ) { 
     this.projectGroup = this._fb.group({
-      itemRows:this._fb.array([]),
+      itemRows:this._fb.array([this.initItemRow()]),
     });
 
     this.config = {
@@ -43,7 +53,8 @@ export class ProjectsComponent implements OnInit {
   ngOnInit(): void {
     this.toggleButton = true,
     this.getProjectActivityDetails(),
-    this.getListofProjects()
+    this.getListofProjects(),
+    this.getActivityLists()
   }
 
   private getProjectActivityDetails(){
@@ -51,9 +62,19 @@ export class ProjectsComponent implements OnInit {
     const url = `${this._url.project.getprojectListbyEmployeeID}`
     this._http.get(url).subscribe({
       next:(res:any)=>{
-        this.projectGroup.value.itemRows = res.data;}
+        this.itemRows.setValue(res.data);}
       })
     }
+
+    private getActivityLists(){
+      console.log("first call")
+      const url = `${this._url.activity.getActivityList}`
+      this._http.get(url).subscribe({next:(res:any)=>{
+          this.getActivityName = res.data;
+          console.log("data",res.data)}
+        })
+        }
+
 
 
     private getListofProjects(){
@@ -61,7 +82,9 @@ export class ProjectsComponent implements OnInit {
       const url = `${this._url.project.getallprojectlist}`
     this._http.get(url).subscribe({
       next:(res:any)=>{
-        this.projectGroup.value.itemRows = res.data;}
+        this.itemRows.setValue(res.data);
+      console.log("aaaa",res.data)
+    }
       })
 
     }
@@ -70,15 +93,15 @@ export class ProjectsComponent implements OnInit {
 
   initItemRow():FormGroup{
     return this._fb.group({
-    projectName:[""],
-    projectDescription: [""],
+    projectName:new FormControl('',Validators.required),
+    projectDescription: new FormControl('',Validators.required),
     clientId: [0],
-    startDate: ["29/11/2022"],
-    endDate: ["29/12/2022"],
-    currentStatus: [""],
-    sredProject: [""],
+    startDate: new FormControl('29/11/2022',Validators.required),
+    endDate: new FormControl('29/12/2022',Validators.required),
+    currentStatus: new FormControl('',Validators.required),
+    sredProject: new FormControl('',Validators.required),
     activities: [
-    ] 
+     ] 
     })
   }
 
@@ -90,36 +113,23 @@ export class ProjectsComponent implements OnInit {
   saveField()
   {
     console.log(this.projectGroup.value.itemRows)
-
-    // let temp = [
-    //   {
-    //     "projectName": "prr",
-    //     "projectDescription": "prr",
-    //     "clientId": 1,
-    //     "startDate": "2022-06-08T14:12:39.719Z",
-    //     "endDate": "2022-06-08T14:12:39.719Z",
-    //     "currentStatus": "prr",
-    //     "sredProject": "prr",
-    //     "activities": [
-    //       {
-
-    //         "activityName": "prr",
-    //         "activityDescription": "prr",
-    //       }
-    //     ]
-    //   }
-    // ]
     console.log("hi");
-    let formObj = this.projectGroup.value; // {name: '', description: ''}
-        let serializedForm = JSON.stringify(formObj.itemRows);
-        console.log(serializedForm);
+    // let formObj = this.projectGroup.value; // {name: '', description: ''}
+    //     let serializedForm = JSON.stringify(formObj.itemRows);
+    //     console.log(serializedForm);
     const url = `${this._url.project.addProject}`
 
-    const body = this.projectGroup.value.itemRows;
-    console.log(body);
+    var body = this.projectGroup.value.itemRows;
+
+    body.forEach(function (value,index) {
+      body[index].activities = [{activityId: 1}]
+  });
+    // body.activities.push({activityId: this.selectedactivity})
+    console.log("boddddy",body);
     this._http.post(url,body).subscribe(
       {
         next:(res:any)=>{
+          this.ProjectItems = res.data;
           console.log(res.responseMessage);
         }
       });
@@ -146,52 +156,35 @@ public addFieldValue(){
 
 public deleteRow(index : any) {
   
-  // let temp = [
-  //   {
-  //     "projectName": "prr",
-  //     "projectDescription": "prr",
-  //     "clientId": 1,
-  //     "startDate": "2022-06-08T14:12:39.719Z",
-  //     "endDate": "2022-06-08T14:12:39.719Z",
-  //     "currentStatus": "prr",
-  //     "sredProject": "prr",
-  //     "activities": [
-  //       {
-
-  //         "activityName": "prr",
-  //         "activityDescription": "prr",
-  //       }
-  //     ]
-  //   }
-  // ]
   console.log("hi");
-  let formObj = this.projectGroup.value; // {name: '', description: ''}
-      let serializedForm = JSON.stringify(formObj.itemRows);
-      console.log(serializedForm);
+  // let formObj = this.projectGroup.value; // {name: '', description: ''}
+  //     let serializedForm = JSON.stringify(formObj.itemRows);
+  //     console.log(serializedForm);
   const url = `${this._url.project.deleteProject}`
 
-  const body = this.projectGroup.value.itemRows;
+  const body = this.projectGroup.value.itemRows[index];
   console.log(body);
-  this._http.post(url,body).subscribe(
+  this._http.post(url,[body]).subscribe(
     {
       next:(res:any)=>{
+        this.itemRows.removeAt(index)
         console.log(res.responseMessage);
       }
     });
-  console.log("hiii");
-  const control = <FormArray>this.projectGroup.controls['itemRows'];
-  if(control != null)
-  {
-    this.TotalRow = control.value.length;
-  }
-  if(this.TotalRow > 1)
-  {
-    control.removeAt(index);
-  }
-  else{
-    alert('one record is mendatory');
-    return false;
-}
+//   console.log("hiii");
+//   const control = <FormArray>this.projectGroup.controls['itemRows'];
+//   if(control != null)
+//   {
+//     this.TotalRow = control.value.length;
+//   }
+//   if(this.TotalRow > 1)
+//   {
+//     control.removeAt(index);
+//   }
+//   else{
+//     alert('one record is mendatory');
+//     return false;
+// }
  }
 
  pageChanged(event){

@@ -1,0 +1,88 @@
+
+<div class="action-head justify-content-between d-flex align-items-center mb-4">
+    <div class="page-title w-100">Log (Audit Trail)</div>
+    <div class="act-filter d-flex align-items-center justify-content-center">
+        <input type="text" class="search-filter" placeholder="Search Projects"
+            />
+    </div>
+    <div class="action d-flex justify-content-end">
+        <div class="row">
+            <div class="col">
+              <div ngbDropdown class="d-inline-block">
+                <button class="act-btn thm-btn thm-btn-primary" id="dropdownBasic1" ngbDropdownToggle>Filter</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <button ngbDropdownItem>Date Range</button>
+                <button ngbDropdownItem>Employee</button>
+                <button ngbDropdownItem>Activity</button>
+                <button ngbDropdownItem>Action</button>
+                <button ngbDropdownItem>My Log</button>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+</div>
+<br>
+<div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="text-primary">
+                            <th>
+                               Project
+                            </th>
+                            <th>
+                               Employee Name
+                            </th>
+                            <th>
+                                Date
+                            </th>
+                            <th>
+                                Activity
+                            </th>
+                            <th>
+                                Action
+                            </th>
+                            <th>
+                                Details
+                            </th>
+                            <th>
+                                Open
+                            </th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let log for Logs; let i = index">
+                                <td>
+                                    {{log.project}}
+                                </td>
+                                <td>
+                                    {{log.employeeName}}
+                                </td>
+                                <td>
+                                   {{log.date}}
+                                </td>
+                                <td>
+                                    {{log.activity}}
+                                </td>
+                                <td>
+                                    {{log.action}}
+                                </td>
+                                <td>
+                                    {{log.details}}
+                                </td>
+                                <td>
+                                    <button class="thm-linkbtn" routerLink="/Projects">Click here</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
