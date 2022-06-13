@@ -91,15 +91,33 @@ namespace AnL.Repository.Implementation
 
         public bool SubmitTimesheet(List<TimesheetDetails> timesheetDetails)
         {
-            foreach (var timesheet in timesheetDetails)
+            var querable = timesheetDetails.ToList();
+            List<int> iDs = querable.Select(x => x.UniqueId).ToList();
+            var result = dbSet.Where(e => iDs.Contains(e.UniqueId)).ToList();
+            result.ForEach(x =>
             {
-                TimesheetDetails existingSheet = this.GetById(timesheet.UniqueId);
-                existingSheet.Status = TimeSheetStatus.Submitted;
-                existingSheet.EmployeeRemarks = timesheet.EmployeeRemarks;
-                existingSheet.SubmittedDate = timesheet.SubmittedDate;
-                existingSheet.SubmittedTo = timesheet.SubmittedTo;
-            }
-            this.SaveChanges();
+                x.Status = TimeSheetStatus.Submitted;
+                x.EmployeeRemarks = timesheetDetails[0].EmployeeRemarks;
+                x.SubmittedDate = timesheetDetails[0].SubmittedDate;
+                x.SubmittedTo = timesheetDetails[0].SubmittedTo;
+            });
+            _context.UpdateRange(result);
+            //data.ForEach(u =>
+            //{
+            //    u.Status = TimeSheetStatus.Submitted;
+            //    u.EmployeeRemarks = timesheetDetails[0].EmployeeRemarks;
+            //    u.SubmittedDate= timesheetDetails[0].SubmittedDate;
+            //    u.SubmittedTo = timesheetDetails[0].SubmittedTo;
+            //});
+            //foreach (var timesheet in timesheetDetails)
+            //{
+            //    TimesheetDetails existingSheet = this.GetById(timesheet.UniqueId);
+            //    existingSheet.Status = TimeSheetStatus.Submitted;
+            //    existingSheet.EmployeeRemarks = timesheet.EmployeeRemarks;
+            //    existingSheet.SubmittedDate = timesheet.SubmittedDate;
+            //    existingSheet.SubmittedTo = timesheet.SubmittedTo;
+            //}
+            _context.SaveChanges();
             return true;
         }
 
@@ -137,23 +155,45 @@ namespace AnL.Repository.Implementation
         {
             if (Action == TimeSheetStatus.Approved)
             {
-                foreach (var timesheet in timesheetDetails)
+                var querable = timesheetDetails.ToList();
+                List<int> iDs = querable.Select(x => x.UniqueId).ToList();
+                var result = dbSet.Where(e => iDs.Contains(e.UniqueId)).ToList();
+                result.ForEach(x =>
                 {
-                    TimesheetDetails existingSheet = this.GetById(timesheet.UniqueId);
-                    existingSheet.Status = TimeSheetStatus.Approved;
-                    existingSheet.SupervisorRemarks = timesheet.SupervisorRemarks;
-                    existingSheet.ApprovedRejectedBy = timesheet.ApprovedRejectedBy;
-                }
+                    x.Status = TimeSheetStatus.Approved;
+                    x.SupervisorRemarks = timesheetDetails[0].SupervisorRemarks;
+                    x.ApprovedRejectedBy = timesheetDetails[0].ApprovedRejectedBy;
+                });
+                _context.UpdateRange(result);
+                //Previous Logic
+                //foreach (var timesheet in timesheetDetails)
+                //{
+                //    TimesheetDetails existingSheet = this.GetById(timesheet.UniqueId);
+                //    existingSheet.Status = TimeSheetStatus.Approved;
+                //    existingSheet.SupervisorRemarks = timesheet.SupervisorRemarks;
+                //    existingSheet.ApprovedRejectedBy = timesheet.ApprovedRejectedBy;
+                //}
             }
             else
             {
-                foreach (var timesheet in timesheetDetails)
+                var querable = timesheetDetails.ToList();
+                List<int> iDs = querable.Select(x => x.UniqueId).ToList();
+                var result = dbSet.Where(e => iDs.Contains(e.UniqueId)).ToList();
+                result.ForEach(x =>
                 {
-                    TimesheetDetails existingSheet = this.GetById(timesheet.UniqueId);
-                    existingSheet.Status = TimeSheetStatus.Rejected;
-                    existingSheet.SupervisorRemarks = timesheet.SupervisorRemarks;
-                    existingSheet.ApprovedRejectedBy = timesheet.ApprovedRejectedBy;
-                }
+                    x.Status = TimeSheetStatus.Rejected;
+                    x.SupervisorRemarks = timesheetDetails[0].SupervisorRemarks;
+                    x.ApprovedRejectedBy = timesheetDetails[0].ApprovedRejectedBy;
+                });
+                _context.UpdateRange(result);
+                //Previous Logic
+                //foreach (var timesheet in timesheetDetails)
+                //{
+                //    TimesheetDetails existingSheet = this.GetById(timesheet.UniqueId);
+                //    existingSheet.Status = TimeSheetStatus.Rejected;
+                //    existingSheet.SupervisorRemarks = timesheet.SupervisorRemarks;
+                //    existingSheet.ApprovedRejectedBy = timesheet.ApprovedRejectedBy;
+                //}
             }
             this.SaveChanges();
             return true;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace AnL.ViewModel
 {
@@ -17,9 +18,13 @@ namespace AnL.ViewModel
     }
     public class ReportRequest
     {
+        [Required]
         public List<int> ProjectIds { get; set; }
+        [Required]
         public List<string> EmployeeId { get; set; }
+        [Required]
         public string FromDate { get; set; }
+        [Required]
         public string ToDate { get; set; }
         public double NumberOfHours { get; set; }
     }

@@ -33,94 +33,40 @@ namespace AnL.Controllers
         /// <summary>
         /// Fetch Timesheet Details based on the user Logged in
         /// </summary>
-        [NonAction]
-        public async Task<ActionResult> TestGetDetails(TimesheetViewModel timesheetDetails)
+        [HttpPost]
+        public async Task<ActionResult> GetDetails([FromQuery] PaginationFilter filter, TimesheetViewModel timesheetDetails)
         {
             try
             {
-                //Repo Code
-
-                List<string> employeeIDs = new List<string>();
-                employeeIDs.Add(timesheetDetails.EmployeeId);
-                var empDetails = _UOW.EmployeeDetailsRepository.GetEmployeeDetails(employeeIDs);
-                List<string> subEmpDetails = new List<string>();
-                List<TimesheetDetails> sheetDetails = new List<TimesheetDetails>();
-                //Get Manager and all employee Timesheet Details based on dates
-                if (empDetails[0].SupervisorFlag == "Y" && empDetails.Count == 1)
+                List<Details> details = new List<Details>();
+                var data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.EmployeeId == timesheetDetails.EmployeeId && x.Date >= DateTime.Parse(timesheetDetails.FromDate) && x.Date <= DateTime.Parse(timesheetDetails.ToDate)).Include(x => x.Project).Include(x => x.Activity);
+                foreach (var a in data.Select(x => x.ProjectId).Distinct())
                 {
-                    //Get Manager Timesheet Details
-                    var managerTimeSheetDetails = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.EmployeeId == empDetails[0].EmployeeId && x.Date >= DateTime.Parse(timesheetDetails.FromDate) && x.Date <= DateTime.Parse(timesheetDetails.ToDate)).Include(x => x.Project).Include(x => x.Activity).ToList();
-                    foreach (var data in managerTimeSheetDetails)
+                    foreach (var b in data.Select(x => x.ActivityId).Distinct())
                     {
-                        sheetDetails.Add(data);
-                    }
-                    //Get all employee Timeesheet Details
-                    subEmpDetails = _UOW.EmployeeDetailsRepository.GetAllByCondition(x => x.SupervisorFlag == "N").Select(x => x.EmployeeId).ToList();
-                    foreach (var emp in subEmpDetails)
-                    {
-                        var employeeTimeSheetDetails = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.EmployeeId == emp && x.Date >= DateTime.Parse(timesheetDetails.FromDate) && x.Date <= DateTime.Parse(timesheetDetails.ToDate)).Include(x=>x.Project).Include(x=>x.Activity).ToList();
-                        foreach (var data in employeeTimeSheetDetails)
+                        var recd = data.Where(x => x.ProjectId == a && x.ActivityId == b).Select(x => new Details
                         {
-                            sheetDetails.Add(data);
-                        }
+                            ProjectId = x.ProjectId,
+                            ProjectName = x.Project.ProjectName,
+                            ActivityId = x.ActivityId,
+                            ActivityName = x.Activity.ActivityName,
+                            Status = x.Status,
+                            Remarks = x.Remarks,
+                            EmployeeRemarks = x.EmployeeRemarks,
+                            SupervisorRemarks = x.SupervisorRemarks,
+                            TimeTaken = (data.Where(y => y.ProjectId == a && y.ActivityId == x.ActivityId).Select(z => new TimeSpent { Date = z.Date, NumberOfHours = z.NumberOfHours, UniqueId = z.UniqueId })).ToList()
+                        }).Distinct().ToList();
+                        details.AddRange(recd);
                     }
                 }
-                else
-                {
-                    //sheetDetails.Add(_UOW.TimesheetDetailRepository.GetById(empDetails[0]));
-                    var result = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.EmployeeId == empDetails[0].EmployeeId && x.Date >= DateTime.Parse(timesheetDetails.FromDate) && x.Date <= DateTime.Parse(timesheetDetails.ToDate)).Include(x=>x.Project).Include(x=>x.Activity).ToList();
-                    foreach (var data in result)
-                    {
-                        sheetDetails.Add(data);
-                    }
-                }
-                //Conversion to data friendly to pass to UI
-                MasterTimesheetViewModel model =new MasterTimesheetViewModel();
-                List<TimesheetViewModel> sheetDetails2 = new List<TimesheetViewModel>();
-                foreach (var data in sheetDetails)
-                {
-                    TimesheetViewModel viewModel=new TimesheetViewModel();
-                    viewModel.Date= data.Date;
-                    viewModel.EmployeeId= data.EmployeeId;
-                    //viewModel.EmployeeName = data.EmployeeName;
-                    viewModel.ProjectId= data.ProjectId;
-                    viewModel.ProjectName = data.Project.ProjectName;
-                    viewModel.ActivityId= data.ActivityId;
-                    viewModel.ActivityName = data.Activity.ActivityName;
-                    viewModel.NumberOfHours= data.NumberOfHours;
-                    viewModel.Remarks= data.Remarks;
-                    viewModel.Status= data.Status;
-                    //viewModel.LastUpdatedDate = data.LastUpdatedDate;
-                    //viewModel.LastUpdatedBy = data.LastUpdatedBy;
-                    viewModel.UniqueId=data.UniqueId;
-                    sheetDetails2.Add(viewModel);
-                }
-                //model.TimesheetDetails = sheetDetails2;
-                model.ManagerId = empDetails[0].ManagerId;
-                model.ManagerName = String.Concat(empDetails[0].FirstName, empDetails[0].LastName);
-                BaseResponse response = new BaseResponse();
-                //if (subEmpDetails != null || subEmpDetails.Count() > 0)
-                if (sheetDetails.Count > 0)
-                {
-                    response.Data = model;
-                    response.ResponseCode = HTTPConstants.OK;
-                    response.ResponseMessage = MessageConstants.TimesheetListingSuccess;
-                    return Ok(response);
-                }
-                else
-                {
-                    response.Data = null;
-                    response.ResponseCode = HTTPConstants.BAD_REQUEST;
-                    response.ResponseMessage = MessageConstants.TimesheetListingFailed;
-                    return BadRequest(response);
-                }
-                //Controller Code
-                ////var details =  _UOW.TimesheetDetailRepository.GetTimesheetDetails(timesheetDetails);
-
-                ////if (details != null)
-                ////    return Ok(details);
-                ////else
-                ////    return BadRequest("No Details");
+                var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+                var pagedData = details.Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
+                                                    .Take(validFilter.PageSize)
+                                                    .ToList();
+                var totalRecords = details.Count;
+                var route = Request.Path.Value;
+                var pagedReponse = PaginationHelper.CreatePagedReponse<Details>(pagedData, validFilter, totalRecords, uriService, route);
+                return Ok(pagedReponse);
             }
             catch (Exception ex)
             {
@@ -131,8 +77,8 @@ namespace AnL.Controllers
         /// <summary>
         /// Fetch Timesheet Details based on the user Logged in
         /// </summary>
-        [HttpPost]
-        public async Task<ActionResult> GetDetails([FromQuery] PaginationFilter filter,TimesheetViewModel timesheetDetails)
+        [NonAction]
+        public async Task<ActionResult> TestGetDetails([FromQuery] PaginationFilter filter,TimesheetViewModel timesheetDetails)
         {
             try
             {
@@ -333,37 +279,62 @@ namespace AnL.Controllers
             {
                 var managerDetails = _UOW.EmployeeDetailsRepository.GetById(ManagerID);
                 var employeeDetails = _UOW.EmployeeDetailsRepository.GetById(EmployeeID);
-                bool result=false;
+                bool result = false;
                 bool mailSent = false;
-                foreach (var listrecords in timesheetDetails)
+                var data = timesheetDetails.ToList();
+                string employeeRemarks = data.Select(x => x.EmployeeRemarks).FirstOrDefault();
+                List<TimesheetDetails> timesheetDetailsList = new List<TimesheetDetails>();
+                foreach (var a in data.Select(x => x.ProjectId).Distinct())
                 {
-                    List<TimesheetDetails> timesheetDetailsList = new List<TimesheetDetails>();
-
-                    foreach (var timesheet in listrecords.TimeTaken)
+                    foreach (var b in data.Where(y => y.ProjectId == a).Select(y => y.ActivityId).Distinct())
                     {
-                        TimesheetDetails details = new TimesheetDetails();
-                        details.UniqueId = timesheet.UniqueId;
-                        details.SubmittedTo = ManagerID;
-                        details.SubmittedDate = DateTime.UtcNow;
-                        details.EmployeeRemarks = listrecords.EmployeeRemarks;
-                        if(details.UniqueId!=0)
+                        var recd = data.Where(y => y.ActivityId == b && y.ProjectId == a).SelectMany(y => y.TimeTaken).Select(z => new TimesheetDetails
                         {
-                            timesheetDetailsList.Add(details);
-                        }
+                            UniqueId = z.UniqueId,
+                            ProjectId = a,
+                            ActivityId = b,
+                            Date = z.Date,
+                            Status = TimeSheetStatus.Submitted,
+                            EmployeeRemarks = employeeRemarks,
+                            SubmittedTo = ManagerID,
+                            SubmittedDate = DateTime.UtcNow
+                        });
+                        timesheetDetailsList.AddRange(recd.ToList());
                     }
-                    result = _UOW.TimesheetDetailRepository.SubmitTimesheet(timesheetDetailsList);
                 }
+
+                result = _UOW.TimesheetDetailRepository.SubmitTimesheet(timesheetDetailsList);
+
+                //Previous logic
+                //foreach (var listrecords in timesheetDetails)
+                //{
+                //    List<TimesheetDetails> timesheetDetailsList = new List<TimesheetDetails>();
+
+                //    foreach (var timesheet in listrecords.TimeTaken)
+                //    {
+                //        TimesheetDetails details = new TimesheetDetails();
+                //        details.UniqueId = timesheet.UniqueId;
+                //        details.SubmittedTo = ManagerID;
+                //        details.SubmittedDate = DateTime.UtcNow;
+                //        details.EmployeeRemarks = listrecords.EmployeeRemarks;
+                //        if(details.UniqueId!=0)
+                //        {
+                //            timesheetDetailsList.Add(details);
+                //        }
+                //    }
+                //    result = _UOW.TimesheetDetailRepository.SubmitTimesheet(timesheetDetailsList);
+                //}
                 string subject = "Timesheet Submitted";
                 string body = "Dear " + String.Concat(employeeDetails.FirstName, " ", employeeDetails.LastName) +
-                    "\n\nYour Timesheet has been submitted successfully to Supervisor " + String.Concat(managerDetails.FirstName, " ", managerDetails.LastName)+".\n\n with remarks as below : \n\n"+ timesheetDetails[0].EmployeeRemarks;
+                    "\n\nYour Timesheet has been submitted successfully to Supervisor " + String.Concat(managerDetails.FirstName, " ", managerDetails.LastName) + ".\n\n with remarks as below : \n\n" + timesheetDetails[0].EmployeeRemarks;
                 mailSent = SendMail(managerDetails.EmailAddress, subject, body);
-                if (result&&mailSent)
+                if (result && mailSent)
                 {
                     response.Data = result;
                     response.ResponseCode = HTTPConstants.OK;
                     response.ResponseMessage = MessageConstants.TimesheetSubmissionSuccess;
                 }
-                else if(result&&!mailSent)
+                else if (result && !mailSent)
                 {
                     response.Data = result;
                     response.ResponseCode = HTTPConstants.OK;
@@ -497,20 +468,39 @@ namespace AnL.Controllers
             {
                 bool result = false;
                 List<TimesheetDetails> timesheetDetailsList = new List<TimesheetDetails>();
-                foreach (var listrecords in model)
+                
+                var data = model.ToList();
+                string supervisorRemarks = data.Select(x => x.SupervisorRemarks).FirstOrDefault();
+                foreach (var b in data.Select(y => y.ActivityId).Distinct())
                 {
-                    foreach (var timesheet in listrecords.TimeTaken)
+                    var recd = data.Where(y => y.ActivityId == b).SelectMany(y => y.TimeTaken).Select(z => new TimesheetDetails
                     {
-                        TimesheetDetails details = new TimesheetDetails();
-                        details.UniqueId = timesheet.UniqueId;
-                        details.ApprovedRejectedBy = SupervisorID;
-                        details.SupervisorRemarks = listrecords.SupervisorRemarks;
-                        if (details.UniqueId != 0)
-                        {
-                            timesheetDetailsList.Add(details);
-                        }
-                    }
+                        UniqueId = z.UniqueId,
+                        ProjectId = data.Select(x=>x.ProjectId).FirstOrDefault(),
+                        ActivityId = b,
+                        Date = z.Date,
+                        ApprovedRejectedBy=SupervisorID,
+                        SupervisorRemarks = supervisorRemarks
+                    });
+                    timesheetDetailsList.AddRange(recd.ToList());
                 }
+
+
+                //Previous Logic
+                //foreach (var listrecords in model)
+                //{
+                //    foreach (var timesheet in listrecords.TimeTaken)
+                //    {
+                //        TimesheetDetails details = new TimesheetDetails();
+                //        details.UniqueId = timesheet.UniqueId;
+                //        details.ApprovedRejectedBy = SupervisorID;
+                //        details.SupervisorRemarks = listrecords.SupervisorRemarks;
+                //        if (details.UniqueId != 0)
+                //        {
+                //            timesheetDetailsList.Add(details);
+                //        }
+                //    }
+                //}
                 var managerDetails = _UOW.EmployeeDetailsRepository.GetById(SupervisorID);
                 var employeeDetails = _UOW.EmployeeDetailsRepository.GetById(EmployeeID);
                 if (Action == TimeSheetStatus.Approved)
@@ -564,10 +554,10 @@ namespace AnL.Controllers
         public async Task<ActionResult> GetTimesheetReport(ReportRequest model)
         {
             Dictionary<string, string[]> parameters = new Dictionary<string, string[]>();
-            parameters.Add("EMPLOYEE_ID_LIST", null);//, new string[] { string.Join(",", model.EmployeeId), "nvarchar" });   
-            parameters.Add("PROJECT_ID", null);//, new string[] { string.Join(",", model.ProjectIds), "nvarchar" });
-            parameters.Add("FROM_DATE", null);//, new string[] { model.FromDate});
-            parameters.Add("TO_DATE", null);//, new string[] { model.ToDate });
+            parameters.Add("EMPLOYEE_ID_LIST",    new string[] { string.Join(",", model.EmployeeId), "nvarchar" });   
+            parameters.Add("PROJECT_ID",    new string[] { string.Join(",", model.ProjectIds), "nvarchar" });
+            parameters.Add("FROM_DATE",   new string[] { model.FromDate, "date" });
+            parameters.Add("TO_DATE",    new string[] { model.ToDate, "date" });
             List<SPViewModel> countList = _UOW.ExcecuteSP("USP_GET_TIMESHEET_REPORT", parameters);
             var queryable = countList.ToList();
           
@@ -584,7 +574,7 @@ namespace AnL.Controllers
                          .Select(z=> new TimeSpentperDay {  Date=z.Date, NumberOfHours=z.NumberOfHours}).ToList()
                                )
 
-                }).ToList();
+                }).GroupBy(x=>x.EmployeeName).Select(y=>y.First()).ToList();
                 reports.AddRange(recd);
 
                 
