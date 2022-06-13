@@ -22,7 +22,8 @@ export class ReportsComponent implements OnInit {
   selectedProjectList = [];
   selectedEmployeeList = [];
   reportList :any[];
-  allDates :any[]
+  allDates :any[];
+  totalHours: any[]
   // maxPickerDateFrom : any;
   // minPickerDateFrom : any;
 
@@ -55,91 +56,91 @@ export class ReportsComponent implements OnInit {
 
 
 
-    this.reportList = [
-      {
-        "projectName": 'prjc 1',
-        "employeeName": 'emp 1',
-        "timeSpent": [
-          {
-            "Date": "2022-06-06T00:00:00",
-            "numberOfHours": 2,
-            "UniqueId": 0
-          },
-          {
-            "Date": "2022-06-07T00:00:00",
-            "numberOfHours": 0,
-            "UniqueId": 0
-          },
-          {
-            "Date": "2022-06-08T00:00:00",
-            "numberOfHours": 0,
-            "UniqueId": 0
-          },
-          {
-            "Date": "2022-06-09T00:00:00",
-            "numberOfHours": 0,
-            "UniqueId": 0
-          },{
-            "Date": "2022-06-010T00:00:00",
-            "numberOfHours": 0,
-            "UniqueId": 0
-          },
-          {
-            "Date": "2022-06-11T00:00:00",
-            "numberOfHours": 0,
-            "UniqueId": 0
-          },
-          {
-            "Date": "2022-06-01200:00:00",
-            "numberOfHours": 0,
-            "UniqueId": 0
-          },
-          {
-            "Date": "2022-06-13T00:00:00",
-            "numberOfHours": 0,
-            "UniqueId": 0
-          },{
-            "Date": "2022-06-14T00:00:00",
-            "numberOfHours": 0,
-            "UniqueId": 0
-          },
-          {
-            "Date": "2022-06-15T00:00:00",
-            "numberOfHours": 0,
-            "UniqueId": 0
-          },
-          {
-            "Date": "2022-06-16T00:00:00",
-            "numberOfHours": 0,
-            "UniqueId": 0
-          },
-          {
-            "Date": "2022-06-17T00:00:00",
-            "numberOfHours": 0,
-            "UniqueId": 0
-          },{
-            "Date": "2022-06-18T00:00:00",
-            "numberOfHours": 0,
-            "UniqueId": 0
-          },
-          {
-            "Date": "2022-06-19T00:00:00",
-            "numberOfHours": 0,
-            "UniqueId": 0
-          },
-          {
-            "Date": "2022-06-20T00:00:00",
-            "numberOfHours": 2,
-            "UniqueId": 0
-          },
-          {
-            "Date": "2022-06-21T00:00:00",
-            "numberOfHours": 4,
-            "UniqueId": 0
-          }
-        ]
-      },
-      ]
+    // this.reportList = [
+    //   {
+    //     "projectName": 'prjc 1',
+    //     "employeeName": 'emp 1',
+    //     "timeSpent": [
+    //       {
+    //         "Date": "2022-06-06T00:00:00",
+    //         "numberOfHours": 2,
+    //         "UniqueId": 0
+    //       },
+    //       {
+    //         "Date": "2022-06-07T00:00:00",
+    //         "numberOfHours": 0,
+    //         "UniqueId": 0
+    //       },
+    //       {
+    //         "Date": "2022-06-08T00:00:00",
+    //         "numberOfHours": 0,
+    //         "UniqueId": 0
+    //       },
+    //       {
+    //         "Date": "2022-06-09T00:00:00",
+    //         "numberOfHours": 0,
+    //         "UniqueId": 0
+    //       },{
+    //         "Date": "2022-06-010T00:00:00",
+    //         "numberOfHours": 0,
+    //         "UniqueId": 0
+    //       },
+    //       {
+    //         "Date": "2022-06-11T00:00:00",
+    //         "numberOfHours": 0,
+    //         "UniqueId": 0
+    //       },
+    //       {
+    //         "Date": "2022-06-01200:00:00",
+    //         "numberOfHours": 0,
+    //         "UniqueId": 0
+    //       },
+    //       {
+    //         "Date": "2022-06-13T00:00:00",
+    //         "numberOfHours": 0,
+    //         "UniqueId": 0
+    //       },{
+    //         "Date": "2022-06-14T00:00:00",
+    //         "numberOfHours": 0,
+    //         "UniqueId": 0
+    //       },
+    //       {
+    //         "Date": "2022-06-15T00:00:00",
+    //         "numberOfHours": 0,
+    //         "UniqueId": 0
+    //       },
+    //       {
+    //         "Date": "2022-06-16T00:00:00",
+    //         "numberOfHours": 0,
+    //         "UniqueId": 0
+    //       },
+    //       {
+    //         "Date": "2022-06-17T00:00:00",
+    //         "numberOfHours": 0,
+    //         "UniqueId": 0
+    //       },{
+    //         "Date": "2022-06-18T00:00:00",
+    //         "numberOfHours": 0,
+    //         "UniqueId": 0
+    //       },
+    //       {
+    //         "Date": "2022-06-19T00:00:00",
+    //         "numberOfHours": 0,
+    //         "UniqueId": 0
+    //       },
+    //       {
+    //         "Date": "2022-06-20T00:00:00",
+    //         "numberOfHours": 2,
+    //         "UniqueId": 0
+    //       },
+    //       {
+    //         "Date": "2022-06-21T00:00:00",
+    //         "numberOfHours": 4,
+    //         "UniqueId": 0
+    //       }
+    //     ]
+    //   },
+    //   ]
 
 
   }
@@ -226,7 +227,7 @@ export class ReportsComponent implements OnInit {
     var dateArray = [];
     var currentDate = moment(start);
     var stopDate = moment(end);
-    while(currentDate<=stopDate){
+    while(moment(currentDate).format("YYYY-MM-DD 00:00:00.000")<=moment(stopDate).format("YYYY-MM-DD 00:00:00.000")){
       //dateArray.push(moment(currentDate).format("MMMM-DD"));
       dateArray.push(currentDate);
       currentDate = moment(currentDate).add(1,'days');
@@ -253,19 +254,32 @@ export class ReportsComponent implements OnInit {
   public onGenerateReport(){
     if(this.setStatus()){
       if(this.endDate.getFullYear() - this.startDate.getFullYear() <= 1){
-      
+        const pList = [];
+        const eList = [];
         this.allDates = this.dateFormatter(this.startDate,this.endDate);
+        console.log(this.allDates);
+        const sDate = moment(this.startDate).format("YYYY-MM-DD 00:00:00.000")
+        const eDate = moment(this.endDate).format("YYYY-MM-DD 00:00:00.000");
+        this.selectedProjectList.forEach((item)=>{pList.push(item.projectId)});
+        this.selectedEmployeeList.forEach((item)=>{eList.push(item.employeeId)});
+
+        // console.log("sDate",sDate);
+        // console.log("Edate",eDate)
+        // console.log("pIds",pList);
+        // console.log("EIds",eList);
 
         const body = {
-          projectIds:'',
-          employeeId:'',
-          fromDate:'',
-          toDate: ''
+          projectIds:pList,
+          employeeId:eList,
+          fromDate:sDate,
+          toDate: eDate
         };
         const url = `${this._url.timesheet.getTimesheetReport}`;
         this._http.post(url,body).subscribe({
             next:(res:any)=>{
               console.log(res);
+              this.reportList = res.reportViewModels;
+              this.totalHours = res.reportDayWiseTotals;
           }
         })
 

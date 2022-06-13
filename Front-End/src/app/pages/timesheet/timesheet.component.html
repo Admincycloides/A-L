@@ -30,7 +30,7 @@
             Add Time</button>
     </div>
 </div>
-<div class="row sheet-row">
+<div class="row sheet-row" [ngClass]="showSideWindow || showSideWindowCheckAll ? 'split-col':''">
     <div class="sheet-col">
         <div class="card">
             <div class="card-body pt-1">
@@ -138,13 +138,13 @@
 
                                 <td>
                                     <button class="edit actico-btn"
-                                        (click)="onTimesheetAddEdit(i)" *ngIf="row.status == 'In Progress' || row.status == 'Rejected'"><img
+                                        (click)="onTimesheetAddEdit(i)" *ngIf="row.status == 'In Progress' || row.status == 'Rejected' || row.status == 'Submitted'"><img
                                             src="../../../assets/img/edit.png"
                                             alt="" /></button>
                                 </td>
                                 <td>
                                     <button class="delete actico-btn"
-                                        (click)="onTimesheetDelete(i)" *ngIf="row.status == 'In Progress' || row.status == 'Rejected'"><img
+                                        (click)="onTimesheetDelete(i)" *ngIf="row.status == 'In Progress' || row.status == 'Rejected' || row.status == 'Submitted'"><img
                                             src="../../../assets/img/delete.png"
                                             alt="" class="del-ico"/></button>
                                 </td>
