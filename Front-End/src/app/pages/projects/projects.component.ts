@@ -92,19 +92,38 @@ export class ProjectsComponent implements OnInit {
     private getListofProjects(){
 
       const url = `${this._url.project.getallprojectlist}`
-    this._http.get(url).subscribe({
-      next:(res:any)=>{
-        this.projectGroup.setValue(res.data);
-      console.log("aaaa",res.data)
-    }
-      })
-
-    }
+      this._http.get(url).subscribe({
+        next:(res:any)=>{
+          // this.itemRows.setValue(res.data);
+          var items = [];
+          res.data.forEach(element => {
+            this.addFieldValue();
+              let i = {
+                projectId:element.projectId,
+                projectName:element.projectName,
+                projectDescription:'',
+                clientId:0,
+                startDate:'',
+                endDate:'',
+                currentStatus:'',
+                sredProject:'',
+                enabledFlag:'',
+                activities:''
+              }
+              items.push(i);
+          });
+          this.itemRows.patchValue(items);
+        console.log("aaaa",this.itemRows.value)
+      }
+        })
+  
+      }
 
 
 
   initItemRow():FormGroup{
     return this._fb.group({
+    projectId:[],
     projectName:[''],
     projectDescription: [''],
     clientId: [0],
@@ -135,7 +154,7 @@ export class ProjectsComponent implements OnInit {
     var body = this.projectGroup.value.itemRows;
 
     body.forEach(function (value,index) {
-      body[index].activities = [{activityId: 2}]
+      body[index].activities = [{activityId: this.selectedactivity}]
   });
     // body.activities.push({activityId: this.selectedactivity})
     console.log("boddddy",body);
@@ -157,23 +176,27 @@ export class ProjectsComponent implements OnInit {
 }
 
 makeEditable(itemrow: any,) {
-  itemrow.editable = !itemrow.editable;
+  console.log("aww",itemrow);
+
+  if(itemrow.editable == true){
 
   const url = `${this._url.project.editproject}`
 
-  var body = this.projectGroup.value.itemRows;
+  var body = itemrow.value;
 
-  body.forEach(function (value,index) {
-    body[index].activities = [{activityId: 4}]
-  });
+  // body.forEach(function (value,index) {
+  //   body[index].activities = [{activityId: 4}]
+  // });
 
   console.log(body);
-  this._http.post(url,[body]).subscribe(
+  this._http.post(url,body).subscribe(
     {
       next:(res:any)=>{
         console.log(res.responseMessage);
       }
-    });
+    });}
+    itemrow.editable = !itemrow.editable;
+    
   }
 
 public addFieldValue(){
@@ -220,6 +243,10 @@ public deleteRow(index : any) {
 
  pageChanged(event){
   this.config.currentPage = event;
+}
+
+viewactivity(){
+  
 }
 
 }
