@@ -364,7 +364,9 @@ input[type='number']::-webkit-inner-spin-button {
         background-color: #26c541!important;
     }
 }
-
+.action-head{
+    padding: 0 15px 0 7px;
+}
 // custom date picker
 input{
     &.date-input{
@@ -493,9 +495,9 @@ ng-multiselect-dropdown{
 .sheet-col{
     padding: 0 15px;
 }
-.remarks-col{
-    padding: 0 15px 0 0;
-}
+// .remarks-col{
+//     padding: 0 15px 0 0;
+// }
 .page-title{
     padding: 5px;
     font-size:  rem(18px);
