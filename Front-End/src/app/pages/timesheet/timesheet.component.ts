@@ -88,14 +88,14 @@ export class TimesheetComponent implements OnInit {
     this.addTimesheetForm = this._fb.group({
       project: ["", Validators.required],
       activity: ["", Validators.required],
-      monday: [0.0],
-      tuesday: [0.0],
-      wednesday: [0.0],
-      thursday: [0.0],
-      friday: [0.0],
-      saturday: [0.0],
-      sunday: [0.0],
-      remarks: [""],
+      monday: [0.0,[Validators.min(0),Validators.max(24)]],
+      tuesday: [0.0,[Validators.min(0),Validators.max(24)]],
+      wednesday: [0.0,[Validators.min(0),Validators.max(24)]],
+      thursday: [0.0,[Validators.min(0),Validators.max(24)]],
+      friday: [0.0,[Validators.min(0),Validators.max(24)]],
+      saturday: [0.0,[Validators.min(0),Validators.max(24)]],
+      sunday: [0.0,[Validators.min(0),Validators.max(24)]],
+      remarks: ["",[Validators.min(0),Validators.max(24)]],
     });
   }
   //To fetch supervisors
