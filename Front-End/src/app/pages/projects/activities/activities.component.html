@@ -42,7 +42,7 @@
                                             </thead>
                                         <ng-container projectGroup.controls.itemRows>
                                          <tbody formArrayName ="itemRows">
-                                            <tr *ngFor="let itemrow of itemRows['controls']; let i = index " [formGroupName]="i">
+                                            <tr *ngFor="let itemrow of itemRows['controls']; let i = index " [formGroupName]='i'>
                                                 <td class="col-md-2">
                                                     <span *ngIf="!itemrow.editable">{{itemrow.activityName}}</span>
                                                     <input placeholder="Activity Name" formControlName="activityName" *ngIf="itemrow.editable" />

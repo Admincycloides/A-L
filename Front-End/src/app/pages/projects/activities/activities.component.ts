@@ -15,6 +15,7 @@ import { UrlService } from 'app/_services/url.service';
 export class ActivitiesComponent implements OnInit {
   projectGroup : FormGroup;
   TotalRow : number; 
+  activityItems:any;
   userDetails:any;
   public index: any = '';
   public isSubmitted: boolean = false;
@@ -110,6 +111,7 @@ makeEditable(itemrow: any) {
     this._http.post(url,body).subscribe(
       {
         next:(res:any)=>{
+          this.activityItems = res.data;
           console.log(res.responseMessage);
         }
       });
