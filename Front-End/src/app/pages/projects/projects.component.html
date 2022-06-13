@@ -4,7 +4,6 @@
         <input type="text" class="search-filter" placeholder="Search Project"/>
     </div>
     <div class="action d-flex justify-content-end">
-<<<<<<< Updated upstream
       <select name="Activity Id" (change)="changeid($event)" [(ngModel)]="selectedactivity" class="form-control mr-2 filt-select">
         <option selected>---Select----</option>
         <option [value]="get.activityId" *ngFor="let get of getActivityName">
@@ -15,17 +14,6 @@
         <!-- the below button have to be added conditionaly -->
         <button class="act-btn thm-btn thm-btn-primary" type="button" (click)="saveField()"><i class="nc-icon nc-check-2"></i>Save</button>
         
-=======
-        <button class="act-btn thm-btn thm-btn-primary" type="button" (click)="addFieldValue();changeText()" *ngIf="supervisorFlag != 'Y'" ion-button><i class="nc-icon nc-simple-add"></i>Add Project</button>
-        <!-- the below button have to be added conditionaly -->
-        <button class="act-btn thm-btn thm-btn-primary" type="button" (click)="saveField()" *ngIf="supervisorFlag !='Y' "><i class="nc-icon nc-check-2"></i>Save</button>
-        <select name="Activity Id" (change)="changeid($event)" [(ngModel)]="selectedactivity" class="form-control" *ngIf="supervisorFlag != 'Y'">
-          <option>---Select----</option>
-          <option [value]="get.activityId" *ngFor="let get of getActivityName" >
-            {{get.activityName}}
-          </option>
-        </select>
->>>>>>> Stashed changes
     </div>
     <!-- <div class="action d-flex justify-content-end">
       <button (click)="addFieldValue()" [disabled]="projectGroup.invalid" ion-button>Add</button>
@@ -39,7 +27,6 @@
           <div class="table-responsive">
             <table class="table">
               <thead class="text-primary">
-<<<<<<< Updated upstream
                 <th nowrap>Project Name</th>
                 <th nowrap>Project Description</th>
                 <th nowrap>Client Name</th>
@@ -51,24 +38,10 @@
                 <th> View</th>
                 <th nowrap> Assigned to</th>
                 <th>Delete</th>
-=======
-                <th>Project Name</th>
-                <th>Project Description</th>
-                <th>Client Id</th>
-                <th> Start Date</th>
-                <th> End Date</th>
-                <th> Current Status</th>
-                <th> SHED Project</th>
-                <th *ngIf="supervisorFlag != 'Y'"> Edit</th>
-                <th> View</th>
-                <th> Assigned to</th>
-                <th *ngIf="supervisorFlag != 'Y'">Delete</th>
->>>>>>> Stashed changes
               </thead>
               <ng-container projectGroup.controls.itemRows>
-                <tbody formArrayName="itemRows">
-                  <ng-container *ngFor="let itemrow of projectGroup['controls'].itemRows['controls']; let i = index">
-                  <tr [formGroupName]="i">
+                <tbody formArrayName ="itemRows">
+                  <tr *ngFor="let itemrow of projectGroup['controls'].itemRows['controls']; let i = index" [formGroupName]="i">
                       <td class="col-md-2 form-group">
                             <span *ngIf="!itemrow.editable">{{itemrow.projectName}}</span>
                             <input placeholder="Project Name" formControlName="projectName" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/>
@@ -97,17 +70,9 @@
                           <span *ngIf="!itemrow.editable">{{itemrow.sredProject}}</span>
                             <input placeholder="SHED Project" formControlName="sredProject" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/>
                        </td>
-<<<<<<< Updated upstream
                       <td class="col-md-2 form-group">
                         <button class="edit actico-btn" type="button" (click)="makeEditable(itemrow)">
                           <img src="../../../assets/img/edit.png" alt="">
-=======
-                      <td class="col-md-2 form-group" >
-                        <button class="edit" type="button" (click)="makeEditable(itemrow)">
-                          <!-- <img
-                            src="../../../assets/img/edit.png"
-                            alt="" /> -->Edit
->>>>>>> Stashed changes
                         </button>
                       </td>
                       <td class="col-md-2 form-group">
@@ -119,21 +84,12 @@
                           <span *ngIf="!itemrow.editable">{{itemrow.assignedto}}</span>
                           <input placeholder="Assigned To" formControlName="assignedto" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/>
                     </td>
-<<<<<<< Updated upstream
                     <td class="col-md-2 form-group" >
                       <button class="delete actico-btn" type="button" (click)="deleteRow(i)" >
                         <img src="../../../assets/img/delete.png" alt="" class="del-ico"/>
-=======
-                    <td class="col-md-2 form-group"  >
-                      <button class="delete" type="button" (click)="deleteRow(i)" >
-                          <!-- <img
-                          src="../../../assets/img/delete.png"
-                          alt="" /> -->Delete
->>>>>>> Stashed changes
                       </button>
                   </td>
                 </tr>
-                  </ng-container>
                 </tbody>
               </ng-container>
             </table>
