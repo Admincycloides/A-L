@@ -82,8 +82,8 @@ namespace AnL.Repository.Implementation
                 {
                     var parameter = command.CreateParameter();
                     parameter.ParameterName = param.Key;
-                    parameter.Value= param.Value;
-                    //switch (param.Value[0])
+                    parameter.Value= param.Value[0];
+                    //switch (param.Value[1])
                     //{
                     //    case "date":
                     //        {
