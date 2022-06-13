@@ -62,7 +62,7 @@ export class ProjectsComponent implements OnInit {
     const url = `${this._url.project.getprojectListbyEmployeeID}`
     this._http.get(url).subscribe({
       next:(res:any)=>{
-        this.itemRows.setValue(res.data);}
+        this.itemRows.controls = (res.data);}
       })
     }
 
@@ -82,7 +82,7 @@ export class ProjectsComponent implements OnInit {
       const url = `${this._url.project.getallprojectlist}`
     this._http.get(url).subscribe({
       next:(res:any)=>{
-        this.itemRows.setValue(res.data);
+        this.itemRows.controls = (res.data);
       console.log("aaaa",res.data)
     }
       })
@@ -122,7 +122,7 @@ export class ProjectsComponent implements OnInit {
     var body = this.projectGroup.value.itemRows;
 
     body.forEach(function (value,index) {
-      body[index].activities = [{activityId: 1}]
+      body[index].activities = [{activityId: this.selectedactivity}]
   });
     // body.activities.push({activityId: this.selectedactivity})
     console.log("boddddy",body);

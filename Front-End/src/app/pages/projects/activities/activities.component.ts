@@ -66,7 +66,7 @@ export class ActivitiesComponent implements OnInit {
     const url = `${this._url.activity.getActivityList}`
     this._http.get(url).subscribe({
       next:(res:any)=>{
-        this.itemRows.setValue(res.data);
+        this.itemRows.controls = res.data;
         console.log("data",res.data)
       }
       })
