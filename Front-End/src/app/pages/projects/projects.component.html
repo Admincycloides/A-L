@@ -1,42 +1,42 @@
-<div class="page-title w-100">PROJECTS</div>
-<div class="action-head justify-content-between d-flex">
-    <div class="act-filter d-flex align-items-center justify-content-center">
+<div class="action-head justify-content-between d-flex align-items-center mb-4">
+  <div class="page-title w-100">PROJECTS</div>
+    <div class="act-filter d-flex align-items-center justify-content-center mx-2">
         <input type="text" class="search-filter" placeholder="Search Project"/>
     </div>
     <div class="action d-flex justify-content-end">
+      <select name="Activity Id" (change)="changeid($event)" [(ngModel)]="selectedactivity" class="form-control mr-2 filt-select">
+        <option selected>---Select----</option>
+        <option [value]="get.activityId" *ngFor="let get of getActivityName">
+          {{get.activityName}}
+        </option>
+      </select>
         <button class="act-btn thm-btn thm-btn-primary" type="button" (click)="addFieldValue();changeText()" ion-button><i class="nc-icon nc-simple-add"></i>Add Project</button>
         <!-- the below button have to be added conditionaly -->
         <button class="act-btn thm-btn thm-btn-primary" type="button" (click)="saveField()"><i class="nc-icon nc-check-2"></i>Save</button>
-        <select name="Activity Id" (change)="changeid($event)" [(ngModel)]="selectedactivity" class="form-control">
-          <option>---Select----</option>
-          <option [value]="get.activityId" *ngFor="let get of getActivityName">
-            {{get.activityName}}
-          </option>
-        </select>
+        
     </div>
     <!-- <div class="action d-flex justify-content-end">
       <button (click)="addFieldValue()" [disabled]="projectGroup.invalid" ion-button>Add</button>
   </div> -->
 </div>
-<br>
 <form [formGroup]="projectGroup">
-  <div class="row">
+  <div class="">
     <div class="col-md-12">
       <div class="card">
         <div class="card-body">
           <div class="table-responsive">
             <table class="table">
               <thead class="text-primary">
-                <th>Project Name</th>
-                <th>Project Description</th>
-                <th>Client Name</th>
-                <th> Start Date</th>
-                <th> End Date</th>
-                <th> Current Status</th>
-                <th> SHED Project</th>
+                <th nowrap>Project Name</th>
+                <th nowrap>Project Description</th>
+                <th nowrap>Client Name</th>
+                <th nowrap> Start Date</th>
+                <th nowrap> End Date</th>
+                <th nowrap> Current Status</th>
+                <th nowrap> SHED Project</th>
                 <th> Edit</th>
                 <th> View</th>
-                <th> Assigned to</th>
+                <th nowrap> Assigned to</th>
                 <th>Delete</th>
               </thead>
               <ng-container projectGroup.controls.itemRows>
@@ -44,53 +44,49 @@
                   <tr *ngFor="let itemrow of projectGroup['controls'].itemRows['controls']; let i = index" [formGroupName]="i">
                       <td class="col-md-2 form-group">
                             <span *ngIf="!itemrow.editable">{{itemrow.projectName}}</span>
-                            <input placeholder="Project Name" formControlName="projectName" type="text" *ngIf="itemrow.editable"/>
+                            <input placeholder="Project Name" formControlName="projectName" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/>
                       </td>
                       <td class="col-md-2 form-group">
                             <span *ngIf="!itemrow.editable">{{itemrow.projectDescription}}</span>
-                            <input placeholder="Project Description" formControlName="projectDescription" type="text" *ngIf="itemrow.editable"/>
+                            <input placeholder="Project Description" formControlName="projectDescription" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/>
                       </td>
                       <td class="col-md-2 form-group"> 
                             <span *ngIf="!itemrow.editable">{{itemrow.clientId}}</span>
-                            <input placeholder="Client Name" formControlName="clientId" type="int" *ngIf="itemrow.editable" />
+                            <input placeholder="Client Name" formControlName="clientId" type="int" *ngIf="itemrow.editable" class="cd-input h-input"/>
                       </td>
                       <td class="col-md-2 form-group">
                             <span *ngIf="!itemrow.editable">{{itemrow.startDate}}</span>
-                            <input placeholder="StartDate" formControlName="startDate" type="date" *ngIf="itemrow.editable"/>
+                            <input placeholder="StartDate" formControlName="startDate" type="date" *ngIf="itemrow.editable" class="cd-input h-input"/>
                       </td>
                       <td class="col-md-2 form-group">
                             <span *ngIf="!itemrow.editable">{{itemrow.endDate}}</span>
-                            <input placeholder="End Date" formControlName="endDate" type="date" *ngIf="itemrow.editable"/>
+                            <input placeholder="End Date" formControlName="endDate" type="date" *ngIf="itemrow.editable" class="cd-input h-input"/>
                       </td>
                       <td class="col-md-2 form-group">
                            <span *ngIf="!itemrow.editable">{{itemrow.currentStatus}}</span>
-                           <input placeholder="Current Status" formControlName="currentStatus" type="text" *ngIf="itemrow.editable"/>
+                           <input placeholder="Current Status" formControlName="currentStatus" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/>
                       </td>
                        <td class="col-md-2 form-group">
                           <span *ngIf="!itemrow.editable">{{itemrow.sredProject}}</span>
-                            <input placeholder="SHED Project" formControlName="sredProject" type="text" *ngIf="itemrow.editable"/>
+                            <input placeholder="SHED Project" formControlName="sredProject" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/>
                        </td>
                       <td class="col-md-2 form-group">
-                        <button class="edit" type="button" (click)="makeEditable(itemrow)">
-                          <!-- <img
-                            src="../../../assets/img/edit.png"
-                            alt="" /> -->Edit
+                        <button class="edit actico-btn" type="button" (click)="makeEditable(itemrow)">
+                          <img src="../../../assets/img/edit.png" alt="">
                         </button>
                       </td>
                       <td class="col-md-2 form-group">
-                          <button class="view" routerLink="/activities" type="button">
-                            <!-- <img src="../../../assets/img/view.png" alt="" /> -->view
+                          <button class="view actico-btn" routerLink="/activities" type="button">
+                            <img src="../../../assets/img/view.png" alt="" />
                           </button>
                      </td>
                      <td class="col-md-2 form-group">
                           <span *ngIf="!itemrow.editable">{{itemrow.assignedto}}</span>
-                          <input placeholder="Assigned To" formControlName="assignedto" type="text" *ngIf="itemrow.editable"/>
+                          <input placeholder="Assigned To" formControlName="assignedto" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/>
                     </td>
                     <td class="col-md-2 form-group" >
-                      <button class="delete" type="button" (click)="deleteRow(i)" >
-                          <!-- <img
-                          src="../../../assets/img/delete.png"
-                          alt="" /> -->Delete
+                      <button class="delete actico-btn" type="button" (click)="deleteRow(i)" >
+                        <img src="../../../assets/img/delete.png" alt="" class="del-ico"/>
                       </button>
                   </td>
                 </tr>
