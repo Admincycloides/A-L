@@ -47,7 +47,7 @@
 
 // custom styles
 
-body{
+body,.form-control{
     font-family: 'Roboto', sans-serif;
 
 .error{
@@ -85,7 +85,6 @@ body{
 table{
     th,td{
         text-align: center;
-        position: relative;
         &:first-child{
             padding-left: 28px!important;
         }
@@ -149,6 +148,11 @@ table{
         text-align: center;
         &:focus,&:focus-visible{
             border: solid 1px #bdb9b9!important;
+        }
+    }
+    &:not(.stick-page-base){
+        th,td{
+            position: relative;
         }
     }
 }
@@ -454,6 +458,19 @@ ng-multiselect-dropdown{
         background: #fff;
         border-radius: 4px;
         font-size: 14px;
+        &>span{
+            color: #66615b;
+        }
+    }
+    .dropdown-btn{
+        .selected-item{
+            &>{
+                span{
+                    line-height: 19px;
+                    font-size: 11px;
+                }
+            }
+        }
     }
 }
 .multiselect-dropdown .dropdown-btn .selected-item-container .selected-item,.multiselect-item-checkbox input[type=checkbox]:checked + div:before{
@@ -554,8 +571,8 @@ ng-multiselect-dropdown{
     }
 }
 // search bar
-input{
-    &.search-filter{
+input,select{
+    &.search-filter,.filt-select{
         background-color: #dfdfdf!important;
         height: 40px;
         @include radius(5px);

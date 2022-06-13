@@ -122,14 +122,14 @@
                   {{ getTotalHours(item.timeSpent) }}
                 </td>
               </tr>
-              <tr *ngIf="totalHours?.length">
-                <td>Total</td>
+              <tr *ngIf="totalHours?.length" class="total">
+                <td><strong>Total</strong></td>
                 <td></td>
                 <td *ngFor="let date of allDates">
                   {{ getTotalHoursValues(date) }}
                 </td>
                 <td>
-                  {{ getTotalHours(totalHours) }}
+                  <strong>{{ getTotalHours(totalHours) }}</strong>
                 </td>
               </tr>
               <tr></tr>
