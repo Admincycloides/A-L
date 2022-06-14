@@ -24,6 +24,7 @@ export class ActivitiesComponent implements OnInit {
   userDetails:any;
   public index: any = '';
   public isSubmitted: boolean = false;
+  SelectedValue:any;
 
   // public addActivity = [];
 
@@ -61,14 +62,24 @@ export class ActivitiesComponent implements OnInit {
       // activityId:[],
       activityName:[""],
       activityDescription:[""],
-      enabledFlag: []
+      enabledFlag: [""]
     })
   }
+  changeName(e)
+  {
+    this.SelectedValue= e.target.value;
+    console.log(this.SelectedValue)
+  }
+  
+  Cancel(itemrow:any){
 
-
+    if(itemrow.editable == true)
+    return itemrow.editable = false
+    
+  }
 
   ngOnInit() {
-    this.titleService.setTitle("Project Name");
+    this.titleService.setTitle(this.SelectedValue);
     
     this.sub=this._Activatedroute.paramMap.subscribe(params => { 
       console.log(params);
@@ -144,29 +155,65 @@ export class ActivitiesComponent implements OnInit {
 // }
 
 makeEditable(itemrow: any) {
-  itemrow.editable = !itemrow.editable;
+    console.log("aww",itemrow);
+  
+    if(itemrow.editable == true){
+  
+    const url = `${this._url.activity.editactivity}`
+  
+    var body = itemrow.value;
+  
+    // body.forEach(function (value,index) {
+    //   body[index].activities = [{activityId: 4}]
+    // });
+  
+    console.log(body);
+    this._http.post(url,body).subscribe(
+      {
+        next:(res:any)=>{
+          console.log(res.responseMessage);
+        }
+      });}
+      itemrow.editable = !itemrow.editable;
+      
   }
 
-  saveField(){
-      if(this.text == "Add Activity"){
-      const body = this.projectGroup.value.itemRows;
-        console.log(body);
-      // let formObj = this.projectGroup.value.itemRows;
-      // console.log(formObj);
-      //   let serializedForm = JSON.stringify(formObj.itemRows);
-      //   console.log(serializedForm);
-      const url = `${this._url.activity.addActivity}`
 
-    // const body = this.addActivity;
-    // console.log(body);
-    this._http.post(url,body).subscribe(
+
+  saveField()
+  {
+    
+    console.log("hi",this.projectGroup.value.itemRows)
+    console.log("hi");
+    var body = this.projectGroup.value.itemRows;
+    // let formObj = this.projectGroup.value; // {name: '', description: ''}
+    //     let serializedForm = JSON.stringify(formObj.itemRows);
+    //     console.log(serializedForm);
+    this.projectGroup.value.itemRows.forEach(element => {
+      
+      if(element.activityID == null){
+        console.log("zakkkkkk")
+           body = {
+            enabledFlag:element.enabledFlag,
+            // activityId:element.activityId,
+            activityName:element.activityName,
+            activityDescription:element.activityDescription
+        }}
+    });
+    const url = `${this._url.activity.addActivity}`
+
+  //   body.forEach(function (value,index) {
+  //     body[index].activities = [{activityId: this.selectedactivity}]
+  // });
+    // body.activities.push({activityId: this.selectedactivity})
+    console.log("boddddy",body);
+    this._http.post(url,[body]).subscribe(
       {
         next:(res:any)=>{
           this.activityItems = res.data;
           console.log(res.responseMessage);
         }
       });
-    }
   }
 
 public addFieldValue() { 

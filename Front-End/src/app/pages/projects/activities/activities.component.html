@@ -5,7 +5,7 @@
     </div>
     <div class="action d-flex justify-content-end">
         <div class="action d-flex justify-content-end">
-            <button type="button" class="act-btn thm-btn thm-btn-primary" type="button" (click)="addFieldValue();" ion-button><i class="nc-icon nc-simple-add"></i> {{ text }}</button>
+            <button type="button" class="act-btn thm-btn thm-btn-primary" type="button" style='margin-right:16px' (click)="addFieldValue();" ion-button><i class="nc-icon nc-simple-add"></i> {{ text }}</button>
             <!-- the below button have to be added conditionaly -->
             <button class="act-btn thm-btn thm-btn-primary" type="button" (click)="saveField()"><i class="nc-icon nc-check-2"></i> Save</button>
         </div>
@@ -39,6 +39,9 @@
                                             Edit
                                         </th>
                                         <th>
+                                            Cancel
+                                        </th>
+                                        <th>
                                             Delete
                                         </th>
                                     </thead>
@@ -59,6 +62,10 @@
                                                         src="../../../assets/img/edit.png"
                                                         alt="" /></button>
                                                     </td>
+                                                    <td class="col-md-2">
+                                                    <button class="cancel actico-btn" type="button" (click)="Cancel(itemrow)">
+                                                        <img src="../../../assets/img/edit.png" alt="">
+                                                        </button></td>
                                                     <td class="col-md-2">
                                                         <button class="delete actico-btn" (click)="deleteRow(i)">
                                                         <img

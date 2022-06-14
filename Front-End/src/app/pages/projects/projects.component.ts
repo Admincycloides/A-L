@@ -13,6 +13,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./projects.component.scss']
 })
 export class ProjectsComponent implements OnInit {
+  public text: string = 'Add Project';
   public index: any = '';
   searchTerm: any= '';
   userDetails: any;
@@ -39,7 +40,6 @@ export class ProjectsComponent implements OnInit {
   }
   // public addProjects = [];
 
-  public text: string = 'Add Project';
   config: any;
   collection = { count: 60, data: [] };
 
@@ -89,6 +89,13 @@ export class ProjectsComponent implements OnInit {
   //     })
   //   }
 
+  public changeText(){
+    if (this.text === 'Add Project') {
+      this.text = 'save';
+    } else {
+      this.text = 'Add Project';
+    }
+}
 
 
     private getActivityLists(){
@@ -110,7 +117,7 @@ export class ProjectsComponent implements OnInit {
 
     private getListofProjects(){
       const search = this.config.search;
-      const url = `${this._url.project.getprojectlist}?empID=${this.user.employeeId}&ProjectName=${this.searchTerm}`;
+      const url = `${this._url.project.getprojectlist}?empID=${this.user.employeeID}&ProjectName=${this.searchTerm}`;
       console.log(url)
       this._http.get(url).subscribe({
         next:(res:any)=>{
@@ -209,18 +216,13 @@ export class ProjectsComponent implements OnInit {
         }
       });
   }
-  public changeText(){
-    if (this.text === 'Add Project') {
-      this.text = 'save';
-    } else {
-      this.text = 'Add Project';
-    }
 
-}
+
 Cancel(itemrow:any){
 
   if(itemrow.editable == true)
-  return !itemrow.editable
+  return itemrow.editable = false
+  
 }
 
 
@@ -256,6 +258,7 @@ public addFieldValue(){
 
 public deleteRow(index : any) {
   
+  
   console.log("hi");
   // let formObj = this.projectGroup.value; // {name: '', description: ''}
   //     let serializedForm = JSON.stringify(formObj.itemRows);
@@ -271,7 +274,8 @@ public deleteRow(index : any) {
       }
     });
 
-    // this.itemRows.removeAt(index)
+   
+    this.itemRows.removeAt(index)
 //   console.log("hiii");
 //   const control = <FormArray>this.projectGroup.controls['itemRows'];
 //   if(control != null)
@@ -317,7 +321,7 @@ public onProjectEmployeeSelect(item: any) {
 searchItems(event: any) {
   this.config.search = event.target.value;
   this.searchTerm = event.target.value;
-  this.getListofProjects();
+  // this.getListofProjects();
 }
 
 }
