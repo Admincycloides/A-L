@@ -55,7 +55,7 @@ export class UrlService {
     getprojectlist: 'api/Project/GetProjectList',
     getclientlist : 'api/Project/GetClientList',
     editproject : 'api/Project/EditProject',
-    getprojectdetailsByid:'api/Project/GetprojectDetailsByID?ProjectID=1'
+    getprojectdetailsByid:'api/Project/GetprojectDetailsByID'
   }
 
   public activity = {

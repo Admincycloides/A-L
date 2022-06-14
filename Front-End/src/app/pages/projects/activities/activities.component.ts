@@ -4,7 +4,7 @@ import { Title } from '@angular/platform-browser';
 import { Router,ActivatedRoute }  from '@angular/router';
 import { HttpService } from 'app/_services/http.service';
 import { UrlService } from 'app/_services/url.service';
-import { ProjectsComponent } from '../projects.component';
+// import { ProjectsComponent } from '../projects.component';
 
 
 @Component({
@@ -34,18 +34,10 @@ export class ActivitiesComponent implements OnInit {
   config: any;
   collection = { count: 60, data: [] }
   
-  public getActivityforProject(projectId){
-console.log("qqqq")
-    const url = `${this._url.project.getprojectdetailsByid}`
-    this._http.get(url).subscribe({
-      next:(res:any)=>{
-        this.getselectedactivity = res.data;
-      }
-    })
-  }
+  
 
   constructor(private _fb:FormBuilder, public titleService: Title,private _http: HttpService,private _url: UrlService,private _router:Router,private _Activatedroute:ActivatedRoute,
-    private _projectcomponent:ProjectsComponent) {
+    ) {
     this.projectGroup = this._fb.group({
       itemRows:this._fb.array([]),
     });
@@ -66,9 +58,10 @@ console.log("qqqq")
 
   initItemRow():FormGroup{
     return this._fb.group({
+      // activityId:[],
       activityName:[""],
       activityDescription:[""],
-      enabledFlag: [""]
+      enabledFlag: []
     })
   }
 
@@ -76,34 +69,58 @@ console.log("qqqq")
 
   ngOnInit() {
     this.titleService.setTitle("Project Name");
-    this.getActivityforProject("projectId");
-    this.getActivityDetails();
+    
     this.sub=this._Activatedroute.paramMap.subscribe(params => { 
       console.log(params);
-       this.projectId = params.get('projectId'); 
+       this.projectId = params.get('ProjectId'); 
        console.log("id",this.projectId)
+       this.getActivityforProject(this.projectId);
+    // this.getActivityDetails();
            
    });
   }
   
-
+  public getActivityforProject(projectId){
+    console.log("qqqq")
+    const url = `${this._url.project.getprojectdetailsByid}?ProjectID=${projectId}`
+    this._http.get(url).subscribe({
+      next:(res:any)=>{
+        // this.getselectedactivity = res.data.activities;
+        var items = [];
+        let activities = res.data.activities
+        res.data.activities.forEach(element => {
+          this.addFieldValue()
+          let i = {
+                enabledFlag:element.enabledFlag,
+                // activityId:element.activityId,
+                activityName:element.activityName,
+                activityDescription:element.activityDescription
+          }
+          items.push(i);
+        });
+        console.log("aaaa",res.data.activities)
+        this.itemRows.setValue(items);
+        console.log("aaaa",this.itemRows.value)
+      }
+    })
+  }
 
   private getActivityDetails(){
     const url = `${this._url.activity.getActivityList}`
     this._http.get(url).subscribe({
       next:(res:any)=>{
         var items = [];
-          res.data.forEach(element => {
-            this.addFieldValue();
-              let i = {
-                activityId:element.activityId,
-                activityName:element.activityName,
-                activityDescription:element.activityDescription
-              }
-              items.push(i);
-          });
-          this.itemRows.patchValue(items);
-        console.log("aaaa",this.itemRows.value)
+          // res.data.forEach(element => {
+          //   this.addFieldValue();
+          //     let i = {
+          //       activityId:element.activityId,
+          //       activityName:element.activityName,
+          //       activityDescription:element.activityDescription
+          //     }
+          //     items.push(i);
+          // });
+          // this.itemRows.patchValue(items);
+        // console.log("aaaa",this.itemRows.value)
       }
         })
     }
@@ -155,8 +172,8 @@ makeEditable(itemrow: any) {
 public addFieldValue() { 
   if(this.text == "save"){
     this.isVisible = true;
-  this.itemRows.push(this.initItemRow());
   }
+  this.itemRows.push(this.initItemRow());
   // const control = <FormArray>this.projectGroup.controls['itemRows'];
   // control.push(this.initItemRow());
   //  console.log("hiii")}
