@@ -112,7 +112,7 @@ export class ProjectsComponent implements OnInit {
 
     private getListofProjects(){
       const search = this.config.search;
-      const url = `${this._url.project.getprojectlist}?EmpID=${12345}&ProjectName=${this.searchTerm}`;
+      const url = `${this._url.project.getprojectlist}?EmpID=${this.user.employeeId}&ProjectName=${this.searchTerm}`;
       console.log(url)
       this._http.get(url).subscribe({
         next:(res:any)=>{

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Title } from '@angular/platform-browser';
+import { Router,ActivatedRoute }  from '@angular/router';
 import { HttpService } from 'app/_services/http.service';
 import { UrlService } from 'app/_services/url.service';
+import { ProjectsComponent } from '../projects.component';
 
 
 @Component({
@@ -16,6 +18,9 @@ export class ActivitiesComponent implements OnInit {
   projectGroup : FormGroup;
   TotalRow : number; 
   activityItems:any;
+  projectId:any;
+  sub:any;
+  getselectedactivity:any;
   userDetails:any;
   public index: any = '';
   public isSubmitted: boolean = false;
@@ -27,9 +32,20 @@ export class ActivitiesComponent implements OnInit {
   public text: string = 'Add Activity';
 
   config: any;
-  collection = { count: 60, data: [] };
+  collection = { count: 60, data: [] }
+  
+  public getActivityforProject(projectId){
+console.log("qqqq")
+    const url = `${this._url.project.getprojectdetailsByid}`
+    this._http.get(url).subscribe({
+      next:(res:any)=>{
+        this.getselectedactivity = res.data;
+      }
+    })
+  }
 
-  constructor(private _fb:FormBuilder, public titleService: Title,private _http: HttpService,private _url: UrlService) {
+  constructor(private _fb:FormBuilder, public titleService: Title,private _http: HttpService,private _url: UrlService,private _router:Router,private _Activatedroute:ActivatedRoute,
+    private _projectcomponent:ProjectsComponent) {
     this.projectGroup = this._fb.group({
       itemRows:this._fb.array([]),
     });
@@ -60,19 +76,37 @@ export class ActivitiesComponent implements OnInit {
 
   ngOnInit() {
     this.titleService.setTitle("Project Name");
+    this.getActivityforProject("projectId");
+    this.getActivityDetails();
+    this.sub=this._Activatedroute.paramMap.subscribe(params => { 
+      console.log(params);
+       this.projectId = params.get('projectId'); 
+       console.log("id",this.projectId)
+           
+   });
   }
+  
 
 
   private getActivityDetails(){
     const url = `${this._url.activity.getActivityList}`
     this._http.get(url).subscribe({
       next:(res:any)=>{
-        this.itemRows.controls = res.data;
-        console.log("data",res.data)
+        var items = [];
+          res.data.forEach(element => {
+            this.addFieldValue();
+              let i = {
+                activityId:element.activityId,
+                activityName:element.activityName,
+                activityDescription:element.activityDescription
+              }
+              items.push(i);
+          });
+          this.itemRows.patchValue(items);
+        console.log("aaaa",this.itemRows.value)
       }
-      })
+        })
     }
-
   
   public changeText(){
     if (this.text === 'Add Activity') {

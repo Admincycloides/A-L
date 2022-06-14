@@ -42,13 +42,14 @@
                                             </thead>
                                         <ng-container projectGroup.controls.itemRows>
                                          <tbody formArrayName ="itemRows">
-                                            <tr *ngFor="let itemrow of itemRows['controls']; let i = index " [formGroupName]='i'>
+                                            <ng-container *ngFor="let itemrow of itemRows.controls; let i = index ">
+                                            <tr [formGroupName]='i'>
                                                 <td class="col-md-2">
-                                                    <span *ngIf="!itemrow.editable">{{itemrow.activityName}}</span>
+                                                    <span *ngIf="!itemrow.editable">{{itemrow.value.activityName}}</span>
                                                     <input placeholder="Activity Name" formControlName="activityName" *ngIf="itemrow.editable" />
                                                 </td>
                                                 <td class="col-md-2">
-                                                    <span *ngIf="!itemrow.editable">{{itemrow.activityDescription}}</span>
+                                                    <span *ngIf="!itemrow.editable">{{itemrow.value.activityDescription}}</span>
                                                     <input placeholder="Activity Description" formControlName="activityDescription" *ngIf="itemrow.editable" />
                                                 </td>
                                                 <td class="col-md-2">
@@ -64,6 +65,7 @@
                                                     </button>
                                                 </td>
                                             </tr>
+                                        </ng-container>
                                          </tbody>
                                         </ng-container>
                                         </table>

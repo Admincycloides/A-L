@@ -52,8 +52,10 @@ export class UrlService {
     deleteProject : 'api/Project/DeleteProject',
     allocateResources : 'api/Project/allocateResources',
     getallprojectlist : 'api/Project/GetAllProjectList',
+    getprojectlist: 'api/Project/GetProjectList',
     getclientlist : 'api/Project/GetClientList',
-    editproject : 'api/Project/EditProject'
+    editproject : 'api/Project/EditProject',
+    getprojectdetailsByid:'api/Project/GetprojectDetailsByID?ProjectID=1'
   }
 
   public activity = {
