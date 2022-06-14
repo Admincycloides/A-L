@@ -261,6 +261,11 @@ input[type='number']::-webkit-inner-spin-button {
     }
 }
 // layout
+.form-control{
+    &:focus, &:focus-visible{
+        border: solid 1px #bdb9b9!important;
+    }
+}
 .sidebar .logo, .off-canvas-sidebar .logo{
     height: 62px;
     background-color: $secondary-color;
