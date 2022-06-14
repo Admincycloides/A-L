@@ -39,7 +39,7 @@
                 <th> Start Date</th>
                 <th> End Date</th>
                 <th nowrap> Current Status</th>
-                <th nowrap> SHED Project</th>
+                <th nowrap>Cancel</th>
                 <th *ngIf="supervisorFlag != 'Y'"> Edit</th>
                 <th> View</th>
                 <th> Assigned to</th>
@@ -81,8 +81,11 @@
                            <input placeholder="Current Status" formControlName="currentStatus" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/>
                       </td>
                        <td class="col-md-2 form-group">
-                          <span *ngIf="!itemrow.editable">{{itemrow.value.sredProject}}</span>
-                            <input placeholder="SHED Project" formControlName="sredProject" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/>
+                          <!-- <span *ngIf="!itemrow.editable">{{itemrow.value.sredProject}}</span>
+                            <input placeholder="SHED Project" formControlName="sredProject" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/> -->
+                            <button class="cancel actico-btn" type="button" (click)="Cancel(itemrow)">
+                              <img src="../../../assets/img/cancel.png" alt="">
+                            </button>
                        </td>
                       <td class="col-md-2 form-group">
                         <button class="edit actico-btn" type="button" (click)="makeEditable(itemrow)">
@@ -98,10 +101,11 @@
                           <span *ngIf="!itemrow.editable">{{itemrow.value.assignedto}}</span>
                           <!-- <input placeholder="Assigned To" formControlName="assignedto" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/> 
                           -->
-                          <ng-multiselect-dropdown
+                          <ng-multiselect-dropdown *ngIf="itemrow.editable"
                           [placeholder]="'Select Employee'"
                           [settings]="dropdownEmployeeSettings"
                           [data]="employeeList"
+                          [(ngValue)]="employeeId"
                           name="employee"
                           (onDeSelect)="onProjectEmployeeDeSelect($event, 'employee')"
                           (onSelect)="onProjectEmployeeSelect($event, 'employee')"

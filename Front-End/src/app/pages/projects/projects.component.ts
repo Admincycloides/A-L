@@ -60,12 +60,12 @@ export class ProjectsComponent implements OnInit {
 
   ngOnInit(): void {
 
-    
-    this.getListofProjects(),
-    this.getActivityLists(),
-    this.GetClientLists(),
-    
-    this.getEmployeeList(),
+    this.user = JSON.parse(localStorage.getItem('user'));
+    console.log("macha",this.user);
+    this.getListofProjects();
+    this.getActivityLists();
+    this.GetClientLists();
+    this.getEmployeeList();
     this.dropdownEmployeeSettings = {
       singleSelection: false,
       idField: "employeeId",
@@ -75,10 +75,8 @@ export class ProjectsComponent implements OnInit {
       itemsShowLimit: 3,
       allowSearchFilter: true,
     };
-    this.toggleButton = true,
+    this.toggleButton = true;
     // this.getProjectActivityDetails(),
-        this.user = JSON.parse(localStorage.getItem('user'));
-        console.log("macha",this.user)
   }
 
  
@@ -112,7 +110,7 @@ export class ProjectsComponent implements OnInit {
 
     private getListofProjects(){
       const search = this.config.search;
-      const url = `${this._url.project.getprojectlist}?EmpID=${this.user.employeeId}&ProjectName=${this.searchTerm}`;
+      const url = `${this._url.project.getprojectlist}?empID=${this.user.employeeId}&ProjectName=${this.searchTerm}`;
       console.log(url)
       this._http.get(url).subscribe({
         next:(res:any)=>{
@@ -131,6 +129,7 @@ export class ProjectsComponent implements OnInit {
                 currentStatus:element.currentStatus,
                 sredProject:element.sredProject,
                 enabledFlag:element.enabledFlag,
+                assignedTo:element.assignedTo,
               }
               items.push(i);
           });
@@ -190,8 +189,9 @@ export class ProjectsComponent implements OnInit {
           currentStatus:element.currentStatus,
           sredProject:element.sredProject,
           enabledFlag:element.enabledFlag,
-          assignedTO:element.assignedTo,
-          activities:[]
+          assignedTo:element.assignedTo,
+          activities:[],
+          employeeID:[element.employeeId],
         }}
     });
     const url = `${this._url.project.addProject}`
@@ -217,6 +217,13 @@ export class ProjectsComponent implements OnInit {
     }
 
 }
+Cancel(itemrow:any){
+
+  if(itemrow.editable == true)
+  return !itemrow.editable
+}
+
+
 
 makeEditable(itemrow: any,) {
   console.log("aww",itemrow);
