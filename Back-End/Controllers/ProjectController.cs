@@ -110,7 +110,7 @@ namespace AnL.Controllers
             {
                 BaseResponse rsp = new BaseResponse();
                 var data = await _UOW.ProjectRepository.AddActivity(ActivityDetails);
-                if (data == null)
+                if (data != null)
                 {
                     rsp.Data = "Activity Name already exist.";
                     return Conflict(rsp);
@@ -128,6 +128,34 @@ namespace AnL.Controllers
                 return BadRequest("Oops! Something went wrong!" + ex);
             }
         }
+
+
+        [HttpPost]
+        public async Task<ActionResult> EditActivity(List<ActivityMaster> ActivityDetails)
+        {
+            try
+            {
+                BaseResponse rsp = new BaseResponse();
+                var data = await _UOW.ProjectRepository.EditActivity(ActivityDetails);
+                if (data != null)
+                {
+                    rsp.Data = "Activity Name already exist.";
+                    return Conflict(rsp);
+                }
+                else
+                {
+                    rsp.Data = data;
+                    rsp.ResponseMessage = MessageConstants.ActivityAdditionSuccess;
+                }
+                return Ok(rsp);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+        }
+
 
 
         [HttpPost]

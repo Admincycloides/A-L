@@ -304,7 +304,42 @@ namespace AnL.Repository.Implementation
                 throw ex;
             }
         }
+        public async Task<object> EditActivity(List<ActivityMaster> viewModel)
+        {
+            try
+            {
+                foreach (var proj in viewModel)
+                {
+                    var activityData = await _context.Set<ActivityDetails>().
+                        Where(X => X.ActivityId==proj.ActivityId).FirstOrDefaultAsync();
+                    if(activityData!=null)
+                    {
+                        if(activityData.ActivityName.ToLower() != proj.ActivityName.Trim().ToLower())
+                        {
+                            if(!_context.Set<ActivityDetails>().
+                                Where(X => X.ActivityName.ToLower() == proj.ActivityName.Trim().ToLower()).Any())
+                            {
+                                activityData.ActivityName = proj.ActivityName;
 
+                            }
+                            else
+                            {
+                                return "Axtivity Name already Exist.";
+                            }
+                        }
+                        activityData.ActivityDescription = proj.ActivityDescription;
+                        
+                    }
+                    this.SaveChanges();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return null;
+        }
         public async Task<object> AddActivity(List<ActivityMaster> viewModel)
         {
             try
