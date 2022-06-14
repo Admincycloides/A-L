@@ -22,6 +22,7 @@ namespace AnL.ViewModel
         public string SredProject { get; set; }
         public string EnabledFlag { get; set; }
         public List<ProjectActivities> Activities{ get; set; }
+        public List<string> EmployeeID { get; set; }
     }
 
     public class EditProjectView

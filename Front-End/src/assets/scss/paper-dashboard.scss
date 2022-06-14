@@ -261,12 +261,22 @@ input[type='number']::-webkit-inner-spin-button {
     }
 }
 // layout
+.form-control{
+    &:focus, &:focus-visible{
+        border: solid 1px #bdb9b9!important;
+    }
+}
 .sidebar .logo, .off-canvas-sidebar .logo{
     height: 62px;
     background-color: $secondary-color;
     padding: 0 0 0 5pxpx;
     display: flex;
     align-items: center;
+}
+.m-item{
+    &:focus,&:focus-visible{
+        outline: none;
+    }
 }
 .main-panel{
     .navbar{
@@ -392,6 +402,12 @@ input{
         outline: none;
     }
 }
+ngb-datepicker-navigation-select>.form-select{
+    border: 1px solid #DDDDDD!important;
+    &:focus,&:focus-visible{
+        border: 1px solid #DDDDDD!important;
+    }
+}
 .week-range{
     color: transparentize($dark-color,.6);
     font-weight: 500;
@@ -470,6 +486,7 @@ ngb-datepicker{
         }
     }
 }
+
 ng-multiselect-dropdown{
     .dropdown-btn{
         border: 1px solid #DDDDDD!important;
@@ -478,6 +495,12 @@ ng-multiselect-dropdown{
         font-size: 14px;
         &>span{
             color: #66615b;
+        }
+        .dropdown-multiselect__caret{
+            &:before{
+                border-width: 5px 5px 0!important;
+                top: 61%!important;
+            }
         }
     }
     .dropdown-btn{
@@ -490,6 +513,25 @@ ng-multiselect-dropdown{
             }
         }
     }
+
+    &.sm-mdrop{
+        .multiselect-dropdown{
+            width: 154px;
+            .dropdown-btn{
+                font-size: 13px;
+                padding: 4px 6px!important;
+                line-height: 18px!important;
+                .dropdown-multiselect__caret{
+                    height: 28px!important;
+                    width: 23px!important;
+                    padding: 2px!important;
+                }
+            }
+            .dropdown-btn>span{
+                color: #a7a7a7;
+            }
+        }
+}
 }
 .multiselect-item-checkbox input[type=checkbox] + div{
     font-size: 13px;
@@ -524,6 +566,11 @@ ng-multiselect-dropdown{
         }
         .remarks-col{
             width: 20%;
+            .form-control{
+                &:focus,&:focus-visible{
+                    border: 1px solid #DDDDDD!important;
+                }
+            }
         }
     }
 }

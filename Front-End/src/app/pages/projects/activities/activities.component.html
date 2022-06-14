@@ -1,81 +1,83 @@
 <div class="action-head justify-content-between d-flex align-items-center mb-4">
     <div class="page-title w-100">Activities</div>
     <div class="act-filter d-flex align-items-center justify-content-center">
-        <input type="text" class="search-filter" placeholder="Search Activities"/>
+        <input type="text" class="search-filter" placeholder="Search Activities" />
     </div>
     <div class="action d-flex justify-content-end">
         <div class="action d-flex justify-content-end">
-            <button type="button" class="act-btn thm-btn thm-btn-primary" type="button" (click)="changeText();addFieldValue();saveField()" ion-button><i class="nc-icon nc-simple-add"></i> {{ text }}</button>
+            <button type="button" class="act-btn thm-btn thm-btn-primary" type="button" (click)="addFieldValue();" ion-button><i class="nc-icon nc-simple-add"></i> {{ text }}</button>
             <!-- the below button have to be added conditionaly -->
-            <!-- <button class="act-btn thm-btn thm-btn-primary" type="button"  (click)="saveField()"><i class="nc-icon nc-check-2"></i> Save</button> -->
+            <button class="act-btn thm-btn thm-btn-primary" type="button" (click)="saveField()"><i class="nc-icon nc-check-2"></i> Save</button>
         </div>
         <!-- <div class="action d-flex justify-content-end">
             <button (click)="addFieldValue()" [disabled]="projectGroup.invalid">Add</button>
         </div> -->
     </div>
 </div>
-<div class="sp-row"><div class="sub-ptitle w-100">{{titleService.getTitle()}}</div></div>
+<div class="sp-row">
+    <div class="sub-ptitle w-100">{{titleService.getTitle()}}</div>
+</div>
 
 
 <form [formGroup]="projectGroup">
     <div>
-            <div>
-                <div class="">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table">
-                                            <thead class="text-primary">
-                                                    <th>
-                                                        Activity Name 
-                                                    </th>
-                                                    <th>
-                                                        Activity Description 
-                                                    </th>
-                                                    <th>
-                                                      Edit 
-                                                    </th>
-                                                    <th>
-                                                        Delete 
-                                                    </th>
-                                            </thead>
-                                        <ng-container projectGroup.controls.itemRows>
-                                         <tbody formArrayName ="itemRows">
-                                            <tr *ngFor="let itemrow of itemRows['controls']; let i = index " [formGroupName]='i'>
-                                                <td class="col-md-2">
-                                                    <span *ngIf="!itemrow.editable">{{itemrow.activityName}}</span>
-                                                    <input placeholder="Activity Name" formControlName="activityName" *ngIf="itemrow.editable" />
-                                                </td>
-                                                <td class="col-md-2">
-                                                    <span *ngIf="!itemrow.editable">{{itemrow.activityDescription}}</span>
-                                                    <input placeholder="Activity Description" formControlName="activityDescription" *ngIf="itemrow.editable" />
-                                                </td>
-                                                <td class="col-md-2">
-                                                    <button class="edit actico-btn" (click)="makeEditable(itemrow)"><img
+        <div>
+            <div class="">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="text-primary">
+                                        <th>
+                                            Activity Name
+                                        </th>
+                                        <th>
+                                            Activity Description
+                                        </th>
+                                        <th>
+                                            Edit
+                                        </th>
+                                        <th>
+                                            Delete
+                                        </th>
+                                    </thead>
+                                    <ng-container projectGroup.controls.itemRows>
+                                        <tbody formArrayName="itemRows">
+                                            <ng-container *ngFor="let itemrow of itemRows.controls; let i = index ">
+                                                <tr [formGroupName]='i'>
+                                                    <td class="col-md-2">
+                                                        <span *ngIf="!itemrow.editable">{{itemrow.value.activityName}}</span>
+                                                        <input placeholder="Activity Name" formControlName="activityName" *ngIf="itemrow.editable" />
+                                                    </td>
+                                                    <td class="col-md-2">
+                                                        <span *ngIf="!itemrow.editable">{{itemrow.value.activityDescription}}</span>
+                                                        <input placeholder="Activity Description" formControlName="activityDescription" *ngIf="itemrow.editable" />
+                                                    </td>
+                                                    <td class="col-md-2">
+                                                        <button class="edit actico-btn" (click)="makeEditable(itemrow)"><img
                                                         src="../../../assets/img/edit.png"
                                                         alt="" /></button>
-                                                </td>
-                                                <td class="col-md-2">
-                                                    <button class="delete actico-btn" (click)="deleteRow(i)" >
+                                                    </td>
+                                                    <td class="col-md-2">
+                                                        <button class="delete actico-btn" (click)="deleteRow(i)">
                                                         <img
                                                         src="../../../assets/img/delete.png"
                                                         alt="" />
                                                     </button>
-                                                </td>
-                                            </tr>
-                                         </tbody>
-                                        </ng-container>
-                                        </table>
-                                    </div>
-                                </div>
+                                                    </td>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                    </ng-container>
+                                </table>
                             </div>
                         </div>
-                </div> 
+                    </div>
+                </div>
             </div>
-            <pagination-controls (pageChange)="pageChanged($event)"
-            [maxSize]="5"></pagination-controls>
+        </div>
+        <pagination-controls (pageChange)="pageChanged($event)" [maxSize]="5"></pagination-controls>
     </div>
-    
+
 </form>
- 
