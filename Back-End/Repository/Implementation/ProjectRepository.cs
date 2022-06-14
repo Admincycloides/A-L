@@ -71,7 +71,7 @@ namespace AnL.Repository.Implementation
         }
         
 
-        public async Task<object> AddProject(List<ProjectViewModel> viewModel)
+        public async Task<object> AddProject(List<ProjectViewModel> viewModel,string Userid)
         {
             try
             {
@@ -101,10 +101,24 @@ namespace AnL.Repository.Implementation
                             ActivityMapping = activty
 
                         };
-
+                        var employeeMapp = new List<ProjectMapping>();
+                        
                         this.Add(Project);
                         this.SaveChanges();
-                        
+
+                        foreach (var a in proj.EmployeeID)
+                        {
+                            employeeMapp.Add(new ProjectMapping { 
+                                ProjectId = Project.ProjectId, 
+                                EmployeeId = a, 
+                                Active=true,
+                                LastUpdatedBy = Userid,
+                                LastUpdate= DateTime.Now
+                            });
+                        }
+                        Project.ProjectMapping = employeeMapp;
+                        //this.dbSetProjectMapp.AddRange(employeeMapp);
+                        this.SaveChanges();
                         //foreach (var a in proj.Activities)
                         //{
                         //    activty.Add(new ActivityMapping { ActivityId = a.ActivityId, ProjectId= Project.ProjectId });
