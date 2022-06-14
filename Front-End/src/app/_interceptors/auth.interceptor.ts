@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthService } from "app/_services/auth.service";
 
-@Injectable({ providedIn: "root" })
+@Injectable()
 export class AuthHeaderInterceptor implements HttpInterceptor {
     constructor(private _router: Router, private _authService: AuthService) { }
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
