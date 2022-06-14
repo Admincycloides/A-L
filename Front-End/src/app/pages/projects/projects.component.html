@@ -1,14 +1,8 @@
 <div class="action-head justify-content-between d-flex align-items-center mb-4">
-  <div class="page-title w-100">PROJECTS</div>
-    <div class="act-filter d-flex align-items-center justify-content-center mx-2"  >
+    <div class="page-title w-100">PROJECTS</div>
+    <div class="act-filter d-flex align-items-center justify-content-center mx-2">
         <!-- <input type="text" class="search-filter" placeholder="Search Project" *ngFor="let a of itemRows"  /> -->
-        <input
-        #searchBar
-        type="text"
-        class="cpage-search search-filter"
-        placeholder="Search Project"
-        (click)="searchItems($event)"
-      />
+        <input #searchBar type="text" class="cpage-search search-filter" placeholder="Search Project" (click)="searchItems($event)" />
     </div>
     <div class="action d-flex justify-content-end">
         <button class="act-btn thm-btn thm-btn-primary" type="button" (click)="addFieldValue();changeText()" *ngIf="supervisorFlag != 'Y'" ion-button><i class="nc-icon nc-simple-add"></i>Add Project</button>
@@ -26,105 +20,96 @@
   </div> -->
 </div>
 <form [formGroup]="projectGroup">
-  <div class="">
-    <div class="col-md-12">
-      <div class="card">
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table">
-              <thead class="text-primary">
-                <th>Project Name</th>
-                <th>Project Description</th>
-                <th>Client Name</th>
-                <th> Start Date</th>
-                <th> End Date</th>
-                <th> Current Status</th>
-                <th> SHED Project</th>
-                <th *ngIf="supervisorFlag != 'Y'"> Edit</th>
-                <th> View</th>
-                <th> Assigned to</th>
-                <th *ngIf="supervisorFlag != 'Y'">Delete</th>
-              </thead>
-              <ng-container projectGroup.controls.itemRows>
-                <tbody formArrayName="itemRows">
-                  <ng-container *ngFor="let itemrow of itemRows.controls; let i = index">
-                  <tr [formGroupName]="i">
-                      <td class="col-md-2 form-group">
-                            <span *ngIf="!itemrow.editable">{{itemrow.value.projectName}}</span>
-                            <input placeholder="Project Name" formControlName="projectName" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/>
-                      </td>
-                      <td class="col-md-2 form-group">
-                            <span *ngIf="!itemrow.editable">{{itemrow.value.projectDescription}}</span>
-                            <input placeholder="Project Description" formControlName="projectDescription" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/>
-                      </td>
-                      <td class="col-md-2 form-group"> 
-                            <span *ngIf="!itemrow.editable">{{itemrow.value.clientName}}</span>
-                            <!-- <input placeholder="Client Name" formControlName="clientId" type="int" *ngIf="itemrow.editable" class="cd-input h-input"/> -->
-                            <!-- <option [value]="get.clientId" *ngFor="let set of getclientdescription" formControlName="clientName"></option> -->
-                            <select formControlName="clientId"  class="form-control" *ngIf="itemrow.editable">
+    <div class="">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="text-primary">
+                                <th>Project Name</th>
+                                <th>Project Description</th>
+                                <th>Client Name</th>
+                                <th> Start Date</th>
+                                <th> End Date</th>
+                                <th> Current Status</th>
+                                <th> SHED Project</th>
+                                <th *ngIf="supervisorFlag != 'Y'"> Edit</th>
+                                <th> View</th>
+                                <th> Assigned to</th>
+                                <th *ngIf="supervisorFlag != 'Y'">Delete</th>
+                            </thead>
+                            <ng-container projectGroup.controls.itemRows>
+                                <tbody formArrayName="itemRows">
+                                    <ng-container *ngFor="let itemrow of itemRows.controls; let i = index">
+                                        <tr [formGroupName]="i">
+                                            <td class="col-md-2 form-group">
+                                                <span *ngIf="!itemrow.editable">{{itemrow.value.projectName}}</span>
+                                                <input placeholder="Project Name" formControlName="projectName" type="text" *ngIf="itemrow.editable" class="cd-input h-input" />
+                                            </td>
+                                            <td class="col-md-2 form-group">
+                                                <span *ngIf="!itemrow.editable">{{itemrow.value.projectDescription}}</span>
+                                                <input placeholder="Project Description" formControlName="projectDescription" type="text" *ngIf="itemrow.editable" class="cd-input h-input" />
+                                            </td>
+                                            <td class="col-md-2 form-group">
+                                                <span *ngIf="!itemrow.editable">{{itemrow.value.clientName}}</span>
+                                                <!-- <input placeholder="Client Name" formControlName="clientId" type="int" *ngIf="itemrow.editable" class="cd-input h-input"/> -->
+                                                <!-- <option [value]="get.clientId" *ngFor="let set of getclientdescription" formControlName="clientName"></option> -->
+                                                <select formControlName="clientId" class="form-control" *ngIf="itemrow.editable">
                              <option>---Select----</option>
                             <option [(ngValue)]="get.clientId" *ngFor="let get of getclientdescription" (click)="changeid(e)" >
                              {{get.clientName}}
                               </option>
                               </select>
-                      </td>
-                      <td class="col-md-2 form-group">
-                            <span *ngIf="!itemrow.editable">{{itemrow.value.startDate |date }}</span>
-                            <input placeholder="StartDate" formControlName="startDate" type="date" *ngIf="itemrow.editable" class="cd-input h-input"/>
-                      </td>
-                      <td class="col-md-2 form-group">
-                            <span *ngIf="!itemrow.editable">{{itemrow.value.endDate |date}}</span>
-                            <input placeholder="End Date" formControlName="endDate" type="date" *ngIf="itemrow.editable" class="cd-input h-input"/>
-                      </td>
-                      <td class="col-md-2 form-group">
-                           <span *ngIf="!itemrow.editable">{{itemrow.value.currentStatus}}</span>
-                           <input placeholder="Current Status" formControlName="currentStatus" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/>
-                      </td>
-                       <td class="col-md-2 form-group">
-                          <span *ngIf="!itemrow.editable">{{itemrow.value.sredProject}}</span>
-                            <input placeholder="SHED Project" formControlName="sredProject" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/>
-                       </td>
-                      <td class="col-md-2 form-group">
-                        <button class="edit actico-btn" type="button" (click)="makeEditable(itemrow)">
+                                            </td>
+                                            <td class="col-md-2 form-group">
+                                                <span *ngIf="!itemrow.editable">{{itemrow.value.startDate |date }}</span>
+                                                <input placeholder="StartDate" formControlName="startDate" type="date" *ngIf="itemrow.editable" class="cd-input h-input" />
+                                            </td>
+                                            <td class="col-md-2 form-group">
+                                                <span *ngIf="!itemrow.editable">{{itemrow.value.endDate |date}}</span>
+                                                <input placeholder="End Date" formControlName="endDate" type="date" *ngIf="itemrow.editable" class="cd-input h-input" />
+                                            </td>
+                                            <td class="col-md-2 form-group">
+                                                <span *ngIf="!itemrow.editable">{{itemrow.value.currentStatus}}</span>
+                                                <input placeholder="Current Status" formControlName="currentStatus" type="text" *ngIf="itemrow.editable" class="cd-input h-input" />
+                                            </td>
+                                            <td class="col-md-2 form-group">
+                                                <span *ngIf="!itemrow.editable">{{itemrow.value.sredProject}}</span>
+                                                <input placeholder="SHED Project" formControlName="sredProject" type="text" *ngIf="itemrow.editable" class="cd-input h-input" />
+                                            </td>
+                                            <td class="col-md-2 form-group">
+                                                <button class="edit actico-btn" type="button" (click)="makeEditable(itemrow)">
                           <img src="../../../assets/img/edit.png" alt="">
                         </button>
-                      </td>
-                      <td class="col-md-2 form-group">
-                          <a class="view actico-btn"  [href]="'/activities/'+itemrow.value.projectId">
-                            <img src="../../../assets/img/view.png" alt="" />
-                          </a>
-                     </td>
-                     <td class="col-md-2 form-group">
-                          <span *ngIf="!itemrow.editable">{{itemrow.value.assignedto}}</span>
-                          <!-- <input placeholder="Assigned To" formControlName="assignedto" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/> 
+                                            </td>
+                                            <td class="col-md-2 form-group">
+                                                <a class="view actico-btn" [routerLink]="'/activities/'+itemrow.value.projectId">
+                                                    <img src="../../../assets/img/view.png" alt="" />
+                                                </a>
+                                            </td>
+                                            <td class="col-md-2 form-group">
+                                                <span *ngIf="!itemrow.editable">{{itemrow.value.assignedto}}</span>
+                                                <!-- <input placeholder="Assigned To" formControlName="assignedto" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/> 
                           -->
-                          <ng-multiselect-dropdown
-                          [placeholder]="'Select Employee'"
-                          [settings]="dropdownEmployeeSettings"
-                          [data]="employeeList"
-                          name="employee"
-                          (onDeSelect)="onProjectEmployeeDeSelect($event, 'employee')"
-                          (onSelect)="onProjectEmployeeSelect($event, 'employee')"
-                          (onSelectAll)="onProjectEmployeeSelectAll($event, 'employee')"
-                          (onDeSelectAll)="onProjectEmployeeDeSelectAll($event, 'employee')"
-                        ></ng-multiselect-dropdown>
-                    </td>
-                    <td class="col-md-2 form-group" >
-                      <button class="delete actico-btn" type="button" (click)="deleteRow(i)" >
+                                                <ng-multiselect-dropdown [placeholder]="'Select Employee'" [settings]="dropdownEmployeeSettings" [data]="employeeList" name="employee" (onDeSelect)="onProjectEmployeeDeSelect($event, 'employee')" (onSelect)="onProjectEmployeeSelect($event, 'employee')"
+                                                    (onSelectAll)="onProjectEmployeeSelectAll($event, 'employee')" (onDeSelectAll)="onProjectEmployeeDeSelectAll($event, 'employee')"></ng-multiselect-dropdown>
+                                            </td>
+                                            <td class="col-md-2 form-group">
+                                                <button class="delete actico-btn" type="button" (click)="deleteRow(i)">
                         <img src="../../../assets/img/delete.png" alt="" class="del-ico"/>
                       </button>
-                    </td>
-                </tr>
-                  </ng-container>
-                </tbody>
-              </ng-container>
-            </table>
-          </div>
-            
+                                            </td>
+                                        </tr>
+                                    </ng-container>
+                                </tbody>
+                            </ng-container>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-  <pagination-controls (pageChange)="pageChanged($event)"
-            [maxSize]="5"></pagination-controls>
+    <pagination-controls (pageChange)="pageChanged($event)" [maxSize]="5"></pagination-controls>
 </form>

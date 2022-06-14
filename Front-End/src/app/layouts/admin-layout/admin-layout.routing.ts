@@ -10,7 +10,7 @@ import { ReportsComponent } from 'app/pages/reports/reports.component';
 export const AdminLayoutRoutes: Routes = [
     { path: 'timesheet',      component: TimesheetComponent },
     { path: 'projects',      component: ProjectsComponent },
-    { path: 'activities',      component: ActivitiesComponent },
+    { path: 'activities/:ProjectId',      component: ActivitiesComponent },
     { path: 'activities',      component: ActivitiesComponent },
     { path: 'review',      component: ReviewtimesheetComponent},
     { path: 'reviewlink',      component: ReviewlinkComponent},
