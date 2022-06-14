@@ -8,10 +8,11 @@ using AnL.Constants;
 using AnL.Models;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace AnL.Controllers
 {
-    //[Authorize]
+    [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class ProjectController : Controller
@@ -81,10 +82,12 @@ namespace AnL.Controllers
         [HttpPost]
         public async Task<ActionResult> AddProject(List<ProjectViewModel> ProjectDetails)
         {
+            var user = HttpContext.User;
+            var Userid = user.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 BaseResponse rsp = new BaseResponse();
-                var data = await _UOW.ProjectRepository.AddProject(ProjectDetails);
+                var data = await _UOW.ProjectRepository.AddProject(ProjectDetails,Userid);
                 if (data == null)
                 {
                     rsp.Data = "Project Name already exist.";
