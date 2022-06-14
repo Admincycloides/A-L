@@ -182,6 +182,74 @@ namespace AnL.Repository.Implementation
                 throw ex;
             }
         }
+       
+        public async Task<object> EditProjectDetails(EditProjectView project)
+        {
+            try
+            {
+                var NewProject = this.dbSet.Where(X => X.ProjectId == project.ProjectId).FirstOrDefault();
+                NewProject.ProjectDescription = project.ProjectDescription;
+                NewProject.ProjectName = project.ProjectName;
+                NewProject.StartDate = project.StartDate;
+                NewProject.EndDate = project.EndDate;
+                NewProject.CurrentStatus = project.CurrentStatus;
+                NewProject.EnabledFlag = project.EnabledFlag;
+                NewProject.ClientId = project.ClientId;
+                this.SaveChanges();
+
+                return null;
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+        public async Task<object> EditProjectActive(EditProjectView project)
+        {
+            try
+            {
+                if (project.NewActivity != null)
+                    if (project.NewActivity.Count > 0)
+                    {
+                        var activty = new List<ActivityMapping>();
+                        foreach (var a in project.NewActivity)
+                        {
+                            activty.Add(new ActivityMapping { ActivityId = a.ActivityId, ProjectId = project.ProjectId , IsActive=true});
+                        }
+                        this.dbActivityMapp.AddRange(activty);
+                        this.SaveChanges();
+                    }
+
+
+                var NewProject = this.dbSet.Where(X => X.ProjectId == project.ProjectId).Include(y=>y.ActivityMapping).FirstOrDefault();
+                
+                //dbActivityMapp
+                if (project.RemoveActivity != null)
+                    if (project.RemoveActivity.Count > 0)
+                    {
+                        foreach (var a in project.RemoveActivity)
+                        {
+                            NewProject.ActivityMapping.Where(X => X.ActivityId == a.ActivityId).
+                                ToList().ForEach(X => X.IsActive = false);
+                        }
+
+
+                    }
+                this.SaveChanges();
+              
+
+                return null;
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            
+        }
+
         public async Task<object> EditProject(EditProjectView project)
         {
             try
@@ -236,7 +304,42 @@ namespace AnL.Repository.Implementation
                 throw ex;
             }
         }
+        public async Task<object> EditActivity(List<ActivityMaster> viewModel)
+        {
+            try
+            {
+                foreach (var proj in viewModel)
+                {
+                    var activityData = await _context.Set<ActivityDetails>().
+                        Where(X => X.ActivityId==proj.ActivityId).FirstOrDefaultAsync();
+                    if(activityData!=null)
+                    {
+                        if(activityData.ActivityName.ToLower() != proj.ActivityName.Trim().ToLower())
+                        {
+                            if(!_context.Set<ActivityDetails>().
+                                Where(X => X.ActivityName.ToLower() == proj.ActivityName.Trim().ToLower()).Any())
+                            {
+                                activityData.ActivityName = proj.ActivityName;
 
+                            }
+                            else
+                            {
+                                return "Axtivity Name already Exist.";
+                            }
+                        }
+                        activityData.ActivityDescription = proj.ActivityDescription;
+                        
+                    }
+                    this.SaveChanges();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return null;
+        }
         public async Task<object> AddActivity(List<ActivityMaster> viewModel)
         {
             try
@@ -353,26 +456,26 @@ namespace AnL.Repository.Implementation
 
         }
 
-        public bool DeleteProject(List<ProjectViewModel> project)
+        public bool DeleteProject(int project)
         {
             try
             {
                 List<ProjectDetails> details = new List<ProjectDetails>();
                 ProjectDetails project1 = new ProjectDetails();
-                foreach (var proj in project)
+               // foreach (var proj in project)
                 {
 
                     //project1 = this.dbSet.Where(X => X.ProjectName == proj.ProjectName).FirstOrDefault();
-                    bool TimesheetDetailForProjectPresent = timesheetDetail.GetTimesheetDetailsForProject(proj.ProjectId);
+                    bool TimesheetDetailForProjectPresent = timesheetDetail.GetTimesheetDetailsForProject(project);
                     if (TimesheetDetailForProjectPresent)
                     {
                         return false;
                     }                 
                 }
-                foreach (var proj in project)
+                //foreach (var proj in project)
                 {
                     var projectMapp = new List<ProjectMapping>();
-                    project1 = this.dbSet.Where(X => X.ProjectId == proj.ProjectId).FirstOrDefault();
+                    project1 = this.dbSet.Where(X => X.ProjectId == project).FirstOrDefault();
                     var activityMapp = new List<ActivityMapping>();
                     //foreach (var a in proj.Activities)
                     //{
@@ -380,8 +483,8 @@ namespace AnL.Repository.Implementation
                     //    var activitymapp = this.dbActivityMapp.Where(X => X.ProjectId == a.Pro).fi;//.Add(new ActivityMapping { ActivityId = a.ActivityId });
 
                     //}
-                    activityMapp = this.dbActivityMapp.Where(X => X.ProjectId == proj.ProjectId).ToList();
-                    projectMapp = this.dbSetProjectMapp.Where(X => X.ProjectId == proj.ProjectId).ToList();
+                    activityMapp = this.dbActivityMapp.Where(X => X.ProjectId == project).ToList();
+                    projectMapp = this.dbSetProjectMapp.Where(X => X.ProjectId == project).ToList();
                     ProjectDetails eachItem = this.GetById(project1.ProjectId);//new ProjectDetails() { ProjectId = proj.ProjectId };
                     
                     //ProjectMapping project1=_context.Add()
@@ -424,5 +527,128 @@ namespace AnL.Repository.Implementation
                 throw ex;
             }
         }
+
+        public async Task<ProjectViewModel> GetprojectDetailsByID(int ProjectID)
+        {
+            List<ProjectViewModel> rsp = new List<ProjectViewModel>();
+            try
+            {
+                await Task.Run(() =>
+                {
+                    IQueryable<ProjectMapping> result = (IQueryable<ProjectMapping>)_context.Set<ProjectMapping>().
+                                                        Where(X => X.ProjectId == ProjectID && X.Active == true).Include(c => c.Project).
+                                                        ThenInclude(Z => Z.ActivityMapping).ThenInclude(y => y.Activity);
+
+                    if (result.Any())
+                    {
+                        foreach (var i in result.Select(X => X.Project).Distinct())
+                        {
+                            var activities = i.ActivityMapping.Select(
+                                X => new ProjectActivities
+                                {
+                                    ActivityDescription = X.Activity.ActivityDescription,
+                                    ActivityId = X.ActivityId,
+                                    ActivityName = X.Activity.ActivityName,
+                                    EnabledFlag = X.Activity.EnabledFlag
+                                }
+
+
+                                ).ToList();
+
+                            rsp.Add(new ProjectViewModel
+                            {
+                                ClientId = i.ClientId,
+                                CurrentStatus = i.CurrentStatus,
+                                EnabledFlag = i.EnabledFlag,
+                                EndDate = i.EndDate,
+                                ProjectId = i.ProjectId,
+                                ProjectDescription = i.ProjectDescription,
+                                ProjectName = i.ProjectName,
+                                SredProject = i.SredProject,
+                                StartDate = i.StartDate,
+                                Activities = activities
+
+
+                            });
+
+
+                        }
+
+
+                    }
+                });
+                return rsp.Count > 0 ? rsp[0] : null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public async Task<List<ProjectListViewModel>> GetProjectList(string EmployeeID , string ProjectName)
+        {
+            List<ProjectListViewModel> rsp = new List<ProjectListViewModel>();
+            try
+            {
+                await Task.Run(() =>
+                {
+                    if (string.IsNullOrEmpty(ProjectName))
+                    {
+                        rsp = (_context.Set<ProjectDetails>().Where(y => y.ClientId != null).Include(d => d.ProjectMapping).Include(X => X.Client).Select(
+
+                           X => new ProjectListViewModel
+                           {
+                               ProjectId = X.ProjectId,
+                               ProjectName = X.ProjectName,
+                               ClientId = X.ClientId,
+                               CurrentStatus = X.CurrentStatus,
+                               EnabledFlag = X.EnabledFlag,
+                               ProjectDescription = X.ProjectDescription,
+                               SredProject = X.SredProject,
+                               StartDate = X.StartDate,
+                               EndDate = X.EndDate,
+                               clientName = X.Client.ClientName,
+                               EmployeeList = X.ProjectMapping.Where(a => a.Active == true && a.Employee.SupervisorFlag == "N").Select(u => u.Employee.FirstName + " " + u.Employee.LastName).ToList(),
+                               SupervisorList = X.ProjectMapping.Where(a => a.Active == true && a.Employee.SupervisorFlag == "Y").Select(u => u.Employee.FirstName + " " + u.Employee.LastName).ToList()
+
+                           }
+                           )).ToList();
+                    }
+                    else
+                    {
+                        rsp = (_context.Set<ProjectDetails>().Where( y=>y.ProjectName.Trim().ToLower().Contains(ProjectName.Trim().ToLower())
+                        ).Include(d => d.ProjectMapping).Include(X => X.Client).Select(
+
+                         X => new ProjectListViewModel
+                         {
+                             ProjectId = X.ProjectId,
+                             ProjectName = X.ProjectName,
+                             ClientId = X.ClientId,
+                             CurrentStatus = X.CurrentStatus,
+                             EnabledFlag = X.EnabledFlag,
+                             ProjectDescription = X.ProjectDescription,
+                             SredProject = X.SredProject,
+                             StartDate = X.StartDate,
+                             EndDate = X.EndDate,
+                             clientName = X.Client.ClientName,
+                             EmployeeList = X.ProjectMapping.Where(a => a.Active == true && a.Employee.SupervisorFlag == "N").Select(u => u.Employee.FirstName + " " + u.Employee.LastName).ToList(),
+                             SupervisorList = X.ProjectMapping.Where(a => a.Active == true && a.Employee.SupervisorFlag == "Y").Select(u => u.Employee.FirstName + " " + u.Employee.LastName).ToList()
+
+                         }
+                         )).ToList();
+                    }
+                });
+                return rsp.Count > 0 ? rsp : null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+
+
     }
 }
