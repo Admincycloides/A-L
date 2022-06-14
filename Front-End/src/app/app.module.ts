@@ -18,8 +18,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from "@angular/common/http";
 import { ReviewtimesheetComponent } from './pages/reviewtimesheet/reviewtimesheet.component';
 import { ReviewlinkComponent } from './pages/reviewtimesheet/reviewlink/reviewlink.component';
-import { ProjectsComponent } from "./pages/projects/projects.component";
-import { ActivitiesComponent } from "./pages/projects/activities/activities.component";
 import { NgxPaginationModule } from 'ngx-pagination';
 
 
@@ -30,8 +28,6 @@ import { NgxPaginationModule } from 'ngx-pagination';
     AppComponent,
     AdminLayoutComponent,
     LoginComponent,
-    ProjectsComponent,
-    ActivitiesComponent
   ],
   imports: [
     BrowserAnimationsModule,

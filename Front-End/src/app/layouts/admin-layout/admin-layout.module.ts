@@ -16,6 +16,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ReviewlinkComponent } from 'app/pages/reviewtimesheet/reviewlink/reviewlink.component';
 import { ReportsComponent } from 'app/pages/reports/reports.component';
+import { ProjectsComponent } from '../../pages/projects/projects.component';
+import { ActivitiesComponent } from '../../pages/projects/activities/activities.component';
 
 
 
@@ -34,7 +36,9 @@ import { ReportsComponent } from 'app/pages/reports/reports.component';
     TimesheetComponent,
     ReviewtimesheetComponent,
     ReviewlinkComponent,
-    ReportsComponent,  
+    ReportsComponent,
+    ProjectsComponent,
+    ActivitiesComponent 
   ],
   providers: [],
 })
