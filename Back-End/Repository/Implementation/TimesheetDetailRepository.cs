@@ -48,7 +48,6 @@ namespace AnL.Repository.Implementation
             {
                 sheetDetails.Add(this.GetById(empDetails[0]));
             }
-            //if (subEmpDetails != null || subEmpDetails.Count() > 0)
             if (sheetDetails.Count > 0)
                 return sheetDetails;
             else
@@ -81,11 +80,11 @@ namespace AnL.Repository.Implementation
 
         public bool DeleteTimesheetDetails(List<TimesheetDetails> timesheetDetails)
         {
-            foreach (var details in timesheetDetails)
-            {
-                this.Delete(details);
-                _context.SaveChanges();
-            }
+            var querable = timesheetDetails.ToList();
+            List<int> iDs = querable.Select(x => x.UniqueId).ToList();
+            var result = dbSet.Where(e => iDs.Contains(e.UniqueId)).ToList();
+            _context.RemoveRange(result);
+            this.SaveChanges();
             return true;
         }
 
@@ -102,21 +101,6 @@ namespace AnL.Repository.Implementation
                 x.SubmittedTo = timesheetDetails[0].SubmittedTo;
             });
             _context.UpdateRange(result);
-            //data.ForEach(u =>
-            //{
-            //    u.Status = TimeSheetStatus.Submitted;
-            //    u.EmployeeRemarks = timesheetDetails[0].EmployeeRemarks;
-            //    u.SubmittedDate= timesheetDetails[0].SubmittedDate;
-            //    u.SubmittedTo = timesheetDetails[0].SubmittedTo;
-            //});
-            //foreach (var timesheet in timesheetDetails)
-            //{
-            //    TimesheetDetails existingSheet = this.GetById(timesheet.UniqueId);
-            //    existingSheet.Status = TimeSheetStatus.Submitted;
-            //    existingSheet.EmployeeRemarks = timesheet.EmployeeRemarks;
-            //    existingSheet.SubmittedDate = timesheet.SubmittedDate;
-            //    existingSheet.SubmittedTo = timesheet.SubmittedTo;
-            //}
             _context.SaveChanges();
             return true;
         }
@@ -165,14 +149,6 @@ namespace AnL.Repository.Implementation
                     x.ApprovedRejectedBy = timesheetDetails[0].ApprovedRejectedBy;
                 });
                 _context.UpdateRange(result);
-                //Previous Logic
-                //foreach (var timesheet in timesheetDetails)
-                //{
-                //    TimesheetDetails existingSheet = this.GetById(timesheet.UniqueId);
-                //    existingSheet.Status = TimeSheetStatus.Approved;
-                //    existingSheet.SupervisorRemarks = timesheet.SupervisorRemarks;
-                //    existingSheet.ApprovedRejectedBy = timesheet.ApprovedRejectedBy;
-                //}
             }
             else
             {
@@ -186,14 +162,6 @@ namespace AnL.Repository.Implementation
                     x.ApprovedRejectedBy = timesheetDetails[0].ApprovedRejectedBy;
                 });
                 _context.UpdateRange(result);
-                //Previous Logic
-                //foreach (var timesheet in timesheetDetails)
-                //{
-                //    TimesheetDetails existingSheet = this.GetById(timesheet.UniqueId);
-                //    existingSheet.Status = TimeSheetStatus.Rejected;
-                //    existingSheet.SupervisorRemarks = timesheet.SupervisorRemarks;
-                //    existingSheet.ApprovedRejectedBy = timesheet.ApprovedRejectedBy;
-                //}
             }
             this.SaveChanges();
             return true;
