@@ -19,6 +19,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { ReviewtimesheetComponent } from './pages/reviewtimesheet/reviewtimesheet.component';
 import { ReviewlinkComponent } from './pages/reviewtimesheet/reviewlink/reviewlink.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { httpInterceptProviders } from "./_interceptors";
 
 
 
@@ -45,7 +46,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
     ReactiveFormsModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [httpInterceptProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
