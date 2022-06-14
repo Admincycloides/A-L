@@ -4,6 +4,7 @@ using AnL.Helpers;
 using AnL.Models;
 using AnL.Repository.Abstraction;
 using AnL.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,10 +14,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace AnL.Controllers
 {
+    [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class TimesheetController : Controller
@@ -440,6 +443,7 @@ namespace AnL.Controllers
         {
             try
             {
+                
                 var data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.EmployeeId == model.EmployeeId && x.ProjectId == model.ProjectId && x.SubmittedDate.Value.Date == model.Date.Date).Include(x => x.Project).Include(x => x.Activity).ToList();
                 if (!string.IsNullOrEmpty(search))
                 {

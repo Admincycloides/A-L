@@ -1,11 +1,13 @@
 ﻿using System;
-//using Audit.EntityFramework;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using AnL.Models;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace AnL.Models
 {
-    //[AuditDbContext(Mode = AuditOptionMode.OptOut, IncludeEntityObjects = false, AuditEventType = "{database}_{context}")]
     public partial class Tan_DBContext : DbContext
     {
         public Tan_DBContext()
@@ -19,6 +21,7 @@ namespace AnL.Models
 
         public virtual DbSet<ActivityDetails> ActivityDetails { get; set; }
         public virtual DbSet<ActivityMapping> ActivityMapping { get; set; }
+        public virtual DbSet<Audit> Audit { get; set; }
         public virtual DbSet<ClientDetails> ClientDetails { get; set; }
         public virtual DbSet<EmployeeDetails> EmployeeDetails { get; set; }
         public virtual DbSet<ProjectDetails> ProjectDetails { get; set; }
@@ -26,7 +29,8 @@ namespace AnL.Models
         public virtual DbSet<TimesheetDetails> TimesheetDetails { get; set; }
         public virtual DbSet<UserData> UserData { get; set; }
         public virtual DbSet<UserLogin> UserLogin { get; set; }
-
+        
+       
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -86,6 +90,40 @@ namespace AnL.Models
                     .HasForeignKey(d => d.ProjectId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Project Details-ActivityMap");
+            });
+
+            modelBuilder.Entity<Audit>(entity =>
+            {
+                entity.Property(e => e.AffectedColumns)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.DateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.NewValues)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.OldValues)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PrimaryKey)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TableName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Type)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UserId)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<ClientDetails>(entity =>

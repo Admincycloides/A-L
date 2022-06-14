@@ -14,6 +14,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
@@ -67,47 +69,26 @@ namespace TestApplication
                 return new UriService(uri);
             });
 
-            //var AuthenticationProviderKey = "Tangentia";
-            ////var ValidIssuer = Configuration.GetSection("Jwt").GetSection("Issuer").Value;
-            ////var ValidAudience = Configuration.GetSection("Jwt").GetSection("Audience").Value;
-            ////var SecreteKey = Configuration.GetSection("Jwt").GetSection("SecretKey").Value;
-            //var tokenValidationParameters = new TokenValidationParameters
-            //{
-            //    ValidateIssuer = true,
-            //    ValidateAudience = true,
-            //    ValidateLifetime = true,
-            //    RequireSignedTokens = true,
-            //    ValidateIssuerSigningKey = true,
-            //    ValidIssuer = "Issuer",//Configuration["Jwt:Issuer"],
-            //    ValidAudience = "Audience",//Configuration["Jwt:Audience"],
-            //    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("KqcL7s998JrfFHRP"/*_configuration["Jwt:SecretKey"]*/)),
-            //    ClockSkew = TimeSpan.FromMinutes(20),
-            //    RequireExpirationTime = true,
-            //    LifetimeValidator = (DateTime? notBefore, DateTime? expires, SecurityToken securityToken,
-            //                         TokenValidationParameters validationParameters) =>
-            //    {
-            //        return notBefore <= DateTime.UtcNow &&
-            //               expires >= DateTime.UtcNow;
-            //    }
-            //};
 
-
-            //services.AddAuthentication(options =>
-            //{
-            //    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //}).AddJwtBearer(config =>
-            //{
-            //    config.RequireHttpsMetadata = false;
-            //    config.SaveToken = true;
-            //    config.TokenValidationParameters = tokenValidationParameters;
-            //    config.Authority = "https://localhost:44351";
-            //});
-
+           
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
-            options => Configuration.Bind("JwtSettings", options))
+            .AddJwtBearer(options =>
+            {
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("KqcL7s998JrfFHRP"/*_configuration["Jwt:SecretKey"]*/));
+                //var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+                options.Authority = Configuration["Auth:Authority"];
+                options.RequireHttpsMetadata = false;
+                options.Audience = Configuration["Auth:Audience"];
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = key
+                };
+            })
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
         options => Configuration.Bind("CookieSettings", options));
             services.AddSwaggerGen(swagger =>
@@ -159,6 +140,7 @@ namespace TestApplication
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwaggerUI();
+                IdentityModelEventSource.ShowPII = true;
             }
 
             app.UseHttpsRedirection();
@@ -180,6 +162,7 @@ namespace TestApplication
             var option = new RewriteOptions();
             option.AddRedirect("^$", "swagger");
             app.UseRewriter(option);
+            
         }
     }
 }

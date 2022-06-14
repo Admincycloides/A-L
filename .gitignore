@@ -49,3 +49,7 @@ Back-End/obj/Debug/netcoreapp3.1/AnL.genruntimeconfig.cache
 Back-End/obj/Debug/netcoreapp3.1/AnL.pdb
 Back-End/obj/project.assets.json
 Back-End/obj/project.nuget.cache
+Back-End/.vs/AnL/config/applicationhost.config
+*.dll
+Back-End/.vs/AnL/config/applicationhost.config
+Back-End/.vs/AnL/config/applicationhost.config
