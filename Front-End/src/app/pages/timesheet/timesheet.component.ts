@@ -452,9 +452,9 @@ export class TimesheetComponent implements OnInit {
         );
 
         const body = {
-          projectId: 9,
+          projectId: projectId,
           projectName: this.addTimesheetForm.controls.project.value,
-          activityId: 15,
+          activityId: activityId,
           activityName: this.addTimesheetForm.controls.activity.value,
           //status          : 'In Progress',
           timeTaken: timeTaken,
