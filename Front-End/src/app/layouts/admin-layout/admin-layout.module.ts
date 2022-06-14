@@ -16,6 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ReviewlinkComponent } from 'app/pages/reviewtimesheet/reviewlink/reviewlink.component';
 import { ReportsComponent } from 'app/pages/reports/reports.component';
+import { httpInterceptProviders } from 'app/_interceptors';
 
 
 
@@ -36,7 +37,9 @@ import { ReportsComponent } from 'app/pages/reports/reports.component';
     ReviewlinkComponent,
     ReportsComponent,  
   ],
-  providers: [],
+  providers: [
+    httpInterceptProviders
+  ],
 })
 
 export class AdminLayoutModule {}
