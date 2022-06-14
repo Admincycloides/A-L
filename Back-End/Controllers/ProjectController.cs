@@ -286,18 +286,18 @@ namespace AnL.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> DeleteProject(List<ProjectViewModel> project )
+        public async Task<ActionResult> DeleteProject(int projectID)
         {
             try
             {
                 BaseResponse response = new BaseResponse();
-                if (project==null)
+                if (projectID==0)
                 {
-                    response.Data = project;
+                    response.Data = projectID;
                     response.ResponseCode = HTTPConstants.BAD_REQUEST;
                     response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
                 }
-                var DeleteProjectResponse = _UOW.ProjectRepository.DeleteProject(project);
+                var DeleteProjectResponse = _UOW.ProjectRepository.DeleteProject(projectID);
                 
                 if (DeleteProjectResponse)
                 {

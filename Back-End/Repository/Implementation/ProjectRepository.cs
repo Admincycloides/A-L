@@ -456,26 +456,26 @@ namespace AnL.Repository.Implementation
 
         }
 
-        public bool DeleteProject(List<ProjectViewModel> project)
+        public bool DeleteProject(int project)
         {
             try
             {
                 List<ProjectDetails> details = new List<ProjectDetails>();
                 ProjectDetails project1 = new ProjectDetails();
-                foreach (var proj in project)
+               // foreach (var proj in project)
                 {
 
                     //project1 = this.dbSet.Where(X => X.ProjectName == proj.ProjectName).FirstOrDefault();
-                    bool TimesheetDetailForProjectPresent = timesheetDetail.GetTimesheetDetailsForProject(proj.ProjectId);
+                    bool TimesheetDetailForProjectPresent = timesheetDetail.GetTimesheetDetailsForProject(project);
                     if (TimesheetDetailForProjectPresent)
                     {
                         return false;
                     }                 
                 }
-                foreach (var proj in project)
+                //foreach (var proj in project)
                 {
                     var projectMapp = new List<ProjectMapping>();
-                    project1 = this.dbSet.Where(X => X.ProjectId == proj.ProjectId).FirstOrDefault();
+                    project1 = this.dbSet.Where(X => X.ProjectId == project).FirstOrDefault();
                     var activityMapp = new List<ActivityMapping>();
                     //foreach (var a in proj.Activities)
                     //{
@@ -483,8 +483,8 @@ namespace AnL.Repository.Implementation
                     //    var activitymapp = this.dbActivityMapp.Where(X => X.ProjectId == a.Pro).fi;//.Add(new ActivityMapping { ActivityId = a.ActivityId });
 
                     //}
-                    activityMapp = this.dbActivityMapp.Where(X => X.ProjectId == proj.ProjectId).ToList();
-                    projectMapp = this.dbSetProjectMapp.Where(X => X.ProjectId == proj.ProjectId).ToList();
+                    activityMapp = this.dbActivityMapp.Where(X => X.ProjectId == project).ToList();
+                    projectMapp = this.dbSetProjectMapp.Where(X => X.ProjectId == project).ToList();
                     ProjectDetails eachItem = this.GetById(project1.ProjectId);//new ProjectDetails() { ProjectId = proj.ProjectId };
                     
                     //ProjectMapping project1=_context.Add()
