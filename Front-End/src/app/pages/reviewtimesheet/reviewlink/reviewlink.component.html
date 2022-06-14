@@ -22,12 +22,12 @@
     </div>
   </div>
 </div>
-<div class="row sheet-row">
+<div class="sheet-row" [ngClass]="status == 'Submitted' ? 'split-col':''">
   <div class="sheet-col">
     <div class="card">
-      <div class="card-body">
+      <div class="card-body pt-1">
         <div class="table-responsive">
-          <table class="table">
+          <table class="table table-striped">
             <thead class="text-primary">
               <th>Activities</th>
               <th>Mon <br />{{ timesheetDates[0]?.date | date: "MMM-d" }}</th>

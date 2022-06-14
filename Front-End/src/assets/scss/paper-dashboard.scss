@@ -135,6 +135,13 @@ table{
         .cd-input{
             min-width: 124px;
         }
+        .label-status{
+            border: solid 1px $secondary-color;
+            @include radius(4px);
+            color:$secondary-color;
+            padding: 5px;
+            background-color: #fefffe;
+        }
     }
     tbody{
         border: none!important;
@@ -414,7 +421,7 @@ input{
         color: $secondary-color;
     }
 }
-.date-holder{
+.date-holder,.mg-filter{
     .dropdown-menu{
         box-shadow: 0px 0px 17px 5px rgba(0,0,0,.06);
     }
@@ -452,6 +459,17 @@ input{
 
     }
 }
+ngb-datepicker{
+    .ngb-dp-header{
+        .ngb-dp-arrow{
+            .ngb-dp-arrow-btn{
+                &:hover,&:focus,&:focus-visible{
+                    background-color: $secondary-color!important;
+                }
+            }
+        }
+    }
+}
 ng-multiselect-dropdown{
     .dropdown-btn{
         border: 1px solid #DDDDDD!important;
@@ -472,6 +490,9 @@ ng-multiselect-dropdown{
             }
         }
     }
+}
+.multiselect-item-checkbox input[type=checkbox] + div{
+    font-size: 13px;
 }
 .multiselect-dropdown .dropdown-btn .selected-item-container .selected-item,.multiselect-item-checkbox input[type=checkbox]:checked + div:before{
     border: solid 1px $secondary-color!important;
