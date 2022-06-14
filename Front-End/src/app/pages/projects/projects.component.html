@@ -31,7 +31,7 @@
       <div class="card">
         <div class="card-body">
           <div class="table-responsive">
-            <table class="table">
+            <table class="table table-striped">
               <thead class="text-primary">
                 <th>Project Name</th>
                 <th>Project Description</th>
@@ -61,7 +61,7 @@
                             <span *ngIf="!itemrow.editable">{{itemrow.value.clientName}}</span>
                             <!-- <input placeholder="Client Name" formControlName="clientId" type="int" *ngIf="itemrow.editable" class="cd-input h-input"/> -->
                             <!-- <option [value]="get.clientId" *ngFor="let set of getclientdescription" formControlName="clientName"></option> -->
-                            <select formControlName="clientId"  class="form-control" *ngIf="itemrow.editable">
+                            <select formControlName="clientId"  class="cd-input h-input" *ngIf="itemrow.editable">
                              <option>---Select----</option>
                             <option [(ngValue)]="get.clientId" *ngFor="let get of getclientdescription" (click)="changeid(e)" >
                              {{get.clientName}}
@@ -107,6 +107,7 @@
                           (onSelect)="onProjectEmployeeSelect($event, 'employee')"
                           (onSelectAll)="onProjectEmployeeSelectAll($event, 'employee')"
                           (onDeSelectAll)="onProjectEmployeeDeSelectAll($event, 'employee')"
+                          class="sm-mdrop"
                         ></ng-multiselect-dropdown>
                     </td>
                     <td class="col-md-2 form-group" >
