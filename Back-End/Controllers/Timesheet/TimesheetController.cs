@@ -197,6 +197,17 @@ namespace AnL.Controllers
         {
             try
             {
+                //Check for existing record in DB for project and activity
+                int randomUniqueID = timesheetDetails.TimeTaken[0].UniqueId;
+                BaseResponse response = new BaseResponse();
+                var existingProjectActivity = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.EmployeeId == _UOW.TimesheetDetailRepository.GetById(randomUniqueID).EmployeeId && x.ProjectId == timesheetDetails.ProjectId && x.ActivityId == timesheetDetails.ActivityId && x.Date.Date == timesheetDetails.TimeTaken[0].Date.Date);
+                if (existingProjectActivity.Count() > 0 && existingProjectActivity.Select(x => x.UniqueId).FirstOrDefault() != randomUniqueID)
+                {
+                    response.Data = null;
+                    response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                    response.ResponseMessage = MessageConstants.TimesheetAlreadyExists;
+                    return BadRequest(response);
+                }
                 List<TimesheetDetails> timesheetDetailsList = new List<TimesheetDetails>();
 
                 foreach (var timesheet in timesheetDetails.TimeTaken)
@@ -210,7 +221,6 @@ namespace AnL.Controllers
                     timesheetDetailsList.Add(details);
                 }
                 var ModifyTimesheetResponse = _UOW.TimesheetDetailRepository.ModifyTimesheetDetails(timesheetDetailsList);
-                BaseResponse response = new BaseResponse();
                 if (ModifyTimesheetResponse)
                 {
                     response.Data = ModifyTimesheetResponse;
@@ -271,6 +281,9 @@ namespace AnL.Controllers
                 return BadRequest("Oops! Something went wrong!" + ex);
             }
         }
+        /// <summary>
+        /// Submit timesheet to Supervisor
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult> SubmitTimesheetDetails(List<Details> timesheetDetails,string ManagerID,string EmployeeID)
         {
@@ -304,26 +317,6 @@ namespace AnL.Controllers
                 }
 
                 result = _UOW.TimesheetDetailRepository.SubmitTimesheet(timesheetDetailsList);
-
-                //Previous logic
-                //foreach (var listrecords in timesheetDetails)
-                //{
-                //    List<TimesheetDetails> timesheetDetailsList = new List<TimesheetDetails>();
-
-                //    foreach (var timesheet in listrecords.TimeTaken)
-                //    {
-                //        TimesheetDetails details = new TimesheetDetails();
-                //        details.UniqueId = timesheet.UniqueId;
-                //        details.SubmittedTo = ManagerID;
-                //        details.SubmittedDate = DateTime.UtcNow;
-                //        details.EmployeeRemarks = listrecords.EmployeeRemarks;
-                //        if(details.UniqueId!=0)
-                //        {
-                //            timesheetDetailsList.Add(details);
-                //        }
-                //    }
-                //    result = _UOW.TimesheetDetailRepository.SubmitTimesheet(timesheetDetailsList);
-                //}
                 string subject = "Timesheet Submitted";
                 string body = "Dear " + String.Concat(employeeDetails.FirstName, " ", employeeDetails.LastName) +
                     "\n\nYour Timesheet has been submitted successfully to Supervisor " + String.Concat(managerDetails.FirstName, " ", managerDetails.LastName) + ".\n\n with remarks as below : \n\n" + timesheetDetails[0].EmployeeRemarks;
@@ -355,6 +348,9 @@ namespace AnL.Controllers
                 return BadRequest("Oops! Something went wrong!" + ex);
             }
         }
+        /// <summary>
+        /// Listing records of timesheet that are submitted along with their status for supervisor
+        /// </summary>
         [HttpGet]
         public async Task<ActionResult> GetReviewTimesheet([FromQuery] PaginationFilter filter, string EmployeeID,string searchValue)
         {
@@ -405,7 +401,9 @@ namespace AnL.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Listing records of timesheet that can be Approved/Rejected by supervisor
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult> GetReviewTimesheetDetails([FromQuery] PaginationFilter filter, TimesheetViewModel model,string search)
         {
@@ -460,7 +458,9 @@ namespace AnL.Controllers
                 return BadRequest("Oops! Something went wrong!" + ex);
             }
         }
-
+        /// <summary>
+        /// Changes the status of the Timesheet based on Supervisor Decision and generates email
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult> SupervisorDecision( List<Details> model,string SupervisorID, string EmployeeID, string Action)
         {
@@ -484,23 +484,6 @@ namespace AnL.Controllers
                     });
                     timesheetDetailsList.AddRange(recd.ToList());
                 }
-
-
-                //Previous Logic
-                //foreach (var listrecords in model)
-                //{
-                //    foreach (var timesheet in listrecords.TimeTaken)
-                //    {
-                //        TimesheetDetails details = new TimesheetDetails();
-                //        details.UniqueId = timesheet.UniqueId;
-                //        details.ApprovedRejectedBy = SupervisorID;
-                //        details.SupervisorRemarks = listrecords.SupervisorRemarks;
-                //        if (details.UniqueId != 0)
-                //        {
-                //            timesheetDetailsList.Add(details);
-                //        }
-                //    }
-                //}
                 var managerDetails = _UOW.EmployeeDetailsRepository.GetById(SupervisorID);
                 var employeeDetails = _UOW.EmployeeDetailsRepository.GetById(EmployeeID);
                 if (Action == TimeSheetStatus.Approved)
@@ -549,7 +532,9 @@ namespace AnL.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Generates Timesheet Report
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult> GetTimesheetReport(ReportRequest model)
         {
@@ -579,16 +564,7 @@ namespace AnL.Controllers
 
                 
             }
-            //        var result =
-            //from s in meter_readings.Take(10)
-            //group s by new { date = new DateTime(s.read_date.Year, s.read_date.Month, 1) } into g
-            //select new
-            //{
-            //    read_date = g.Key.date,
-            //    T1 = g.Sum(x => x.T1),
-            //    T2 = g.Sum(x => x.T2)
-            //  };
-            //run and check ok
+            //Populates hours spent on each day
             var dateRange = reports.SelectMany(X => X.TimeSpent).ToList();
 
             var abc= (from dr in dateRange
