@@ -38,6 +38,12 @@
         public static readonly string ProjectDeletionSuccess = "Project deleted successfully";
         public static readonly string ProjectDeletionFailed = "Project deletion failed as timesheet record exist against Project";
 
+
+        public static readonly string EditProjectSuccess = "Project Updated successfully";
+        public static readonly string EditProjectFailed = "Project Updated failed.";
+
+
+
         public static readonly string EmployeeFetchSuccess = "Employee records fetched successfully";
         public static readonly string EmployeeFetchFailed = "Employee records fetch failed";
     }

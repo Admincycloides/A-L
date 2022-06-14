@@ -110,7 +110,7 @@ namespace AnL.Controllers
             {
                 BaseResponse rsp = new BaseResponse();
                 var data = await _UOW.ProjectRepository.AddActivity(ActivityDetails);
-                if (data == null)
+                if (data != null)
                 {
                     rsp.Data = "Activity Name already exist.";
                     return Conflict(rsp);
@@ -128,6 +128,34 @@ namespace AnL.Controllers
                 return BadRequest("Oops! Something went wrong!" + ex);
             }
         }
+
+
+        [HttpPost]
+        public async Task<ActionResult> EditActivity(List<ActivityMaster> ActivityDetails)
+        {
+            try
+            {
+                BaseResponse rsp = new BaseResponse();
+                var data = await _UOW.ProjectRepository.EditActivity(ActivityDetails);
+                if (data != null)
+                {
+                    rsp.Data = "Activity Name already exist.";
+                    return Conflict(rsp);
+                }
+                else
+                {
+                    rsp.Data = data;
+                    rsp.ResponseMessage = MessageConstants.ActivityAdditionSuccess;
+                }
+                return Ok(rsp);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+        }
+
 
 
         [HttpPost]
@@ -155,7 +183,7 @@ namespace AnL.Controllers
                 return BadRequest("Oops! Something went wrong!" + ex);
             }
         }
-
+        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpPost]
         public async Task<ActionResult> EditProject(EditProjectView project)
         {
@@ -188,20 +216,88 @@ namespace AnL.Controllers
         
 
 }
+        [HttpPost]
+        public async Task<ActionResult> EditProjectDetails(EditProjectView project)
+        {
+            BaseResponse response = new BaseResponse();
+            if (project == null)
+            {
+                response.Data = project;
+                response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
+            }
+            var EditProjectResponse = _UOW.ProjectRepository.EditProjectDetails(project);
+
+            if (EditProjectResponse != null)
+            {
+                response.Data = EditProjectResponse;
+                response.ResponseCode = HTTPConstants.OK;
+                response.ResponseMessage = MessageConstants.EditProjectSuccess;
+
+            }
+            else
+            {
+                response.Data = EditProjectResponse;
+                response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                response.ResponseMessage = MessageConstants.EditProjectSuccess;
+                return BadRequest(response);
+            }
+            return Ok(response);
+
+
+
+
+        }
+
 
         [HttpPost]
-        public async Task<ActionResult> DeleteProject(List<ProjectViewModel> project )
+        public async Task<ActionResult> EditProjectActive(EditProjectView project)
+        {
+            BaseResponse response = new BaseResponse();
+            if (project == null)
+            {
+                response.Data = project;
+                response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
+            }
+            var EditProjectResponse = _UOW.ProjectRepository.EditProjectActive(project);
+
+            if (EditProjectResponse != null)
+            {
+                response.Data = EditProjectResponse;
+                response.ResponseCode = HTTPConstants.OK;
+                response.ResponseMessage = MessageConstants.EditProjectSuccess;
+
+            }
+            else
+            {
+                response.Data = EditProjectResponse;
+                response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                response.ResponseMessage = MessageConstants.EditProjectSuccess;
+                return BadRequest(response);
+            }
+            return Ok(response);
+
+
+
+
+        }
+
+
+
+        [HttpPost]
+        public async Task<ActionResult> DeleteProject(int projectID)
         {
             try
             {
                 BaseResponse response = new BaseResponse();
-                if (project==null)
+                if (projectID==0)
                 {
-                    response.Data = project;
+                    response.Data = projectID;
                     response.ResponseCode = HTTPConstants.BAD_REQUEST;
                     response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
                 }
-                var DeleteProjectResponse = _UOW.ProjectRepository.DeleteProject(project);
+                var DeleteProjectResponse = _UOW.ProjectRepository.DeleteProject(projectID);
                 
                 if (DeleteProjectResponse)
                 {
@@ -225,6 +321,23 @@ namespace AnL.Controllers
                 return BadRequest("Oops! Something went wrong!" + ex);
             }
         }
+       
+ [HttpGet]
+        public async Task<ActionResult> GetprojectDetailsByID(int ProjectID)
+        {
+            try
+            {
+                BaseResponse rsp = new BaseResponse();
+                rsp.Data = await _UOW.ProjectRepository.GetprojectDetailsByID(ProjectID);
+                return Ok(rsp);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+
+        } 
         [HttpGet]
         public async Task<ActionResult> GetAllProjectList()
         {
@@ -232,6 +345,22 @@ namespace AnL.Controllers
             {
                 BaseResponse rsp = new BaseResponse();
                 rsp.Data = await _UOW.ProjectRepository.GetAllProject();
+                return Ok(rsp);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+
+        } 
+        [HttpGet]
+        public async Task<ActionResult> GetProjectList(string EmpID, string ProjectName)
+        {
+            try
+            {
+                BaseResponse rsp = new BaseResponse();
+                rsp.Data = await _UOW.ProjectRepository.GetProjectList( EmpID, ProjectName);
                 return Ok(rsp);
             }
             catch (Exception ex)
