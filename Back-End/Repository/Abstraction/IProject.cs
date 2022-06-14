@@ -20,7 +20,8 @@ namespace AnL.Repository.Abstraction
         public bool DeleteActivity(List<ActivityMaster> viewModel);
 
         public Task<object> EditProject(EditProjectView project);
-
+        public Task<object> EditProjectDetails(EditProjectView project);
+        public Task<object> EditProjectActive(EditProjectView project);
         public Task<List<ClientViewModel>> GetClientList();
         public Task<List<ProjectListViewModel>> GetAllProject();
         public Task<List<ProjectListViewModel>> GetProjectList(string EmployeeID, string ProjectName);
