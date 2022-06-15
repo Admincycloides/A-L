@@ -77,33 +77,33 @@ namespace AnL.Repository.Implementation
         }
         
 
-        public async Task<object> AddProject(List<ProjectViewModel> viewModel,string Userid)
+        public async Task<object> AddProject(ProjectViewModel viewModel,string Userid)
         {
             try
             {
-                foreach(var proj in viewModel)
-                {
-                    if (!await _context.Set<ProjectDetails>().Where(X => X.ProjectName.Trim() == proj.ProjectName.Trim().ToLower()).AnyAsync())
+                //foreach(var proj in viewModel)
+               // {
+                    if (!await _context.Set<ProjectDetails>().Where(X => X.ProjectName.Trim() == viewModel.ProjectName.Trim().ToLower()).AnyAsync())
                     {
 
                         var activty = new List<ActivityMapping>();
 
 
-                        foreach (var a in proj.Activities)
+                        foreach (var a in viewModel.Activities)
                         {
                             activty.Add(new ActivityMapping { ActivityId = a.ActivityId, IsActive=true});
                         }
 
                         ProjectDetails Project = new ProjectDetails
                         {
-                            ClientId = proj.ClientId,
-                            CurrentStatus = proj.CurrentStatus,
-                            EnabledFlag = proj.EnabledFlag,
-                            EndDate = proj.EndDate,
-                            ProjectDescription = proj.ProjectDescription,
-                            ProjectName = proj.ProjectName,
-                            SredProject = proj.SredProject,
-                            StartDate = proj.StartDate,
+                            ClientId = viewModel.ClientId,
+                            CurrentStatus = viewModel.CurrentStatus,
+                            EnabledFlag = viewModel.EnabledFlag,
+                            EndDate = viewModel.EndDate,
+                            ProjectDescription = viewModel.ProjectDescription,
+                            ProjectName = viewModel.ProjectName,
+                            SredProject = viewModel.SredProject,
+                            StartDate = viewModel.StartDate,
                             ActivityMapping = activty
 
                         };
@@ -113,7 +113,7 @@ namespace AnL.Repository.Implementation
                         audit.AddAuditLogs(Userid);
                         this.SaveChanges();
 
-                        foreach (var a in proj.EmployeeID)
+                        foreach (var a in viewModel.EmployeeID)
                         {
                             employeeMapp.Add(new ProjectMapping { 
                                 ProjectId = Project.ProjectId, 
@@ -134,14 +134,14 @@ namespace AnL.Repository.Implementation
                         //}
                         //Project.ActivityMapping = activty;
                         //this.SaveChanges();
-                        return (await _context.Set<ProjectDetails>().Where(X => X.ProjectName.Trim() == proj.ProjectName.Trim().ToLower()).Select(X => X.ProjectId).FirstOrDefaultAsync());
+                        return (await _context.Set<ProjectDetails>().Where(X => X.ProjectName.Trim() == viewModel.ProjectName.Trim().ToLower()).Select(X => X.ProjectId).FirstOrDefaultAsync());
                     }
                     else
                     {
                         return null;
                     }
-                }
-                return null;
+              //  }
+              //  return null;
             }
             catch (Exception ex)
             {
