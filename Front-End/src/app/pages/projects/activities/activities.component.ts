@@ -163,13 +163,13 @@ makeEditable(itemrow: any) {
     const url = `${this._url.activity.editactivity}`
   
     var body = itemrow.value;
-    body.projectId = this.projectId
+    // body.projectId = this.projectId
     // body.forEach(function (value,index) {
     //   body[index].activities = [{activityId: 4}]
     // });
   
     console.log(body);
-    this._http.post(url,body).subscribe(
+    this._http.post(url,[body]).subscribe(
       {
         next:(res:any)=>{
           console.log(res.responseMessage);
