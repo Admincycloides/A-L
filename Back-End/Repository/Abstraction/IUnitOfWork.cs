@@ -9,6 +9,7 @@ namespace AnL.Repository.Abstraction
         IUser UserRepository { get; }
         IEmployeeDetails EmployeeDetailsRepository { get; }
         IProject ProjectRepository { get; }
+        IAudit AuditRepository { get; }
         public List<SPViewModel> ExcecuteSP(string procedureName, Dictionary<string, string[]> parameters);
         void SaveChanges();
     }
