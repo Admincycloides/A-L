@@ -2,7 +2,7 @@
     <div class="page-title w-100">PROJECTS</div>
     <div class="act-filter d-flex align-items-center justify-content-center mx-2">
         <!-- <input type="text" class="search-filter" placeholder="Search Project" *ngFor="let a of itemRows"  /> -->
-        <input #searchBar type="text" class="cpage-search search-filter" placeholder="Search Project" (click)="searchItems($event)" />
+        <input #searchBar type="text" class="cpage-search search-filter" placeholder="Search Project" (keyup)="searchItems($event)" />
     </div>
     <div class="action d-flex justify-content-end">
         <button class="act-btn thm-btn thm-btn-primary" type="button" style='margin-right:16px' (click)="addFieldValue();changeText();" *ngIf="supervisorFlag != 'Y'" ion-button><i class="nc-icon nc-simple-add"></i>Add Project</button>

@@ -120,12 +120,21 @@ export class ProjectsComponent implements OnInit {
       const url = `${this._url.project.getprojectlist}?empID=${this.user.employeeID}&ProjectName=${this.searchTerm}`;
       console.log(url)
       // this.itemRows.remove
+      // clearFormArray = (formArray: FormArray) => {
+        while (this.itemRows.length !== 0) {
+          this.itemRows.removeAt(0)
+        }
+      // }
+      let values = this.itemRows.value
       this._http.get(url).subscribe({
         next:(res:any)=>{
           // this.itemRows.setValue(res.data);
           var items = [];
-          res.data.forEach(element => {
-            this.addFieldValue();
+          res.data.forEach((element,ind) => {
+            if(!values.hasOwnProperty(ind)){
+              this.addFieldValue();
+            }
+            
               let i = {
                 projectId:element.projectId,
                 projectName:element.projectName,
@@ -227,7 +236,7 @@ export class ProjectsComponent implements OnInit {
           next:(res:any)=>{
             this.ProjectItems = res.data;
             console.log(res.responseMessage);
-            // this.getListofProjects();
+            this.getListofProjects();
           }
         });
     }
@@ -340,7 +349,7 @@ public onProjectEmployeeSelect(item: any) {
 searchItems(event: any) {
   this.config.search = event.target.value;
   this.searchTerm = event.target.value;
-  // this.getListofProjects();
+  this.getListofProjects();
 }
 
 }
