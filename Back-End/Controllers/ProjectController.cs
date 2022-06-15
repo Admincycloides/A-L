@@ -80,7 +80,7 @@ namespace AnL.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddProject(List<ProjectViewModel> ProjectDetails)
+        public async Task<ActionResult> AddProject(ProjectViewModel ProjectDetails)
         {
             var user = HttpContext.User;
             var Userid = user.FindFirst(ClaimTypes.NameIdentifier).Value;
