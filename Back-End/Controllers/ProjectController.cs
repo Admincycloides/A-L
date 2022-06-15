@@ -286,7 +286,42 @@ namespace AnL.Controllers
 
         }
 
+        [HttpPost]
+        public async Task<ActionResult> DeleteActivity(int ActivityID)
+        {
+            try
+            {
+                BaseResponse response = new BaseResponse();
+                if (ActivityID == 0)
+                {
+                    response.Data = ActivityID;
+                    response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                    response.ResponseMessage = MessageConstants.ActivityDeletionFailed;
+                }
+                var DeleteProjectResponse = _UOW.ProjectRepository.DeleteActivity(ActivityID);
 
+                if (DeleteProjectResponse)
+                {
+                    response.Data = DeleteProjectResponse;
+                    response.ResponseCode = HTTPConstants.OK;
+                    response.ResponseMessage = MessageConstants.ActivityDeletionSuccess;
+
+                }
+                else
+                {
+                    response.Data = DeleteProjectResponse;
+                    response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                    response.ResponseMessage = MessageConstants.ActivityDeletionFailed;
+                    return BadRequest(response);
+                }
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+        }
 
         [HttpPost]
         public async Task<ActionResult> DeleteProject(int projectID)

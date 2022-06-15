@@ -14,6 +14,7 @@
         public static readonly string ReviewTimesheetListingSuccess = "Review TimeSheet records fetched successfully";
         public static readonly string ReviewTimesheetListingFailed = "Review TimeSheet records fetch failed";
         public static readonly string TimesheetListingNoRecords = "Employee has no timesheet records during the selected week!!";
+        
         public static readonly string GenerateOTPFailed = "OTP Generation failed";
         public static readonly string GenerateOTPSuccess = "OTP Generated successfully";
         public static readonly string InvalidEmailAddress = "Invalid Email Address";
@@ -37,6 +38,9 @@
 
         public static readonly string ProjectDeletionSuccess = "Project deleted successfully";
         public static readonly string ProjectDeletionFailed = "Project deletion failed as timesheet record exist against Project";
+
+        public static readonly string ActivityDeletionSuccess = "Activity deleted successfully";
+        public static readonly string ActivityDeletionFailed = "Activity deletion failed as timesheet record exist against Activity";
 
 
         public static readonly string EditProjectSuccess = "Project Updated successfully";
