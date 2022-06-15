@@ -33,7 +33,7 @@
                                 <th> Start Date</th>
                                 <th> End Date</th>
                                 <th nowrap> Current Status</th>
-                                <th nowrap>Cancel</th>
+                                <th nowrap *ngIf="supervisorFlag != 'Y'">Cancel</th>
                                 <th *ngIf="supervisorFlag != 'Y'"> Edit</th>
                                 <th> View</th>
                                 <th nowrap> Assigned to</th>
