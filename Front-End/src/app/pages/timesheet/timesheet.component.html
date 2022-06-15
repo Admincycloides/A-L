@@ -237,7 +237,8 @@
                     <textarea
                         [(ngModel)]="submitRemarks"
                         class="form-control"
-                        rows="4"></textarea>
+                        rows="4"
+                        maxlength="500"></textarea>
                 </div>
                 <div class="r-row">
                     <button
@@ -314,7 +315,8 @@
                     <div class="form-group mb-3">
                         <label>Remarks</label>
                         <textarea class="form-control"
-                            formControlName="remarks"></textarea>
+                            formControlName="remarks"
+                            maxlength="500"></textarea>
                         <div class="error"></div>
                     </div>
                 </div>
