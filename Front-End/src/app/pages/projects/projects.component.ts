@@ -281,7 +281,7 @@ Cancel(itemrow:any){
 makeEditable(itemrow: any,) {
   console.log("aww",itemrow);
 
-  if(itemrow.editable == true && itemrow.value.projectId != ''){
+  if(itemrow.editable == true && itemrow.value.projectId != null){
 
   const url = `${this._url.project.editproject}`
 
@@ -325,8 +325,8 @@ public deleteRow(index : any) {
       }
     });
 
-   
-    this.itemRows.removeAt(index)
+   if(body.projectId == null){
+    this.itemRows.removeAt(index)}
 //   console.log("hiii");
 //   const control = <FormArray>this.projectGroup.controls['itemRows'];
 //   if(control != null)

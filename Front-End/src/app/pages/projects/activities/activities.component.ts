@@ -158,18 +158,18 @@ export class ActivitiesComponent implements OnInit {
 makeEditable(itemrow: any) {
     console.log("aww",itemrow);
   
-    if(itemrow.editable == true && itemrow.value.activityId != ''){
+    if(itemrow.editable == true && itemrow.value.activityId != null){
   
     const url = `${this._url.activity.editactivity}`
   
     var body = itemrow.value;
-    body.projectId = this.projectId
+    // body.projectId = this.projectId
     // body.forEach(function (value,index) {
     //   body[index].activities = [{activityId: 4}]
     // });
   
     console.log(body);
-    this._http.post(url,body).subscribe(
+    this._http.post(url,[body]).subscribe(
       {
         next:(res:any)=>{
           console.log(res.responseMessage);
@@ -195,7 +195,7 @@ makeEditable(itemrow: any) {
       if(element.activityId == null){
         console.log("zakkkkkk")
            var dt = {
-            projectId:this.projectId,
+            projectId:parseInt(this.projectId),
             enabledFlag:element.enabledFlag,
             // activityId:element.activityId,
             activityName:element.activityName,

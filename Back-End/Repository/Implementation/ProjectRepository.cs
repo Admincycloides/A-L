@@ -77,33 +77,35 @@ namespace AnL.Repository.Implementation
         }
         
 
-        public async Task<object> AddProject(ProjectViewModel viewModel,string Userid)
+        public async Task<object> AddProject(List<ProjectViewModel> viewModel,string Userid)
         {
             try
             {
-                //foreach(var proj in viewModel)
-               // {
-                    if (!await _context.Set<ProjectDetails>().Where(X => X.ProjectName.Trim() == viewModel.ProjectName.Trim().ToLower()).AnyAsync())
+                var ids = new List<int>();
+                List<ProjectDetails> projects = new List<ProjectDetails>();
+                foreach (var proj in viewModel)
+                {
+                    if (!await _context.Set<ProjectDetails>().Where(X => X.ProjectName.Trim() == proj.ProjectName.Trim().ToLower()).AnyAsync())
                     {
 
                         var activty = new List<ActivityMapping>();
+                        
 
-
-                        foreach (var a in viewModel.Activities)
+                        foreach (var a in proj.Activities)
                         {
                             activty.Add(new ActivityMapping { ActivityId = a.ActivityId, IsActive=true});
                         }
 
                         ProjectDetails Project = new ProjectDetails
                         {
-                            ClientId = viewModel.ClientId,
-                            CurrentStatus = viewModel.CurrentStatus,
-                            EnabledFlag = viewModel.EnabledFlag,
-                            EndDate = viewModel.EndDate,
-                            ProjectDescription = viewModel.ProjectDescription,
-                            ProjectName = viewModel.ProjectName,
-                            SredProject = viewModel.SredProject,
-                            StartDate = viewModel.StartDate,
+                            ClientId = proj.ClientId,
+                            CurrentStatus = proj.CurrentStatus,
+                            EnabledFlag = proj.EnabledFlag,
+                            EndDate = proj.EndDate,
+                            ProjectDescription = proj.ProjectDescription,
+                            ProjectName = proj.ProjectName,
+                            SredProject = proj.SredProject,
+                            StartDate = proj.StartDate,
                             ActivityMapping = activty
 
                         };
@@ -113,7 +115,7 @@ namespace AnL.Repository.Implementation
                         audit.AddAuditLogs(Userid);
                         this.SaveChanges();
 
-                        foreach (var a in viewModel.EmployeeID)
+                        foreach (var a in proj.EmployeeID)
                         {
                             employeeMapp.Add(new ProjectMapping { 
                                 ProjectId = Project.ProjectId, 
@@ -127,21 +129,25 @@ namespace AnL.Repository.Implementation
                         //this.dbSetProjectMapp.AddRange(employeeMapp);
                         audit.AddAuditLogs(Userid);
                         this.SaveChanges();
-                        
+                        projects.Add(new ProjectDetails { ProjectId=Project.ProjectId });
+
                         //foreach (var a in proj.Activities)
                         //{
                         //    activty.Add(new ActivityMapping { ActivityId = a.ActivityId, ProjectId= Project.ProjectId });
                         //}
                         //Project.ActivityMapping = activty;
                         //this.SaveChanges();
-                        return (await _context.Set<ProjectDetails>().Where(X => X.ProjectName.Trim() == viewModel.ProjectName.Trim().ToLower()).Select(X => X.ProjectId).FirstOrDefaultAsync());
+
+                        var result = await _context.Set<ProjectDetails>().Where(X => X.ProjectName.Trim() == proj.ProjectName.Trim().ToLower()).Select(X => X.ProjectId).FirstOrDefaultAsync();
+                        
                     }
                     else
                     {
                         return null;
                     }
-              //  }
-              //  return null;
+                }
+                
+                return true;
             }
             catch (Exception ex)
             {
@@ -368,14 +374,14 @@ namespace AnL.Repository.Implementation
             }
             return null;
         }
-        public async Task<object> AddActivity(ProjectActivityMap viewModel,string userid)
+        public async Task<object> AddActivity(List<ProjectActivityMap> viewModel,string userid)
         {
             try
             {
                 //IMopDbContext Db1 = new MopDbContext();
-                //foreach (var proj in viewModel)
-                //{
-                    if (!await _context.Set<ActivityDetails>().Where(X => X.ActivityName.Trim() == viewModel.ActivityName.Trim().ToLower()).AnyAsync())
+                foreach (var proj in viewModel)
+                {
+                    if (!await _context.Set<ActivityDetails>().Where(X => X.ActivityName.Trim() == proj.ActivityName.Trim().ToLower()).AnyAsync())
                     {
 
                         //var activty = new List<ActivityMapping>();
@@ -384,8 +390,8 @@ namespace AnL.Repository.Implementation
                         ActivityDetails activity = new ActivityDetails
                         {
                             //ActivityId=proj.ActivityId,
-                            ActivityName = viewModel.ActivityName,
-                            ActivityDescription = viewModel.ActivityDescription,
+                            ActivityName = proj.ActivityName,
+                            ActivityDescription = proj.ActivityDescription,
                             EnabledFlag = "true"
 
                         };
@@ -396,7 +402,7 @@ namespace AnL.Repository.Implementation
                         dbActivityMapp.Add(new ActivityMapping
                         {
                             ActivityId=activity.ActivityId,
-                            ProjectId= viewModel.ProjectId,
+                            ProjectId= proj.ProjectId,
                             IsActive=true
                         });
                         
@@ -406,15 +412,15 @@ namespace AnL.Repository.Implementation
                         this.SaveChanges();
 
 
-                        var a = await _context.Set<ActivityDetails>().Where(X => X.ActivityName.Trim() == viewModel.ActivityName.Trim().ToLower()).Select(X => X.ActivityId).FirstOrDefaultAsync();
-                        return (a);
+                        //var a = await _context.Set<ActivityDetails>().Where(X => X.ActivityName.Trim() == proj.ActivityName.Trim().ToLower()).Select(X => X.ActivityId).FirstOrDefaultAsync();
+                       // return (a);
                     }
                     else
                     {
                         return null;
                     }
-                //}
-                
+                }
+                return true;
             }
             catch (Exception ex)
             {
