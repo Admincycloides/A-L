@@ -368,14 +368,14 @@ namespace AnL.Repository.Implementation
             }
             return null;
         }
-        public async Task<object> AddActivity(List<ActivityMaster> viewModel,string userid)
+        public async Task<object> AddActivity(ProjectActivityMap viewModel,string userid)
         {
             try
             {
                 //IMopDbContext Db1 = new MopDbContext();
-                foreach (var proj in viewModel)
-                {
-                    if (!await _context.Set<ActivityDetails>().Where(X => X.ActivityName.Trim() == proj.ActivityName.Trim().ToLower()).AnyAsync())
+                //foreach (var proj in viewModel)
+                //{
+                    if (!await _context.Set<ActivityDetails>().Where(X => X.ActivityName.Trim() == viewModel.ActivityName.Trim().ToLower()).AnyAsync())
                     {
 
                         //var activty = new List<ActivityMapping>();
@@ -384,28 +384,37 @@ namespace AnL.Repository.Implementation
                         ActivityDetails activity = new ActivityDetails
                         {
                             //ActivityId=proj.ActivityId,
-                            ActivityName = proj.ActivityName,
-                            ActivityDescription = proj.ActivityDescription,
+                            ActivityName = viewModel.ActivityName,
+                            ActivityDescription = viewModel.ActivityDescription,
                             EnabledFlag = "true"
 
                         };
-
                         dbActivity.Add(activity);
+                        audit.AddAuditLogs(userid);
+                        this.SaveChanges();
+
+                        dbActivityMapp.Add(new ActivityMapping
+                        {
+                            ActivityId=activity.ActivityId,
+                            ProjectId= viewModel.ProjectId,
+                            IsActive=true
+                        });
+                        
                         
                         
                         audit.AddAuditLogs(userid);
                         this.SaveChanges();
 
 
-                        var a = await _context.Set<ActivityDetails>().Where(X => X.ActivityName.Trim() == proj.ActivityName.Trim().ToLower()).Select(X => X.ActivityId).FirstOrDefaultAsync();
+                        var a = await _context.Set<ActivityDetails>().Where(X => X.ActivityName.Trim() == viewModel.ActivityName.Trim().ToLower()).Select(X => X.ActivityId).FirstOrDefaultAsync();
                         return (a);
                     }
                     else
                     {
                         return null;
                     }
-                }
-                return null;
+                //}
+                
             }
             catch (Exception ex)
             {
