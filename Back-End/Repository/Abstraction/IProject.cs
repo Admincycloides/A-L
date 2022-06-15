@@ -15,9 +15,9 @@ namespace AnL.Repository.Abstraction
         public Task<object> AddProject(List<ProjectViewModel> viewModel, string Userid);
         public Task<object> AllocateResources(MapProjectResources viewModel);
 
-        public bool DeleteProject(int projectID);
+        public bool DeleteActivity(int activityID);
         public Task<object> AddActivity(List<ActivityMaster> viewModel);
-        public bool DeleteActivity(List<ActivityMaster> viewModel);
+        public bool DeleteProject(int ProjectID);
 
         public Task<object> EditProject(EditProjectView project);
         public Task<object> EditProjectDetails(EditProjectView project);

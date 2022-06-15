@@ -14,6 +14,7 @@ namespace AnL.Repository.Implementation
         private DbContext _context;
         private readonly IUnitOfWork _UOW;
         private TimesheetDetailRepository timesheetDetail;
+        private readonly IMopDbContext Db;
 
         DbSet<ProjectDetails> dbSet;
         DbSet<ProjectMapping> dbSetProjectMapp;
@@ -146,7 +147,7 @@ namespace AnL.Repository.Implementation
             {
                 await Task.Run(() =>
                {
-                   rsp = (_context.Set<ActivityDetails>().Select(
+                   rsp = (_context.Set<ActivityDetails>().Where(x=> (x.EnabledFlag).ToLower()=="true").Select(
 
                        X => new ActivityMaster
                        {
@@ -393,19 +394,31 @@ namespace AnL.Repository.Implementation
             }
         }
 
-        public bool DeleteActivity(List<ActivityMaster> viewModel)
+        public bool DeleteActivity(int activityID)
         {
             try
             {
-                var activity = new List<ActivityDetails>();
-                foreach (var a in viewModel)
-                {
-                    //a.EnabledFlag = "false";
-                    activity.Add(new ActivityDetails { ActivityId = a.ActivityId, EnabledFlag="false" });
-                    
-                }
+                var activity = new ActivityDetails();
+                List<ActivityMapping> activityMapp = new List<ActivityMapping>();
+                activity = this.dbActivity.Find(activityID);
                 
-                return false;
+                foreach(var a in activity.ActivityMapping)
+                {
+                    //project1 = this.dbSet.Find(a.ProjectId);
+                    bool TimesheetDetailForProjectPresent = timesheetDetail.GetTimesheetDetailsForProject(a.ProjectId);
+                    if (TimesheetDetailForProjectPresent)
+                    {
+                        return false;
+                    }
+                }
+                foreach (var a in activity.ActivityMapping)
+                {
+                    a.IsActive = false;
+                }
+                //activity = this.dbActivity.Find(activityID);
+                activity.EnabledFlag = "False";
+                this.SaveChanges();
+                return true;
             }
             catch (Exception ex)
             {
