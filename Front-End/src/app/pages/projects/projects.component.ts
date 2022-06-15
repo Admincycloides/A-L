@@ -325,8 +325,8 @@ public deleteRow(index : any) {
       }
     });
 
-   
-    this.itemRows.removeAt(index)
+   if(body.projectId == null){
+    this.itemRows.removeAt(index)}
 //   console.log("hiii");
 //   const control = <FormArray>this.projectGroup.controls['itemRows'];
 //   if(control != null)
