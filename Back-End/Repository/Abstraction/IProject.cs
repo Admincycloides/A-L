@@ -26,7 +26,7 @@ namespace AnL.Repository.Abstraction
         public Task<object> EditActivity(List<ActivityMaster> viewModel, string userid);
         public Task<List<ClientViewModel>> GetClientList();
         public Task<List<ProjectListViewModel>> GetAllProject();
-        public Task<List<ProjectListViewModel>> GetProjectList(string EmployeeID, string ProjectName);
+        public Task<List<ProjectListingViewModel>> GetProjectList(string EmployeeID, string ProjectName);
         public Task<ProjectViewModel> GetprojectDetailsByID(int ProjectID);
     }
 }
