@@ -78,7 +78,7 @@
                           <!-- <span *ngIf="!itemrow.editable">{{itemrow.value.sredProject}}</span>
                             <input placeholder="SHED Project" formControlName="sredProject" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/> -->
                             <button class="cancel actico-btn" type="button" (click)="Cancel(itemrow)">
-                              <img src="../../../assets/img/edit.png" alt="">
+                              <img src="../../../assets/img/cancel.png" alt="">
                               </button>
                        </td>
                       <td class="col-md-2 form-group">
@@ -95,7 +95,7 @@
                                                 <span *ngIf="!itemrow.editable">{{itemrow.value.assignedTo}}</span>
                                                 <!-- <input placeholder="Assigned To" formControlName="assignedto" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/> -->
                                                 <ng-multiselect-dropdown [placeholder]="'Select Employee'" formControlName="assignedTo"  [settings]="dropdownEmployeeSettings" [data]="employeeList" name="employee" (onDeSelect)="onProjectEmployeeDeSelect($event, 'employee')" (onSelect)="onProjectEmployeeSelect($event, 'employee')"
-                                                    (onSelectAll)="onProjectEmployeeSelectAll($event, 'employee')" (onDeSelectAll)="onProjectEmployeeDeSelectAll($event, 'employee')" *ngIf="itemrow.editable"></ng-multiselect-dropdown>
+                                                    (onSelectAll)="onProjectEmployeeSelectAll($event, 'employee')" (onDeSelectAll)="onProjectEmployeeDeSelectAll($event, 'employee')" *ngIf="itemrow.editable" class="sm-mdrop"></ng-multiselect-dropdown>
                                             </td>
                                             <td class="col-md-2 form-group">
                                                 <button class="delete actico-btn" type="button" (click)="deleteRow(i)">
