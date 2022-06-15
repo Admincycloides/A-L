@@ -59,7 +59,7 @@ export class ActivitiesComponent implements OnInit {
 
   initItemRow():FormGroup{
     return this._fb.group({
-      // activityId:[],
+      activityId:[],
       // projectId:[],
       activityName:[""],
       activityDescription:[""],
@@ -104,7 +104,7 @@ export class ActivitiesComponent implements OnInit {
           this.addFieldValue()
           let i = {
                 enabledFlag:element.enabledFlag,
-                // activityId:element.activityId,
+                activityId:element.activityId,
                 activityName:element.activityName,
                 activityDescription:element.activityDescription
           }
@@ -158,12 +158,12 @@ export class ActivitiesComponent implements OnInit {
 makeEditable(itemrow: any) {
     console.log("aww",itemrow);
   
-    if(itemrow.editable == true){
+    if(itemrow.editable == true && itemrow.value.activityId != ''){
   
     const url = `${this._url.activity.editactivity}`
   
     var body = itemrow.value;
-  
+    body.projectId = this.projectId
     // body.forEach(function (value,index) {
     //   body[index].activities = [{activityId: 4}]
     // });
@@ -192,7 +192,7 @@ makeEditable(itemrow: any) {
     //     console.log(serializedForm);
     this.projectGroup.value.itemRows.forEach(element => {
       
-      if(element.activityID == null){
+      if(element.activityId == null){
         console.log("zakkkkkk")
            var dt = {
             projectId:this.projectId,

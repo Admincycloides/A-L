@@ -117,7 +117,7 @@ export class ProjectsComponent implements OnInit {
 
     private getListofProjects(){
       const search = this.config.search;
-      const url = `${this._url.project.getprojectlist}?empID=${this.user.employeeID}&ProjectName=${this.searchTerm}`;
+      const url = `${this._url.project.getprojectlist}?empID=${this.user.employeeId}&ProjectName=${encodeURIComponent(this.searchTerm)}`;
       console.log(url)
       // this.itemRows.remove
       // clearFormArray = (formArray: FormArray) => {
@@ -128,31 +128,40 @@ export class ProjectsComponent implements OnInit {
         next:(res:any)=>{
           // this.itemRows.setValue(res.data);
           var items = [];
-          res.data.forEach((element,ind) => {
-            if(!values.hasOwnProperty(ind)){
-              this.addFieldValue();
-            }
-            
-              let i = {
-                projectId:element.projectId,
-                projectName:element.projectName,
-                projectDescription:element.projectDescription,
-                clientName:element.clientName,
-                clientId:element.clientId,
-                startDate:element.startDate != null?this.formatDate(element.startDate): '',
-                endDate:element.endDate != null?this.formatDate(element.endDate):'',
-                currentStatus:element.currentStatus,
-                sredProject:element.sredProject,
-                enabledFlag:element.enabledFlag,
-                // assignedTo:element.employeeList != null ?element.employeeList.join(','):'',
-                assignedTo:element.supervisorList
+          if(res.data != null){
+
+            res.data.forEach((element,ind) => {
+              if(!values.hasOwnProperty(ind)){
+                this.addFieldValue();
               }
-              items.push(i);
-          });
-          this.itemRows.patchValue(items);
-          while (this.itemRows.length > res.data.length) {
-            this.itemRows.removeAt(this.itemRows.length-1)
+              
+                let i = {
+                  projectId:element.projectId,
+                  projectName:element.projectName,
+                  projectDescription:element.projectDescription,
+                  clientName:element.clientName,
+                  clientId:element.clientId,
+                  startDate:element.startDate != null?this.formatDate(element.startDate): '',
+                  endDate:element.endDate != null?this.formatDate(element.endDate):'',
+                  currentStatus:element.currentStatus,
+                  sredProject:element.sredProject,
+                  enabledFlag:element.enabledFlag,
+                  // assignedTo:element.employeeList != null ?element.employeeList.join(','):'',
+                  assignedTo:element.supervisorList
+                }
+                items.push(i);
+            });
+            this.itemRows.patchValue(items);
+            while (this.itemRows.length > res.data.length) {
+              this.itemRows.removeAt(this.itemRows.length-1)
+            }
           }
+          else{
+            while (this.itemRows.length !==0) {
+              this.itemRows.removeAt(0)
+            }
+          }
+          
         console.log("aaaa",this.itemRows.value)
       }
         })
