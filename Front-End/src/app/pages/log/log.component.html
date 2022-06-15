@@ -6,24 +6,9 @@
             />
     </div>
     <div class="action d-flex justify-content-end">
-        <div class="row">
-            <div class="col">
-              <div ngbDropdown class="d-inline-block">
-                <button class="act-btn thm-btn thm-btn-primary" id="dropdownBasic1" ngbDropdownToggle>Filter</button>
-                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <button ngbDropdownItem>Date Range</button>
-                <button ngbDropdownItem>Employee</button>
-                <button ngbDropdownItem>Activity</button>
-                <button ngbDropdownItem>Action</button>
-                <button ngbDropdownItem>My Log</button>
-                </div>
-              </div>
-            </div>
-          </div>
+        Filter
     </div>
 </div>
-<br>
-<div>
 <div class="row">
     <div class="col-md-12">
         <div class="card">
@@ -54,15 +39,15 @@
                             </th>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let log for Logs; let i = index">
+                            <tr *ngFor="let log of logs">
                                 <td>
-                                    {{log.project}}
+                                    {{log.projectName}}
                                 </td>
                                 <td>
                                     {{log.employeeName}}
                                 </td>
                                 <td>
-                                   {{log.date}}
+                                    {{log.date}}
                                 </td>
                                 <td>
                                     {{log.activity}}
@@ -71,10 +56,10 @@
                                     {{log.action}}
                                 </td>
                                 <td>
-                                    {{log.details}}
+                                    {{log.Details}}
                                 </td>
                                 <td>
-                                    <button class="thm-linkbtn" routerLink="/Projects">Click here</button>
+                                    <button class="thm-linkbtn">Click here</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -84,5 +69,5 @@
         </div>
     </div>
 
-</div>
+
 </div>

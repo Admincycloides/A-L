@@ -61,7 +61,8 @@ export class UrlService {
   public activity = {
     addActivity : 'api/Project/AddActivity',
     getActivityList : 'api/Project/GetActivityList',
-    editactivity:'api/Project/EditProjectActive'
+    editactivity:'api/Project/EditProjectActive',
+    deleteactivity:'api/Project/DeleteActivity?ActivityID=1'
 
   }
 }

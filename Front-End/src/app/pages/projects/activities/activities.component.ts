@@ -70,7 +70,7 @@ export class ActivitiesComponent implements OnInit {
     this.SelectedValue= e.target.value;
     console.log(this.SelectedValue)
   }
-  
+
   Cancel(itemrow:any){
 
     if(itemrow.editable == true)
@@ -221,27 +221,23 @@ public addFieldValue() {
     this.isVisible = true;
   }
   this.itemRows.push(this.initItemRow());
-  // const control = <FormArray>this.projectGroup.controls['itemRows'];
-  // control.push(this.initItemRow());
-  //  console.log("hiii")}
+  
 }
 
  public deleteRow(index : any) {
+
   console.log("hiii");
   this.itemRows.removeAt(index)
-//   const control = <FormArray>this.projectGroup.controls['itemRows'];
-//   // control.removeAt(index);
-//   if(control != null)
-//   {
-//     this.TotalRow = control.value.length;
-//   }
-//   if(this.TotalRow > 1)
-//   {
-//     control.removeAt(index);
-//   }
-//   else{
-//     alert('one record is mendatory');
-//     return false;
+const body = this.projectGroup.value.itemRows[index];
+  console.log("we",body);
+  const url = `${this._url.activity.deleteactivity}?activityID=${body.activityId}`
+  this._http.post(url,body.activityId).subscribe(
+    {
+      next:(res:any)=>{
+        this.itemRows.removeAt(index)
+        console.log(res.responseMessage);
+      }
+    });
 // }
  }
  
