@@ -5,6 +5,7 @@ import { ActivitiesComponent } from '../../pages/projects/activities/activities.
 import { ReviewtimesheetComponent } from 'app/pages/reviewtimesheet/reviewtimesheet.component';
 import { ReviewlinkComponent } from 'app/pages/reviewtimesheet/reviewlink/reviewlink.component';
 import { ReportsComponent } from 'app/pages/reports/reports.component';
+import { LogComponent } from 'app/pages/log/log.component';
 
 
 export const AdminLayoutRoutes: Routes = [
@@ -15,5 +16,6 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'review',      component: ReviewtimesheetComponent},
     { path: 'reviewlink',      component: ReviewlinkComponent},
     { path: 'reports',      component: ReportsComponent},
+    {path: 'log',            component:LogComponent}
     ]
 

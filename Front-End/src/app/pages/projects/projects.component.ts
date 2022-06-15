@@ -146,7 +146,8 @@ export class ProjectsComponent implements OnInit {
                 currentStatus:element.currentStatus,
                 sredProject:element.sredProject,
                 enabledFlag:element.enabledFlag,
-                assignedTo:element.supervisorList != null ?element.supervisorList.join(', '):'',
+                // assignedTo:element.employeeList != null ?element.employeeList.join(','):'',
+                assignedTo:element.supervisorList
               }
               items.push(i);
           });
@@ -155,6 +156,18 @@ export class ProjectsComponent implements OnInit {
       }
         })
   
+      }
+
+      formatnames(employees){
+        var result = [];
+        if (employees.length > 0){
+          employees.forEach(element => {
+            result.push(element.employeeName);
+          });
+        }
+
+        return result.join(',');
+
       }
 
 

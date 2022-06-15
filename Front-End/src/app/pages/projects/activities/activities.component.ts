@@ -60,6 +60,7 @@ export class ActivitiesComponent implements OnInit {
   initItemRow():FormGroup{
     return this._fb.group({
       // activityId:[],
+      // projectId:[],
       activityName:[""],
       activityDescription:[""],
       enabledFlag: [""]
@@ -194,6 +195,7 @@ makeEditable(itemrow: any) {
       if(element.activityID == null){
         console.log("zakkkkkk")
            body = {
+            projectId:element.projectId,
             enabledFlag:element.enabledFlag,
             // activityId:element.activityId,
             activityName:element.activityName,
