@@ -6,7 +6,7 @@ import { UrlService } from 'app/_services/url.service';
 import { IDropdownSettings } from "ng-multiselect-dropdown";
 import { data } from 'jquery';
 import { ToastrService } from 'ngx-toastr';
-
+import * as moment from 'moment';
 @Component({
   selector: 'app-projects',
   templateUrl: './projects.component.html',
@@ -44,10 +44,10 @@ export class ProjectsComponent implements OnInit {
   collection = { count: 60, data: [] };
 
   constructor(private _url: UrlService,
-    private _fb:FormBuilder,private _http: HttpService
+    private _fb:FormBuilder,private _http: HttpService, private _toast:ToastrService
   ) { 
     this.projectGroup = this._fb.group({
-      itemRows:this._fb.array([this.initItemRow()]),
+      itemRows:this._fb.array([]),
     });
 
     this.config = {
@@ -119,24 +119,34 @@ export class ProjectsComponent implements OnInit {
       const search = this.config.search;
       const url = `${this._url.project.getprojectlist}?empID=${this.user.employeeID}&ProjectName=${this.searchTerm}`;
       console.log(url)
+      // this.itemRows.remove
+      // clearFormArray = (formArray: FormArray) => {
+        while (this.itemRows.length !== 0) {
+          this.itemRows.removeAt(0)
+        }
+      // }
+      let values = this.itemRows.value
       this._http.get(url).subscribe({
         next:(res:any)=>{
           // this.itemRows.setValue(res.data);
           var items = [];
-          res.data.forEach(element => {
-            this.addFieldValue();
+          res.data.forEach((element,ind) => {
+            if(!values.hasOwnProperty(ind)){
+              this.addFieldValue();
+            }
+            
               let i = {
                 projectId:element.projectId,
                 projectName:element.projectName,
                 projectDescription:element.projectDescription,
                 clientName:element.clientName,
                 clientId:element.clientId,
-                startDate:element.startDate,
-                endDate:element.endDate,
+                startDate:element.startDate != null?this.formatDate(element.startDate): '',
+                endDate:element.endDate != null?this.formatDate(element.endDate):'',
                 currentStatus:element.currentStatus,
                 sredProject:element.sredProject,
                 enabledFlag:element.enabledFlag,
-                assignedTo:element.assignedTo,
+                assignedTo:element.supervisorList != null ?element.supervisorList.join(', '):'',
               }
               items.push(i);
           });
@@ -167,7 +177,9 @@ export class ProjectsComponent implements OnInit {
         activityId: [],}]
     })
   }
-
+  formatDate(input){
+    return moment(input).format('YYYY-MM-DD')
+  }
   get itemRows() : FormArray {
 
     return this.projectGroup.get("itemRows") as FormArray
@@ -178,15 +190,22 @@ export class ProjectsComponent implements OnInit {
     
     console.log(this.projectGroup.value.itemRows)
     console.log("hi");
-    var body = this.projectGroup.value.itemRows;
+    var body = []; //this.projectGroup.value.itemRows;
     // let formObj = this.projectGroup.value; // {name: '', description: ''}
     //     let serializedForm = JSON.stringify(formObj.itemRows);
     //     console.log(serializedForm);
     this.projectGroup.value.itemRows.forEach(element => {
       
       if(element.projectId == null){
+        var eid =[];
+        if(element.assignedTo.length > 0){
+
+          element.assignedTo.forEach(e => {
+            eid.push(e.employeeId);
+          });
+        }
         console.log("zakkkkkk")
-           body = {
+        var item = {
           projectName:element.projectName,
           projectDescription:element.projectDescription,
           clientName:element.clientName,
@@ -198,8 +217,10 @@ export class ProjectsComponent implements OnInit {
           enabledFlag:element.enabledFlag,
           assignedTo:element.assignedTo,
           activities:[],
-          employeeID:[element.employeeId],
-        }}
+          employeeID:eid,
+        }
+        body.push(item);
+      }
     });
     const url = `${this._url.project.addProject}`
 
@@ -207,14 +228,21 @@ export class ProjectsComponent implements OnInit {
   //     body[index].activities = [{activityId: this.selectedactivity}]
   // });
     // body.activities.push({activityId: this.selectedactivity})
-    console.log("boddddy",body);
-    this._http.post(url,[body]).subscribe(
-      {
-        next:(res:any)=>{
-          this.ProjectItems = res.data;
-          console.log(res.responseMessage);
-        }
-      });
+    if(body.length > 0){
+
+      console.log("boddddy",body);
+      this._http.post(url,body).subscribe(
+        {
+          next:(res:any)=>{
+            this.ProjectItems = res.data;
+            console.log(res.responseMessage);
+            this.getListofProjects();
+          }
+        });
+    }
+    else{
+      this._toast.error('No new project to save','Error saving');
+    }
   }
 
 
@@ -230,7 +258,7 @@ Cancel(itemrow:any){
 makeEditable(itemrow: any,) {
   console.log("aww",itemrow);
 
-  if(itemrow.editable == true){
+  if(itemrow.editable == true && itemrow.value.projectId != ''){
 
   const url = `${this._url.project.editproject}`
 
@@ -321,7 +349,7 @@ public onProjectEmployeeSelect(item: any) {
 searchItems(event: any) {
   this.config.search = event.target.value;
   this.searchTerm = event.target.value;
-  // this.getListofProjects();
+  this.getListofProjects();
 }
 
 }

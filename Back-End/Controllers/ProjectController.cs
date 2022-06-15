@@ -111,9 +111,11 @@ namespace AnL.Controllers
         {
             try
             {
+                var user = HttpContext.User;
+                var Userid = user.FindFirst(ClaimTypes.NameIdentifier).Value;
                 BaseResponse rsp = new BaseResponse();
-                var data = await _UOW.ProjectRepository.AddActivity(ActivityDetails);
-                if (data != null)
+                var data = await _UOW.ProjectRepository.AddActivity(ActivityDetails, Userid);
+                if (data == null)
                 {
                     rsp.Data = "Activity Name already exist.";
                     return Conflict(rsp);
@@ -138,8 +140,10 @@ namespace AnL.Controllers
         {
             try
             {
+                var user = HttpContext.User;
+                var Userid = user.FindFirst(ClaimTypes.NameIdentifier).Value;
                 BaseResponse rsp = new BaseResponse();
-                var data = await _UOW.ProjectRepository.EditActivity(ActivityDetails);
+                var data = await _UOW.ProjectRepository.EditActivity(ActivityDetails, Userid);
                 if (data != null)
                 {
                     rsp.Data = "Activity Name already exist.";
@@ -190,6 +194,8 @@ namespace AnL.Controllers
         [HttpPost]
         public async Task<ActionResult> EditProject(EditProjectView project)
         {
+            var user = HttpContext.User;
+            var Userid = user.FindFirst(ClaimTypes.NameIdentifier).Value;
             BaseResponse response = new BaseResponse();
             if (project == null)
             {
@@ -197,7 +203,7 @@ namespace AnL.Controllers
                 response.ResponseCode = HTTPConstants.BAD_REQUEST;
                 response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
             }
-            var EditProjectResponse = _UOW.ProjectRepository.EditProject(project);
+            var EditProjectResponse = _UOW.ProjectRepository.EditProject(project, Userid);
 
             if (EditProjectResponse != null)
             {
@@ -222,6 +228,8 @@ namespace AnL.Controllers
         [HttpPost]
         public async Task<ActionResult> EditProjectDetails(EditProjectView project)
         {
+            var user = HttpContext.User;
+            var Userid = user.FindFirst(ClaimTypes.NameIdentifier).Value;
             BaseResponse response = new BaseResponse();
             if (project == null)
             {
@@ -229,7 +237,7 @@ namespace AnL.Controllers
                 response.ResponseCode = HTTPConstants.BAD_REQUEST;
                 response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
             }
-            var EditProjectResponse = _UOW.ProjectRepository.EditProjectDetails(project);
+            var EditProjectResponse = _UOW.ProjectRepository.EditProjectDetails(project, Userid);
 
             if (EditProjectResponse != null)
             {
@@ -256,6 +264,8 @@ namespace AnL.Controllers
         [HttpPost]
         public async Task<ActionResult> EditProjectActive(EditProjectView project)
         {
+            var user = HttpContext.User;
+            var Userid = user.FindFirst(ClaimTypes.NameIdentifier).Value;
             BaseResponse response = new BaseResponse();
             if (project == null)
             {
@@ -263,7 +273,7 @@ namespace AnL.Controllers
                 response.ResponseCode = HTTPConstants.BAD_REQUEST;
                 response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
             }
-            var EditProjectResponse = _UOW.ProjectRepository.EditProjectActive(project);
+            var EditProjectResponse = _UOW.ProjectRepository.EditProjectActive(project, Userid);
 
             if (EditProjectResponse != null)
             {
@@ -291,6 +301,8 @@ namespace AnL.Controllers
         {
             try
             {
+                var user = HttpContext.User;
+                var Userid = user.FindFirst(ClaimTypes.NameIdentifier).Value;
                 BaseResponse response = new BaseResponse();
                 if (ActivityID == 0)
                 {
@@ -298,7 +310,7 @@ namespace AnL.Controllers
                     response.ResponseCode = HTTPConstants.BAD_REQUEST;
                     response.ResponseMessage = MessageConstants.ActivityDeletionFailed;
                 }
-                var DeleteProjectResponse = _UOW.ProjectRepository.DeleteActivity(ActivityID);
+                var DeleteProjectResponse = _UOW.ProjectRepository.DeleteActivity(ActivityID, Userid);
 
                 if (DeleteProjectResponse)
                 {
@@ -328,6 +340,8 @@ namespace AnL.Controllers
         {
             try
             {
+                var user = HttpContext.User;
+                var Userid = user.FindFirst(ClaimTypes.NameIdentifier).Value;
                 BaseResponse response = new BaseResponse();
                 if (projectID==0)
                 {
@@ -335,8 +349,8 @@ namespace AnL.Controllers
                     response.ResponseCode = HTTPConstants.BAD_REQUEST;
                     response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
                 }
-                var DeleteProjectResponse = _UOW.ProjectRepository.DeleteProject(projectID);
-                
+                var DeleteProjectResponse = _UOW.ProjectRepository.DeleteProject(projectID, Userid);
+
                 if (DeleteProjectResponse)
                 {
                     response.Data = DeleteProjectResponse;
@@ -360,7 +374,7 @@ namespace AnL.Controllers
             }
         }
        
- [HttpGet]
+    [HttpGet]
         public async Task<ActionResult> GetprojectDetailsByID(int ProjectID)
         {
             try
