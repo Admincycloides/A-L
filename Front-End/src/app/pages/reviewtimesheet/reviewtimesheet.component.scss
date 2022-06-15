@@ -1,0 +1,17 @@
+.link.thm-linkbtn{
+    border: none;
+    outline: none;
+    font-size: 11px;
+    background: #439451;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 11px;
+    padding: 5px;
+    min-width: 50px;
+    text-decoration: none;
+    &:hover,&:focus,&:focus-visible{
+        opacity: .8;
+        border: none;
+        outline: none;
+    }
+}

@@ -1,5 +1,11 @@
 ﻿using AnL.Repository.Abstraction;
 using AnL.Models;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using System.Data;
+using System;
+using System.Dynamic;
+using AnL.ViewModel;
 
 namespace AnL.Repository.Implementation
 {
@@ -63,6 +69,51 @@ namespace AnL.Repository.Implementation
                 }
 
                 return _UserRepository;
+            }
+        }
+
+        public List<SPViewModel> ExcecuteSP(string procedureName, Dictionary<string, string[]> parameters)
+        {
+            using (var command = this._dbcontext.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = procedureName;
+                command.CommandType = CommandType.StoredProcedure;
+                foreach (var param in parameters)
+                {
+                    var parameter = command.CreateParameter();
+                    parameter.ParameterName = param.Key;
+                    parameter.Value= param.Value[0];
+                    //switch (param.Value[1])
+                    //{
+                    //    case "date":
+                    //        {
+                    //            parameter.DbType = DbType.Date;
+                    //            break;
+                    //        }
+                    //    default:
+                    //        {
+                    //            parameter.DbType = DbType.String;
+                    //            break;
+                    //        }
+                    //}
+                    command.Parameters.Add(parameter);
+                }
+                this._dbcontext.Database.OpenConnection();
+                var sqlDataReader = command.ExecuteReader();
+                List<SPViewModel> items = new List<SPViewModel>();
+                SPViewModel data = null;
+                while (sqlDataReader.Read())
+                {
+                    data = new SPViewModel();
+                    data.ProjectId = int.Parse(sqlDataReader["Project_ID"].ToString());
+                    data.ProjectName = sqlDataReader["PROJECTNAME"].ToString();
+                    data.EmployeeName = sqlDataReader["EMPLOYEENAME"].ToString();
+                    data.EmployeeId = sqlDataReader["Employee_ID"].ToString();
+                    data.Date = DateTime.Parse(sqlDataReader["DATE"].ToString());
+                    data.NumberOfHours = double.Parse(sqlDataReader["NUMBEROFHOURS"].ToString());
+                    items.Add(data);
+                }
+                return items;
             }
         }
         public void SaveChanges()

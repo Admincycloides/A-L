@@ -1,0 +1,35 @@
+@import "../../../assets/scss/paper-dashboard/mixins";
+@import "../../../assets/scss/paper-dashboard/variables";
+@import "../../../assets/scss/paper-dashboard/responsive";
+#headers {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: white;
+    font-weight: bold;
+    color: black;
+    border-collapse: collapse;
+
+}
+.filt-select{
+    width: 156px;
+    font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+    .filt-select{
+        background-color: #dfdfdf!important;
+        height: 40px;
+        @include radius(5px);
+        border: none!important;
+        outline: none;
+        padding: 5px 10px;
+         padding-right: 35px;
+         &:focus,&:focus-visible{
+            border: none!important;
+            outline: none;
+        }
+    }
+
+

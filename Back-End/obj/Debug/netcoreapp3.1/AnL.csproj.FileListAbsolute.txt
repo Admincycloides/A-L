@@ -240,3 +240,13 @@ C:\Users\Shruti\Documents\GitHub\A-L\Back-End\bin\Debug\netcoreapp3.1\AutoMapper
 C:\Users\Shruti\Documents\GitHub\A-L\Back-End\obj\Debug\netcoreapp3.1\AnL.csproj.CopyComplete
 C:\Digital Projects\A&L\A-L\Back-End\bin\Debug\netcoreapp3.1\AnL.StaticWebAssets.xml
 C:\Digital Projects\A&L\A-L\Back-End\bin\Debug\netcoreapp3.1\AutoMapper.dll
+C:\Users\Zakir\OneDrive\Desktop\ALL\A-L\Back-End\obj\Debug\netcoreapp3.1\AnL.csproj.AssemblyReference.cache
+C:\Users\Zakir\OneDrive\Desktop\ALL\A-L\Back-End\obj\Debug\netcoreapp3.1\AnL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Zakir\OneDrive\Desktop\ALL\A-L\Back-End\obj\Debug\netcoreapp3.1\AnL.AssemblyInfoInputs.cache
+C:\Users\Zakir\OneDrive\Desktop\ALL\A-L\Back-End\obj\Debug\netcoreapp3.1\AnL.AssemblyInfo.cs
+C:\Users\Zakir\OneDrive\Desktop\ALL\A-L\Back-End\obj\Debug\netcoreapp3.1\AnL.csproj.CoreCompileInputs.cache
+C:\Users\Zakir\OneDrive\Desktop\ALL\A-L\Back-End\obj\Debug\netcoreapp3.1\AnL.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Zakir\OneDrive\Desktop\ALL\A-L\Back-End\obj\Debug\netcoreapp3.1\AnL.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Zakir\OneDrive\Desktop\ALL\A-L\Back-End\obj\Debug\netcoreapp3.1\AnL.dll
+C:\Users\Zakir\OneDrive\Desktop\ALL\A-L\Back-End\obj\Debug\netcoreapp3.1\AnL.xml
+C:\Users\Zakir\OneDrive\Desktop\ALL\A-L\Back-End\obj\Debug\netcoreapp3.1\AnL.pdb

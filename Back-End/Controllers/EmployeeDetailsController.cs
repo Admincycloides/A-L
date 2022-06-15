@@ -2,6 +2,7 @@
 using AnL.Models;
 using AnL.Repository.Abstraction;
 using AnL.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace AnL.Controllers
 {
+    [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class EmployeeDetailsController : Controller
@@ -94,6 +96,23 @@ namespace AnL.Controllers
                 Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
                 return BadRequest("Oops! Something went wrong!" + ex);
             }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetAllEmployeeList()
+        {
+            try
+            {
+                BaseResponse rsp = new BaseResponse();
+                rsp.Data = await _UOW.EmployeeDetailsRepository.GetAllEmployee();
+                return Ok(rsp);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+
         }
     }
 }

@@ -1,4 +1,3 @@
-
 <div class="action-head justify-content-between d-flex align-items-center mb-4">
     <div class="page-title w-100">Timesheet Management</div>
     <div class="act-filter d-flex align-items-center justify-content-center">
@@ -8,13 +7,26 @@
                 <i class="nc-icon nc-minimal-left"></i>
             </button>
             <div class="date-custom d-flex">
-                <div class="date-holder position-relative d-flex justify-content-center align-items-center">
-                    <input class="form-control date-input" readonly name="dp" [(ngModel)]="model" ngbDatepicker (dateSelect)="dateChange($event)" #d="ngbDatepicker">
-                    <div class="week-range position-absolute">{{weekShow}}</div>
+                <div
+                    class="date-holder position-relative d-flex
+                    justify-content-center align-items-center">
+                    <input
+                        class="form-control date-input"
+                        readonly
+                        name="dp"
+                        [(ngModel)]="model"
+                        ngbDatepicker
+                        (dateSelect)="dateChange($event)"
+                        #d="ngbDatepicker"
+                        />
+                    <div class="week-range position-absolute">{{ weekShow }}</div>
                 </div>
                 <div class="input-group-append">
-                    <button class="btn btn-outline-secondary calendar m-0 date-select"
-                        (click)="d.toggle()" type="button">
+                    <button
+                        class="btn btn-outline-secondary calendar m-0
+                        date-select"
+                        (click)="d.toggle()"
+                        type="button">
                         <i class="nc-icon nc-calendar-60"></i>
                     </button>
                 </div>
@@ -26,21 +38,24 @@
     </div>
     <div class="action d-flex justify-content-end">
         <button class="act-btn thm-btn-primary"
-            (click)="onTimesheetAddEdit(-1)"><i class="nc-icon nc-simple-add"></i>
-            Add Time</button>
+            (click)="onTimesheetAddEdit(-1)">
+            <i class="nc-icon nc-simple-add"></i> Add Time
+        </button>
     </div>
 </div>
-<div class="row sheet-row">
+<div class="sheet-row" [ngClass]="showSideWindow || showSideWindowCheckAll ?
+    'split-col':''">
     <div class="sheet-col">
         <div class="card">
             <div class="card-body pt-1">
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-striped">
                         <thead class="text-primary">
-                            <th>
+                            <th nowrap>
                                 <input class="form-check-input tbl-check"
                                     type="checkbox" value=""
                                     id="flexCheckDefault"
+                                    *ngIf="timeSheetDetails?.length"
                                     (click)="onRowCheck(-1)">
                                 Status
                             </th>
@@ -84,80 +99,106 @@
                                 Delete
                             </th>
                         </thead>
-                        <tbody *ngFor="let row of timeSheetDetails |
-                            paginate: config; let i= index">
-                            <tr>
-                                <td>
+                        <tbody>
+                            <tr *ngFor="let row of timeSheetDetails |
+                                paginate: config; let i= index">
+                                <td nowrap>
                                     <input class="form-check-input tbl-check"
                                         type="checkbox" value=""
                                         id="flexCheckDefault"
-                                        *ngIf="row.status == 'In Progress' || row.status == 'Rejected'"
-                                        (click)="onRowCheck(i)" [checked]="selectAllTimesheet?
+                                        *ngIf="row.status == 'In Progress' ||
+                                        row.status == 'Rejected'"
+                                        (click)="onRowCheck(i)"
+                                        [checked]="selectAllTimesheet?
                                         true:false">
                                     <!-- <input class="form-check-input tbl-check" type="checkbox" value="" id="flexCheckDefault" 
                         (click)="onRowCheck(i)" [checked] = "selectAllTimesheet"> -->
-                                 
-                                  {{row.status}}
+                                    {{ row.status }}
                                 </td>
                                 <td>
-                                  {{row.projectName}}
+                                    {{ row.projectName }}
                                 </td>
                                 <td>
-                                  {{row.activityName}}
-                              </td>
-                                <td>
-                                    {{row.timeTaken[0].numberOfHours}}
+                                    {{ row.activityName }}
                                 </td>
                                 <td>
-                                    {{row.timeTaken[1].numberOfHours}}
+                                    {{ row.timeTaken[0].numberOfHours }}
                                 </td>
                                 <td>
-                                  {{row.timeTaken[2].numberOfHours}}
+                                    {{ row.timeTaken[1].numberOfHours }}
                                 </td>
                                 <td>
-                                  {{row.timeTaken[3].numberOfHours}}
+                                    {{ row.timeTaken[2].numberOfHours }}
                                 </td>
                                 <td>
-                                  {{row.timeTaken[4].numberOfHours}}
+                                    {{ row.timeTaken[3].numberOfHours }}
                                 </td>
                                 <td>
-                                  {{row.timeTaken[5].numberOfHours}}
+                                    {{ row.timeTaken[4].numberOfHours }}
                                 </td>
                                 <td>
-                                  {{row.timeTaken[6].numberOfHours}}
+                                    {{ row.timeTaken[5].numberOfHours }}
                                 </td>
                                 <td>
-                                  {{row.timeTaken[0].numberOfHours+row.timeTaken[1].numberOfHours+row.timeTaken[2].numberOfHours
-                                  +row.timeTaken[3].numberOfHours+row.timeTaken[4].numberOfHours+row.timeTaken[5].numberOfHours+row.timeTaken[6].numberOfHours
-                                  }}
+                                    {{ row.timeTaken[6].numberOfHours }}
                                 </td>
                                 <td>
-                                    {{row.remarks}}
+                                    {{
+                                    row.timeTaken[0].numberOfHours +
+                                    row.timeTaken[1].numberOfHours +
+                                    row.timeTaken[2].numberOfHours +
+                                    row.timeTaken[3].numberOfHours +
+                                    row.timeTaken[4].numberOfHours +
+                                    row.timeTaken[5].numberOfHours +
+                                    row.timeTaken[6].numberOfHours
+                                    }}
+                                </td>
+                                <td>
+                                    {{ row.remarks }}
                                 </td>
 
                                 <td>
-                                    <button class="edit actico-btn"
-                                        (click)="onTimesheetAddEdit(i)" *ngIf="row.status == 'In Progress' || row.status == 'Rejected'"><img
-                                            src="../../../assets/img/edit.png"
-                                            alt="" /></button>
+                                    <button
+                                        class="edit actico-btn"
+                                        (click)="onTimesheetAddEdit(i)"
+                                        *ngIf="row.status == 'In Progress' ||
+                                        row.status == 'Rejected' ||
+                                        row.status == 'Submitted'">
+                                        <img src="../../../assets/img/edit.png"
+                                            alt="" />
+                                    </button>
                                 </td>
                                 <td>
-                                    <button class="delete actico-btn"
-                                        (click)="onTimesheetDelete(i)" *ngIf="row.status == 'In Progress' || row.status == 'Rejected'"><img
+                                    <button
+                                        class="delete actico-btn"
+                                        (click)="onTimesheetDelete(i)"
+                                        *ngIf="row.status == 'In Progress' ||
+                                        row.status == 'Rejected'">
+                                        <img
                                             src="../../../assets/img/delete.png"
-                                            alt="" class="del-ico"/></button>
+                                            alt=""
+                                            class="del-ico"
+                                            />
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                    <ng-container *ngIf="timeSheetDetails == null">
+                        <div class="justify-content-center mb-5 mt-2 d-flex">
+                            No timesheet records during the selected week!!
+                        </div>
+                    </ng-container>
                 </div>
             </div>
         </div>
         <!-- Pagination -->
-        <div class="pagination-line d-flex justify-content-end" *ngIf="true">
+        <div
+            class="pagination-line d-flex justify-content-end"
+            *ngIf="timeSheetDetails != null">
             <ul>
                 <pagination-controls
-                    id='timesheet'
+                    id="timesheet"
                     (pageChange)="pageChanged($event)"
                     [directionLinks]="true"
                     [autoHide]="false"
@@ -171,79 +212,109 @@
                 </pagination-controls>
             </ul>
         </div>
-        <ng-container *ngIf="timeSheetDetails == null">
-            <div class="justify-content-center mb-5 mt-2 d-flex">No timesheet records during the selected week!!</div>
-          </ng-container>
     </div>
 
-    <div class=" remarks-col" *ngIf="showSideWindow">
+    <div class="remarks-col" *ngIf="showSideWindow || showSideWindowCheckAll">
         <div class="card">
             <div class="card-body pt-1">
                 <div class="r-row mb-1">
                     <label>Send to</label>
-                    <select required (change)="onselectSupervisor($event)" class="form-control">
+                    <select
+                        required
+                        (change)="onselectSupervisor($event)"
+                        class="form-control">
                         <option>(Supervisor)</option>
-                        <option *ngFor="let item of superVisorList" [value]="item.managerId">{{item.firstName}} 
-                            {{item.lastName}}
+                        <option
+                            *ngFor="let item of superVisorList"
+                            [value]="item.managerId">
+                            {{ item.firstName }}
+                            {{ item.lastName }}
                         </option>
                     </select>
                 </div>
                 <div class="r-row mb-1">
                     <label>Remarks</label>
-                    <textarea [(ngModel)]="submitRemarks" class="form-control" rows="4"></textarea>
+                    <textarea
+                        [(ngModel)]="submitRemarks"
+                        class="form-control"
+                        rows="4"></textarea>
                 </div>
                 <div class="r-row">
-                    <button (click)="onSubmitTimesheet()" class="thm-btn-primary sm-btn w-100 my-2">Submit</button>
+                    <button
+                        (click)="onSubmitTimesheet()"
+                        class="thm-btn-primary sm-btn w-100 my-2">
+                        Submit
+                    </button>
                 </div>
             </div>
         </div>
-        
     </div>
-
 </div>
 <ng-template #content let-modal>
     <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title">Add Time</h4>
-        <button type="button" class="btn-close" aria-label="Close"
-            (click)="modal.dismiss('Cross click')"><i class="nc-icon
-                nc-simple-remove"></i></button>
+        <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            (click)="modal.dismiss('Cross click')">
+            <i class="nc-icon nc-simple-remove"></i>
+        </button>
     </div>
     <div class="modal-body addproject-modal">
         <form [formGroup]="addTimesheetForm">
             <div class="row fm-row">
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <div class="form-group mb-3">
                         <label>Select Project</label>
-                        <select class="form-control" formControlName = "project" (change)="onProjectSelect($event)">
-                            <option selected>Select Project</option>
-                            <option *ngFor="let item of projectList" [ngValue]="item.ProjectName">{{item.ProjectName}}</option>
+                        <select
+                            class="form-control"
+                            formControlName="project"
+                            (change)="onProjectSelect($event)">
+                            <!-- <option selected >Select Project</option> -->
+                            <option
+                                *ngFor="let item of projectList"
+                                [ngValue]="item.projectName">
+                                {{ item.projectName }}
+                            </option>
                         </select>
-                        <small *ngIf="formSubmitted && !addTimesheetForm.controls.project.value">
+                        <small
+                            *ngIf="formSubmitted &&
+                            !addTimesheetForm.controls.project.value">
                             <span class="error">Project is required</span>
-                          </small>
+                        </small>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label>Activity</label>
+                        <select
+                            class="form-control"
+                            id="activity"
+                            name="activity"
+                            formControlName="activity">
+                            <!-- <option selected>Select Activity</option> -->
+                            <option
+                                *ngFor="let item of activityList"
+                                [ngValue]="item.activityName">
+                                {{ item.activityName }}
+                            </option>
+                        </select>
+                        <small
+                            *ngIf="formSubmitted &&
+                            !addTimesheetForm.controls.activity.value">
+                            <span class="error">Activity is required</span>
+                        </small>
                     </div>
                 </div>
             </div>
-            <div class="row fm-row">
-                <div class="col-md-12">
-                    <div class="form-group mb-3">
-                        <label>Activity</label>  
-                        <select class="form-control" id="activity" name = "activity" formControlName ="activity">
-                            <option selected>Select Activity</option>
-                            <option *ngFor="let item of activityList" [ngValue]="item.ActivityName"
-                            >{{item.ActivityName}}</option>
-                        </select>
-                        <small *ngIf="formSubmitted && !addTimesheetForm.controls.activity.value">
-                            <span class="error">Activity is required</span>
-                          </small>
-                </div>
-            </div>
-            </div>
+
             <div class="row fm-row">
                 <div class="col-md-12">
                     <div class="form-group mb-3">
                         <label>Remarks</label>
-                        <textarea class="form-control" formControlName = "remarks"></textarea>
+                        <textarea class="form-control"
+                            formControlName="remarks"></textarea>
                         <div class="error"></div>
                     </div>
                 </div>
@@ -255,58 +326,85 @@
                             <thead class="text-primary">
                                 <th>
                                     Monday
-                                    {{currentWeek[0] | date: "MMM-d"}}
+                                    {{ currentWeek[0] | date: "MMM-d" }}
                                 </th>
-                                <th>
-                                    Tuesday {{currentWeek[1] | date: "MMM-d"}}
-                                </th>
-                                <th>
-                                    Wednesday {{currentWeek[2] | date: "MMM-d"}}
-                                </th>
-                                <th>
-                                    Thusday {{currentWeek[3] | date: "MMM-d"}}
-                                </th>
-                                <th>
-                                    Friday {{currentWeek[4] | date: "MMM-d"}}
-                                </th>
-                                <th>
-                                    Saturday {{currentWeek[5] | date: "MMM-d"}}
-                                </th>
-                                <th>
-                                    Sunday {{currentWeek[6] | date: "MMM-d"}}
-                                </th>
-                  
-
+                                <th>Tuesday {{ currentWeek[1] | date: "MMM-d" }}</th>
+                                <th>Wednesday {{ currentWeek[2] | date: "MMM-d"
+                                    }}</th>
+                                <th>Thusday {{ currentWeek[3] | date: "MMM-d" }}</th>
+                                <th>Friday {{ currentWeek[4] | date: "MMM-d" }}</th>
+                                <th>Saturday {{ currentWeek[5] | date: "MMM-d"
+                                    }}</th>
+                                <th>Sunday {{ currentWeek[6] | date: "MMM-d" }}</th>
                             </thead>
                             <tbody>
-                              <ng-container>
-                                <tr>
-                                  <td>
-                                      <input type="text" class="h-input" formControlName="monday" />
-                                  </td>
-                                  <td>
-                                      <input type="number" class="h-input" formControlName="tuesday" />
-                                  </td>
-                                  <td>
-                                      <input type="number" class="h-input" formControlName="wednesday" />
-                                  </td>
-                                  <td>
-                                      <input type="number" class="h-input" formControlName="thursday" />
-                                  </td>
-                                  <td>
-                                      <input type="number" class="h-input" formControlName="friday" />
-                                  </td>
-                                  <td>
-                                      <input type="number" class="h-input" formControlName="saturday" />
-                                  </td>
-                                  <td>
-                                      <input type="number" class="h-input" formControlName="sunday" />
-                                  </td>
-
-
-                              </tr>
-                              </ng-container>
-                                
+                                <ng-container>
+                                    <tr>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                class="h-input"
+                                                formControlName="monday"
+                                                />
+                                                <div  class="error" *ngIf="formSubmitted &&
+                                                addTimesheetForm.controls.monday?.invalid">Select Value Between 0-24</div>
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                class="h-input"
+                                                formControlName="tuesday"
+                                                />
+                                                <div  class="error" *ngIf="formSubmitted &&
+                                                addTimesheetForm.controls.tuesday?.invalid">Select Value Between 0-24</div>
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                class="h-input"
+                                                formControlName="wednesday"
+                                                />
+                                                <div  class="error" *ngIf="formSubmitted &&
+                                                addTimesheetForm.controls.wednesday?.invalid">Select Value Between 0-24</div>
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                class="h-input"
+                                                formControlName="thursday"
+                                                />
+                                                <div  class="error" *ngIf="formSubmitted &&
+                                                addTimesheetForm.controls.thursday?.invalid">Select Value Between 0-24</div>
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                class="h-input"
+                                                formControlName="friday"
+                                                />
+                                                <div  class="error" *ngIf="formSubmitted &&
+                                                addTimesheetForm.controls.friday?.invalid">Select Value Between 0-24</div>
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                class="h-input"
+                                                formControlName="saturday"
+                                                />
+                                                <div  class="error" *ngIf="formSubmitted &&
+                                                addTimesheetForm.controls.saturday?.invalid">Select Value Between 0-24</div>
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                class="h-input"
+                                                formControlName="sunday"
+                                                />
+                                                <div  class="error" *ngIf="formSubmitted &&
+                                                addTimesheetForm.controls.sunday?.invalid">Select Value Between 0-24</div>
+                                        </td>
+                                    </tr>
+                                </ng-container>
                             </tbody>
                         </table>
                     </div>
@@ -315,8 +413,12 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark"
-            (click)="onSaveTimesheetDetails()">Save</button>
+        <button
+            type="button"
+            class="act-btn thm-btn thm-btn-primary"
+            (click)="onSaveTimesheetDetails()">
+            Save
+        </button>
     </div>
 </ng-template>
 <!-- ;modal.close('Save click') -->

@@ -30,22 +30,39 @@ export class UrlService {
     submitOTP           : 'api/User/SubmitOTP',
   }
   public timesheet = {
-    getTimesheet      : 'api/Timesheet/GetDetails',
-    deleteTimesheet   : 'api/Timesheet/DeleteTimesheet',
-    addTimesheet      : 'api/Timesheet/AddTimesheetDetails',
-    editTimesheet     : 'api/Timesheet/ModifyTimesheet',
-    submitTimesheet   : 'api/Timesheet/SubmitTimesheetDetails'
+    getTimesheet              : 'api/Timesheet/GetDetails',
+    deleteTimesheet           : 'api/Timesheet/DeleteTimesheet',
+    addTimesheet              : 'api/Timesheet/AddTimesheetDetails',
+    editTimesheet             : 'api/Timesheet/ModifyTimesheet',
+    submitTimesheet           : 'api/Timesheet/SubmitTimesheetDetails',
+    getReviewTimesheet        : 'api/Timesheet/GetReviewTimesheet',
+    getReviewTimesheetDetails : 'api/Timesheet/GetReviewTimesheetDetails',
+    supervisorDecision        : 'api/Timesheet/supervisorDecision',
+    getTimesheetReport        : 'api/Timesheet/GetTimesheetReport'
   }
   public Employee = {
     //getEmployeeDetails    : 'api/Employee/getEmployeeDetails',
-    getSupervisorDetails  : 'api/EmployeeDetails/GetSupervisorDetails'
-  }
-  public review  = {
-    getReviewTimesheet        : 'api/review/GetReviewTimesheet',
-    getReviewTimesheetDetails : 'api/review/GetReviewTimesheetDetails',
-    supervisorDecision        : 'api/review/supervisorDecision'
+    getSupervisorDetails     : 'api/EmployeeDetails/GetSupervisorDetails',
+    getAllEmployeeList       : 'api/EmployeeDetails/GetAllEmployeeList'
   }
   public project = {
-    getprojectListbyEmployeeID :'api/Project/GetprojectListbyEmployeeID'
+    getprojectListbyEmployeeID :'api/Project/GetprojectListbyEmployeeID',
+    getProjectList             : 'api/Project/GetAllProjectList',
+    addProject : 'api/Project/AddProject',
+    deleteProject : 'api/Project/DeleteProject',
+    allocateResources : 'api/Project/allocateResources',
+    getallprojectlist : 'api/Project/GetAllProjectList',
+    getprojectlist: 'api/Project/GetProjectList',
+    getclientlist : 'api/Project/GetClientList',
+    editproject : 'api/Project/EditProject',
+    getprojectdetailsByid:'api/Project/GetprojectDetailsByID'
+  }
+
+  public activity = {
+    addActivity : 'api/Project/AddActivity',
+    getActivityList : 'api/Project/GetActivityList',
+    editactivity:'api/Project/EditProjectActive',
+    deleteactivity:'api/Project/DeleteActivity?ActivityID=1'
+
   }
 }

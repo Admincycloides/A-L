@@ -5,9 +5,14 @@ using AnL.ViewModel;
 using System;
 using Serilog;
 using AnL.Constants;
+using AnL.Models;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace AnL.Controllers
 {
+    [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class ProjectController : Controller
@@ -57,14 +62,32 @@ namespace AnL.Controllers
             }
 
         }
-
-        [HttpPost]
-        public async Task<ActionResult> AddProject(ProjectViewModel ProjectDetails)
+        [HttpGet]
+        public async Task<ActionResult> GetClientList()
         {
             try
             {
                 BaseResponse rsp = new BaseResponse();
-                var data = await _UOW.ProjectRepository.AddProject(ProjectDetails);
+                rsp.Data = await _UOW.ProjectRepository.GetClientList();
+                return Ok(rsp);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddProject(List<ProjectViewModel> ProjectDetails)
+        {
+            var user = HttpContext.User;
+            var Userid = user.FindFirst(ClaimTypes.NameIdentifier).Value;
+            try
+            {
+                BaseResponse rsp = new BaseResponse();
+                var data = await _UOW.ProjectRepository.AddProject(ProjectDetails,Userid);
                 if (data == null)
                 {
                     rsp.Data = "Project Name already exist.";
@@ -83,6 +106,60 @@ namespace AnL.Controllers
                 return BadRequest("Oops! Something went wrong!" + ex);
             }
         }
+        [HttpPost]
+        public async Task<ActionResult> AddActivity(List<ActivityMaster> ActivityDetails)
+        {
+            try
+            {
+                BaseResponse rsp = new BaseResponse();
+                var data = await _UOW.ProjectRepository.AddActivity(ActivityDetails);
+                if (data != null)
+                {
+                    rsp.Data = "Activity Name already exist.";
+                    return Conflict(rsp);
+                }
+                else
+                {
+                    rsp.Data = data;
+                    rsp.ResponseMessage = MessageConstants.ActivityAdditionSuccess;
+                }
+                return Ok(rsp);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult> EditActivity(List<ActivityMaster> ActivityDetails)
+        {
+            try
+            {
+                BaseResponse rsp = new BaseResponse();
+                var data = await _UOW.ProjectRepository.EditActivity(ActivityDetails);
+                if (data != null)
+                {
+                    rsp.Data = "Activity Name already exist.";
+                    return Conflict(rsp);
+                }
+                else
+                {
+                    rsp.Data = data;
+                    rsp.ResponseMessage = MessageConstants.ActivityAdditionSuccess;
+                }
+                return Ok(rsp);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+        }
+
+
 
         [HttpPost]
         public async Task<ActionResult> AllocateResources( MapProjectResources Data)
@@ -109,8 +186,228 @@ namespace AnL.Controllers
                 return BadRequest("Oops! Something went wrong!" + ex);
             }
         }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpPost]
+        public async Task<ActionResult> EditProject(EditProjectView project)
+        {
+            BaseResponse response = new BaseResponse();
+            if (project == null)
+            {
+                response.Data = project;
+                response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
+            }
+            var EditProjectResponse = _UOW.ProjectRepository.EditProject(project);
+
+            if (EditProjectResponse != null)
+            {
+                response.Data = EditProjectResponse;
+                response.ResponseCode = HTTPConstants.OK;
+                response.ResponseMessage = MessageConstants.ProjectDeletionSuccess;
+
+            }
+            else
+            {
+                response.Data = EditProjectResponse;
+                response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
+                return BadRequest(response);
+            }
+            return Ok(response);
 
 
+        
+
+}
+        [HttpPost]
+        public async Task<ActionResult> EditProjectDetails(EditProjectView project)
+        {
+            BaseResponse response = new BaseResponse();
+            if (project == null)
+            {
+                response.Data = project;
+                response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
+            }
+            var EditProjectResponse = _UOW.ProjectRepository.EditProjectDetails(project);
+
+            if (EditProjectResponse != null)
+            {
+                response.Data = EditProjectResponse;
+                response.ResponseCode = HTTPConstants.OK;
+                response.ResponseMessage = MessageConstants.EditProjectSuccess;
+
+            }
+            else
+            {
+                response.Data = EditProjectResponse;
+                response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                response.ResponseMessage = MessageConstants.EditProjectSuccess;
+                return BadRequest(response);
+            }
+            return Ok(response);
+
+
+
+
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult> EditProjectActive(EditProjectView project)
+        {
+            BaseResponse response = new BaseResponse();
+            if (project == null)
+            {
+                response.Data = project;
+                response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
+            }
+            var EditProjectResponse = _UOW.ProjectRepository.EditProjectActive(project);
+
+            if (EditProjectResponse != null)
+            {
+                response.Data = EditProjectResponse;
+                response.ResponseCode = HTTPConstants.OK;
+                response.ResponseMessage = MessageConstants.EditProjectSuccess;
+
+            }
+            else
+            {
+                response.Data = EditProjectResponse;
+                response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                response.ResponseMessage = MessageConstants.EditProjectSuccess;
+                return BadRequest(response);
+            }
+            return Ok(response);
+
+
+
+
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> DeleteActivity(int ActivityID)
+        {
+            try
+            {
+                BaseResponse response = new BaseResponse();
+                if (ActivityID == 0)
+                {
+                    response.Data = ActivityID;
+                    response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                    response.ResponseMessage = MessageConstants.ActivityDeletionFailed;
+                }
+                var DeleteProjectResponse = _UOW.ProjectRepository.DeleteActivity(ActivityID);
+
+                if (DeleteProjectResponse)
+                {
+                    response.Data = DeleteProjectResponse;
+                    response.ResponseCode = HTTPConstants.OK;
+                    response.ResponseMessage = MessageConstants.ActivityDeletionSuccess;
+
+                }
+                else
+                {
+                    response.Data = DeleteProjectResponse;
+                    response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                    response.ResponseMessage = MessageConstants.ActivityDeletionFailed;
+                    return BadRequest(response);
+                }
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> DeleteProject(int projectID)
+        {
+            try
+            {
+                BaseResponse response = new BaseResponse();
+                if (projectID==0)
+                {
+                    response.Data = projectID;
+                    response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                    response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
+                }
+                var DeleteProjectResponse = _UOW.ProjectRepository.DeleteProject(projectID);
+                
+                if (DeleteProjectResponse)
+                {
+                    response.Data = DeleteProjectResponse;
+                    response.ResponseCode = HTTPConstants.OK;
+                    response.ResponseMessage = MessageConstants.ProjectDeletionSuccess;
+
+                }
+                else
+                {
+                    response.Data = DeleteProjectResponse;
+                    response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                    response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
+                    return BadRequest(response);
+                }
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+        }
+       
+ [HttpGet]
+        public async Task<ActionResult> GetprojectDetailsByID(int ProjectID)
+        {
+            try
+            {
+                BaseResponse rsp = new BaseResponse();
+                rsp.Data = await _UOW.ProjectRepository.GetprojectDetailsByID(ProjectID);
+                return Ok(rsp);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+
+        } 
+        [HttpGet]
+        public async Task<ActionResult> GetAllProjectList()
+        {
+            try
+            {
+                BaseResponse rsp = new BaseResponse();
+                rsp.Data = await _UOW.ProjectRepository.GetAllProject();
+                return Ok(rsp);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+
+        } 
+        [HttpGet]
+        public async Task<ActionResult> GetProjectList(string EmpID, string ProjectName)
+        {
+            try
+            {
+                BaseResponse rsp = new BaseResponse();
+                rsp.Data = await _UOW.ProjectRepository.GetProjectList( EmpID, ProjectName);
+                return Ok(rsp);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+
+        }
 
     }
 }

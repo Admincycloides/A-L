@@ -39,122 +39,29 @@
                             </th>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr *ngFor="let log of logs">
                                 <td>
-                                    Project 1
+                                    {{log.projectName}}
                                 </td>
                                 <td>
-                                    Alex
+                                    {{log.employeeName}}
                                 </td>
                                 <td>
-                                    5/23/2022
+                                    {{log.date}}
                                 </td>
                                 <td>
-                                    Activity 1
+                                    {{log.activity}}
                                 </td>
                                 <td>
-                                    Created
+                                    {{log.action}}
                                 </td>
                                 <td>
-                                    5 Hours
-                                </td>
-                                <td>
-                                    <button class="thm-linkbtn">Click here</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Project 1
-                                </td>
-                                <td>
-                                    Alex
-                                </td>
-                                <td>
-                                    5/23/2022
-                                </td>
-                                <td>
-                                    Activity 1
-                                </td>
-                                <td>
-                                    Created
-                                </td>
-                                <td>
-                                    5 Hours
+                                    {{log.Details}}
                                 </td>
                                 <td>
                                     <button class="thm-linkbtn">Click here</button>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    Project 1
-                                </td>
-                                <td>
-                                    Alex
-                                </td>
-                                <td>
-                                    5/23/2022
-                                </td>
-                                <td>
-                                    Activity 1
-                                </td>
-                                <td>
-                                    Created
-                                </td>
-                                <td>
-                                    5 Hours
-                                </td>
-                                <td>
-                                    <button class="thm-linkbtn">Click here</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Project 1
-                                </td>
-                                <td>
-                                    Alex
-                                </td>
-                                <td>
-                                    5/23/2022
-                                </td>
-                                <td>
-                                    Activity 1
-                                </td>
-                                <td>
-                                    Created
-                                </td>
-                                <td>
-                                    5 Hours
-                                </td>
-                                <td>
-                                    <button class="thm-linkbtn">Click here</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Project 1
-                                </td>
-                                <td>
-                                    Alex
-                                </td>
-                                <td>
-                                    5/23/2022
-                                </td>
-                                <td>
-                                    Activity 1
-                                </td>
-                                <td>
-                                    Created
-                                </td>
-                                <td>
-                                    5 Hours
-                                </td>
-                                <td>
-                                    <button class="thm-linkbtn">Click here</button>
-                                </td>
-                            </tr>
-
                         </tbody>
                     </table>
                 </div>

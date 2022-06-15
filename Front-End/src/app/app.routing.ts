@@ -6,11 +6,6 @@ import { TimesheetComponent } from './pages/timesheet/timesheet.component';
 import AuthGuard from './_guards/auth.guard';
 
 export const AppRoutes: Routes = [
-  // {
-  //   path: '',
-  //   redirectTo: 'dashboard',
-  //   pathMatch: 'full',
-  // },
   {
     path: '',
     redirectTo: 'login',
@@ -20,22 +15,14 @@ export const AppRoutes: Routes = [
   {
     path: '',
     component: AdminLayoutComponent,
-    //canActivate :[AuthGuard],
+    canActivate :[AuthGuard],
     children: [
         {
       path: '',
       loadChildren: () => import('./layouts/admin-layout/admin-layout.module').then(x => x.AdminLayoutModule)
   }]},
-  // {
-  //   path: 'timesheet',
-  //   component: AdminLayoutComponent,
-  //   children: [
-  //       {
-  //     path: '',
-  //     loadChildren: () => import('./layouts/admin-layout/admin-layout.module').then(x => x.AdminLayoutModule)
-  // }]},
   {
     path: '**',
-    redirectTo: 'login'
+    redirectTo: ''
   }
 ]

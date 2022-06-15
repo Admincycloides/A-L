@@ -13,7 +13,7 @@ export class AuthService {
     //const time = Math.floor(Date.now() / 1000);
     
     const time = new Date();
-    console.log("tokenExpiryTime > time",tokenExpiryTime > time)
+    //console.log("tokenExpiryTime > time",tokenExpiryTime > time)
     if(tokenExpiryTime > time){
       return true;
     }
