@@ -6,6 +6,8 @@ using AnL.ViewModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using AnL.Helpers.AuditTrail;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace AnL.Repository.Implementation
 {
@@ -14,7 +16,8 @@ namespace AnL.Repository.Implementation
         private DbContext _context;
         private readonly IUnitOfWork _UOW;
         private TimesheetDetailRepository timesheetDetail;
-        private readonly IMopDbContext Db;
+        private AuditRepository audit;
+        //private readonly MopDbContext Db;
 
         DbSet<ProjectDetails> dbSet;
         DbSet<ProjectMapping> dbSetProjectMapp;
@@ -30,6 +33,8 @@ namespace AnL.Repository.Implementation
             dbActivityMapp = context.Set<ActivityMapping>();
             dbActivity = context.Set<ActivityDetails>();
             timesheetDetail = new TimesheetDetailRepository(context,UOW);
+            audit = new AuditRepository(context, UOW);
+
         }
 
         public async Task<object> AllocateResources(MapProjectResources Data)
@@ -105,6 +110,7 @@ namespace AnL.Repository.Implementation
                         var employeeMapp = new List<ProjectMapping>();
                         
                         this.Add(Project);
+                        audit.AddAuditLogs(Userid);
                         this.SaveChanges();
 
                         foreach (var a in proj.EmployeeID)
@@ -119,7 +125,9 @@ namespace AnL.Repository.Implementation
                         }
                         Project.ProjectMapping = employeeMapp;
                         //this.dbSetProjectMapp.AddRange(employeeMapp);
+                        audit.AddAuditLogs(Userid);
                         this.SaveChanges();
+                        
                         //foreach (var a in proj.Activities)
                         //{
                         //    activty.Add(new ActivityMapping { ActivityId = a.ActivityId, ProjectId= Project.ProjectId });
@@ -198,7 +206,7 @@ namespace AnL.Repository.Implementation
             }
         }
        
-        public async Task<object> EditProjectDetails(EditProjectView project)
+        public async Task<object> EditProjectDetails(EditProjectView project, string userid)
         {
             try
             {
@@ -210,6 +218,7 @@ namespace AnL.Repository.Implementation
                 NewProject.CurrentStatus = project.CurrentStatus;
                 NewProject.EnabledFlag = project.EnabledFlag;
                 NewProject.ClientId = project.ClientId;
+                audit.AddAuditLogs(userid);
                 this.SaveChanges();
 
                 return null;
@@ -221,7 +230,7 @@ namespace AnL.Repository.Implementation
             }
 
         }
-        public async Task<object> EditProjectActive(EditProjectView project)
+        public async Task<object> EditProjectActive(EditProjectView project,string userid)
         {
             try
             {
@@ -252,6 +261,7 @@ namespace AnL.Repository.Implementation
 
 
                     }
+                audit.AddAuditLogs(userid);
                 this.SaveChanges();
               
 
@@ -265,7 +275,7 @@ namespace AnL.Repository.Implementation
             
         }
 
-        public async Task<object> EditProject(EditProjectView project)
+        public async Task<object> EditProject(EditProjectView project,string userid)
         {
             try
             {
@@ -310,6 +320,7 @@ namespace AnL.Repository.Implementation
                        
 
                     }
+                audit.AddAuditLogs(userid);
                 this.SaveChanges();
 
                 return null;
@@ -319,7 +330,7 @@ namespace AnL.Repository.Implementation
                 throw ex;
             }
         }
-        public async Task<object> EditActivity(List<ActivityMaster> viewModel)
+        public async Task<object> EditActivity(List<ActivityMaster> viewModel,string userid)
         {
             try
             {
@@ -345,7 +356,9 @@ namespace AnL.Repository.Implementation
                         activityData.ActivityDescription = proj.ActivityDescription;
                         
                     }
+                    audit.AddAuditLogs(userid);
                     this.SaveChanges();
+                    
                 }
 
             }
@@ -355,10 +368,11 @@ namespace AnL.Repository.Implementation
             }
             return null;
         }
-        public async Task<object> AddActivity(List<ActivityMaster> viewModel)
+        public async Task<object> AddActivity(List<ActivityMaster> viewModel,string userid)
         {
             try
             {
+                //IMopDbContext Db1 = new MopDbContext();
                 foreach (var proj in viewModel)
                 {
                     if (!await _context.Set<ActivityDetails>().Where(X => X.ActivityName.Trim() == proj.ActivityName.Trim().ToLower()).AnyAsync())
@@ -377,9 +391,14 @@ namespace AnL.Repository.Implementation
                         };
 
                         dbActivity.Add(activity);
+                        
+                        
+                        audit.AddAuditLogs(userid);
                         this.SaveChanges();
 
-                        return (await _context.Set<ActivityDetails>().Where(X => X.ActivityName.Trim() == proj.ActivityName.Trim().ToLower()).Select(X => X.ActivityId).FirstOrDefaultAsync());
+
+                        var a = await _context.Set<ActivityDetails>().Where(X => X.ActivityName.Trim() == proj.ActivityName.Trim().ToLower()).Select(X => X.ActivityId).FirstOrDefaultAsync();
+                        return (a);
                     }
                     else
                     {
@@ -393,9 +412,10 @@ namespace AnL.Repository.Implementation
                 throw ex;
             }
         }
-
-        public bool DeleteActivity(int activityID)
+        
+        public bool DeleteActivity(int activityID,string userid)
         {
+            
             try
             {
                 var activity = new ActivityDetails();
@@ -417,6 +437,7 @@ namespace AnL.Repository.Implementation
                 }
                 //activity = this.dbActivity.Find(activityID);
                 activity.EnabledFlag = "False";
+                audit.AddAuditLogs(userid);
                 this.SaveChanges();
                 return true;
             }
@@ -483,7 +504,7 @@ namespace AnL.Repository.Implementation
 
         }
 
-        public bool DeleteProject(int project)
+        public bool DeleteProject(int project,string userid)
         {
             try
             {
@@ -518,7 +539,8 @@ namespace AnL.Repository.Implementation
                     eachItem.ActivityMapping = activityMapp;
                     eachItem.ProjectMapping = projectMapp;
                     eachItem.EnabledFlag = "FALSE";
-                       // this.Add(eachItem);
+                    // this.Add(eachItem);
+                    audit.AddAuditLogs(userid);
                         this.SaveChanges();
                     
                 }

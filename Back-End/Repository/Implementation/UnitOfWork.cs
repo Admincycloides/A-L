@@ -22,7 +22,19 @@ namespace AnL.Repository.Implementation
         private IUser _UserRepository;
         private IEmployeeDetails _EmployeeDetailRepository;
         private IProject _ProjectRepository;
+        private IAudit _AuditRepository;
 
+        public IAudit AuditRepository
+        {
+            get
+            {
+                if (_AuditRepository == null)
+                {
+                    _AuditRepository = new AuditRepository(_dbcontext, _UOW);
+                }
+                return _AuditRepository;
+            }
+        }
         public IProject ProjectRepository
         {
             get

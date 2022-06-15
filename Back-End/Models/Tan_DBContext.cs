@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using AnL.Models;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace AnL.Models
 {
@@ -21,7 +17,8 @@ namespace AnL.Models
 
         public virtual DbSet<ActivityDetails> ActivityDetails { get; set; }
         public virtual DbSet<ActivityMapping> ActivityMapping { get; set; }
-        public virtual DbSet<Audit> Audit { get; set; }
+        public virtual DbSet<Audit1> Audit1 { get; set; }
+        public virtual DbSet<AuditOld> AuditOld { get; set; }
         public virtual DbSet<ClientDetails> ClientDetails { get; set; }
         public virtual DbSet<EmployeeDetails> EmployeeDetails { get; set; }
         public virtual DbSet<ProjectDetails> ProjectDetails { get; set; }
@@ -29,8 +26,7 @@ namespace AnL.Models
         public virtual DbSet<TimesheetDetails> TimesheetDetails { get; set; }
         public virtual DbSet<UserData> UserData { get; set; }
         public virtual DbSet<UserLogin> UserLogin { get; set; }
-        
-       
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -92,8 +88,39 @@ namespace AnL.Models
                     .HasConstraintName("Project Details-ActivityMap");
             });
 
-            modelBuilder.Entity<Audit>(entity =>
+            modelBuilder.Entity<Audit1>(entity =>
             {
+                entity.HasKey(e => e.Pid);
+
+                entity.Property(e => e.Pid).HasColumnName("pid");
+
+                entity.Property(e => e.AuditDateTimeUtc).HasColumnType("datetime");
+
+                entity.Property(e => e.AuditType)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.AuditUser)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ChangedColumns)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.KeyValues)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TableName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<AuditOld>(entity =>
+            {
+                entity.ToTable("Audit_old");
+
                 entity.Property(e => e.AffectedColumns)
                     .HasMaxLength(50)
                     .IsUnicode(false);
