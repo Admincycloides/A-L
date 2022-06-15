@@ -59,4 +59,13 @@ namespace AnL.ViewModel
 
 
     }
+    public class ProjectListingViewModel : EditProjectView
+    {
+        public string clientName { get; set; }
+
+        public List<EmployeeListViewModel> EmployeeList { get; set; } = new List<EmployeeListViewModel>();
+        public List<EmployeeListViewModel> SupervisorList { get; set; } = new List<EmployeeListViewModel>();
+
+
+    }
 }

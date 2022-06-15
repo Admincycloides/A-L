@@ -644,9 +644,9 @@ namespace AnL.Repository.Implementation
 
         }
 
-        public async Task<List<ProjectListViewModel>> GetProjectList(string EmployeeID , string ProjectName)
+        public async Task<List<ProjectListingViewModel>> GetProjectList(string EmployeeID , string ProjectName)
         {
-            List<ProjectListViewModel> rsp = new List<ProjectListViewModel>();
+            List<ProjectListingViewModel> rsp = new List<ProjectListingViewModel>();
             try
             {
                 await Task.Run(() =>
@@ -655,7 +655,7 @@ namespace AnL.Repository.Implementation
                     {
                         rsp = (_context.Set<ProjectDetails>().Where(y => y.ClientId != null).Where(y => y.EnabledFlag.ToLower() == "true").Include(d => d.ProjectMapping).Include(X => X.Client).Select(
 
-                           X => new ProjectListViewModel
+                           X => new ProjectListingViewModel
                            {
                                ProjectId = X.ProjectId,
                                ProjectName = X.ProjectName,
@@ -667,8 +667,8 @@ namespace AnL.Repository.Implementation
                                StartDate = X.StartDate,
                                EndDate = X.EndDate,
                                clientName = X.Client.ClientName,
-                               EmployeeList = X.ProjectMapping.Where(a => a.Active == true && a.Employee.SupervisorFlag == "N").Select(u => u.Employee.FirstName + " " + u.Employee.LastName).ToList(),
-                               SupervisorList = X.ProjectMapping.Where(a => a.Active == true && a.Employee.SupervisorFlag == "Y").Select(u => u.Employee.FirstName + " " + u.Employee.LastName).ToList()
+                               EmployeeList = X.ProjectMapping.Where(a => a.Active == true && a.Employee.SupervisorFlag == "N").Select(u => new EmployeeListViewModel {EmployeeId=u.EmployeeId,EmployeeName=String.Concat( u.Employee.FirstName + " " + u.Employee.LastName )}).ToList(),
+                               SupervisorList = X.ProjectMapping.Where(a => a.Active == true && a.Employee.SupervisorFlag == "Y").Select(u => new EmployeeListViewModel { EmployeeId=u.EmployeeId, EmployeeName = String.Concat(u.Employee.FirstName + " " + u.Employee.LastName) }).ToList()
 
                            }
                            )).ToList();
@@ -678,7 +678,7 @@ namespace AnL.Repository.Implementation
                         rsp = (_context.Set<ProjectDetails>().Where( y=>y.ProjectName.Trim().ToLower().Contains(ProjectName.Trim().ToLower())
                         ).Where(y => y.EnabledFlag.ToLower() == "true").Include(d => d.ProjectMapping).Include(X => X.Client).Select(
 
-                         X => new ProjectListViewModel
+                         X => new ProjectListingViewModel
                          {
                              ProjectId = X.ProjectId,
                              ProjectName = X.ProjectName,
@@ -690,8 +690,8 @@ namespace AnL.Repository.Implementation
                              StartDate = X.StartDate,
                              EndDate = X.EndDate,
                              clientName = X.Client.ClientName,
-                             EmployeeList = X.ProjectMapping.Where(a => a.Active == true && a.Employee.SupervisorFlag == "N").Select(u => u.Employee.FirstName + " " + u.Employee.LastName).ToList(),
-                             SupervisorList = X.ProjectMapping.Where(a => a.Active == true && a.Employee.SupervisorFlag == "Y").Select(u => u.Employee.FirstName + " " + u.Employee.LastName).ToList()
+                             EmployeeList = X.ProjectMapping.Where(a => a.Active == true && a.Employee.SupervisorFlag == "N").Select(u => new EmployeeListViewModel { EmployeeId = u.EmployeeId, EmployeeName = String.Concat(u.Employee.FirstName + " " + u.Employee.LastName) }).ToList(),
+                             SupervisorList = X.ProjectMapping.Where(a => a.Active == true && a.Employee.SupervisorFlag == "Y").Select(u => new EmployeeListViewModel { EmployeeId = u.EmployeeId, EmployeeName = String.Concat(u.Employee.FirstName + " " + u.Employee.LastName) }).ToList()
 
                          }
                          )).ToList();
