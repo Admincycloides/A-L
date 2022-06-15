@@ -653,7 +653,7 @@ namespace AnL.Repository.Implementation
                 {
                     if (string.IsNullOrEmpty(ProjectName))
                     {
-                        rsp = (_context.Set<ProjectDetails>().Where(y => y.ClientId != null).Include(d => d.ProjectMapping).Include(X => X.Client).Select(
+                        rsp = (_context.Set<ProjectDetails>().Where(y => y.ClientId != null).Where(y => y.EnabledFlag.ToLower() == "true").Include(d => d.ProjectMapping).Include(X => X.Client).Select(
 
                            X => new ProjectListViewModel
                            {
@@ -676,7 +676,7 @@ namespace AnL.Repository.Implementation
                     else
                     {
                         rsp = (_context.Set<ProjectDetails>().Where( y=>y.ProjectName.Trim().ToLower().Contains(ProjectName.Trim().ToLower())
-                        ).Include(d => d.ProjectMapping).Include(X => X.Client).Select(
+                        ).Where(y => y.EnabledFlag.ToLower() == "true").Include(d => d.ProjectMapping).Include(X => X.Client).Select(
 
                          X => new ProjectListViewModel
                          {
