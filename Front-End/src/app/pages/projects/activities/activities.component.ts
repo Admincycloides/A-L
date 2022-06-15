@@ -186,7 +186,7 @@ makeEditable(itemrow: any) {
     
     console.log("hi",this.projectGroup.value.itemRows)
     console.log("hi");
-    var body = this.projectGroup.value.itemRows;
+    var body = []; //this.projectGroup.value.itemRows;
     // let formObj = this.projectGroup.value; // {name: '', description: ''}
     //     let serializedForm = JSON.stringify(formObj.itemRows);
     //     console.log(serializedForm);
@@ -194,13 +194,16 @@ makeEditable(itemrow: any) {
       
       if(element.activityID == null){
         console.log("zakkkkkk")
-           body = {
-            projectId:element.projectId,
+           var dt = {
+            projectId:this.projectId,
             enabledFlag:element.enabledFlag,
             // activityId:element.activityId,
             activityName:element.activityName,
             activityDescription:element.activityDescription
-        }}
+        }
+        body.push(dt);
+      
+      }
     });
     const url = `${this._url.activity.addActivity}`
 
@@ -209,7 +212,7 @@ makeEditable(itemrow: any) {
   // });
     // body.activities.push({activityId: this.selectedactivity})
     console.log("boddddy",body);
-    this._http.post(url,[body]).subscribe(
+    this._http.post(url,body).subscribe(
       {
         next:(res:any)=>{
           this.activityItems = res.data;

@@ -121,9 +121,7 @@ export class ProjectsComponent implements OnInit {
       console.log(url)
       // this.itemRows.remove
       // clearFormArray = (formArray: FormArray) => {
-        while (this.itemRows.length !== 0) {
-          this.itemRows.removeAt(0)
-        }
+        
       // }
       let values = this.itemRows.value
       this._http.get(url).subscribe({
@@ -152,6 +150,9 @@ export class ProjectsComponent implements OnInit {
               items.push(i);
           });
           this.itemRows.patchValue(items);
+          while (this.itemRows.length > res.data.length) {
+            this.itemRows.removeAt(this.itemRows.length-1)
+          }
         console.log("aaaa",this.itemRows.value)
       }
         })
