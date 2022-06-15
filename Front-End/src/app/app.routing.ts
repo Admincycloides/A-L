@@ -21,14 +21,6 @@ export const AppRoutes: Routes = [
       path: '',
       loadChildren: () => import('./layouts/admin-layout/admin-layout.module').then(x => x.AdminLayoutModule)
   }]},
-  // {
-  //   path: 'timesheet',
-  //   component: AdminLayoutComponent,
-  //   children: [
-  //       {
-  //     path: '',
-  //     loadChildren: () => import('./layouts/admin-layout/admin-layout.module').then(x => x.AdminLayoutModule)
-  // }]},
   {
     path: '**',
     redirectTo: ''
