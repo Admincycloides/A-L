@@ -107,7 +107,7 @@ namespace AnL.Controllers
             }
         }
         [HttpPost]
-        public async Task<ActionResult> AddActivity(List<ActivityMaster> ActivityDetails)
+        public async Task<ActionResult> AddActivity(ProjectActivityMap ActivityDetails)
         {
             try
             {

@@ -10,6 +10,14 @@ namespace AnL.ViewModel
         public string ActivityDescription { get; set; }
         public string EnabledFlag { get; set; }
     }
+    public class ProjectActivityMap
+    {
+        public int ActivityId { get; set; }
+        public string ActivityName { get; set; }
+        public string ActivityDescription { get; set; }
+        public string EnabledFlag { get; set; }
+        public int ProjectId { get; set; }
+    }
     public class ProjectViewModel
     {
         public int ProjectId { get; set; }
