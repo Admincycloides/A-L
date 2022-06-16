@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 using System;
 using AnL.Helpers.AuditTrail;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using AnL.Filter;
+using Microsoft.AspNetCore.Mvc;
+using AnL.Helpers;
+using AnL.Constants;
 
 namespace AnL.Repository.Implementation
 {
@@ -34,7 +38,6 @@ namespace AnL.Repository.Implementation
             dbActivity = context.Set<ActivityDetails>();
             timesheetDetail = new TimesheetDetailRepository(context,UOW);
             audit = new AuditRepository(context, UOW);
-
         }
 
         public async Task<object> AllocateResources(MapProjectResources Data)
@@ -592,7 +595,7 @@ namespace AnL.Repository.Implementation
             }
         }
 
-        public async Task<ProjectViewModel> GetprojectDetailsByID(int ProjectID)
+        public async Task<ProjectViewModel> GetprojectDetailsByID(int ProjectID, string searchValue)
         {
             List<ProjectViewModel> rsp = new List<ProjectViewModel>();
             try
@@ -602,23 +605,39 @@ namespace AnL.Repository.Implementation
                     IQueryable<ProjectMapping> result = (IQueryable<ProjectMapping>)_context.Set<ProjectMapping>().
                                                         Where(X => X.ProjectId == ProjectID && X.Active == true).Include(c => c.Project).
                                                         ThenInclude(Z => Z.ActivityMapping).ThenInclude(y => y.Activity);
-
                     if (result.Any())
                     {
                         foreach (var i in result.Select(X => X.Project).Distinct())
                         {
-                            var activities = i.ActivityMapping.Select(
-                                X => new ProjectActivities
-                                {
-                                    ActivityDescription = X.Activity.ActivityDescription,
-                                    ActivityId = X.ActivityId,
-                                    ActivityName = X.Activity.ActivityName,
-                                    EnabledFlag = X.Activity.EnabledFlag
-                                }
+                            var activities = new List<ProjectActivities>();
+                            if (!string.IsNullOrEmpty(searchValue))
+                            {
+                                activities = i.ActivityMapping.Where(X=>X.Activity.ActivityName.Contains(searchValue.Trim().ToLower())).Select(
+                                    X => new ProjectActivities
+                                    {
+                                        ActivityDescription = X.Activity.ActivityDescription,
+                                        ActivityId = X.ActivityId,
+                                        ActivityName = X.Activity.ActivityName,
+                                        EnabledFlag = X.Activity.EnabledFlag
+                                    }
 
 
-                                ).ToList();
+                                    ).Distinct().ToList();
+                            }
+                            else
+                            {
+                                activities = i.ActivityMapping.Select(
+                                    X => new ProjectActivities
+                                    {
+                                        ActivityDescription = X.Activity.ActivityDescription,
+                                        ActivityId = X.ActivityId,
+                                        ActivityName = X.Activity.ActivityName,
+                                        EnabledFlag = X.Activity.EnabledFlag
+                                    }
 
+
+                                    ).Distinct().ToList();
+                            }
                             rsp.Add(new ProjectViewModel
                             {
                                 ClientId = i.ClientId,
@@ -710,9 +729,5 @@ namespace AnL.Repository.Implementation
                 throw ex;
             }
         }
-
-
-
-
     }
 }

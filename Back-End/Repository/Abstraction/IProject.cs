@@ -15,6 +15,7 @@ namespace AnL.Repository.Abstraction
         public Task<object> AddProject(List<ProjectViewModel> viewModel, string Userid);
         public Task<object> AllocateResources(MapProjectResources viewModel);
 
+        public Task<ProjectViewModel> GetprojectDetailsByID(int ProjectID, string searchValue);
         public bool DeleteActivity(int activityID,string userid);
         public Task<object> AddActivity(List<ProjectActivityMap> viewModel, string userid);
         public bool DeleteProject(int ProjectID, string userid);
@@ -27,6 +28,5 @@ namespace AnL.Repository.Abstraction
         public Task<List<ClientViewModel>> GetClientList();
         public Task<List<ProjectListViewModel>> GetAllProject();
         public Task<List<ProjectListingViewModel>> GetProjectList(string EmployeeID, string ProjectName);
-        public Task<ProjectViewModel> GetprojectDetailsByID(int ProjectID);
     }
 }
