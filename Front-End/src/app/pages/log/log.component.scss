@@ -1,0 +1,33 @@
+@import "../../../assets/scss/paper-dashboard/mixins";
+@import "../../../assets/scss/paper-dashboard/variables";
+@import "../../../assets/scss/paper-dashboard/responsive";
+
+.filter-drop{
+    .dropdown-menu{
+        button{
+            &:hover{
+                background-color: #e4e4e4;
+                color: #000!important;
+            }
+        }
+        font-size: 12px;
+    }
+    & > {
+        .dropdown-toggle{
+            background: url(../../../assets/img/filter.png) no-repeat 95% center $secondary-color;
+            background-size: 12px;
+            min-width: 112px;
+            padding: 0 34px 0 10px;
+            display: flex;
+            justify-content: flex-start;
+                &::after{
+                    margin-left: 6px;
+                }
+            }
+        }
+    
+
+}
+   
+    
+   
