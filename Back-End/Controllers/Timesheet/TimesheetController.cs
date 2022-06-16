@@ -363,7 +363,7 @@ namespace AnL.Controllers
                 var data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.SubmittedTo==EmployeeID).Include(x => x.Project).ToList();
                 if (!string.IsNullOrEmpty(searchValue))
                 {   
-                    data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.SubmittedTo==EmployeeID).Include(x => x.Project).Where(x=>x.Project.ProjectName.Contains(searchValue)).ToList();
+                    data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.SubmittedTo==EmployeeID).Include(x => x.Project).Where(x=>x.Project.ProjectName.ToLower().Contains(searchValue.Trim().ToLower())).ToList();
                 }
                 var employeeList = data.Select(x => new
                 {
@@ -416,7 +416,7 @@ namespace AnL.Controllers
                 var data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.EmployeeId == model.EmployeeId && x.ProjectId == model.ProjectId && x.SubmittedDate.Value.Date == model.Date.Date).Include(x => x.Project).Include(x => x.Activity).ToList();
                 if (!string.IsNullOrEmpty(search))
                 {
-                    data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.EmployeeId == model.EmployeeId && x.ProjectId == model.ProjectId && x.SubmittedDate.Value.Date == model.Date.Date).Include(x => x.Project).Include(x => x.Activity).Where(x=>x.Activity.ActivityName.Contains(search)).ToList();
+                    data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.EmployeeId == model.EmployeeId && x.ProjectId == model.ProjectId && x.SubmittedDate.Value.Date == model.Date.Date).Include(x => x.Project).Include(x => x.Activity).Where(x=>x.Activity.ActivityName.ToLower().Contains(search.Trim().ToLower())).ToList();
                 }
                 List<Details> weekDetails = new List<Details>();
                 //Tuple for project and its activity

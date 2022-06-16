@@ -612,7 +612,7 @@ namespace AnL.Repository.Implementation
                             var activities = new List<ProjectActivities>();
                             if (!string.IsNullOrEmpty(searchValue))
                             {
-                                activities = i.ActivityMapping.Where(X=>X.Activity.ActivityName.Contains(searchValue.Trim().ToLower())).Select(
+                                activities = i.ActivityMapping.Where(X=>X.Activity.ActivityName.ToLower().Contains(searchValue.Trim().ToLower())).Select(
                                     X => new ProjectActivities
                                     {
                                         ActivityDescription = X.Activity.ActivityDescription,
@@ -620,9 +620,7 @@ namespace AnL.Repository.Implementation
                                         ActivityName = X.Activity.ActivityName,
                                         EnabledFlag = X.Activity.EnabledFlag
                                     }
-
-
-                                    ).Distinct().ToList();
+                                    ).ToList();
                             }
                             else
                             {
@@ -636,7 +634,7 @@ namespace AnL.Repository.Implementation
                                     }
 
 
-                                    ).Distinct().ToList();
+                                    ).ToList();
                             }
                             rsp.Add(new ProjectViewModel
                             {
