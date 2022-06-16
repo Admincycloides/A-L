@@ -25,9 +25,9 @@
                 <div class="table-responsive">
                     <table class="table">
                         <thead class="text-primary">
-                            <th>
+                            <!-- <th>
                                Project
-                            </th>
+                            </th> -->
                             <th>
                                Employee Id
                             </th>
@@ -41,14 +41,20 @@
                                 Action
                             </th>
                             <th>
-                                Details
+                                Changed Columns 
+                            </th>
+                            <th>
+                                Old Value
+                            </th>
+                            <th>
+                                New Value 
                             </th>
                         </thead>
                         <tbody>
                             <tr *ngFor="let log of LogAudits">
-                                <td>
-                                    <!-- {{log.projectName}} -->
-                                </td>
+                                <!-- <td>
+                                    {{log.projectName}}
+                                </td> -->
                                 <td>
                                     {{log.auditUser}}
                                 </td>
@@ -62,7 +68,13 @@
                                     {{log.auditType}}
                                 </td>
                                 <td>
-                                    <!-- {{log.Details}} -->
+                                    {{log.changedColumns}}
+                                </td>
+                                <td>
+                                    {{log.oldValues}}
+                                </td>
+                                <td >{{log.newValues}} <i  aria-hidden="true" tooltip="{{ log.newValues | slice:0:10}}..."></i>
+                                    
                                 </td>
                             </tr>
                         </tbody>

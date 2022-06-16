@@ -5,9 +5,9 @@
         <input #searchBar type="text" class="cpage-search search-filter" placeholder="Search Project" (keyup)="searchItems($event)" />
     </div>
     <div class="action d-flex justify-content-end">
-        <button class="act-btn thm-btn thm-btn-primary" type="button" style='margin-right:16px' (click)="addFieldValue();changeText();" *ngIf="supervisorFlag == 'N'" ion-button><i class="nc-icon nc-simple-add"></i>Add Project</button>
+        <button class="act-btn thm-btn thm-btn-primary" type="button" style='margin-right:16px' (click)="addFieldValue();changeText();" *ngIf="supervisorFlag == 'Y'" ion-button><i class="nc-icon nc-simple-add"></i>Add Project</button>
         <!-- the below button have to be added conditionaly -->
-        <button class="act-btn thm-btn thm-btn-primary" type="button" (click)="saveField()" *ngIf="supervisorFlag =='N' "><i class="nc-icon nc-check-2"></i>Save</button>
+        <button class="act-btn thm-btn thm-btn-primary" type="button" (click)="saveField()" *ngIf="supervisorFlag =='Y' "><i class="nc-icon nc-check-2"></i>Save</button>
         <!-- <select name="Activity Id" (change)="changeid($event)" [(ngModel)]="selectedactivity" class="form-control" *ngIf="supervisorFlag != 'Y'">
           <option>---Select----</option>
           <option [value]="get.activityId" *ngFor="let get of getActivityName" >
@@ -33,11 +33,11 @@
                                 <th> Start Date</th>
                                 <th> End Date</th>
                                 <th nowrap> Current Status</th>
-                                <th nowrap *ngIf="supervisorFlag == 'N'">Cancel</th>
-                                <th *ngIf="supervisorFlag == 'N'"> Edit</th>
+                                <th nowrap *ngIf="supervisorFlag == 'Y'">Cancel</th>
+                                <th *ngIf="supervisorFlag == 'Y'"> Edit</th>
                                 <th> View</th>
                                 <th nowrap> Assigned to</th>
-                                <th *ngIf="supervisorFlag == 'N'">Delete</th>
+                                <th *ngIf="supervisorFlag == 'Y'">Delete</th>
                             </thead>
                             <ng-container projectGroup.controls.itemRows>
                                 <tbody formArrayName="itemRows">
@@ -74,14 +74,14 @@
                                                 <span *ngIf="!itemrow.editable">{{itemrow.value.currentStatus}}</span>
                                                 <input placeholder="Current Status" formControlName="currentStatus" type="text" *ngIf="itemrow.editable" class="cd-input h-input" />
                                             </td>
-                                            <td class="col-md-2 form-group"  *ngIf="supervisorFlag == 'N'" >
+                                            <td class="col-md-2 form-group"  *ngIf="supervisorFlag == 'Y'" >
                                                 <!-- <span *ngIf="!itemrow.editable">{{itemrow.value.sredProject}}</span>
                             <input placeholder="SHED Project" formControlName="sredProject" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/> -->
                                                 <button class="cancel actico-btn" type="button" (click)="Cancel(itemrow)">
                               <img src="../../../assets/img/cancel.png" alt="">
                               </button>
                                             </td>
-                                            <td class="col-md-2 form-group"  *ngIf="supervisorFlag == 'N'">
+                                            <td class="col-md-2 form-group"  *ngIf="supervisorFlag == 'Y'">
                                                 <button class="edit actico-btn" type="button" (click)="makeEditable(itemrow)">
                           <img src="../../../assets/img/edit.png" alt="">
                         </button>
@@ -96,7 +96,7 @@
                                                 <!-- <input placeholder="Assigned To" formControlName="assignedto" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/> -->
                                                 <ng-multiselect-dropdown [placeholder]="'Select Employee'" formControlName="assignedTo" [settings]="dropdownEmployeeSettings" [data]="employeeList" name="employee" *ngIf="itemrow.editable" class="sm-mdrop"></ng-multiselect-dropdown>
                                             </td>
-                                            <td class="col-md-2 form-group"  *ngIf="supervisorFlag == 'N'">
+                                            <td class="col-md-2 form-group"  *ngIf="supervisorFlag == 'Y'">
                                                 <button class="delete actico-btn" type="button" (click)="deleteRow(i)">
                                                <img src="../../../assets/img/delete.png" alt="" class="del-ico"/>
                                                  </button>

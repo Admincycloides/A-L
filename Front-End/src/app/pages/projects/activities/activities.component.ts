@@ -98,11 +98,12 @@ export class ActivitiesComponent implements OnInit {
     const pageNo = this.config.currentPage;
     const pageSize = this.config.itemsPerPage;
     console.log("qqqq")
-    const url = `${this._url.project.getprojectdetailsByid}?ProjectID=${projectId}&PageNumber=${pageNo}&PageSize=${pageSize}&EmployeeName=${encodeURIComponent(this.searchTerm)}`
+    const url = `${this._url.project.getprojectdetailsByid}?ProjectID=${projectId}&PageNumber=${pageNo}&PageSize=${pageSize}&SearchValue=${encodeURIComponent(this.searchTerm)}`
     this._http.get(url).subscribe({
       next:(res:any)=>{
         // this.getselectedactivity = res.data.activities;
         var items = [];
+        if(res.data != null){
         let activities = res.data.activities
         res.data.forEach(element => {
           this.addFieldValue()
@@ -114,6 +115,16 @@ export class ActivitiesComponent implements OnInit {
           }
           items.push(i);
         });
+        this.itemRows.patchValue(items);
+        while (this.itemRows.length > res.data.length) {
+          this.itemRows.removeAt(this.itemRows.length-1)
+        }
+      }
+      else{
+        while (this.itemRows.length !==0) {
+          this.itemRows.removeAt(0)
+        }
+      }
         console.log("aaaa",res.data.activities)
         this.itemRows.setValue(items);
         console.log("aaaa",this.itemRows.value)
