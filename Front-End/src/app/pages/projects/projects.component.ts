@@ -28,6 +28,7 @@ export class ProjectsComponent implements OnInit {
   user:any;
   getclientdescription:any;
   
+  
   public isSubmitted: boolean = false;
   projectGroup : FormGroup;
   TotalRow : number; 
@@ -182,25 +183,28 @@ export class ProjectsComponent implements OnInit {
   initItemRow():FormGroup{
     return this._fb.group({
     projectId:[],
-    projectName:[''],
+    projectName:['',[Validators.required]],
     projectDescription: [''],
-    clientId:[ ],
-    clientName: [''],
-    startDate: [''],
-    endDate: [''],
+    clientId:[ ,[Validators.required]],
+    clientName: ['',[Validators.required]],
+    startDate: ['',[Validators.required]],
+    endDate: ['',[Validators.required]],
     currentStatus: [''],
     sredProject: [''],
     enabledFlag: ['true'],
-    assignedTo:[''],
+    assignedTo:['',[Validators.required]],
     activities: [
       {
         activityId: [],}]
     })
     
   }
+
   formatDate(input){
     return moment(input).format('YYYY-MM-DD')
   }
+
+  
   get itemRows() : FormArray {
 
     return this.projectGroup.get("itemRows") as FormArray
@@ -210,7 +214,9 @@ export class ProjectsComponent implements OnInit {
   {
     console.log(this.projectGroup.value.itemRows)
     console.log("hi");
-    var body = []; //this.projectGroup.value.itemRows;
+    var body = [];
+    
+     //this.projectGroup.value.itemRows;
     // let formObj = this.projectGroup.value; // {name: '', description: ''}
     //     let serializedForm = JSON.stringify(formObj.itemRows);
     //     console.log(serializedForm);
@@ -241,8 +247,10 @@ export class ProjectsComponent implements OnInit {
           
         }
         body.push(item);
+        
       }
     });
+    
     
     const url = `${this._url.project.addProject}`
 
@@ -262,7 +270,7 @@ export class ProjectsComponent implements OnInit {
             this.getListofProjects();
           },
           error: (err: any) => {
-            this._toast.error(err.error.responseMessage);
+            this._toast.error(err.error.data);
           },
 
         }

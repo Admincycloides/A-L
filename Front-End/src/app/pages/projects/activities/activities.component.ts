@@ -5,6 +5,7 @@ import { Router,ActivatedRoute }  from '@angular/router';
 import { HttpService } from 'app/_services/http.service';
 import { UrlService } from 'app/_services/url.service';
 import { ToastrService } from 'ngx-toastr';
+import { element } from 'protractor';
 // import { ProjectsComponent } from '../projects.component';
 
 
@@ -64,7 +65,7 @@ export class ActivitiesComponent implements OnInit {
     return this._fb.group({
       activityId:[],
       // projectId:[],
-      activityName:[""],
+      activityName:["",[Validators.required]],
       activityDescription:[""],
       enabledFlag: [""]
     })
@@ -227,7 +228,6 @@ makeEditable(itemrow: any) {
             activityDescription:element.activityDescription
         }
         body.push(dt);
-      
       }
     });
     const url = `${this._url.activity.addActivity}`
@@ -243,16 +243,19 @@ makeEditable(itemrow: any) {
           this._toast.error(err.error.data);
         },
         
+        
       });
+      
+      
   }
 
 
 
 public addFieldValue() { 
-  if(this.text == "save"){
-    this.isVisible = true;
-  }
+  
   this.itemRows.push(this.initItemRow());
+  
+
   
 }
 

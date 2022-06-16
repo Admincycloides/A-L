@@ -46,6 +46,7 @@
                                             <td class="col-md-2 form-group">
                                                 <span *ngIf="!itemrow.editable">{{itemrow.value.projectName}}</span>
                                                 <input placeholder="Project Name" formControlName="projectName" type="text" *ngIf="itemrow.editable" class="cd-input h-input" />
+                                                <!-- <span *ngIf="itemRows.controls[i].get('projectName').errors?.required" style="color: red;">Required*</span> -->
                                             </td>
                                             <td class="col-md-2 form-group">
                                                 <span *ngIf="!itemrow.editable">{{itemrow.value.projectDescription}}</span>
@@ -55,20 +56,23 @@
                                                 <span *ngIf="!itemrow.editable">{{itemrow.value.clientName}}</span>
                                                 <!-- <input placeholder="Client Name" formControlName="clientId" type="int" *ngIf="itemrow.editable" class="cd-input h-input"/> -->
                                                 <!-- <option [value]="get.clientId" *ngFor="let set of getclientdescription" formControlName="clientName"></option> -->
-                                                <select formControlName="clientId" class="cd-input h-input" *ngIf="itemrow.editable">
-                             <option>---Select----</option>
-                            <option [(ngValue)]="get.clientId" *ngFor="let get of getclientdescription"  >
-                             {{get.clientName}}
-                              </option>
-                              </select>
+                                                <select formControlName="clientId" class="cd-input h-input" *ngIf="itemrow.editable" required>
+                                                <option>---Select----</option>
+                                                <option [(ngValue)]="get.clientId" *ngFor="let get of getclientdescription"  >
+                                                 {{get.clientName}}
+                                                 </option>
+                                                 </select>
+                                                 <!-- <span *ngIf="itemRows.controls[i].get('clientName').errors?.required" style="color: red;">Required*</span> -->
                                             </td>
                                             <td class="col-md-2 form-group">
                                                 <span *ngIf="!itemrow.editable">{{itemrow.value.startDate |date }}</span>
                                                 <input placeholder="StartDate" formControlName="startDate" type="date" *ngIf="itemrow.editable" class="cd-input h-input" />
+                                                <!-- <span *ngIf="itemRows.controls[i].get('startDate').errors?.required" style="color: red;">Required*</span> -->
                                             </td>
                                             <td class="col-md-2 form-group">
                                                 <span *ngIf="!itemrow.editable">{{itemrow.value.endDate |date}}</span>
                                                 <input placeholder="End Date" formControlName="endDate" type="date" *ngIf="itemrow.editable" class="cd-input h-input" />
+                                                <!-- <span *ngIf="itemRows.controls[i].get('endDate').errors?.required" style="color: red;">Required*</span> -->
                                             </td>
                                             <td class="col-md-2 form-group">
                                                 <span *ngIf="!itemrow.editable">{{itemrow.value.currentStatus}}</span>
@@ -78,13 +82,13 @@
                                                 <!-- <span *ngIf="!itemrow.editable">{{itemrow.value.sredProject}}</span>
                             <input placeholder="SHED Project" formControlName="sredProject" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/> -->
                                                 <button class="cancel actico-btn" type="button" (click)="Cancel(itemrow)">
-                              <img src="../../../assets/img/cancel.png" alt="">
-                              </button>
+                                             <img src="../../../assets/img/cancel.png" alt="">
+                                             </button>
                                             </td>
                                             <td class="col-md-2 form-group"  *ngIf="supervisorFlag == 'Y'">
                                                 <button class="edit actico-btn" type="button" (click)="makeEditable(itemrow)">
-                          <img src="../../../assets/img/edit.png" alt="">
-                        </button>
+                                             <img src="../../../assets/img/edit.png" alt="">
+                                             </button>
                                             </td>
                                             <td class="col-md-2 form-group" [value]="itemrow.value.projectName">
                                                 <a class="view actico-btn" [routerLink]="'/activities/'+itemrow.value.projectId" (change)="changeName($event)">
@@ -95,6 +99,7 @@
                                                 <span *ngIf="!itemrow.editable">{{formatnames(itemrow.value.assignedTo)}}</span>
                                                 <!-- <input placeholder="Assigned To" formControlName="assignedto" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/> -->
                                                 <ng-multiselect-dropdown [placeholder]="'Select Employee'" formControlName="assignedTo" [settings]="dropdownEmployeeSettings" [data]="employeeList" name="employee" *ngIf="itemrow.editable" class="sm-mdrop"></ng-multiselect-dropdown>
+                                                <!-- <span *ngIf="itemRows.controls[i].get('assignedTo').errors?.required" style="color: red;">Required*</span> -->
                                             </td>
                                             <td class="col-md-2 form-group"  *ngIf="supervisorFlag == 'Y'">
                                                 <button class="delete actico-btn" type="button" (click)="deleteRow(i)">

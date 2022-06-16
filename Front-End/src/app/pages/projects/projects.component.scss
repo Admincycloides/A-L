@@ -32,4 +32,15 @@
         }
     }
 
+    input.ng-invalid{
+        border-left: 5px solid red;
+    }
 
+
+    // ng-multiselect-dropdown.ng-invalid{
+    //     border-left: 5px solid red;
+    // }
+
+    select.ng-invalid{
+        border-left: 5px solid red;
+    }
