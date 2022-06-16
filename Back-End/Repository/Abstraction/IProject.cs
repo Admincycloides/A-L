@@ -18,6 +18,7 @@ namespace AnL.Repository.Abstraction
         public bool DeleteProject(List<ProjectViewModel> viewModel);
         public Task<object> AddActivity(List<ActivityMaster> viewModel);
         public Task<List<ProjectListViewModel>> GetAllProject();
-
+        public Task<List<ProjectListingViewModel>> GetProjectList(string EmployeeID, string ProjectName);
+        public Task<ProjectViewModel> GetprojectDetailsByID(int ProjectID, string searchValue);
     }
 }

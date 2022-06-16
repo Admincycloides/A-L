@@ -6,6 +6,12 @@ using AnL.ViewModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using AnL.Helpers.AuditTrail;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using AnL.Filter;
+using Microsoft.AspNetCore.Mvc;
+using AnL.Helpers;
+using AnL.Constants;
 
 namespace AnL.Repository.Implementation
 {
@@ -14,11 +20,17 @@ namespace AnL.Repository.Implementation
         private DbContext _context;
         private readonly IUnitOfWork _UOW;
         private TimesheetDetailRepository timesheetDetail;
+        private AuditRepository audit;
+        
+        //private readonly MopDbContext Db;
 
         DbSet<ProjectDetails> dbSet;
         DbSet<ProjectMapping> dbSetProjectMapp;
         DbSet<ActivityMapping> dbActivityMapp;
         DbSet<ActivityDetails> dbActivity;
+        DbSet<ClientDetails> dbClient;
+        
+
         public ProjectRepository(DbContext context, IUnitOfWork UOW) : base(context)
         {
             this._context = context;
@@ -28,6 +40,8 @@ namespace AnL.Repository.Implementation
             dbActivityMapp = context.Set<ActivityMapping>();
             dbActivity = context.Set<ActivityDetails>();
             timesheetDetail = new TimesheetDetailRepository(context,UOW);
+            audit = new AuditRepository(context, UOW);
+            
         }
 
         public async Task<object> AllocateResources(MapProjectResources Data)
@@ -144,7 +158,7 @@ namespace AnL.Repository.Implementation
                 throw ex;
             }
             }
-        public async Task<object> AddActivity(List<ActivityMaster> viewModel)
+        public async Task<List<ClientViewModel>> GetClientList()
         {
             try
             {
@@ -301,6 +315,142 @@ namespace AnL.Repository.Implementation
 
                        }
                        )).ToList();
+                });
+                return rsp.Count > 0 ? rsp : null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<ProjectViewModel> GetprojectDetailsByID(int ProjectID, string searchValue)
+        {
+            List<ProjectViewModel> rsp = new List<ProjectViewModel>();
+            try
+            {
+                
+                await Task.Run(() =>
+                {
+                    IQueryable<ProjectMapping> result = (IQueryable<ProjectMapping>)_context.Set<ProjectMapping>().
+                                                        Where(X => X.ProjectId == ProjectID && X.Active == true).Include(c => c.Project).
+                                                        ThenInclude(Z => Z.ActivityMapping).ThenInclude(y => y.Activity);
+                    if (result.Any())
+                    {
+                        foreach (var i in result.Select(X => X.Project).Distinct())
+                        {
+                            var activities = new List<ProjectActivities>();
+                            if (!string.IsNullOrEmpty(searchValue))
+                            {
+                                activities = i.ActivityMapping.Where(X=>X.Activity.ActivityName.Contains(searchValue.Trim().ToLower())).Select(
+                                    X => new ProjectActivities
+                                    {
+                                        ActivityDescription = X.Activity.ActivityDescription,
+                                        ActivityId = X.ActivityId,
+                                        ActivityName = X.Activity.ActivityName,
+                                        EnabledFlag = X.Activity.EnabledFlag
+                                    }
+
+
+                                    ).Distinct().ToList();
+                            }
+                            else
+                            {
+                                activities = i.ActivityMapping.Select(
+                                    X => new ProjectActivities
+                                    {
+                                        ActivityDescription = X.Activity.ActivityDescription,
+                                        ActivityId = X.ActivityId,
+                                        ActivityName = X.Activity.ActivityName,
+                                        EnabledFlag = X.Activity.EnabledFlag
+                                    }
+
+
+                                    ).Distinct().ToList();
+                            }
+                            rsp.Add(new ProjectViewModel
+                            {
+                                ClientId = i.ClientId,
+                                CurrentStatus = i.CurrentStatus,
+                                EnabledFlag = i.EnabledFlag,
+                                EndDate = i.EndDate,
+                                ProjectId = i.ProjectId,
+                                ProjectDescription = i.ProjectDescription,
+                                ProjectName = i.ProjectName,
+                                SredProject = i.SredProject,
+                                StartDate = i.StartDate,
+                                Activities = activities
+
+
+                            });
+
+
+                        }
+
+
+                    }
+                });
+                return rsp.Count > 0 ? rsp[0] : null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public async Task<List<ProjectListingViewModel>> GetProjectList( string EmployeeID , string ProjectName)
+        {
+            List<ProjectListingViewModel> rsp = new List<ProjectListingViewModel>();
+            try
+            {
+                await Task.Run(() =>
+                {
+                    if (string.IsNullOrEmpty(ProjectName))
+                    {
+                        rsp = (_context.Set<ProjectDetails>().Where(y => y.ClientId != null).Where(y => y.EnabledFlag.ToLower() == "true").Include(d => d.ProjectMapping).Include(X => X.Client).Select(
+
+                           X => new ProjectListingViewModel
+                           {
+                               ProjectId = X.ProjectId,
+                               ProjectName = X.ProjectName,
+                               ClientId = X.ClientId,
+                               CurrentStatus = X.CurrentStatus,
+                               EnabledFlag = X.EnabledFlag,
+                               ProjectDescription = X.ProjectDescription,
+                               SredProject = X.SredProject,
+                               StartDate = X.StartDate,
+                               EndDate = X.EndDate,
+                               clientName = X.Client.ClientName,
+                               EmployeeList = X.ProjectMapping.Where(a => a.Active == true && a.Employee.SupervisorFlag == "N").Select(u => new EmployeeListViewModel {EmployeeId=u.EmployeeId,EmployeeName=String.Concat( u.Employee.FirstName + " " + u.Employee.LastName )}).ToList(),
+                               SupervisorList = X.ProjectMapping.Where(a => a.Active == true && a.Employee.SupervisorFlag == "Y").Select(u => new EmployeeListViewModel { EmployeeId=u.EmployeeId, EmployeeName = String.Concat(u.Employee.FirstName + " " + u.Employee.LastName) }).ToList()
+
+                           }
+                           )).ToList();
+                    }
+                    else
+                    {
+                        rsp = (_context.Set<ProjectDetails>().Where( y=>y.ProjectName.Trim().ToLower().Contains(ProjectName.Trim().ToLower())
+                        ).Where(y => y.EnabledFlag.ToLower() == "true").Include(d => d.ProjectMapping).Include(X => X.Client).Select(
+
+                         X => new ProjectListingViewModel
+                         {
+                             ProjectId = X.ProjectId,
+                             ProjectName = X.ProjectName,
+                             ClientId = X.ClientId,
+                             CurrentStatus = X.CurrentStatus,
+                             EnabledFlag = X.EnabledFlag,
+                             ProjectDescription = X.ProjectDescription,
+                             SredProject = X.SredProject,
+                             StartDate = X.StartDate,
+                             EndDate = X.EndDate,
+                             clientName = X.Client.ClientName,
+                             EmployeeList = X.ProjectMapping.Where(a => a.Active == true && a.Employee.SupervisorFlag == "N").Select(u => new EmployeeListViewModel { EmployeeId = u.EmployeeId, EmployeeName = String.Concat(u.Employee.FirstName + " " + u.Employee.LastName) }).ToList(),
+                             SupervisorList = X.ProjectMapping.Where(a => a.Active == true && a.Employee.SupervisorFlag == "Y").Select(u => new EmployeeListViewModel { EmployeeId = u.EmployeeId, EmployeeName = String.Concat(u.Employee.FirstName + " " + u.Employee.LastName) }).ToList()
+
+                         }
+                         )).ToList();
+                    }
                 });
                 return rsp.Count > 0 ? rsp : null;
             }

@@ -40,6 +40,9 @@
 
         public static readonly string EmployeeFetchSuccess = "Employee records fetched successfully";
         public static readonly string EmployeeFetchFailed = "Employee records fetch failed";
+
+        public static readonly string ActivityFetchSuccess = "Activity records fetched successfully";
+        public static readonly string ActivityFetchFailed = "Activity records fetch failed";
     }
 }
 
