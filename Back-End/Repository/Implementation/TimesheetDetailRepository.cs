@@ -15,6 +15,7 @@ namespace AnL.Repository.Implementation
     {
         private DbContext _context;
         private IUnitOfWork _UOW;
+        private AuditRepository audit;
 
         DbSet<TimesheetDetails> dbSet;
         public TimesheetDetailRepository(DbContext context, IUnitOfWork UOW) : base(context)
@@ -22,6 +23,7 @@ namespace AnL.Repository.Implementation
             this._UOW = UOW;
             this._context = context;
             dbSet = context.Set<TimesheetDetails>();
+            audit = new AuditRepository(context, UOW);
         }
 
 
@@ -54,7 +56,7 @@ namespace AnL.Repository.Implementation
                 return null;
         }
 
-        public bool ModifyTimesheetDetails(List<TimesheetDetails> timesheetDetails)
+        public bool ModifyTimesheetDetails(List<TimesheetDetails> timesheetDetails,string userid)
         {
             foreach (var timesheet in timesheetDetails)
             {
@@ -64,31 +66,34 @@ namespace AnL.Repository.Implementation
                 existingSheet.NumberOfHours = timesheet.NumberOfHours;
                 existingSheet.Remarks = timesheet.Remarks;
             }
+            audit.AddAuditLogs(userid);
             this.SaveChanges();
             return true;
         }
 
-        public bool AddDetails(List<TimesheetDetails> timesheetdetails)
+        public bool AddDetails(List<TimesheetDetails> timesheetdetails,string userid)
         {
             foreach (var timesheet in timesheetdetails)
             {
                 this.Add(timesheet);
             }
+            audit.AddAuditLogs(userid);
             this.SaveChanges();
             return true;
         }
 
-        public bool DeleteTimesheetDetails(List<TimesheetDetails> timesheetDetails)
+        public bool DeleteTimesheetDetails(List<TimesheetDetails> timesheetDetails, string userid)
         {
             var querable = timesheetDetails.ToList();
             List<int> iDs = querable.Select(x => x.UniqueId).ToList();
             var result = dbSet.Where(e => iDs.Contains(e.UniqueId)).ToList();
             _context.RemoveRange(result);
+            audit.AddAuditLogs(userid);
             this.SaveChanges();
             return true;
         }
 
-        public bool SubmitTimesheet(List<TimesheetDetails> timesheetDetails)
+        public bool SubmitTimesheet(List<TimesheetDetails> timesheetDetails, string userid)
         {
             var querable = timesheetDetails.ToList();
             List<int> iDs = querable.Select(x => x.UniqueId).ToList();
@@ -101,6 +106,7 @@ namespace AnL.Repository.Implementation
                 x.SubmittedTo = timesheetDetails[0].SubmittedTo;
             });
             _context.UpdateRange(result);
+            audit.AddAuditLogs(userid);
             _context.SaveChanges();
             return true;
         }
@@ -135,7 +141,7 @@ namespace AnL.Repository.Implementation
             return result;
         }
 
-        public bool SupervisorAction(List<TimesheetDetails> timesheetDetails,string Action)
+        public bool SupervisorAction(List<TimesheetDetails> timesheetDetails,string Action,string userid)
         {
             if (Action == TimeSheetStatus.Approved)
             {
@@ -163,7 +169,7 @@ namespace AnL.Repository.Implementation
                 });
                 _context.UpdateRange(result);
             }
-
+            audit.AddAuditLogs(userid);
             this.SaveChanges();
             return true;
         }

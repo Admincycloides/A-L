@@ -143,6 +143,8 @@ namespace AnL.Controllers
         [HttpPost]
         public async Task<ActionResult> AddTimesheetDetails(Details timesheetDetails,string EmployeeId)
         {
+            var user = HttpContext.User;
+            var Userid = user.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 List<TimesheetDetails> timesheetDetailsList = new List<TimesheetDetails>();
@@ -168,7 +170,7 @@ namespace AnL.Controllers
                     response.ResponseMessage = MessageConstants.TimesheetAlreadyExists;
                     return BadRequest(response);
                 }
-                var AddTimesheetDetailsResponse = _UOW.TimesheetDetailRepository.AddDetails(timesheetDetailsList);
+                var AddTimesheetDetailsResponse = _UOW.TimesheetDetailRepository.AddDetails(timesheetDetailsList,Userid);
                 if (AddTimesheetDetailsResponse)
                 {
                     response.Data = AddTimesheetDetailsResponse;
@@ -198,6 +200,8 @@ namespace AnL.Controllers
         [HttpPost]
         public async Task<ActionResult> ModifyTimesheet(Details timesheetDetails)
         {
+            var user = HttpContext.User;
+            var Userid = user.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 //Check for existing record in DB for project and activity
@@ -223,7 +227,7 @@ namespace AnL.Controllers
                     details.Remarks=timesheetDetails.Remarks;
                     timesheetDetailsList.Add(details);
                 }
-                var ModifyTimesheetResponse = _UOW.TimesheetDetailRepository.ModifyTimesheetDetails(timesheetDetailsList);
+                var ModifyTimesheetResponse = _UOW.TimesheetDetailRepository.ModifyTimesheetDetails(timesheetDetailsList,Userid);
                 if (ModifyTimesheetResponse)
                 {
                     response.Data = ModifyTimesheetResponse;
@@ -253,6 +257,8 @@ namespace AnL.Controllers
         [HttpPost]
         public async Task<ActionResult> DeleteTimesheet(Details timesheetDetails)
         {
+            var user = HttpContext.User;
+            var Userid = user.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 List<TimesheetDetails> details = new List<TimesheetDetails>();
@@ -261,7 +267,7 @@ namespace AnL.Controllers
                     TimesheetDetails eachItem = new TimesheetDetails() { UniqueId = timesheet.UniqueId };
                     details.Add(eachItem);
                 }
-                var DeleteTimesheetResponse=_UOW.TimesheetDetailRepository.DeleteTimesheetDetails(details);
+                var DeleteTimesheetResponse=_UOW.TimesheetDetailRepository.DeleteTimesheetDetails(details,Userid);
                 BaseResponse response = new BaseResponse();
                 if (DeleteTimesheetResponse)
                 {
@@ -290,6 +296,8 @@ namespace AnL.Controllers
         [HttpPost]
         public async Task<ActionResult> SubmitTimesheetDetails(List<Details> timesheetDetails,string ManagerID,string EmployeeID)
         {
+            var user = HttpContext.User;
+            var Userid = user.FindFirst(ClaimTypes.NameIdentifier).Value;
             BaseResponse response = new BaseResponse();
             try
             {
@@ -319,7 +327,7 @@ namespace AnL.Controllers
                     }
                 }
 
-                result = _UOW.TimesheetDetailRepository.SubmitTimesheet(timesheetDetailsList);
+                result = _UOW.TimesheetDetailRepository.SubmitTimesheet(timesheetDetailsList,Userid);
                 string subject = "Timesheet Submitted";
                 string body = "Dear " + String.Concat(employeeDetails.FirstName, " ", employeeDetails.LastName) +
                     "\n\nYour Timesheet has been submitted successfully to Supervisor " + String.Concat(managerDetails.FirstName, " ", managerDetails.LastName) + ".\n\n with remarks as below : \n\n" + timesheetDetails[0].EmployeeRemarks;
@@ -468,6 +476,8 @@ namespace AnL.Controllers
         [HttpPost]
         public async Task<ActionResult> SupervisorDecision( List<Details> model,string SupervisorID, string EmployeeID, string Action)
         {
+            var user = HttpContext.User;
+            var Userid = user.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 bool result = false;
@@ -496,7 +506,7 @@ namespace AnL.Controllers
                     string body = "Dear " + String.Concat(employeeDetails.FirstName, " ", employeeDetails.LastName) +
                         "\n\nYour Timesheet has been approved by Supervisor " + String.Concat(managerDetails.FirstName, " ", managerDetails.LastName) + " with remarks as below : \n\n" + model[0].SupervisorRemarks;
                     SendMail(employeeDetails.EmailAddress, subject, body);
-                    result = _UOW.TimesheetDetailRepository.SupervisorAction(timesheetDetailsList, TimeSheetStatus.Approved);
+                    result = _UOW.TimesheetDetailRepository.SupervisorAction(timesheetDetailsList, TimeSheetStatus.Approved,Userid);
                 }
                 else if (Action == TimeSheetStatus.Rejected)
                 {
@@ -504,7 +514,7 @@ namespace AnL.Controllers
                     string body = "Dear " + String.Concat(employeeDetails.FirstName, " ", employeeDetails.LastName) +
                         "\n\nYour Timesheet has been rejected by Supervisor " + String.Concat(managerDetails.FirstName, " ", managerDetails.LastName) + " with remarks as below : \n\n" + model[0].SupervisorRemarks;
                     SendMail(employeeDetails.EmailAddress, subject, body);
-                    result = _UOW.TimesheetDetailRepository.SupervisorAction(timesheetDetailsList, TimeSheetStatus.Rejected);
+                    result = _UOW.TimesheetDetailRepository.SupervisorAction(timesheetDetailsList, TimeSheetStatus.Rejected,Userid);
                 }
                 else
                 {
