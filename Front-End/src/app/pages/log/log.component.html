@@ -73,8 +73,9 @@
                                 <td>
                                     {{log.oldValues}}
                                 </td>
-                                <td >{{log.newValues}} <i  aria-hidden="true" tooltip="{{ log.newValues | slice:0:10}}..."></i>
-                                    
+                                <td><span triggers="mouseenter:mouseleave" ngbPopover="{{log.newValues}}"> {{getName(log.newValues)}}</span>
+                                <!--  {{log.newValues | slice:0:20}}... -->
+                                
                                 </td>
                             </tr>
                         </tbody>

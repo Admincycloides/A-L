@@ -61,6 +61,7 @@ export class ProjectsComponent implements OnInit {
   ngOnInit(): void {
 
     this.user = JSON.parse(localStorage.getItem('user'));
+    this.supervisorFlag = this.user.supervisorFlag;
     console.log("macha",this.user);
     this.getListofProjects();
     this.getActivityLists();

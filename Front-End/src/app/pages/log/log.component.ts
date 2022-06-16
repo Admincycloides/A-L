@@ -3,6 +3,7 @@ import { HttpService } from 'app/_services/http.service';
 import { UrlService } from 'app/_services/url.service';
 import { NgbModal,NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 import { IDropdownSettings } from "ng-multiselect-dropdown";
+import { Tooltip } from 'chart.js';
 
 
 @Component({
@@ -14,6 +15,8 @@ import { IDropdownSettings } from "ng-multiselect-dropdown";
 export class LogComponent implements OnInit {
 
   public LogAudits = [];
+  tooltipName:any;
+  tooltipDescription:any;
   dropdownEmployeeSettings: IDropdownSettings = {};
 
   constructor(private _http: HttpService,private _url: UrlService,config: NgbModalConfig, private modalService: NgbModal) { 
@@ -39,7 +42,16 @@ export class LogComponent implements OnInit {
         })
     }
 
-    
+    public getName(value:any){
+
+      let newString;
+      if(value.length > 100 ){
+        console.log("goo",value);
+      newString = value.substring(0,80)+'....';
+      // this.tooltipDescription
+    }
+  return newString
+}
   }
 
 
