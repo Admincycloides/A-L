@@ -2,11 +2,12 @@
 <div class="action-head justify-content-between d-flex align-items-center mb-4">
     <div class="page-title w-100">Log (Audit Trail)</div>
     <div class="act-filter d-flex align-items-center justify-content-center">
-        <input type="text" class="search-filter" placeholder="Search Projects"
-            />
+        <input type="text" class="search-filter" placeholder="Search Projects"/>
     </div>
     <div class="action d-flex justify-content-end">
-        <div ngbDropdown class="filter-drop" placement="bottom-right">
+        
+        <button (click)="open(content)" class="filter-pop act-btn thm-btn thm-btn-primary">Filter</button>
+        <!-- <div ngbDropdown class="filter-drop" placement="bottom-right">
             <button class="act-btn thm-btn thm-btn-primary" id="gfg"
                     ngbDropdownToggle>Filter</button>
             <div ngbDropdownMenu="gfg">
@@ -14,7 +15,7 @@
               <button ngbDropdownItem>Activity</button>
               <button ngbDropdownItem>Action</button>
             </div>
-          </div>
+          </div> -->
     </div>
 </div>
 <div class="row">
@@ -73,3 +74,48 @@
 
 
 </div>
+
+<!-- Filter modal -->
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Log Filter</h4>
+      <button  type="button" aria-label="Close" class="btn-close" (click)="d('Cross click')"><i  class="nc-icon nc-simple-remove"></i></button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="row fm-row">
+            <div class="col-md-6">
+                <div  class="form-group mb-3">
+                    <label >From Date</label>
+                    <input  type="date" class="form-control "/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div  class="form-group mb-3">
+                    <label >To Date</label>
+                    <input  type="date" class="form-control "/>
+                </div>
+            </div>
+        </div>
+        <div class="row fm-row">
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label>Activities</label>
+                    <ng-multiselect-dropdown [placeholder]="'Select Activities'" formControlName="assignedTo" [settings]="dropdownEmployeeSettings" [data]="employeeList" name="employee" *ngIf="itemrow.editable" class="modal-ms"></ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label >Actions </label>
+                    <ng-multiselect-dropdown [placeholder]="'Select Activities'" formControlName="assignedTo" [settings]="dropdownEmployeeSettings" [data]="employeeList" name="employee" *ngIf="itemrow.editable" class="modal-ms"></ng-multiselect-dropdown>
+                </div>
+            </div>
+
+        </div>
+
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="act-btn thm-btn thm-btn-primary" (click)="c('Save click')">Submit</button>
+    </div>
+  </ng-template>
