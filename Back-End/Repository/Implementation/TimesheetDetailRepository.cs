@@ -163,8 +163,21 @@ namespace AnL.Repository.Implementation
                 });
                 _context.UpdateRange(result);
             }
+
             this.SaveChanges();
             return true;
+        }
+        public bool GetTimesheetDetailsForActivity(int Activityid)
+        {
+            List<TimesheetDetails> details = this.GetAllByCondition(x => x.ActivityId == Activityid).ToList();
+            if (details.Count == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
         public bool GetTimesheetDetailsForProject(int ProjectId)
         {

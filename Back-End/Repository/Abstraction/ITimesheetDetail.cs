@@ -15,6 +15,7 @@ namespace AnL.Repository.Abstraction
         public bool SubmitTimesheet(List<TimesheetDetails> items);
         public bool DeleteTimesheetDetails(List<TimesheetDetails> timesheetDetails);
         public bool GetTimesheetDetailsForProject(int ProjectId);
+        public bool GetTimesheetDetailsForActivity(int Activityid);
         public Task<List<TimesheetViewModel>> GetReview(string EmployeeID);
         public bool SupervisorAction(List<TimesheetDetails> timesheetDetails, string Action);
     }
