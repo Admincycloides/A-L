@@ -1,7 +1,9 @@
-﻿using AnL.Helpers.AuditTrail;
+﻿using AnL.Filter;
+using AnL.Helpers.AuditTrail;
 using AnL.Models;
 using AnL.Repository.Abstraction;
 using AnL.ViewModel;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
@@ -69,6 +71,17 @@ namespace AnL.Repository.Implementation
 
                 });
                 return rsp;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<Object> GetAuditLogDetails([FromQuery] PaginationFilter filter, AuditViewModel model, string search)
+        {
+            try
+            {
+                return null;
             }
             catch (Exception ex)
             {

@@ -201,7 +201,7 @@ namespace AnL.Controllers
             {
                 response.Data = project;
                 response.ResponseCode = HTTPConstants.BAD_REQUEST;
-                response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
+                response.ResponseMessage = MessageConstants.EditProjectFailed;
             }
             var EditProjectResponse = _UOW.ProjectRepository.EditProject(project, Userid);
 
@@ -209,7 +209,7 @@ namespace AnL.Controllers
             {
                 response.Data = EditProjectResponse;
                 response.ResponseCode = HTTPConstants.OK;
-                response.ResponseMessage = MessageConstants.ProjectDeletionSuccess;
+                response.ResponseMessage = MessageConstants.EditProjectSuccess;
 
             }
             else

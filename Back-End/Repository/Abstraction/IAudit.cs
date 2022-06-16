@@ -1,5 +1,7 @@
-﻿using AnL.Models;
+﻿using AnL.Filter;
+using AnL.Models;
 using AnL.ViewModel;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +13,6 @@ namespace AnL.Repository.Abstraction
     {
         public void AddAuditLogs(string userName);
         public Task<List<AuditViewModel>> GetAuditLog();
+        public Task<Object> GetAuditLogDetails([FromQuery] PaginationFilter filter, AuditViewModel model, string search);
     }
 }
