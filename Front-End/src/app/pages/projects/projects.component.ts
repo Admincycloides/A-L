@@ -80,23 +80,14 @@ export class ProjectsComponent implements OnInit {
     // this.getProjectActivityDetails(),
   }
 
- 
-  // private getProjectActivityDetails(){
 
-  //   const url = `${this._url.project.getprojectListbyEmployeeID}`
-  //   this._http.get(url).subscribe({
-  //     next:(res:any)=>{
-  //       this.projectGroup['controls'].itemRows['controls'] = (res.data);}
-  //     })
-  //   }
-
-  public changeText(){
-    if (this.text === 'Add Project') {
-      this.text = 'save';
-    } else {
-      this.text = 'Add Project';
-    }
-}
+//   public changeText(){
+//     if (this.text === 'Add Project') {
+//       this.text = 'save';
+//     } else {
+//       this.text = 'Add Project';
+//     }
+// }
 
 
     private getActivityLists(){
@@ -205,6 +196,7 @@ export class ProjectsComponent implements OnInit {
       {
         activityId: [],}]
     })
+    
   }
   formatDate(input){
     return moment(input).format('YYYY-MM-DD')
@@ -216,7 +208,6 @@ export class ProjectsComponent implements OnInit {
 
   saveField()
   {
-    
     console.log(this.projectGroup.value.itemRows)
     console.log("hi");
     var body = []; //this.projectGroup.value.itemRows;
@@ -247,10 +238,12 @@ export class ProjectsComponent implements OnInit {
           assignedTo:element.assignedTo,
           activities:[],
           employeeID:eid,
+          
         }
         body.push(item);
       }
     });
+    
     const url = `${this._url.project.addProject}`
 
   //   body.forEach(function (value,index) {
@@ -274,7 +267,6 @@ export class ProjectsComponent implements OnInit {
 
         }
         );
-
     }
     else{
       this._toast.error('No new project to save','Error saving');
@@ -331,9 +323,11 @@ public deleteRow(index : any) {
   // let formObj = this.projectGroup.value; // {name: '', description: ''}
   //     let serializedForm = JSON.stringify(formObj.itemRows);
   //     console.log(serializedForm);
+  
   const body = this.projectGroup.value.itemRows[index];
   console.log("we",body);
   const url = `${this._url.project.deleteProject}?projectID=${body.projectId}`
+  if(body.projectId != null){
   this._http.post(url,body.projectId).subscribe(
     {
       next:(res:any)=>{
@@ -344,9 +338,10 @@ public deleteRow(index : any) {
       error: (err: any) => {
         this._toast.error(err.error.responseMessage);
       },
-    });
+    });}
 
    if(body.projectId == null){
+    this._toast.success("Project Deleted Successfully");
     this.itemRows.removeAt(index)
   }
 //   console.log("hiii");

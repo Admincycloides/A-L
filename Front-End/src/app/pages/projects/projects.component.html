@@ -5,7 +5,7 @@
         <input #searchBar type="text" class="cpage-search search-filter" placeholder="Search Project" (keyup)="searchItems($event)" />
     </div>
     <div class="action d-flex justify-content-end">
-        <button class="act-btn thm-btn thm-btn-primary" type="button" style='margin-right:16px' (click)="addFieldValue();changeText();" *ngIf="supervisorFlag == 'Y'" ion-button><i class="nc-icon nc-simple-add"></i>Add Project</button>
+        <button class="act-btn thm-btn thm-btn-primary" type="button" style='margin-right:16px' (click)="addFieldValue()" *ngIf="supervisorFlag == 'Y'" ion-button><i class="nc-icon nc-simple-add"></i>Add Project</button>
         <!-- the below button have to be added conditionaly -->
         <button class="act-btn thm-btn thm-btn-primary" type="button" (click)="saveField()" *ngIf="supervisorFlag =='Y' "><i class="nc-icon nc-check-2"></i>Save</button>
         <!-- <select name="Activity Id" (change)="changeid($event)" [(ngModel)]="selectedactivity" class="form-control" *ngIf="supervisorFlag != 'Y'">

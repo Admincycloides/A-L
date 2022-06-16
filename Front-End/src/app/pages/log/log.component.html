@@ -113,14 +113,22 @@
         <div class="row fm-row">
             <div class="col-md-6">
                 <div class="form-group mb-3">
-                    <label>Activities</label>
-                    <ng-multiselect-dropdown [placeholder]="'Select Activities'" formControlName="assignedTo" [settings]="dropdownEmployeeSettings" [data]="employeeList" name="employee" *ngIf="itemrow.editable" class="modal-ms"></ng-multiselect-dropdown>
+                    <label>Activities</label><br>
+                    <select>
+                        <option>Create</option>
+                        <option>Update</option>
+                      </select>
+                    <!-- <ng-multiselect-dropdown [placeholder]="'Select Activities'" formControlName="assignedTo" [settings]="dropdownEmployeeSettings" [data]="employeeList" name="employee" *ngIf="itemrow.editable" class="modal-ms"></ng-multiselect-dropdown> -->
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group mb-3">
-                    <label >Actions </label>
-                    <ng-multiselect-dropdown [placeholder]="'Select Activities'" formControlName="assignedTo" [settings]="dropdownEmployeeSettings" [data]="employeeList" name="employee" *ngIf="itemrow.editable" class="modal-ms"></ng-multiselect-dropdown>
+                    <label >Actions </label><br>
+                    <select>
+                        <option>Activity_Details</option>
+                        <option>Project_Details</option>
+                      </select>
+                    <!-- <ng-multiselect-dropdown [placeholder]="'Select Activities'" formControlName="assignedTo" [settings]="dropdownEmployeeSettings" [data]="employeeList" name="employee" *ngIf="itemrow.editable" class="modal-ms"></ng-multiselect-dropdown> -->
                 </div>
             </div>
 

@@ -10,7 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-activities',
-  templateUrl: './activities.component.html',
+  templateUrl: '././activities.component.html',
   styleUrls: ['./activities.component.scss']
   
 })
@@ -231,11 +231,6 @@ makeEditable(itemrow: any) {
       }
     });
     const url = `${this._url.activity.addActivity}`
-
-  //   body.forEach(function (value,index) {
-  //     body[index].activities = [{activityId: this.selectedactivity}]
-  // });
-    // body.activities.push({activityId: this.selectedactivity})
     console.log("boddddy",body);
     this._http.post(url,body).subscribe(
       {
@@ -245,10 +240,13 @@ makeEditable(itemrow: any) {
           console.log(res.responseMessage);
         },
         error: (err: any) => {
-          this._toast.error(err.error.responseMessage);
+          this._toast.error(err.error.data);
         },
+        
       });
   }
+
+
 
 public addFieldValue() { 
   if(this.text == "save"){
@@ -257,6 +255,8 @@ public addFieldValue() {
   this.itemRows.push(this.initItemRow());
   
 }
+
+
 
  public deleteRow(index : any) {
 
