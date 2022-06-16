@@ -20,6 +20,8 @@ import { ReviewtimesheetComponent } from './pages/reviewtimesheet/reviewtimeshee
 import { ReviewlinkComponent } from './pages/reviewtimesheet/reviewlink/reviewlink.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { httpInterceptProviders } from "./_interceptors";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { LogComponent } from "./pages/log/log.component";
 
 
 
@@ -29,12 +31,14 @@ import { httpInterceptProviders } from "./_interceptors";
     AppComponent,
     AdminLayoutComponent,
     LoginComponent,
+    LogComponent
   ],
   imports: [
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
     NgxPaginationModule,
+    NgbModule,
     RouterModule.forRoot(AppRoutes,{
       useHash: true
     }),
@@ -45,8 +49,9 @@ import { httpInterceptProviders } from "./_interceptors";
     FixedPluginModule,
     ReactiveFormsModule,
     HttpClientModule,
+    NgbModule,
   ],
   providers: [httpInterceptProviders],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent,LogComponent]
 })
 export class AppModule { }

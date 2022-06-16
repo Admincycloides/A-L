@@ -6,7 +6,15 @@
             />
     </div>
     <div class="action d-flex justify-content-end">
-        Filter
+        <div ngbDropdown class="filter-drop" placement="bottom-right">
+            <button class="act-btn thm-btn thm-btn-primary" id="gfg"
+                    ngbDropdownToggle>Filter</button>
+            <div ngbDropdownMenu="gfg">
+              <button ngbDropdownToggle>Date Range</button>
+              <button ngbDropdownItem>Activity</button>
+              <button ngbDropdownItem>Action</button>
+            </div>
+          </div>
     </div>
 </div>
 <div class="row">
@@ -20,7 +28,7 @@
                                Project
                             </th>
                             <th>
-                               Employee Name
+                               Employee Id
                             </th>
                             <th>
                                 Date
@@ -34,9 +42,6 @@
                             <th>
                                 Details
                             </th>
-                            <th>
-                                Open
-                            </th>
                         </thead>
                         <tbody>
                             <tr *ngFor="let log of LogAudits">
@@ -44,22 +49,19 @@
                                     <!-- {{log.projectName}} -->
                                 </td>
                                 <td>
+                                    {{log.auditUser}}
+                                </td>
+                                <td>
+                                    {{log.auditDateTime | date}}
+                                </td>
+                                <td>
                                     {{log.tableName}}
                                 </td>
                                 <td>
-                                    {{log.auditDateTime}}
-                                </td>
-                                <td>
-                                    <!-- {{log.activity}} -->
-                                </td>
-                                <td>
-                                    <!-- {{log.action}} -->
+                                    {{log.auditType}}
                                 </td>
                                 <td>
                                     <!-- {{log.Details}} -->
-                                </td>
-                                <td>
-                                    <!-- <button class="thm-linkbtn">Click here</button> -->
                                 </td>
                             </tr>
                         </tbody>

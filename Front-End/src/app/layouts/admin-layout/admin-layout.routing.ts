@@ -16,6 +16,6 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'review',      component: ReviewtimesheetComponent},
     { path: 'reviewlink',      component: ReviewlinkComponent},
     { path: 'reports',      component: ReportsComponent},
-    {path: 'log',            component:LogComponent}
+    { path: 'log',            component:LogComponent}
     ]
 
