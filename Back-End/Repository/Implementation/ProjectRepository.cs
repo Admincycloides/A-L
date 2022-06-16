@@ -436,20 +436,27 @@ namespace AnL.Repository.Implementation
             
             try
             {
-                var activity = new ActivityDetails();
-                List<ActivityMapping> activityMapp = new List<ActivityMapping>();
-                activity = this.dbActivity.Find(activityID);
+                //var activity = new ActivityDetails();
                 
-                foreach(var a in activity.ActivityMapping)
+                bool TimesheetDetailForProjectPresent = timesheetDetail.GetTimesheetDetailsForActivity(activityID);
+                if (TimesheetDetailForProjectPresent)
                 {
-                    //project1 = this.dbSet.Find(a.ProjectId);
-                    bool TimesheetDetailForProjectPresent = timesheetDetail.GetTimesheetDetailsForProject(a.ProjectId);
-                    if (TimesheetDetailForProjectPresent)
-                    {
-                        return false;
-                    }
+                    return false;
                 }
-                foreach (var a in activity.ActivityMapping)
+                List<ActivityMapping> activityMapp = new List<ActivityMapping>();
+                activityMapp = this.dbActivityMapp.Where(x => x.ActivityId == activityID).ToList();
+                var activity = this.dbActivity.Where(x => x.ActivityId == activityID).FirstOrDefault();
+                
+                //foreach (var a in activity.ActivityMapping)
+                //{
+                //    //project1 = this.dbSet.Find(a.ProjectId);
+                //    bool TimesheetDetailForProjectPresent = timesheetDetail.GetTimesheetDetailsForProject(a.ProjectId);
+                //    if (TimesheetDetailForProjectPresent)
+                //    {
+                //        return false;
+                //    }
+                //}
+                foreach (var a in activityMapp)
                 {
                     a.IsActive = false;
                 }
