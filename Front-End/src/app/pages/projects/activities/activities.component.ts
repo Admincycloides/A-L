@@ -4,6 +4,7 @@ import { Title } from '@angular/platform-browser';
 import { Router,ActivatedRoute }  from '@angular/router';
 import { HttpService } from 'app/_services/http.service';
 import { UrlService } from 'app/_services/url.service';
+import { ToastrService } from 'ngx-toastr';
 // import { ProjectsComponent } from '../projects.component';
 
 
@@ -18,6 +19,8 @@ export class ActivitiesComponent implements OnInit {
   projectGroup : FormGroup;
   TotalRow : number; 
   activityItems:any;
+  toolTipName:any;
+  toolTipDescription:any;
   searchTerm: any= '';
   projectId:any;
   sub:any;
@@ -43,7 +46,7 @@ export class ActivitiesComponent implements OnInit {
   
   
 
-  constructor(private _fb:FormBuilder, public titleService: Title,private _http: HttpService,private _url: UrlService,private _router:Router,private _Activatedroute:ActivatedRoute,
+  constructor(private _fb:FormBuilder, public titleService: Title,private _http: HttpService,private _url: UrlService,private _router:Router,private _Activatedroute:ActivatedRoute,private _toast:ToastrService
     ) {
     this.projectGroup = this._fb.group({
       itemRows:this._fb.array([]),
@@ -190,8 +193,12 @@ makeEditable(itemrow: any) {
     this._http.post(url,[body]).subscribe(
       {
         next:(res:any)=>{
+          this._toast.success(res.responseMessage);
           console.log(res.responseMessage);
-        }
+        },
+        error: (err: any) => {
+          this._toast.error(err.error.responseMessage);
+        },
       });}
       itemrow.editable = !itemrow.editable;
       
@@ -233,9 +240,13 @@ makeEditable(itemrow: any) {
     this._http.post(url,body).subscribe(
       {
         next:(res:any)=>{
+          this._toast.success(res.responseMessage);
           this.activityItems = res.data;
           console.log(res.responseMessage);
-        }
+        },
+        error: (err: any) => {
+          this._toast.error(err.error.responseMessage);
+        },
       });
   }
 
@@ -257,9 +268,13 @@ const body = this.projectGroup.value.itemRows[index];
   this._http.post(url,body.activityId).subscribe(
     {
       next:(res:any)=>{
+        this._toast.success(res.responseMessage);
         this.itemRows.removeAt(index)
         console.log(res.responseMessage);
-      }
+      },
+      error: (err: any) => {
+        this._toast.error(err.error.responseMessage);
+      },
     });
 // }
  }
