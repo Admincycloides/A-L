@@ -5,7 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-log',
-  templateUrl: './log.component.html',
+  templateUrl: '././log.component.html',
   styleUrls: ['./log.component.scss']
 })
 export class LogComponent implements OnInit {
@@ -29,4 +29,6 @@ export class LogComponent implements OnInit {
       }
         })
     }
+
+    
   }

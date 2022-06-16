@@ -18,6 +18,7 @@ export class ActivitiesComponent implements OnInit {
   projectGroup : FormGroup;
   TotalRow : number; 
   activityItems:any;
+  searchTerm: any= '';
   projectId:any;
   sub:any;
   getselectedactivity:any;
@@ -32,7 +33,12 @@ export class ActivitiesComponent implements OnInit {
 
   public text: string = 'Add Activity';
 
-  config: any;
+  public config = {
+    currentPage: 1,
+    itemsPerPage: 5,
+    totalItems: 1,
+    search: "",
+  };
   collection = { count: 60, data: [] }
   
   
@@ -43,13 +49,7 @@ export class ActivitiesComponent implements OnInit {
       itemRows:this._fb.array([]),
     });
 
-    this.getActivityDetails(),
-
-    this.config = {
-      itemsPerPage: 5,
-      currentPage: 1,
-      totalItems: this.collection.count
-    };
+    this.getActivityDetails()
   }
 
   get itemRows() : FormArray {
@@ -93,14 +93,18 @@ export class ActivitiesComponent implements OnInit {
   }
   
   public getActivityforProject(projectId){
+
+    const search = this.config.search;
+    const pageNo = this.config.currentPage;
+    const pageSize = this.config.itemsPerPage;
     console.log("qqqq")
-    const url = `${this._url.project.getprojectdetailsByid}?ProjectID=${projectId}`
+    const url = `${this._url.project.getprojectdetailsByid}?ProjectID=${projectId}&PageNumber=${pageNo}&PageSize=${pageSize}&EmployeeName=${encodeURIComponent(this.searchTerm)}`
     this._http.get(url).subscribe({
       next:(res:any)=>{
         // this.getselectedactivity = res.data.activities;
         var items = [];
         let activities = res.data.activities
-        res.data.activities.forEach(element => {
+        res.data.forEach(element => {
           this.addFieldValue()
           let i = {
                 enabledFlag:element.enabledFlag,
@@ -113,6 +117,9 @@ export class ActivitiesComponent implements OnInit {
         console.log("aaaa",res.data.activities)
         this.itemRows.setValue(items);
         console.log("aaaa",this.itemRows.value)
+        let totalPage = res.totalPages;
+        let itemsPerPage = res.pageSize;
+        this.config.totalItems = totalPage * itemsPerPage;
       }
     })
   }
@@ -248,6 +255,13 @@ const body = this.projectGroup.value.itemRows[index];
  
  pageChanged(event){
   this.config.currentPage = event;
+  this.getActivityforProject(this.projectId);
+}
+
+searchItems(event: any) {
+  this.config.search = event.target.value;
+  this.searchTerm = event.target.value;
+  this.getActivityforProject(this.projectId);
 }
 
 }

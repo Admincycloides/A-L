@@ -68,7 +68,8 @@ export class UrlService {
 
 public audit = {
   
-  auditlog:'api/Audit/GetAuditLog'
+  auditlog:'api/Audit/GetAuditLog',
+  getauditdetails:'/api/Audit/GetAuditLogDetails'
 
 }
 

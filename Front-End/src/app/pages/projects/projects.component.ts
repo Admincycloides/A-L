@@ -41,7 +41,13 @@ export class ProjectsComponent implements OnInit {
   }
   // public addProjects = [];
 
-  config: any;
+  public config = {
+    currentPage: 1,
+    itemsPerPage: 5,
+    totalItems: 1,
+    search: "",
+  };
+  
   collection = { count: 60, data: [] };
 
   constructor(private _url: UrlService,
@@ -50,14 +56,7 @@ export class ProjectsComponent implements OnInit {
     this.projectGroup = this._fb.group({
       itemRows:this._fb.array([]),
     });
-
-    this.config = {
-      itemsPerPage: 5,
-      currentPage: 1,
-      totalItems: this.collection.count
-    };
   }
-  
 
   ngOnInit(): void {
 
@@ -118,7 +117,10 @@ export class ProjectsComponent implements OnInit {
 
     private getListofProjects(){
       const search = this.config.search;
-      const url = `${this._url.project.getprojectlist}?empID=${this.user.employeeId}&ProjectName=${encodeURIComponent(this.searchTerm)}`;
+      const pageNo = this.config.currentPage;
+      const pageSize = this.config.itemsPerPage;
+  
+      const url = `${this._url.project.getprojectlist}?PageNumber=${pageNo}&PageSize=${pageSize}&empID=${this.user.employeeId}&ProjectName=${encodeURIComponent(this.searchTerm)}`;
       console.log(url)
       // this.itemRows.remove
       // clearFormArray = (formArray: FormArray) => {
@@ -127,7 +129,9 @@ export class ProjectsComponent implements OnInit {
       let values = this.itemRows.value
       this._http.get(url).subscribe({
         next:(res:any)=>{
-          // this.itemRows.setValue(res.data);
+        let totalPage = res.totalPages;
+        let itemsPerPage = res.pageSize;
+        this.config.totalItems = totalPage * itemsPerPage;
           var items = [];
           if(res.data != null){
 
@@ -342,7 +346,8 @@ public deleteRow(index : any) {
     });
 
    if(body.projectId == null){
-    this.itemRows.removeAt(index)}
+    this.itemRows.removeAt(index)
+  }
 //   console.log("hiii");
 //   const control = <FormArray>this.projectGroup.controls['itemRows'];
 //   if(control != null)

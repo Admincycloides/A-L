@@ -1,7 +1,7 @@
 <div class="action-head justify-content-between d-flex align-items-center mb-4">
     <div class="page-title w-100">Activities</div>
     <div class="act-filter d-flex align-items-center justify-content-center">
-        <input type="text" class="search-filter" placeholder="Search Activities" />
+        <input type="text" class="search-filter" placeholder="Search Activities" (keyup)="searchItems($event)" />
     </div>
     <div class="action d-flex justify-content-end">
         <div class="action d-flex justify-content-end">
@@ -47,7 +47,7 @@
                                     </thead>
                                     <ng-container projectGroup.controls.itemRows>
                                         <tbody formArrayName="itemRows">
-                                            <ng-container *ngFor="let itemrow of itemRows.controls; let i = index ">
+                                            <ng-container *ngFor="let itemrow of itemRows.controls | paginate: config; let i = index ">
                                                 <tr [formGroupName]='i'>
                                                     <td class="col-md-2">
                                                         <span *ngIf="!itemrow.editable">{{itemrow.value.activityName}}</span>
@@ -84,7 +84,21 @@
                 </div>
             </div>
         </div>
-        <pagination-controls (pageChange)="pageChanged($event)" [maxSize]="5"></pagination-controls>
+        <ul>
+            <pagination-controls
+              (pageChange)="pageChanged($event)"
+              [directionLinks]="true"
+              [autoHide]="false"
+              [maxSize]="10"
+              [responsive]="true"
+              previousLabel="Previous"
+              nextLabel="Next"
+              screenReaderPaginationLabel="Pagination"
+              screenReaderPageLabel="page"
+              screenReaderCurrentLabel="You're on page"
+            >
+            </pagination-controls>
+          </ul>
     </div>
 
 </form>
