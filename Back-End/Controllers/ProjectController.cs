@@ -15,6 +15,7 @@ using System.Linq;
 
 namespace AnL.Controllers
 {
+    [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class ProjectController : Controller
@@ -67,7 +68,6 @@ namespace AnL.Controllers
             }
 
         }
-       
         [HttpGet]
         public async Task<ActionResult> GetClientList()
         {
@@ -82,14 +82,17 @@ namespace AnL.Controllers
                 Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
                 return BadRequest("Oops! Something went wrong!" + ex);
             }
+        }
 
         [HttpPost]
         public async Task<ActionResult> AddProject(List<ProjectViewModel> ProjectDetails)
         {
+            var user = HttpContext.User;
+            var Userid = user.FindFirst(ClaimTypes.NameIdentifier).Value;
             try
             {
                 BaseResponse rsp = new BaseResponse();
-                var data = await _UOW.ProjectRepository.AddProject(ProjectDetails);
+                var data = await _UOW.ProjectRepository.AddProject(ProjectDetails,Userid);
                 if (data == null)
                 {
                     rsp.Data = "Project Name already exist.";
@@ -109,12 +112,14 @@ namespace AnL.Controllers
             }
         }
         [HttpPost]
-        public async Task<ActionResult> AddActivity(List<ActivityMaster> ActivityDetails)
+        public async Task<ActionResult> AddActivity(List<ProjectActivityMap> ActivityDetails)
         {
             try
             {
+                var user = HttpContext.User;
+                var Userid = user.FindFirst(ClaimTypes.NameIdentifier).Value;
                 BaseResponse rsp = new BaseResponse();
-                var data = await _UOW.ProjectRepository.AddActivity(ActivityDetails);
+                var data = await _UOW.ProjectRepository.AddActivity(ActivityDetails, Userid);
                 if (data == null)
                 {
                     rsp.Data = "Activity Name already exist.";
@@ -133,6 +138,36 @@ namespace AnL.Controllers
                 return BadRequest("Oops! Something went wrong!" + ex);
             }
         }
+
+
+        [HttpPost]
+        public async Task<ActionResult> EditActivity(List<ActivityMaster> ActivityDetails)
+        {
+            try
+            {
+                var user = HttpContext.User;
+                var Userid = user.FindFirst(ClaimTypes.NameIdentifier).Value;
+                BaseResponse rsp = new BaseResponse();
+                var data = await _UOW.ProjectRepository.EditActivity(ActivityDetails, Userid);
+                if (data != null)
+                {
+                    rsp.Data = "Activity Name already exist.";
+                    return Conflict(rsp);
+                }
+                else
+                {
+                    rsp.Data = data;
+                    rsp.ResponseMessage = MessageConstants.ActivityAdditionSuccess;
+                }
+                return Ok(rsp);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+        }
+
 
 
         [HttpPost]
@@ -160,21 +195,167 @@ namespace AnL.Controllers
                 return BadRequest("Oops! Something went wrong!" + ex);
             }
         }
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpPost]
+        public async Task<ActionResult> EditProject(EditProjectView project)
+        {
+            var user = HttpContext.User;
+            var Userid = user.FindFirst(ClaimTypes.NameIdentifier).Value;
+            BaseResponse response = new BaseResponse();
+            if (project == null)
+            {
+                response.Data = project;
+                response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                response.ResponseMessage = MessageConstants.EditProjectFailed;
+            }
+            var EditProjectResponse = _UOW.ProjectRepository.EditProject(project, Userid);
+
+            if (EditProjectResponse != null)
+            {
+                response.Data = EditProjectResponse;
+                response.ResponseCode = HTTPConstants.OK;
+                response.ResponseMessage = MessageConstants.EditProjectSuccess;
+
+            }
+            else
+            {
+                response.Data = EditProjectResponse;
+                response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
+                return BadRequest(response);
+            }
+            return Ok(response);
+
+
+        
+
+}
+        [HttpPost]
+        public async Task<ActionResult> EditProjectDetails(EditProjectView project)
+        {
+            var user = HttpContext.User;
+            var Userid = user.FindFirst(ClaimTypes.NameIdentifier).Value;
+            BaseResponse response = new BaseResponse();
+            if (project == null)
+            {
+                response.Data = project;
+                response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
+            }
+            var EditProjectResponse = _UOW.ProjectRepository.EditProjectDetails(project, Userid);
+
+            if (EditProjectResponse != null)
+            {
+                response.Data = EditProjectResponse;
+                response.ResponseCode = HTTPConstants.OK;
+                response.ResponseMessage = MessageConstants.EditProjectSuccess;
+
+            }
+            else
+            {
+                response.Data = EditProjectResponse;
+                response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                response.ResponseMessage = MessageConstants.EditProjectSuccess;
+                return BadRequest(response);
+            }
+            return Ok(response);
+
+
+
+
+        }
+
 
         [HttpPost]
-        public async Task<ActionResult> DeleteProject(List<ProjectViewModel> project )
+        public async Task<ActionResult> EditProjectActive(EditProjectView project)
+        {
+            var user = HttpContext.User;
+            var Userid = user.FindFirst(ClaimTypes.NameIdentifier).Value;
+            BaseResponse response = new BaseResponse();
+            if (project == null)
+            {
+                response.Data = project;
+                response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
+            }
+            var EditProjectResponse = _UOW.ProjectRepository.EditProjectActive(project, Userid);
+
+            if (EditProjectResponse != null)
+            {
+                response.Data = EditProjectResponse;
+                response.ResponseCode = HTTPConstants.OK;
+                response.ResponseMessage = MessageConstants.EditProjectSuccess;
+
+            }
+            else
+            {
+                response.Data = EditProjectResponse;
+                response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                response.ResponseMessage = MessageConstants.EditProjectSuccess;
+                return BadRequest(response);
+            }
+            return Ok(response);
+
+
+
+
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> DeleteActivity(int ActivityID)
         {
             try
             {
+                var user = HttpContext.User;
+                var Userid = user.FindFirst(ClaimTypes.NameIdentifier).Value;
                 BaseResponse response = new BaseResponse();
-                if (project==null)
+                if (ActivityID == 0)
                 {
-                    response.Data = project;
+                    response.Data = ActivityID;
                     response.ResponseCode = HTTPConstants.BAD_REQUEST;
-                    response.ResponseMessage = MessageConstants.TimesheetDeletionSuccess;
+                    response.ResponseMessage = MessageConstants.ActivityDeletionFailed;
                 }
-                var DeleteProjectResponse = _UOW.ProjectRepository.DeleteProject(project);
-                
+                var DeleteProjectResponse = _UOW.ProjectRepository.DeleteActivity(ActivityID, Userid);
+
+                if (DeleteProjectResponse)
+                {
+                    response.Data = DeleteProjectResponse;
+                    response.ResponseCode = HTTPConstants.OK;
+                    response.ResponseMessage = MessageConstants.ActivityDeletionSuccess;
+
+                }
+                else
+                {
+                    response.Data = DeleteProjectResponse;
+                    response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                    response.ResponseMessage = MessageConstants.ActivityDeletionFailed;
+                    return BadRequest(response);
+                }
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                return BadRequest("Oops! Something went wrong!" + ex);
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> DeleteProject(int projectID)
+        {
+            try
+            {
+                var user = HttpContext.User;
+                var Userid = user.FindFirst(ClaimTypes.NameIdentifier).Value;
+                BaseResponse response = new BaseResponse();
+                if (projectID==0)
+                {
+                    response.Data = projectID;
+                    response.ResponseCode = HTTPConstants.BAD_REQUEST;
+                    response.ResponseMessage = MessageConstants.ProjectDeletionFailed;
+                }
+                var DeleteProjectResponse = _UOW.ProjectRepository.DeleteProject(projectID, Userid);
+
                 if (DeleteProjectResponse)
                 {
                     response.Data = DeleteProjectResponse;

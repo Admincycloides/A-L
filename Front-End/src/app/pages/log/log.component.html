@@ -6,7 +6,15 @@
             />
     </div>
     <div class="action d-flex justify-content-end">
-        Filter
+        <div ngbDropdown class="filter-drop" placement="bottom-right">
+            <button class="act-btn thm-btn thm-btn-primary" id="gfg"
+                    ngbDropdownToggle>Filter</button>
+            <div ngbDropdownMenu="gfg">
+              <button ngbDropdownToggle>Date Range</button>
+              <button ngbDropdownItem>Activity</button>
+              <button ngbDropdownItem>Action</button>
+            </div>
+          </div>
     </div>
 </div>
 <div class="row">
@@ -20,7 +28,7 @@
                                Project
                             </th>
                             <th>
-                               Employee Name
+                               Employee Id
                             </th>
                             <th>
                                 Date
@@ -34,127 +42,28 @@
                             <th>
                                 Details
                             </th>
-                            <th>
-                                Open
-                            </th>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr *ngFor="let log of LogAudits">
                                 <td>
-                                    Project 1
+                                    <!-- {{log.projectName}} -->
                                 </td>
                                 <td>
-                                    Alex
+                                    {{log.auditUser}}
                                 </td>
                                 <td>
-                                    5/23/2022
+                                    {{log.auditDateTime | date}}
                                 </td>
                                 <td>
-                                    Activity 1
+                                    {{log.tableName}}
                                 </td>
                                 <td>
-                                    Created
+                                    {{log.auditType}}
                                 </td>
                                 <td>
-                                    5 Hours
-                                </td>
-                                <td>
-                                    <button class="thm-linkbtn">Click here</button>
+                                    <!-- {{log.Details}} -->
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    Project 1
-                                </td>
-                                <td>
-                                    Alex
-                                </td>
-                                <td>
-                                    5/23/2022
-                                </td>
-                                <td>
-                                    Activity 1
-                                </td>
-                                <td>
-                                    Created
-                                </td>
-                                <td>
-                                    5 Hours
-                                </td>
-                                <td>
-                                    <button class="thm-linkbtn">Click here</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Project 1
-                                </td>
-                                <td>
-                                    Alex
-                                </td>
-                                <td>
-                                    5/23/2022
-                                </td>
-                                <td>
-                                    Activity 1
-                                </td>
-                                <td>
-                                    Created
-                                </td>
-                                <td>
-                                    5 Hours
-                                </td>
-                                <td>
-                                    <button class="thm-linkbtn">Click here</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Project 1
-                                </td>
-                                <td>
-                                    Alex
-                                </td>
-                                <td>
-                                    5/23/2022
-                                </td>
-                                <td>
-                                    Activity 1
-                                </td>
-                                <td>
-                                    Created
-                                </td>
-                                <td>
-                                    5 Hours
-                                </td>
-                                <td>
-                                    <button class="thm-linkbtn">Click here</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Project 1
-                                </td>
-                                <td>
-                                    Alex
-                                </td>
-                                <td>
-                                    5/23/2022
-                                </td>
-                                <td>
-                                    Activity 1
-                                </td>
-                                <td>
-                                    Created
-                                </td>
-                                <td>
-                                    5 Hours
-                                </td>
-                                <td>
-                                    <button class="thm-linkbtn">Click here</button>
-                                </td>
-                            </tr>
-
                         </tbody>
                     </table>
                 </div>

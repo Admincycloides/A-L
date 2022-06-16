@@ -37,15 +37,39 @@ export class UrlService {
     submitTimesheet           : 'api/Timesheet/SubmitTimesheetDetails',
     getReviewTimesheet        : 'api/Timesheet/GetReviewTimesheet',
     getReviewTimesheetDetails : 'api/Timesheet/GetReviewTimesheetDetails',
-    supervisorDecision        : 'api/Timesheet/supervisorDecision'
+    supervisorDecision        : 'api/Timesheet/supervisorDecision',
+    getTimesheetReport        : 'api/Timesheet/GetTimesheetReport'
   }
   public Employee = {
     //getEmployeeDetails    : 'api/Employee/getEmployeeDetails',
-    getSupervisorDetails  : 'api/EmployeeDetails/GetSupervisorDetails',
-    getEmployeeList       : 'api/EmployeeDetails/GetSupervisorDetails'
+    getSupervisorDetails     : 'api/EmployeeDetails/GetSupervisorDetails',
+    getAllEmployeeList       : 'api/EmployeeDetails/GetAllEmployeeList'
   }
   public project = {
     getprojectListbyEmployeeID :'api/Project/GetprojectListbyEmployeeID',
-    getProjectList             : 'api/Project/GetprojectList'
+    getProjectList             : 'api/Project/GetAllProjectList',
+    addProject : 'api/Project/AddProject',
+    deleteProject : 'api/Project/DeleteProject',
+    allocateResources : 'api/Project/allocateResources',
+    getallprojectlist : 'api/Project/GetAllProjectList',
+    getprojectlist: 'api/Project/GetProjectList',
+    getclientlist : 'api/Project/GetClientList',
+    editproject : 'api/Project/EditProject',
+    getprojectdetailsByid:'api/Project/GetprojectDetailsByID'
   }
+
+  public activity = {
+    addActivity : 'api/Project/AddActivity',
+    getActivityList : 'api/Project/GetActivityList',
+    editactivity:'api/Project/EditActivity',
+    deleteactivity:'api/Project/DeleteActivity?ActivityID=1'
+
+  }
+
+public audit = {
+  
+  auditlog:'api/Audit/GetAuditLog'
+
+}
+
 }

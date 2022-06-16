@@ -426,6 +426,16 @@
         }
       }
     }
+    .action-head{
+      flex-flow: column;
+    }
+    .page-title{
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .act-filter{
+      margin-bottom: 15px;
+    }
 
 }
 
@@ -574,5 +584,8 @@
        cursor: pointer;
      }
 
+  }
+  .remarks-col,.sheet-col{
+    width: 100%!important;
   }
 }

@@ -59,5 +59,9 @@
     &:hover{
         text-decoration: underline;
     }
+    &:focus,&:focus-visible{
+        outline: none;
+
+    }
 }
 

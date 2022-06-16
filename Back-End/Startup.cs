@@ -1,6 +1,8 @@
 using AnL.Models;
 using AnL.Repository.Abstraction;
 using AnL.Repository.Implementation;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -12,12 +14,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace TestApplication
@@ -62,6 +68,29 @@ namespace TestApplication
                 var uri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
                 return new UriService(uri);
             });
+
+
+           
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("KqcL7s998JrfFHRP"/*_configuration["Jwt:SecretKey"]*/));
+                //var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+                options.Authority = Configuration["Auth:Authority"];
+                options.RequireHttpsMetadata = false;
+                options.Audience = Configuration["Auth:Audience"];
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = key
+                };
+            })
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
+        options => Configuration.Bind("CookieSettings", options));
             services.AddSwaggerGen(swagger =>
             {
                 swagger.SwaggerDoc("v1", new OpenApiInfo
@@ -111,6 +140,7 @@ namespace TestApplication
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwaggerUI();
+                IdentityModelEventSource.ShowPII = true;
             }
 
             app.UseHttpsRedirection();
@@ -132,6 +162,7 @@ namespace TestApplication
             var option = new RewriteOptions();
             option.AddRedirect("^$", "swagger");
             app.UseRewriter(option);
+            
         }
     }
 }

@@ -47,7 +47,7 @@
 
 // custom styles
 
-body{
+body,.form-control{
     font-family: 'Roboto', sans-serif;
 
 .error{
@@ -97,7 +97,7 @@ table{
         vertical-align: middle!important;
         .tbl-check{
             margin-top: 3px;
-            margin-left: -27px;
+            margin-left: -31px;
         }
         span{
             white-space: nowrap;
@@ -123,9 +123,25 @@ table{
             &:hover{
                 opacity: .7;
             }
+            &.view{
+                img{
+                    width: 20px;
+                    max-width: 20px;
+                }
+            }
         }
         padding: 16px 7px!important;
         border-top: solid 1px #e6e6e6!important;
+        .cd-input{
+            min-width: 124px;
+        }
+        .label-status{
+            border: solid 1px $secondary-color;
+            @include radius(4px);
+            color:$secondary-color;
+            padding: 5px;
+            background-color: #fefffe;
+        }
     }
     tbody{
         border: none!important;
@@ -141,7 +157,34 @@ table{
             border: solid 1px #bdb9b9!important;
         }
     }
+    &:not(.stick-page-base){
+        th,td{
+            position: relative;
+        }
+    }
 }
+// custom scroll
+/* width */
+.table-responsive::-webkit-scrollbar {
+    width: 10px;
+    height: 13px;
+  }
+  
+  /* Track */
+  .table-responsive::-webkit-scrollbar-track {
+    background: #ededed;
+  }
+  
+  /* Handle */
+  .table-responsive::-webkit-scrollbar-thumb {
+    background:#c6c6c6;
+    @include radius(2px);
+  }
+  
+  /* Handle on hover */
+  .table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #b6b6b6;
+  }
 //pagination
 .ngx-pagination .current{
     background-color: $secondary-color;
@@ -218,12 +261,22 @@ input[type='number']::-webkit-inner-spin-button {
     }
 }
 // layout
+.form-control{
+    &:focus, &:focus-visible{
+        border: solid 1px #bdb9b9!important;
+    }
+}
 .sidebar .logo, .off-canvas-sidebar .logo{
     height: 62px;
     background-color: $secondary-color;
     padding: 0 0 0 5pxpx;
     display: flex;
     align-items: center;
+}
+.m-item{
+    &:focus,&:focus-visible{
+        outline: none;
+    }
 }
 .main-panel{
     .navbar{
@@ -252,7 +305,7 @@ input[type='number']::-webkit-inner-spin-button {
     margin-top: 100px;
 }
 .sidebar .nav i, .off-canvas-sidebar .nav i{
-    font-size: 18px;
+    font-size: 15px;
     margin-right: 0px;
     bottom: 3px;
 }
@@ -332,7 +385,9 @@ input[type='number']::-webkit-inner-spin-button {
         background-color: #26c541!important;
     }
 }
-
+.action-head{
+    padding: 0 15px 0 10px;
+}
 // custom date picker
 input{
     &.date-input{
@@ -345,6 +400,12 @@ input{
     &:focus,&:focus-visible{
         border: none!important;
         outline: none;
+    }
+}
+ngb-datepicker-navigation-select>.form-select{
+    border: 1px solid #DDDDDD!important;
+    &:focus,&:focus-visible{
+        border: 1px solid #DDDDDD!important;
     }
 }
 .week-range{
@@ -376,7 +437,7 @@ input{
         color: $secondary-color;
     }
 }
-.date-holder{
+.date-holder,.mg-filter{
     .dropdown-menu{
         box-shadow: 0px 0px 17px 5px rgba(0,0,0,.06);
     }
@@ -414,13 +475,78 @@ input{
 
     }
 }
+ngb-datepicker{
+    .ngb-dp-header{
+        .ngb-dp-arrow{
+            .ngb-dp-arrow-btn{
+                &:hover,&:focus,&:focus-visible{
+                    background-color: $secondary-color!important;
+                }
+            }
+        }
+    }
+}
+
 ng-multiselect-dropdown{
     .dropdown-btn{
         border: 1px solid #DDDDDD!important;
         background: #fff;
         border-radius: 4px;
         font-size: 14px;
+        &>span{
+            color: #66615b;
+        }
+        .dropdown-multiselect__caret{
+            &:before{
+                border-width: 5px 5px 0!important;
+                top: 61%!important;
+            }
+        }
     }
+    .dropdown-btn{
+        .selected-item{
+            &>{
+                span{
+                    line-height: 19px;
+                    font-size: 11px;
+                }
+            }
+        }
+    }
+
+    &.sm-mdrop{
+        .multiselect-dropdown{
+            width: 154px;
+            .dropdown-btn{
+                font-size: 13px;
+                padding: 4px 6px!important;
+                line-height: 18px!important;
+                .dropdown-multiselect__caret{
+                    height: 28px!important;
+                    width: 23px!important;
+                    padding: 2px!important;
+                }
+            }
+            .dropdown-btn>span{
+                color: #a7a7a7;
+            }
+        }
+}
+}
+.multiselect-item-checkbox input[type=checkbox] + div{
+    font-size: 13px;
+}
+.multiselect-dropdown .dropdown-btn .selected-item-container .selected-item,.multiselect-item-checkbox input[type=checkbox]:checked + div:before{
+    border: solid 1px $secondary-color!important;
+    background: $secondary-color!important;
+}
+.multiselect-item-checkbox input[type=checkbox]:checked + div:before{
+    background: $secondary-color!important;
+    color: $secondary-color!important;
+    border: solid 2px $secondary-color!important;
+}
+.multiselect-item-checkbox input[type=checkbox] + div:before{
+    border: solid 2px $secondary-color!important;
 }
 .fm-date,.tm-date{
     .form-control{
@@ -432,17 +558,31 @@ ng-multiselect-dropdown{
 
 // inner page
 .sheet-row{
-    flex-flow: row;
+    display: flex;
+    flex-wrap: wrap;
+    &.split-col{
+        .sheet-col{
+            width: 80%;
+        }
+        .remarks-col{
+            width: 20%;
+            .form-control{
+                &:focus,&:focus-visible{
+                    border: 1px solid #DDDDDD!important;
+                }
+            }
+        }
+    }
 }
-.sheet-col{
+.sheet-row .sheet-col:not(.sheet-row.split-col .sheet-col){
     width: 100%;
 }
 .sheet-col{
     padding: 0 15px;
 }
-.remarks-col{
-    padding: 0 15px 0 0;
-}
+// .remarks-col{
+//     padding: 0 15px 0 0;
+// }
 .page-title{
     padding: 5px;
     font-size:  rem(18px);
@@ -484,7 +624,6 @@ ng-multiselect-dropdown{
 }
 //remarks 
 .remarks-col{
-    min-width: 225px;
     .r-row{
         label{
             width: 100%;
@@ -500,8 +639,8 @@ ng-multiselect-dropdown{
     }
 }
 // search bar
-input{
-    &.search-filter{
+input,select{
+    &.search-filter,.filt-select{
         background-color: #dfdfdf!important;
         height: 40px;
         @include radius(5px);
@@ -559,7 +698,7 @@ input{
     
 }
 
-// table test
+// table fixed
 .fixed-table{
     table {
         border-collapse: collapse;

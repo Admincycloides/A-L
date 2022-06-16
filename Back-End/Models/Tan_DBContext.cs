@@ -17,6 +17,8 @@ namespace AnL.Models
 
         public virtual DbSet<ActivityDetails> ActivityDetails { get; set; }
         public virtual DbSet<ActivityMapping> ActivityMapping { get; set; }
+        public virtual DbSet<Audit1> Audit1 { get; set; }
+        public virtual DbSet<AuditOld> AuditOld { get; set; }
         public virtual DbSet<ClientDetails> ClientDetails { get; set; }
         public virtual DbSet<EmployeeDetails> EmployeeDetails { get; set; }
         public virtual DbSet<ProjectDetails> ProjectDetails { get; set; }
@@ -30,7 +32,7 @@ namespace AnL.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=72.138.132.250,8006;Database=Tan_DB;user id=sa;password=T@ngenti@12;");
+                optionsBuilder.UseSqlServer("Server=72.138.132.250,8006;Database=Tan_DB;user id=sa;password=T@ngenti@12");
             }
         }
 
@@ -43,9 +45,7 @@ namespace AnL.Models
 
                 entity.ToTable("Activity_Details");
 
-                entity.Property(e => e.ActivityId)
-                    .HasColumnName("Activity_ID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.ActivityId).HasColumnName("Activity_ID");
 
                 entity.Property(e => e.ActivityDescription)
                     .HasColumnName("Activity_Description")
@@ -86,6 +86,71 @@ namespace AnL.Models
                     .HasForeignKey(d => d.ProjectId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Project Details-ActivityMap");
+            });
+
+            modelBuilder.Entity<Audit1>(entity =>
+            {
+                entity.HasKey(e => e.Pid);
+
+                entity.Property(e => e.Pid).HasColumnName("pid");
+
+                entity.Property(e => e.AuditDateTimeUtc).HasColumnType("datetime");
+
+                entity.Property(e => e.AuditType)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.AuditUser)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ChangedColumns)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.KeyValues)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TableName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<AuditOld>(entity =>
+            {
+                entity.ToTable("Audit_old");
+
+                entity.Property(e => e.AffectedColumns)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.DateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.NewValues)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.OldValues)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PrimaryKey)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TableName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Type)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UserId)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<ClientDetails>(entity =>
@@ -362,10 +427,6 @@ namespace AnL.Models
                 entity.Property(e => e.OtpexpiryDate)
                     .HasColumnName("OTPExpiryDate")
                     .HasColumnType("datetime");
-
-                entity.Property(e => e.Token)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
 
                 entity.Property(e => e.TokenExpiryDate).HasColumnType("datetime");
 
