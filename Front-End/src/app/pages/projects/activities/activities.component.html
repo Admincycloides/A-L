@@ -51,11 +51,11 @@
                                                 <tr [formGroupName]='i'>
                                                     <td class="col-md-2">
                                                         <span *ngIf="!itemrow.editable">{{itemrow.value.activityName}}</span>
-                                                        <input placeholder="Activity Name" formControlName="activityName" *ngIf="itemrow.editable" />
+                                                        <input placeholder="Activity Name" formControlName="activityName" utocomplete="on" *ngIf="itemrow.editable" />
                                                     </td>
                                                     <td class="col-md-2">
                                                         <span *ngIf="!itemrow.editable">{{itemrow.value.activityDescription}}</span>
-                                                        <input placeholder="Activity Description" formControlName="activityDescription" *ngIf="itemrow.editable" />
+                                                        <input placeholder="Activity Description" formControlName="activityDescription" utocomplete="on" *ngIf="itemrow.editable" />
                                                     </td>
                                                     <td class="col-md-2">
                                                         <button class="edit actico-btn" (click)="makeEditable(itemrow)"><img

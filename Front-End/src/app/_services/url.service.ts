@@ -65,4 +65,11 @@ export class UrlService {
     deleteactivity:'api/Project/DeleteActivity?ActivityID=1'
 
   }
+
+public audit = {
+  
+  auditlog:'api/Audit/GetAuditLog'
+
+}
+
 }

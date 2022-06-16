@@ -7,6 +7,7 @@ import { IDropdownSettings } from "ng-multiselect-dropdown";
 import { data } from 'jquery';
 import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
+
 @Component({
   selector: 'app-projects',
   templateUrl: './projects.component.html',
@@ -258,10 +259,17 @@ export class ProjectsComponent implements OnInit {
         {
           next:(res:any)=>{
             this.ProjectItems = res.data;
+            this._toast.success(res.responseMessage);
             console.log(res.responseMessage);
             this.getListofProjects();
-          }
-        });
+          },
+          error: (err: any) => {
+            this._toast.error(err.error.responseMessage);
+          },
+
+        }
+        );
+
     }
     else{
       this._toast.error('No new project to save','Error saving');
@@ -295,8 +303,12 @@ makeEditable(itemrow: any,) {
   this._http.post(url,body).subscribe(
     {
       next:(res:any)=>{
+        this._toast.success(res.responseMessage);
         console.log(res.responseMessage);
-      }
+      },
+      error: (err: any) => {
+        this._toast.error(err.error.responseMessage);
+      },
     });}
     itemrow.editable = !itemrow.editable;
     
@@ -320,9 +332,13 @@ public deleteRow(index : any) {
   this._http.post(url,body.projectId).subscribe(
     {
       next:(res:any)=>{
+        this._toast.success(res.responseMessage);
         this.itemRows.removeAt(index)
         console.log(res.responseMessage);
-      }
+      },
+      error: (err: any) => {
+        this._toast.error(err.error.responseMessage);
+      },
     });
 
    if(body.projectId == null){
