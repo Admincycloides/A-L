@@ -263,6 +263,7 @@ public addFieldValue() {
 
   console.log("hiii");
 const body = this.projectGroup.value.itemRows[index];
+if(body.activityId != null){
   const url = `${this._url.activity.deleteactivity}?activityID=${body.activityId}`
 
   this._http.post(url,body.activityId).subscribe(
@@ -275,7 +276,11 @@ const body = this.projectGroup.value.itemRows[index];
       error: (err: any) => {
         this._toast.error(err.error.responseMessage);
       },
-    });
+    });}
+    if(body.activityId == null){
+      this._toast.success("Project Deleted Successfully");
+      this.itemRows.removeAt(index)
+    }
 // }
  }
  
