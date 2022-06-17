@@ -218,7 +218,7 @@ makeEditable(itemrow: any) {
     //     console.log(serializedForm);
     this.projectGroup.value.itemRows.forEach(element => {
       
-      if(element.activityId == null){
+      if(element.activityName == null ){
         console.log("zakkkkkk")
            var dt = {
             projectId:parseInt(this.projectId),
@@ -255,8 +255,6 @@ public addFieldValue() {
   
   this.itemRows.push(this.initItemRow());
   
-
-  
 }
 
 
@@ -264,10 +262,9 @@ public addFieldValue() {
  public deleteRow(index : any) {
 
   console.log("hiii");
-  this.itemRows.removeAt(index)
 const body = this.projectGroup.value.itemRows[index];
-  console.log("we",body);
   const url = `${this._url.activity.deleteactivity}?activityID=${body.activityId}`
+
   this._http.post(url,body.activityId).subscribe(
     {
       next:(res:any)=>{

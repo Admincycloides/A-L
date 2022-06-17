@@ -2,7 +2,7 @@
 <div class="action-head justify-content-between d-flex align-items-center mb-4">
     <div class="page-title w-100">Log (Audit Trail)</div>
     <div class="act-filter d-flex align-items-center justify-content-center">
-        <input type="text" class="search-filter" placeholder="Search Projects"/>
+        <input #searchBar type="text" class="cpage-search search-filter" placeholder="Search Employee Name" (keyup)="searchItems($event)" />
     </div>
     <div class="action d-flex justify-content-end">
         
@@ -29,7 +29,7 @@
                                Project
                             </th> -->
                             <th>
-                               Employee Id
+                               Employee Name
                             </th>
                             <th>
                                 Date
@@ -51,7 +51,7 @@
                             </th>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let log of LogAudits">
+                            <tr *ngFor="let log of LogAudits | paginate: config">
                                 <!-- <td>
                                     {{log.projectName}}
                                 </td> -->
@@ -84,6 +84,22 @@
             </div>
         </div>
     </div>
+    <ul>
+        <pagination-controls
+          (pageChange)="pageChanged($event)"
+          [directionLinks]="true"
+          [autoHide]="false"
+          [maxSize]="20"
+          [responsive]="true"
+          previousLabel="Previous"
+          nextLabel="Next"
+          screenReaderPaginationLabel="Pagination"
+          screenReaderPageLabel="page"
+          screenReaderCurrentLabel="You're on page" 
+          class="pagein text-right"
+        >
+        </pagination-controls>
+      </ul>
 
 
 </div>
@@ -100,13 +116,13 @@
             <div class="col-md-6">
                 <div  class="form-group mb-3">
                     <label >From Date</label>
-                    <input  type="date" class="form-control "/>
+                    <input  type="date" class="form-control" (change)="filterdate($event,'fromdate')"   />
                 </div>
             </div>
             <div class="col-md-6">
                 <div  class="form-group mb-3">
                     <label >To Date</label>
-                    <input  type="date" class="form-control "/>
+                    <input  type="date" class="form-control "  (change)="filterdate($event,'todate')" />
                 </div>
             </div>
         </div>
@@ -114,7 +130,8 @@
             <div class="col-md-6">
                 <div class="form-group mb-3">
                     <label>Activities</label><br>
-                    <select>
+                    <select (change)="onactivityselect($event,'activity')">
+                        <option>select</option>
                         <option>Create</option>
                         <option>Update</option>
                       </select>
@@ -124,7 +141,8 @@
             <div class="col-md-6">
                 <div class="form-group mb-3">
                     <label >Actions </label><br>
-                    <select>
+                    <select (change)="onactivityselect($event,'action')">
+                        <option>select</option>
                         <option>Activity_Details</option>
                         <option>Project_Details</option>
                       </select>
@@ -137,6 +155,6 @@
       </form>
     </div>
     <div class="modal-footer">
-      <button type="button" class="act-btn thm-btn thm-btn-primary" (click)="c('Save click')">Submit</button>
+      <button type="button" class="act-btn thm-btn thm-btn-primary" (click)="onSubmit();c('Save click')">Submit</button>
     </div>
   </ng-template>

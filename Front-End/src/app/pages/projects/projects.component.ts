@@ -272,7 +272,6 @@ export class ProjectsComponent implements OnInit {
           error: (err: any) => {
             this._toast.error(err.error.data);
           },
-
         }
         );
     }
