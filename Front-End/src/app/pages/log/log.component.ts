@@ -84,7 +84,7 @@ public Giveaudittrail() {
   const tableName = this.action ? this.action:""
   const action = this.activity ? this.activity: ""
 
-  const url = `${this._url.audit.getauditdetails}?PageNumber=${pageNo}&PageSize=${pageSize}&employeeID=${search}`
+  const url = `${this._url.audit.getauditdetails}?PageNumber=${pageNo}&PageSize=${pageSize}&employeeID=${this.searchTerm}`
 
   const body = {
   fromDate:  fromDate,
