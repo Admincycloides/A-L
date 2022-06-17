@@ -218,7 +218,7 @@ makeEditable(itemrow: any) {
     //     console.log(serializedForm);
     this.projectGroup.value.itemRows.forEach(element => {
       
-      if(element.activityName == null ){
+      if(element.activityId == null ){
         console.log("zakkkkkk")
            var dt = {
             projectId:parseInt(this.projectId),
@@ -241,9 +241,7 @@ makeEditable(itemrow: any) {
         },
         error: (err: any) => {
           this._toast.error(err.error.data);
-        },
-        
-        
+        },  
       });
       
       
