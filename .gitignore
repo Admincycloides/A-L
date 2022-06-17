@@ -53,3 +53,16 @@ Back-End/.vs/AnL/config/applicationhost.config
 *.dll
 Back-End/.vs/AnL/config/applicationhost.config
 Back-End/.vs/AnL/config/applicationhost.config
+Back-End/bin/Debug/netcoreapp3.1/AnL.runtimeconfig.json
+Back-End/bin/Debug/netcoreapp3.1/appsettings.Development.json
+Back-End/bin/Debug/netcoreapp3.1/appsettings.json
+Back-End/bin/Debug/netcoreapp3.1/appsettings.QA.json
+Back-End/obj/Debug/netcoreapp3.1/.NETCoreApp,Version=v3.1.AssemblyAttributes.cs
+Back-End/obj/Debug/netcoreapp3.1/AnL.AssemblyInfo.cs
+Back-End/obj/Debug/netcoreapp3.1/AnL.AssemblyInfoInputs.cache
+Back-End/obj/Debug/netcoreapp3.1/AnL.csproj.BuildWithSkipAnalyzers
+Back-End/obj/Debug/netcoreapp3.1/AnL.csproj.CopyComplete
+Back-End/obj/Debug/netcoreapp3.1/AnL.MvcApplicationPartsAssemblyInfo.cache
+Back-End/obj/Debug/netcoreapp3.1/AnL.MvcApplicationPartsAssemblyInfo.cs
+Back-End/obj/Debug/netcoreapp3.1/AnL.RazorTargetAssemblyInfo.cache
+Back-End/obj/Debug/netcoreapp3.1/staticwebassets/AnL.StaticWebAssets.Manifest.cache
