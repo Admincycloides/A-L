@@ -103,18 +103,6 @@ namespace AnL.Models
                 entity.Property(e => e.AuditUser)
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.Property(e => e.ChangedColumns)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.KeyValues)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.TableName)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<AuditOld>(entity =>
@@ -361,18 +349,11 @@ namespace AnL.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.EmployeeRemarks)
-                    .HasColumnName("Employee_Remarks")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.EmployeeRemarks).HasColumnName("Employee_Remarks");
 
                 entity.Property(e => e.NumberOfHours).HasColumnName("Number_of_Hours");
 
                 entity.Property(e => e.ProjectId).HasColumnName("Project_ID");
-
-                entity.Property(e => e.Remarks)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
 
                 entity.Property(e => e.Status)
                     .HasMaxLength(50)
@@ -387,10 +368,7 @@ namespace AnL.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.SupervisorRemarks)
-                    .HasColumnName("Supervisor_Remarks")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.SupervisorRemarks).HasColumnName("Supervisor_Remarks");
 
                 entity.HasOne(d => d.Activity)
                     .WithMany(p => p.TimesheetDetails)

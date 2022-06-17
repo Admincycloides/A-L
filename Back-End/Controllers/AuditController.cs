@@ -61,12 +61,12 @@ namespace AnL.Controllers
                 {
                     if (!string.IsNullOrEmpty(model.FromDate) || !string.IsNullOrEmpty(model.ToDate))
                     {
-                        data = _UOW.AuditRepository.GetAllByCondition(x => x.AuditDateTimeUtc >= DateTime.Parse(model.FromDate) && x.AuditDateTimeUtc <= DateTime.Parse(model.ToDate) && x.AuditType.Contains(model.AuditType) && x.TableName.Contains(model.TableName)).Where(x => x.AuditUser==employeeID).ToList();
+                        data = _UOW.AuditRepository.GetAllByCondition(x => x.AuditDateTimeUtc >= DateTime.Parse(model.FromDate) && x.AuditDateTimeUtc <= DateTime.Parse(model.ToDate) && x.AuditType.Contains(model.AuditType) && x.TableName.Contains(model.TableName)).Where(x => x.AuditUser.ToLower().Contains(employeeID.ToLower())).ToList();
 
                     }
                     else
                     {
-                        data = _UOW.AuditRepository.GetAllByCondition(x => x.AuditType.Contains(model.AuditType) && x.TableName.Contains(model.TableName)).Where(x => x.AuditUser ==employeeID).ToList();
+                        data = _UOW.AuditRepository.GetAllByCondition(x => x.AuditType.Contains(model.AuditType) && x.TableName.Contains(model.TableName)).Where(x => x.AuditUser.ToLower().Contains(employeeID.ToLower())).ToList();
                     }
                        //data = _UOW.AuditRepository.GetAllByCondition(x => x.AuditDateTimeUtc >= DateTime.Parse(model.FromDate) && x.AuditDateTimeUtc <= DateTime.Parse(model.ToDate) && x.AuditType.Contains(model.AuditType) && x.TableName.Contains(model.TableName)).Where(x => x.AuditUser.Contains(employeeID)).ToList();
                 }

@@ -169,7 +169,7 @@ namespace AnL.Repository.Implementation
                 });
                 _context.UpdateRange(result);
             }
-            audit.AddAuditLogs(userid);
+            //audit.AddAuditLogs(userid);
             this.SaveChanges();
             return true;
         }
