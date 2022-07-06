@@ -368,17 +368,17 @@ namespace AnL.Controllers
             List<TimesheetViewModel> result = new List<TimesheetViewModel>();
             try
             {
-                var data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.SubmittedTo==EmployeeID).Include(x => x.Project).ToList();
+                var data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.SubmittedTo==EmployeeID).Include(x => x.Project).AsQueryable();
                 if (!string.IsNullOrEmpty(searchValue))
                 {   
-                    data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.SubmittedTo==EmployeeID).Include(x => x.Project).Where(x=>x.Project.ProjectName.ToLower().Contains(searchValue.Trim().ToLower())).ToList();
+                    data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.SubmittedTo==EmployeeID).Include(x => x.Project).Where(x=>x.Project.ProjectName.ToLower().Contains(searchValue.Trim().ToLower())).AsQueryable();
                 }
                 var employeeList = data.Select(x => new
                 {
                     x.Project.ProjectName,
                     x.ProjectId,
                     x.EmployeeId,
-                    x.SubmittedDate.Value.Date,
+                    x.SubmittedDate,
                     x.Status,
                     EmployeeName = String.Concat(_UOW.EmployeeDetailsRepository.GetById(x.EmployeeId).FirstName, " ", _UOW.EmployeeDetailsRepository.GetById(x.EmployeeId).LastName)
                 }).Distinct().ToList();
@@ -389,7 +389,7 @@ namespace AnL.Controllers
                     timesheetViewModel.ProjectId = employee.ProjectId;
                     timesheetViewModel.EmployeeId = employee.EmployeeId;
                     timesheetViewModel.EmployeeName = employee.EmployeeName;
-                    timesheetViewModel.Date = employee.Date;
+                    timesheetViewModel.Date = (DateTime)employee.SubmittedDate;
                     timesheetViewModel.Status = employee.Status;
                     result.Add(timesheetViewModel);
                 }
@@ -421,10 +421,10 @@ namespace AnL.Controllers
             try
             {
                 
-                var data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.EmployeeId == model.EmployeeId && x.ProjectId == model.ProjectId && x.SubmittedDate.Value.Date == model.Date.Date).Include(x => x.Project).Include(x => x.Activity).ToList();
+                var data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.EmployeeId == model.EmployeeId && x.ProjectId == model.ProjectId && x.SubmittedDate == model.Date).Include(x => x.Project).Include(x => x.Activity).ToList();
                 if (!string.IsNullOrEmpty(search))
                 {
-                    data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.EmployeeId == model.EmployeeId && x.ProjectId == model.ProjectId && x.SubmittedDate.Value.Date == model.Date.Date).Include(x => x.Project).Include(x => x.Activity).Where(x=>x.Activity.ActivityName.ToLower().Contains(search.Trim().ToLower())).ToList();
+                    data = _UOW.TimesheetDetailRepository.GetAllByCondition(x => x.EmployeeId == model.EmployeeId && x.ProjectId == model.ProjectId && x.SubmittedDate == model.Date).Include(x => x.Project).Include(x => x.Activity).Where(x=>x.Activity.ActivityName.ToLower().Contains(search.Trim().ToLower())).ToList();
                 }
                 List<Details> weekDetails = new List<Details>();
                 //Tuple for project and its activity
