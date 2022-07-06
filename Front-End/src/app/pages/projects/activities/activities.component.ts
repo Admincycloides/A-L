@@ -153,7 +153,7 @@ export class ActivitiesComponent implements OnInit {
           //     }
           //     items.push(i);
           // });
-          // this.itemRows.patchValue(items);
+          // this.itemRows]=.patchValue(items);
         // console.log("aaaa",this.itemRows.value)
       }
         })
@@ -168,14 +168,6 @@ export class ActivitiesComponent implements OnInit {
 
 }
 
-// public disable() {
-//   if (this.text == "save"){
-//     this.toggleButton = true
-//   }
-//   else if (this.text ==  'Add Activity'){
-//     this.toggleButton = true
-//   }
-// }
 
 makeEditable(itemrow: any) {
     console.log("aww",itemrow);
@@ -279,7 +271,6 @@ if(body.activityId != null){
       this._toast.success("Project Deleted Successfully");
       this.itemRows.removeAt(index)
     }
-// }
  }
  
  pageChanged(event){

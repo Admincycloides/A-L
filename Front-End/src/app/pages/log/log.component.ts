@@ -106,10 +106,6 @@ public Giveaudittrail() {
         this.config.totalItems = totalPage * itemsPerPage;
         this._toast.success(res.responseMessage);
         console.log(res.responseMessage);
-        // this.activity=""
-        // this.FromDate=""
-        // this.ToDate=""
-        // this.action=""
       },
       error: (err: any) => {
         this._toast.error(err.error.data);

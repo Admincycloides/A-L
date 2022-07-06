@@ -145,7 +145,7 @@ export class ProjectsComponent implements OnInit {
                   sredProject:element.sredProject,
                   enabledFlag:element.enabledFlag,
                   // assignedTo:element.employeeList != null ?element.employeeList.join(','):'',
-                  assignedTo:element.supervisorList
+                  assignedTo:element.supervisorList,
                 }
                 items.push(i);
             });
@@ -325,12 +325,8 @@ public addFieldValue(){
 
 public deleteRow(index : any) {
   
-  
-  console.log("hi");
-  // let formObj = this.projectGroup.value; // {name: '', description: ''}
-  //     let serializedForm = JSON.stringify(formObj.itemRows);
-  //     console.log(serializedForm);
-  
+  console.log("hi"); 
+   
   const body = this.projectGroup.value.itemRows[index];
   console.log("we",body);
   const url = `${this._url.project.deleteProject}?projectID=${body.projectId}`
@@ -351,20 +347,6 @@ public deleteRow(index : any) {
     this._toast.success("Project Deleted Successfully");
     this.itemRows.removeAt(index)
   }
-//   console.log("hiii");
-//   const control = <FormArray>this.projectGroup.controls['itemRows'];
-//   if(control != null)
-//   {
-//     this.TotalRow = control.value.length;
-//   }
-//   if(this.TotalRow > 1)
-//   {
-//     control.removeAt(index);
-//   }
-//   else{
-//     alert('one record is mendatory');
-//     return false;
-// }
  }
 
  pageChanged(event){
