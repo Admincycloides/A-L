@@ -46,7 +46,8 @@ namespace AnL.ViewModel
         public string EnabledFlag { get; set; }
         public List<ProjectActivities> NewActivity { get; set; }
         public List<ProjectActivities> RemoveActivity { get; set; }
-
+        public List<string> NewEmployeeID { get; set; }
+        public List<string> RemoveEmployeeID { get; set; }
     }
 
 
