@@ -254,9 +254,10 @@ namespace AnL.Repository.Implementation
                         this.dbActivityMapp.AddRange(activty);
                         this.SaveChanges();
                     }
+                
 
 
-                var NewProject = this.dbSet.Where(X => X.ProjectId == project.ProjectId).Include(y=>y.ActivityMapping).FirstOrDefault();
+                var NewProject = this.dbSet.Where(X => X.ProjectId == project.ProjectId).Include(y=>y.ActivityMapping).Include(z=>z.ProjectMapping).FirstOrDefault();
                 
                 //dbActivityMapp
                 if (project.RemoveActivity != null)
@@ -270,6 +271,8 @@ namespace AnL.Repository.Implementation
 
 
                     }
+
+                
                 audit.AddAuditLogs(userid);
                 this.SaveChanges();
               
@@ -301,14 +304,33 @@ namespace AnL.Repository.Implementation
                         var activty = new List<ActivityMapping>();
                         foreach (var a in project.NewActivity)
                         {
-                            activty.Add(new ActivityMapping { ActivityId = a.ActivityId, ProjectId=project.ProjectId });
+                            activty.Add(new ActivityMapping { ActivityId = a.ActivityId, ProjectId=project.ProjectId, IsActive=true });
                         }
                         this.dbActivityMapp.AddRange(activty);
                         this.SaveChanges();
                     }
 
+                if (project.NewEmployeeID != null)
+                    if (project.NewEmployeeID.Count > 0)
+                    {
+                        var projMapp = new List<ProjectMapping>();
+                        foreach (var a in project.NewEmployeeID)
+                        {
+                            projMapp.Add(new ProjectMapping 
+                            { 
+                                EmployeeId = a, 
+                                ProjectId = project.ProjectId, 
+                                Active = true, 
+                                LastUpdate = DateTime.Now, 
+                                LastUpdatedBy=userid
+                            });
+                        }
+                        this.dbSetProjectMapp.AddRange(projMapp);
+                        this.SaveChanges();
+                    }
 
-                var NewProject = this.dbSet.Where(X=>X.ProjectId== project.ProjectId).FirstOrDefault();
+
+                var NewProject = this.dbSet.Where(X=>X.ProjectId== project.ProjectId).Include(X=>X.ProjectMapping).Include(Y=>Y.ActivityMapping).FirstOrDefault();
                  NewProject.ProjectDescription = project.ProjectDescription;
                 NewProject.ProjectName = project.ProjectName;
                 NewProject.StartDate = project.StartDate;
@@ -324,10 +346,20 @@ namespace AnL.Repository.Implementation
                         foreach(var a in project.RemoveActivity)
                         {
                             NewProject.ActivityMapping.Where(X => X.ActivityId == a.ActivityId).
-                                ToList().ForEach(X => X.ProjectId = 0);
+                                ToList().ForEach(X => X.IsActive = false);
                         }
                        
 
+                    }
+
+                if (project.RemoveEmployeeID != null)
+                    if (project.RemoveEmployeeID.Count > 0)
+                    {
+                        foreach (var emp in project.RemoveEmployeeID)
+                        {
+                            NewProject.ProjectMapping.Where(X => X.EmployeeId == emp).
+                                ToList().ForEach(X => X.Active = false);
+                        }
                     }
                 audit.AddAuditLogs(userid);
                 this.SaveChanges();

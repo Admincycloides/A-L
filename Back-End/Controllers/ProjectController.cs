@@ -195,7 +195,7 @@ namespace AnL.Controllers
                 return BadRequest("Oops! Something went wrong!" + ex);
             }
         }
-        [ApiExplorerSettings(IgnoreApi = true)]
+        //[ApiExplorerSettings(IgnoreApi = true)]
         [HttpPost]
         public async Task<ActionResult> EditProject(EditProjectView project)
         {
