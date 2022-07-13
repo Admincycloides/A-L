@@ -4,7 +4,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpService } from 'app/_services/http.service';
 import { UrlService } from 'app/_services/url.service';
 import { IDropdownSettings } from "ng-multiselect-dropdown";
-import { data } from 'jquery';
+import { data, event } from 'jquery';
 import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
 
@@ -24,7 +24,8 @@ export class ProjectsComponent implements OnInit {
   ProjectItems:any;
   selectedactivity:any;
   supervisorFlag: string;
-  selectedEmployeeList:any;
+  selectedEmployeeList = [];
+  selectedEmployeeLists =  [];
   user:any;
   getclientdescription:any;
   
@@ -291,20 +292,19 @@ Cancel(itemrow:any){
 
 
 makeEditable(itemrow: any,) {
-  console.log("aww",itemrow);
+  const NewEmployeeId = this.selectedEmployeeLists.length ? this.selectedEmployeeLists:[];
+  const RemovedEmployeeId = this.selectedEmployeeList.length ? this.selectedEmployeeList:[] ;
 
   if(itemrow.editable == true && itemrow.value.projectId != null){
 
+  const body = {...itemrow.value,newEmployeeID:NewEmployeeId,removeEmployeeID:RemovedEmployeeId};
+
+  console.log('BODDY',body)
+      
   const url = `${this._url.project.editproject}`
-
-  var body = itemrow.value;
-
-  // body.forEach(function (value,index) {
-  //   body[index].activities = [{activityId: 4}]
-  // });
-
+  
   console.log(body);
-  this._http.post(url,body).subscribe(
+  this._http.post(url,body).subscribe( 
     {
       next:(res:any)=>{
         this._toast.success(res.responseMessage);
@@ -364,15 +364,29 @@ public getEmployeeList() {
   });
 }
 
-public onProjectEmployeeDeSelect(item: any) {
-    this.selectedEmployeeList.splice(
-      this.selectedEmployeeList.indexOf(item),
-    );
+public onProjectEmployeeDeSelect(event) {
+    if(!this.selectedEmployeeList.includes(event.employeeId)) this.selectedEmployeeList.push(event.employeeId)
+    // this.selectedEmployeeList.splice(
+    //   this.selectedEmployeeList.indexOf(event.employeeId),
+    //   1
+    // );
+
+    console.log("event removed",this.selectedEmployeeList);
   }
 
-public onProjectEmployeeSelect(item: any) {
-    this.selectedEmployeeList.push(item);
+public onProjectEmployeeSelect(event) {
+  if(!this.selectedEmployeeLists.includes(event.employeeId)) this.selectedEmployeeLists.push(event.employeeId);
+  console.log("event added",this.selectedEmployeeLists);
 }
+
+// public onProjectEmployeeSelectAll(event) {
+//   if (!this.selectedEmployeeLists.includes(event.employeeId)) this.selectedEmployeeLists = this.employeeList;
+//   console.log("event all added",this.employeeList);
+// }
+
+// public onProjectEmployeeDeSelectAll(event) {
+
+//   if (!this.selectedEmployeeLists.includes(event.employeeId)) this.selectedEmployeeList = [];}
 
 
 searchItems(event: any) {

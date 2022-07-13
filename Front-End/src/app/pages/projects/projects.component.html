@@ -98,7 +98,8 @@
                                             <td class="sm-mdrop">
                                                 <span *ngIf="!itemrow.editable">{{formatnames(itemrow.value.assignedTo)}}</span>
                                                 <!-- <input placeholder="Assigned To" formControlName="assignedto" type="text" *ngIf="itemrow.editable" class="cd-input h-input"/> -->
-                                                <ng-multiselect-dropdown [placeholder]="'Select Employee'" formControlName="assignedTo" [settings]="dropdownEmployeeSettings" [data]="employeeList" name="employee" *ngIf="itemrow.editable" class="sm-mdrop"></ng-multiselect-dropdown>
+                                                <ng-multiselect-dropdown [placeholder]="'Select Employee'" formControlName="assignedTo" [settings]="dropdownEmployeeSettings" [data]="employeeList" name="employee" class="sm-mdrop"  (onDeSelect)="onProjectEmployeeDeSelect($event)"
+                                                (onSelect)="onProjectEmployeeSelect($event)" *ngIf="itemrow.editable"></ng-multiselect-dropdown>
                                                 <!-- <span *ngIf="itemRows.controls[i].get('assignedTo').errors?.required" style="color: red;">Required*</span> -->
                                             </td>
                                             <td class="col-md-2 form-group"  *ngIf="supervisorFlag == 'Y'">
